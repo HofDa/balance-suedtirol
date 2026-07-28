@@ -150,6 +150,10 @@ button {
   transform: scale(1.14);
 }
 
+.hero-cta::after {
+  transform: translateX(420%) skewX(-12deg);
+}
+
 /* Die Ankunft bewegt nur, sie blendet nicht.
  *
  * Eine Deckkraft von 0 im Startbild macht den Inhalt überall dort dauerhaft
@@ -176,31 +180,53 @@ button {
  * Animationen nicht laufen (angehaltene Zeit, Screenshot-Werkzeuge, manche
  * Sparmodi), blieb der Hero dauerhaft leer.
  *
- * Jetzt bewegt die Ankunft nur noch (siehe `@keyframes hero-content-in`), die
- * Deckkraft bleibt unberührt. Damit kann keine Kombination aus Fill-Mode und
- * Verzögerung den Inhalt mehr verstecken.
+ * Die Inhalte bleiben vollständig an ihrer Position. Eine geringe Kombination
+ * aus Unschärfe und Deckkraft wird langsam scharf — wie ein ruhiger Fokuszug,
+ * nicht wie ein Element, das in die Seite springt. Selbst bei angehaltener
+ * Animation bleibt der Text lesbar.
  *
- * Zwei Stufen statt vier, zusammen 700 ms — genug für eine Blickführung, zu
- * kurz zum Warten. */
+ * Rubrik, Aussage, Erläuterung und Aktion folgen eng aufeinander. */
 @media (prefers-reduced-motion: no-preference) {
   .header-reveal {
     animation: header-in 500ms cubic-bezier(0.16, 1, 0.3, 1) backwards;
   }
 
   .hero-reveal {
-    animation: hero-content-in 680ms cubic-bezier(0.16, 1, 0.3, 1) backwards;
+    animation: hero-content-in var(--hero-reveal-duration, 1300ms)
+      cubic-bezier(0.22, 1, 0.36, 1) var(--hero-reveal-delay, 0ms) backwards;
+    will-change: opacity, filter;
   }
 
-  /* Rubrik und Überschrift kommen gemeinsam — sie sind eine Aussage. */
-  .hero-reveal-eyebrow,
+  .hero-reveal-eyebrow {
+    --hero-reveal-duration: 1100ms;
+    --hero-reveal-delay: 60ms;
+    --hero-reveal-opacity: 0.72;
+    --hero-reveal-blur: 1px;
+  }
+
   .hero-reveal-headline {
-    animation-delay: 40ms;
+    --hero-reveal-duration: 1500ms;
+    --hero-reveal-delay: 110ms;
+    --hero-reveal-opacity: 0.68;
+    --hero-reveal-blur: 3px;
   }
 
-  /* Text und Handlung folgen als zweite Aussage. */
-  .hero-reveal-copy,
+  .hero-reveal-copy {
+    --hero-reveal-duration: 1300ms;
+    --hero-reveal-delay: 220ms;
+    --hero-reveal-opacity: 0.72;
+    --hero-reveal-blur: 2px;
+  }
+
   .hero-reveal-actions {
-    animation-delay: 180ms;
+    --hero-reveal-duration: 1200ms;
+    --hero-reveal-delay: 300ms;
+    --hero-reveal-opacity: 0.76;
+    --hero-reveal-blur: 1.5px;
+  }
+
+  .hero-cta::after {
+    animation: hero-cta-sheen 1800ms cubic-bezier(0.22, 1, 0.36, 1) 900ms both;
   }
 }
 
@@ -290,11 +316,8 @@ button {
 
 @keyframes hero-content-in {
   from {
-    transform: translate3d(0, 14px, 0);
-  }
-
-  to {
-    transform: translate3d(0, 0, 0);
+    opacity: var(--hero-reveal-opacity, 0.72);
+    filter: blur(var(--hero-reveal-blur, 2px));
   }
 }
 
@@ -305,7 +328,7 @@ button {
  * Intersection Observer jedes Element genau einmal. */
 @keyframes home-hero-depth {
   from {
-    transform: translate3d(0, -0.7%, 0) scale(1.155);
+    transform: translate3d(0, -0.3%, 0) scale(1.148);
   }
 
   to {
@@ -313,20 +336,20 @@ button {
   }
 }
 
-@keyframes home-cta-cue {
-  50% {
-    box-shadow: 0 0 0 5px rgb(255 255 255 / 0.12), var(--shadow-on-photo);
+@keyframes hero-cta-sheen {
+  from {
+    transform: translateX(-180%) skewX(-12deg);
+  }
+
+  to {
+    transform: translateX(420%) skewX(-12deg);
   }
 }
 
 @media (prefers-reduced-motion: no-preference) {
   .hero-image {
-    animation: home-hero-depth 5200ms cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation: home-hero-depth 9000ms cubic-bezier(0.22, 1, 0.36, 1) both;
     backface-visibility: hidden;
-  }
-
-  .hero-cta {
-    animation: home-cta-cue 900ms cubic-bezier(0.16, 1, 0.3, 1) 900ms both;
   }
 
   [data-home-page].home-motion-ready [data-home-reveal] {

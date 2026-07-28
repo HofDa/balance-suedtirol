@@ -1,0 +1,22 @@
+import { notFound } from "next/navigation";
+import { FeaturedProjects } from "@/components/home/featured-projects";
+import { Hero } from "@/components/home/hero";
+import { HouseIntro } from "@/components/home/house-intro";
+import { ImpactBridge } from "@/components/home/impact-bridge";
+import { HomeMotionController } from "@/components/home/home-motion-controller";
+import { isLocale } from "@/config/site";
+
+export default async function HomePage({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params;
+  if (!isLocale(locale)) notFound();
+
+  return (
+    <div data-home-page>
+      <HomeMotionController />
+      <Hero locale={locale} />
+      <HouseIntro locale={locale} />
+      <FeaturedProjects locale={locale} />
+      <ImpactBridge locale={locale} />
+    </div>
+  );
+}

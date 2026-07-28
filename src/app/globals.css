@@ -1,58 +1,372 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
 :root {
-  /* Legacy token names kept for compatibility; values are neutral blue-grey. */
-  --bn-green-900: #172a31;
-  --bn-green-800: #243f48;
-  --bn-green-700: #3f6872;
-  --bn-green-600: #527d88;
-  --bn-green-500: #7da8b0;
-  --bn-green-300: #c4dce0;
-  --bn-green-100: #e4eef0;
+  --color-paper: #f7f6f0;
+  --color-surface: #ffffff;
+  --color-ink: #183229;
+  --color-forest: #285744;
+  --color-muted: #657069;
+  --color-moss: #bdd5a9;
+  --color-sage: #dfe8d6;
+  --color-stone: #e9e8e0;
+  --color-accent: #d7a64b;
+  --color-accent-hover: #e8b65c;
+  /* Gedecktes Terrakotta, ausschließlich für negative Werte. */
+  --color-clay: #b06a52;
+  --color-clay-ink: #8d5240;
+  --color-line: rgba(24, 50, 41, 0.12);
 
-  /* Neutral surfaces */
-  --bn-cream:     #e8edf0;
-  --bn-cream-soft:#f4f7f8;
-  --bn-paper:     #ffffff;
-  --bn-ink:       #172329;
-  --bn-ink-soft:  #465962;
+  /* Kategoriefarben bleiben bewusst hell und tragen immer Text und Symbol mit. */
+  --category-cultural-surface: #ece4cf;
+  --category-cultural-marker: #9a8054;
+  --category-forest-surface: #d5e3db;
+  --category-forest-marker: #4f7867;
+  --category-water-surface: #d7e5ea;
+  --category-water-marker: #527b8b;
+  --category-wetland-surface: #d5e5e3;
+  --category-wetland-marker: #5c8581;
+  --category-meadow-surface: #e4e8cb;
+  --category-meadow-marker: #81935f;
+  --category-alpine-surface: #e2e4e1;
+  --category-alpine-marker: #7b8580;
+  --category-settlement-surface: #e6ddd5;
+  --category-settlement-marker: #8b7768;
 
-  /* Accents */
-  --bn-coral:     #e58aa1;     /* "Nils Bertol" pink in deck footer */
-  --bn-water:     #6fb1c6;     /* water/biodiversity blue */
+  /* Knappe, kartografische Radien. Echte Kreise bleiben bewusst rund. */
+  --radius-sharp: 0px;
+  --radius-sm: 2px;
+  --radius-md: 4px;
+  --radius-lg: 6px;
+  --radius-xl: 8px;
 
-  /* Tokens */
-  --bn-bg:           var(--bn-paper);
-  --bn-fg:           var(--bn-ink);
-  --bn-surface:      var(--bn-cream-soft);
-  --bn-surface-alt:  var(--bn-cream);
-  --bn-primary:      var(--bn-green-800);
-  --bn-primary-ink:  #ffffff;
-  --bn-radius:       16px;
-  --bn-radius-lg:    28px;
-  --bn-shadow-soft:  0 12px 30px rgba(36, 63, 72, 0.12);
-  --bn-shadow-card:  0 18px 44px rgba(36, 63, 72, 0.18);
+  /* Schatten. Immer grün getönt, nie neutralgrau — ein grauer Schatten auf
+     warmem Papier wirkt schmutzig. Ruhezustand ist flach; diese Werte sind
+     Antworten auf Hover und Fokus. */
+  --shadow-hover: 0 18px 45px rgba(33, 56, 44, 0.12);
+  --shadow-panel: 0 24px 70px rgba(32, 55, 44, 0.08);
+  /* Einzige Ausnahme von der Grünschatten-Regel: über Fotografie. */
+  --shadow-on-photo: 0 10px 15px rgba(0, 0, 0, 0.2);
 
-  /* Typography */
-  --bn-font-display: var(--font-display-mono), 'Major Mono Display', 'Space Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
-  --bn-font-body:    var(--font-geist-sans), 'Inter', system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  /* Typografie.
+     Newsreader spricht, Public Sans arbeitet. Beide werden über
+     `src/config/fonts.ts` selbst gehostet. */
+  --font-display-stack: var(--font-display), Georgia, "Times New Roman", serif;
+  --font-sans-stack: var(--font-sans), ui-sans-serif, system-ui, -apple-system, sans-serif;
+
+  --text-display: clamp(2.125rem, 4.5vw, 4.25rem);
+  --text-headline: clamp(1.875rem, 4vw, 3rem);
+  --text-title: 1.25rem;
+  --text-body-lg: 1.125rem;
+  --text-body: 1rem;
+  --text-meta: 0.875rem;
+  --text-label: 0.6875rem;
+
+  --leading-display: 1.04;
+  --leading-headline: 1.1;
+  --leading-title: 1.375;
+  --leading-body: 1.7;
+  --leading-meta: 1.55;
+
+  /* Bewegung. */
+  --ease-reveal: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-state: cubic-bezier(0, 0, 0.2, 1);
+  --duration-state: 180ms;
+  --duration-value: 180ms;
+  --duration-bar: 350ms;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
   margin: 0;
-  padding: 0;
-  overflow: hidden;
-  background: var(--bn-bg);
-  color: var(--bn-fg);
-  font-family: var(--bn-font-body);
-  -webkit-font-smoothing: antialiased;
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-sans-stack);
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
   text-rendering: optimizeLegibility;
 }
 
-h1, h2, h3, h4 {
-  font-family: var(--bn-font-display);
-  color: var(--bn-green-800);
-  letter-spacing: 0.01em;
+.font-display {
+  font-family: var(--font-display-stack);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+}
+
+/* Zahlen, die sich ändern, dürfen beim Aktualisieren nicht seitlich wandern. */
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+::selection {
+  background: var(--color-moss);
+  color: var(--color-ink);
+}
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button {
+  touch-action: manipulation;
+}
+
+.no-scrollbar {
+  scrollbar-width: none;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.text-balance {
+  text-wrap: balance;
+}
+
+/* Flache Notebook-Displays: Zitat und Abstände schrumpfen, damit Überschrift und
+   Buttons ohne Scrollen sichtbar bleiben. */
+@media (min-width: 640px) and (max-height: 860px) {
+  .hero-shell {
+    gap: 1.5rem;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+  }
+
+}
+
+.hero-image {
+  transform-origin: 58% 55%;
+  /* Holt die Brillanz zurück, die der Verlauf über der Wiese kostet. */
+  filter: saturate(1.08) contrast(1.04);
+  /* Überdeckung für die Parallaxe: Das Bild ist größer als sein Rahmen, damit beim
+     Verschieben keine Kante frei wird. Gilt auch ohne Animation. */
+  transform: scale(1.14);
+}
+
+/* Die Ankunft bewegt nur, sie blendet nicht.
+ *
+ * Eine Deckkraft von 0 im Startbild macht den Inhalt überall dort dauerhaft
+ * unsichtbar, wo die Zeit steht: angehaltene Animationen, Druckdienste,
+ * Screenshot-Werkzeuge, einzelne Sparmodi. Kein Fill-Mode repariert das —
+ * `both` hält den Startzustand nach dem Ende, `backwards` während der
+ * Verzögerung, und ohne Fill-Mode blitzt es beim Start.
+ *
+ * Deshalb bleibt `opacity` unangetastet und die Bewegung besteht allein aus
+ * einem Versatz. Steht die Zeit still, steht der Inhalt sichtbar 8 bis 12 px
+ * daneben — ein Unterschied, den niemand bemerkt, und keine leere Seite. */
+@keyframes header-in {
+  from {
+    transform: translateY(-8px);
+  }
+}
+
+/* Eine einzige Ankunft, keine Ladechoreografie.
+ *
+ * Vorher liefen vier Stufen mit Verzögerungen bis 1250 ms und `animation-fill-mode: both`.
+ * Das hatte zwei Folgen: Der Hauptknopf war über zwei Sekunden nach dem ersten
+ * Pixel noch unsichtbar, und weil `both` den `from`-Zustand während der
+ * Verzögerung hält, war `opacity: 0` der Ruhezustand — überall dort, wo
+ * Animationen nicht laufen (angehaltene Zeit, Screenshot-Werkzeuge, manche
+ * Sparmodi), blieb der Hero dauerhaft leer.
+ *
+ * Jetzt bewegt die Ankunft nur noch (siehe `@keyframes hero-content-in`), die
+ * Deckkraft bleibt unberührt. Damit kann keine Kombination aus Fill-Mode und
+ * Verzögerung den Inhalt mehr verstecken.
+ *
+ * Zwei Stufen statt vier, zusammen 700 ms — genug für eine Blickführung, zu
+ * kurz zum Warten. */
+@media (prefers-reduced-motion: no-preference) {
+  .header-reveal {
+    animation: header-in 500ms cubic-bezier(0.16, 1, 0.3, 1) backwards;
+  }
+
+  .hero-reveal {
+    animation: hero-content-in 680ms cubic-bezier(0.16, 1, 0.3, 1) backwards;
+  }
+
+  /* Rubrik und Überschrift kommen gemeinsam — sie sind eine Aussage. */
+  .hero-reveal-eyebrow,
+  .hero-reveal-headline {
+    animation-delay: 40ms;
+  }
+
+  /* Text und Handlung folgen als zweite Aussage. */
+  .hero-reveal-copy,
+  .hero-reveal-actions {
+    animation-delay: 180ms;
+  }
+}
+
+@media print {
+  .hero-reveal,
+  .header-reveal {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Filterwechsel in der Projektliste.
+   Bleibende Karten schiebt der Browser an ihre neue Rasterposition, ein- und
+   ausgehende blenden. Kurz gehalten: Das ist eine Erklärung, kein Auftritt.
+   Wo die API fehlt, greift nichts davon und die Liste wechselt sofort. */
+@media (prefers-reduced-motion: no-preference) {
+  ::view-transition-group(*) {
+    animation-duration: 260ms;
+    animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  ::view-transition-old(*) {
+    animation-duration: 140ms;
+  }
+
+  ::view-transition-new(*) {
+    animation-duration: 220ms;
+  }
+}
+
+/* Aufklappende Bereiche: Höhe über `grid-template-rows` statt über `height`,
+   damit der Inhalt seine eigene Höhe behält und nichts umbricht. */
+.reveal-panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 240ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.reveal-panel > * {
+  overflow: hidden;
+  min-height: 0;
+}
+
+.reveal-panel[data-open="true"] {
+  grid-template-rows: 1fr;
+}
+
+/* Mobiles Menü. `<details>` klappt ohne JavaScript, aber auch ohne jede
+   Quittung — 180 ms genügen, damit der Wechsel als Bewegung lesbar wird. */
+@media (prefers-reduced-motion: no-preference) {
+  details[open] > nav {
+    animation: menu-in 180ms cubic-bezier(0.16, 1, 0.3, 1) backwards;
+  }
+}
+
+@keyframes menu-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+}
+
+/* Dialoge kommen aus der Fläche, auf die sie antworten: kurz, ohne Federung. */
+@media (prefers-reduced-motion: no-preference) {
+  .dialog-scrim {
+    animation: scrim-in 160ms ease-out backwards;
+  }
+
+  .dialog-sheet {
+    animation: sheet-in 220ms cubic-bezier(0.16, 1, 0.3, 1) backwards;
+  }
+}
+
+@keyframes scrim-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes sheet-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.985);
+  }
+}
+
+@keyframes hero-content-in {
+  from {
+    transform: translate3d(0, 14px, 0);
+  }
+
+  to {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+/* Startseite: einmalige Blickführung beim Eintritt in einen Abschnitt.
+ *
+ * Die Inhalte bleiben im HTML und ohne JavaScript vollständig sichtbar. Erst
+ * der kleine Home-Controller setzt `home-motion-ready`; danach aktiviert ein
+ * Intersection Observer jedes Element genau einmal. */
+@keyframes home-hero-depth {
+  from {
+    transform: translate3d(0, -0.7%, 0) scale(1.155);
+  }
+
+  to {
+    transform: translate3d(0, 0, 0) scale(1.14);
+  }
+}
+
+@keyframes home-cta-cue {
+  50% {
+    box-shadow: 0 0 0 5px rgb(255 255 255 / 0.12), var(--shadow-on-photo);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .hero-image {
+    animation: home-hero-depth 5200ms cubic-bezier(0.16, 1, 0.3, 1) both;
+    backface-visibility: hidden;
+  }
+
+  .hero-cta {
+    animation: home-cta-cue 900ms cubic-bezier(0.16, 1, 0.3, 1) 900ms both;
+  }
+
+  [data-home-page].home-motion-ready [data-home-reveal] {
+    opacity: 0;
+    transform: translateY(18px);
+    transition:
+      opacity 620ms cubic-bezier(0.16, 1, 0.3, 1),
+      transform 620ms cubic-bezier(0.16, 1, 0.3, 1);
+    transition-delay: var(--home-reveal-delay, 0ms);
+    will-change: opacity, transform;
+  }
+
+  [data-home-page].home-motion-ready [data-home-reveal="scale"] {
+    transform: translateY(12px) scale(0.985);
+  }
+
+  [data-home-page].home-motion-ready [data-home-reveal="slide"] {
+    transform: translateX(14px);
+  }
+
+  [data-home-page].home-motion-ready [data-home-reveal][data-home-visible="true"] {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media print {
+  [data-home-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

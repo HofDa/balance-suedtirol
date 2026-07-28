@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 112" role="img" aria-labelledby="title description">
+  <title id="title">Hauptförderer Platzhalter</title>
+  <desc id="description">Deutlich als Platzhalter und Demo gekennzeichnetes Sponsorlogo.</desc>
+  <rect width="360" height="112" rx="6" fill="#f7f6f0"/>
+  <rect x="1" y="1" width="358" height="110" rx="5" fill="none" stroke="#183229" stroke-opacity=".12"/>
+  <circle cx="52" cy="56" r="28" fill="#285744"/>
+  <path d="M41 63c15-1 25-10 29-25-15 2-26 10-29 25Zm0 0c9-8 17-13 27-17" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="96" y="50" fill="#183229" font-family="Arial, sans-serif" font-size="20" font-weight="700">Sponsor Logo</text>
+  <text x="96" y="76" fill="#657069" font-family="Arial, sans-serif" font-size="13" font-weight="700" letter-spacing="2.6">PLATZHALTER · DEMO</text>
+</svg>

@@ -5,6 +5,7 @@ import { Header } from "@/components/layout/header";
 import { fontVariables } from "@/config/fonts";
 import { isLocale, locales, type Locale } from "@/config/site";
 import { getTranslations } from "@/config/translations";
+import { withBasePath } from "@/lib/public-path";
 import "../globals.css";
 
 export function generateStaticParams() {
@@ -34,8 +35,10 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
     title: { default: meta.title, template: "%s | b*alance" },
     description: meta.description,
     alternates: {
-      canonical: `/${locale}`,
-      languages: Object.fromEntries(locales.map((language) => [language, `/${language}`]))
+      canonical: withBasePath(`/${locale}`),
+      languages: Object.fromEntries(
+        locales.map((language) => [language, withBasePath(`/${language}`)])
+      )
     }
   };
 }

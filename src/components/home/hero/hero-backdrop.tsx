@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { heroImage } from "@/config/hero";
+import { withBasePath } from "@/lib/public-path";
 
 /**
  * Server-rendered hero image. The restrained CSS scale preserves depth without
@@ -10,7 +11,7 @@ export function HeroBackdrop() {
     <div className="absolute inset-0 -z-20 overflow-hidden" aria-hidden="true">
       <div className="relative -top-[10%] h-[120%] w-full">
         <Image
-          src={heroImage.src}
+          src={withBasePath(heroImage.src)}
           alt=""
           fill
           priority

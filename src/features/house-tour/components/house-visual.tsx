@@ -23,6 +23,7 @@ import {
   ZoomOut
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { withBasePath } from "@/lib/public-path";
 import { focusRingTool } from "@/components/ui/focus";
 import { rooms } from "../config/rooms";
 import { houseObjects, objectSprites, visibleSprites } from "../config/house-overlays";
@@ -621,7 +622,7 @@ export function HouseVisual({
               assets-source/house/ und wird nicht ausgeliefert. */}
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src="/assets/house/houseempty.webp"
+            src={withBasePath("/assets/house/houseempty.webp")}
             alt="Interaktive Hausübersicht"
             width={1254}
             height={1254}
@@ -722,7 +723,7 @@ export function HouseVisual({
                           }
                         : { duration: reduceMotion ? 0 : 0.28 }
                     }
-                    src={`/assets/house/cutout/${sprite.src}`}
+                    src={withBasePath(`/assets/house/cutout/${sprite.src}`)}
                     alt={sprite.id}
                     style={{
                       width: "100%",

@@ -4,6 +4,7 @@ import { Label } from "@/components/ui/label";
 import { Surface } from "@/components/ui/surface";
 import { focusRing } from "@/components/ui/focus";
 import type { Project, Sponsor } from "@/types/project";
+import { withBasePath } from "@/lib/public-path";
 
 function SponsorIdentity({
   sponsor,
@@ -25,7 +26,7 @@ function SponsorIdentity({
     <span className="inline-flex flex-wrap items-center gap-2">
       {sponsor.logo ? (
         <Image
-          src={sponsor.logo}
+          src={withBasePath(sponsor.logo)}
           alt={`${sponsor.name} Logo${sponsor.isPlaceholder ? " – Platzhalter" : ""}`}
           width={dimensions.width}
           height={dimensions.height}

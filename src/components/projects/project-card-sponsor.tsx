@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { Label } from "@/components/ui/label";
+import { withBasePath } from "@/lib/public-path";
 import type { Sponsor } from "@/types/project";
 
 export function ProjectCardSponsor({
@@ -20,7 +21,7 @@ export function ProjectCardSponsor({
         <span className="inline-flex flex-wrap items-center gap-2">
           {mainSponsor.logo ? (
             <Image
-              src={mainSponsor.logo}
+              src={withBasePath(mainSponsor.logo)}
               alt={`${mainSponsor.name} Logo${mainSponsor.isPlaceholder ? " – Platzhalter" : ""}`}
               width={100}
               height={28}

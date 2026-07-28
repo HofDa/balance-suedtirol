@@ -6,6 +6,7 @@ import type { Locale } from "@/config/site";
 import { ProjectCardSponsor } from "./project-card-sponsor";
 import { ProjectCategoryBadge, ProjectCategoryMarker } from "./project-category";
 import type { ProjectCategoryId } from "@/config/project-categories";
+import { withBasePath } from "@/lib/public-path";
 
 export type ProjectCardViewCopy = {
   view: string;
@@ -44,7 +45,7 @@ export function ProjectCardView({
       <ProjectCategoryMarker categoryId={primaryCategory} />
       <div className="relative aspect-[16/10] overflow-hidden bg-[var(--color-sage)]/40">
         <Image
-          src={project.image}
+          src={withBasePath(project.image)}
           alt=""
           fill
           sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"

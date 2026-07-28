@@ -36,6 +36,7 @@ import {
   ProjectSupportTrigger,
   type ProjectSupportCopy
 } from "./project-support";
+import { withBasePath } from "@/lib/public-path";
 
 interface ProjectDetailProps {
   project: Project;
@@ -87,7 +88,7 @@ export function ProjectDetail({ project, otherProjects, locale }: ProjectDetailP
           <Surface level="sheet" className="mt-7 overflow-hidden p-0 sm:p-0">
             <div className="relative aspect-[21/9] min-h-[260px] overflow-hidden sm:min-h-[360px]">
               <Image
-                src={project.image}
+                src={withBasePath(project.image)}
                 alt={`${project.title}, ${project.municipality}`}
                 fill
                 priority

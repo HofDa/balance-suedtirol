@@ -1,0 +1,134 @@
+{
+  "bed.webp": {
+    "w": 512,
+    "h": 326,
+    "aspect": 1.5706,
+    "opaque_pct": 75.9
+  },
+  "bike.webp": {
+    "w": 350,
+    "h": 512,
+    "aspect": 0.6836,
+    "opaque_pct": 54.9
+  },
+  "biglamp.webp": {
+    "w": 125,
+    "h": 512,
+    "aspect": 0.2441,
+    "opaque_pct": 32.2
+  },
+  "car.webp": {
+    "w": 512,
+    "h": 333,
+    "aspect": 1.5375,
+    "opaque_pct": 77.3
+  },
+  "carpet.webp": {
+    "w": 512,
+    "h": 164,
+    "aspect": 3.122,
+    "opaque_pct": 90.4
+  },
+  "chairsanddesk.webp": {
+    "w": 512,
+    "h": 282,
+    "aspect": 1.8156,
+    "opaque_pct": 40.5
+  },
+  "closet.webp": {
+    "w": 175,
+    "h": 512,
+    "aspect": 0.3418,
+    "opaque_pct": 95.1
+  },
+  "couch.webp": {
+    "w": 454,
+    "h": 512,
+    "aspect": 0.8867,
+    "opaque_pct": 100.0
+  },
+  "cupboard.webp": {
+    "w": 388,
+    "h": 512,
+    "aspect": 0.7578,
+    "opaque_pct": 53.6
+  },
+  "cupboard2.webp": {
+    "w": 512,
+    "h": 267,
+    "aspect": 1.9176,
+    "opaque_pct": 72.1
+  },
+  "cupboard_tv.webp": {
+    "w": 280,
+    "h": 512,
+    "aspect": 0.5469,
+    "opaque_pct": 82.0
+  },
+  "fridge.webp": {
+    "w": 117,
+    "h": 512,
+    "aspect": 0.2285,
+    "opaque_pct": 100.0
+  },
+  "globe.webp": {
+    "w": 367,
+    "h": 512,
+    "aspect": 0.7168,
+    "opaque_pct": 67.1
+  },
+  "kitchenwall.webp": {
+    "w": 512,
+    "h": 454,
+    "aspect": 1.1278,
+    "opaque_pct": 89.7
+  },
+  "lamp.webp": {
+    "w": 293,
+    "h": 512,
+    "aspect": 0.5723,
+    "opaque_pct": 61.2
+  },
+  "picture.webp": {
+    "w": 171,
+    "h": 512,
+    "aspect": 0.334,
+    "opaque_pct": 79.9
+  },
+  "plant.webp": {
+    "w": 487,
+    "h": 512,
+    "aspect": 0.9512,
+    "opaque_pct": 41.1
+  },
+  "showerbath.webp": {
+    "w": 326,
+    "h": 512,
+    "aspect": 0.6367,
+    "opaque_pct": 100.0
+  },
+  "sink.webp": {
+    "w": 400,
+    "h": 512,
+    "aspect": 0.7812,
+    "opaque_pct": 75.9
+  },
+  "suitcase.webp": {
+    "w": 512,
+    "h": 455,
+    "aspect": 1.1253,
+    "opaque_pct": 91.7
+  },
+  "toilet.webp": {
+    "w": 402,
+    "h": 512,
+    "aspect": 0.7852,
+    "opaque_pct": 82.7
+  },
+  "tv.webp": {
+    "w": 121,
+    "h": 512,
+    "aspect": 0.2363,
+    "opaque_pct": 61.7
+  }
+}

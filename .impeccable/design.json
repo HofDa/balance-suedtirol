@@ -1,0 +1,499 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-07-28T00:00:00.000Z",
+  "title": "Design System: b*alance",
+  "extensions": {
+    "colorMeta": {
+      "paper": {
+        "role": "neutral",
+        "displayName": "Bergpapier",
+        "canonical": "#f7f6f0",
+        "tonalRamp": [
+          "#12120e",
+          "#2d2c27",
+          "#494944",
+          "#686762",
+          "#898883",
+          "#abaaa4",
+          "#cecdc8",
+          "#f3f2ec"
+        ]
+      },
+      "surface": {
+        "role": "neutral",
+        "displayName": "Reinweiß",
+        "canonical": "#ffffff",
+        "tonalRamp": [
+          "#171717",
+          "#2e2e2e",
+          "#4a4a4a",
+          "#686868",
+          "#898989",
+          "#ababab",
+          "#cfcfcf",
+          "#f3f3f3"
+        ]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Tannentinte",
+        "canonical": "#183229",
+        "tonalRamp": [
+          "#00170f",
+          "#183229",
+          "#344f45",
+          "#536e64",
+          "#738f84",
+          "#94b2a6",
+          "#b7d5c9",
+          "#dbfaee"
+        ]
+      },
+      "forest": {
+        "role": "secondary",
+        "displayName": "Bergwald",
+        "canonical": "#285744",
+        "tonalRamp": [
+          "#00190a",
+          "#003524",
+          "#245340",
+          "#44735e",
+          "#64947f",
+          "#86b7a0",
+          "#a8dbc3",
+          "#ccffe8"
+        ]
+      },
+      "muted": {
+        "role": "neutral",
+        "displayName": "Nebelgrau",
+        "canonical": "#657069",
+        "tonalRamp": [
+          "#0b140f",
+          "#252e28",
+          "#414b45",
+          "#606a63",
+          "#808b84",
+          "#a1ada6",
+          "#c5d1c9",
+          "#e9f6ed"
+        ]
+      },
+      "moss": {
+        "role": "secondary",
+        "displayName": "Almmoos",
+        "canonical": "#bdd5a9",
+        "tonalRamp": [
+          "#071700",
+          "#20320c",
+          "#3c5029",
+          "#5a6f47",
+          "#7a9067",
+          "#9cb388",
+          "#bfd7ab",
+          "#e3fcce"
+        ]
+      },
+      "sage": {
+        "role": "neutral",
+        "displayName": "Salbeischleier",
+        "canonical": "#dfe8d6",
+        "tonalRamp": [
+          "#0e1407",
+          "#282e21",
+          "#444b3d",
+          "#636a5b",
+          "#838b7b",
+          "#a5ad9c",
+          "#c8d1bf",
+          "#ecf6e3"
+        ]
+      },
+      "stone": {
+        "role": "neutral",
+        "displayName": "Kalkstein",
+        "canonical": "#e9e8e0",
+        "tonalRamp": [
+          "#13120c",
+          "#2d2c26",
+          "#4a4942",
+          "#686861",
+          "#898881",
+          "#abaaa3",
+          "#cfcec6",
+          "#f3f2ea"
+        ]
+      },
+      "accent": {
+        "role": "primary",
+        "displayName": "Almgold",
+        "canonical": "#d7a64b",
+        "tonalRamp": [
+          "#2b0100",
+          "#491f00",
+          "#693e00",
+          "#8b5d00",
+          "#ae7e19",
+          "#d2a145",
+          "#f7c46b",
+          "#ffe98f"
+        ]
+      },
+      "accent-hover": {
+        "role": "primary",
+        "displayName": "Almgold hell",
+        "canonical": "#e8b65c",
+        "tonalRamp": [
+          "#2b0100",
+          "#491f00",
+          "#693e00",
+          "#8b5d00",
+          "#ae7e19",
+          "#d2a145",
+          "#f7c46b",
+          "#ffe98f"
+        ]
+      },
+      "clay": {
+        "role": "tertiary",
+        "displayName": "Lehm",
+        "canonical": "#b06a52",
+        "tonalRamp": [
+          "#300000",
+          "#511300",
+          "#73331c",
+          "#96523b",
+          "#ba735b",
+          "#df957c",
+          "#ffb89e",
+          "#ffdcc1"
+        ]
+      },
+      "clay-ink": {
+        "role": "tertiary",
+        "displayName": "Gebrannter Lehm",
+        "canonical": "#8d5240",
+        "tonalRamp": [
+          "#2d0000",
+          "#4d1807",
+          "#6e3625",
+          "#915543",
+          "#b47663",
+          "#d99884",
+          "#ffbba6",
+          "#ffdfc9"
+        ]
+      },
+      "line": {
+        "role": "neutral",
+        "displayName": "Feldlinie",
+        "canonical": "rgba(24, 50, 41, 0.12)",
+        "tonalRamp": [
+          "#00170f",
+          "#183229",
+          "#344f45",
+          "#536e64",
+          "#738f84",
+          "#94b2a6",
+          "#b7d5c9",
+          "#dbfaee"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display (Newsreader)",
+        "purpose": "Nur die Seitenüberschrift. Editorial-Antiqua, LS −0.03em; die Akzentzeile trägt Almmoos, nie Gold."
+      },
+      "headline": {
+        "displayName": "Headline (Newsreader)",
+        "purpose": "Abschnittsüberschriften über SectionHeading, immer mit text-wrap: balance."
+      },
+      "title": {
+        "displayName": "Title (Public Sans)",
+        "purpose": "Projekttitel, Panelüberschriften, Zwischenüberschriften in Rechtstexten."
+      },
+      "body": {
+        "displayName": "Body (Public Sans)",
+        "purpose": "Fließtext in Nebelgrau, Zeilenlänge maximal 58 Zeichen."
+      },
+      "label": {
+        "displayName": "Label (Public Sans)",
+        "purpose": "Über die <Label>-Komponente in drei Stufen: section 0.22em, block 0.18em, dense 0.14em. Nie unter 11 px."
+      }
+    },
+    "shadows": [
+      {
+        "name": "hover-lift",
+        "value": "0 18px 45px rgba(33, 56, 44, 0.12)",
+        "purpose": "Antwort einer Projektkarte auf Zeiger oder Tastaturfokus. Nie im Ruhezustand."
+      },
+      {
+        "name": "panel-frame",
+        "value": "0 24px 70px rgba(32, 55, 44, 0.08)",
+        "purpose": "Die eine Ausnahme: große eigenständige Formularflächen dürfen dauerhaft eine sehr weiche Fassung tragen."
+      },
+      {
+        "name": "accent-on-photo",
+        "value": "0 10px 15px rgba(0, 0, 0, 0.2)",
+        "purpose": "Trägt den goldenen Knopf über Fotografie, wo tonale Schichtung nicht greift."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-reveal",
+        "value": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "Einmalige Blickführung beim Seitenaufbau: Kopfbereich 700 ms, Hero-Inhalt 900 ms in vier gestaffelten Phasen."
+      },
+      {
+        "name": "ease-state",
+        "value": "ease-out",
+        "purpose": "Zustandswechsel an Bedienelementen, 180–200 ms. Nur Farbe und Linie, kein Positionsversatz."
+      },
+      {
+        "name": "duration-bar",
+        "value": "350ms",
+        "purpose": "Wachsen der Wert- und Wirkungsbalken im Lebensraum-Check."
+      },
+      {
+        "name": "duration-value",
+        "value": "180ms",
+        "purpose": "Überblenden wechselnder Zahlen in der Wertetafel, mit 4 px Versatz."
+      },
+      {
+        "name": "reduced-motion",
+        "value": "animation-duration: 0.01ms; transition-duration: 0.01ms",
+        "purpose": "Globale Abschaltung. Der Ruhezustand jeder Animation ist sichtbar, damit Inhalt nie am Ablauf hängt."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "xs",
+        "value": "360px"
+      },
+      {
+        "name": "sm",
+        "value": "640px"
+      },
+      {
+        "name": "lg",
+        "value": "1024px"
+      },
+      {
+        "name": "xl",
+        "value": "1280px"
+      },
+      {
+        "name": "2xl",
+        "value": "1536px"
+      },
+      {
+        "name": "flat-notebook",
+        "value": "(min-width: 640px) and (max-height: 860px)"
+      }
+    ],
+    "fonts": [
+      {
+        "name": "Newsreader",
+        "role": "display",
+        "weights": [
+          "400",
+          "500",
+          "600"
+        ],
+        "delivery": "next/font/google, zur Bauzeit geladen, als woff2 selbst gehostet",
+        "purpose": "Die gewachsene Stimme. Trägt Display und Headline, sonst nichts."
+      },
+      {
+        "name": "Public Sans",
+        "role": "sans",
+        "weights": [
+          "400",
+          "500",
+          "600",
+          "700"
+        ],
+        "delivery": "next/font/google, zur Bauzeit geladen, als woff2 selbst gehostet",
+        "purpose": "Arbeit und Oberfläche. Institutionelle Grotesk mit echten Tabellenziffern."
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Akzentknopf",
+      "kind": "button",
+      "refersTo": "button-accent",
+      "description": "Die eine Hauptaktion pro Ansicht: Check starten, Projekt unterstützen. Höchstens einmal sichtbar.",
+      "html": "<button class=\"ds-btn-accent\">Lebensraum-Check starten<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M5 12h14M12 5l7 7-7 7\"/></svg></button>",
+      "css": ".ds-btn-accent { display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 48px; padding: 0 24px; background: var(--color-accent, #d7a64b); color: var(--color-ink, #183229); font-family: Inter, ui-sans-serif, system-ui, sans-serif; font-size: 14px; font-weight: 700; border: none; border-radius: 4px; cursor: pointer; transition: background-color 200ms ease-out; } .ds-btn-accent svg { width: 16px; height: 16px; transition: transform 200ms ease-out; } .ds-btn-accent:hover { background: #e8b65c; } .ds-btn-accent:hover svg { transform: translateX(4px); } .ds-btn-accent:focus-visible { outline: 2px solid #ffffff; outline-offset: 2px; background: #e8b65c; }"
+    },
+    {
+      "name": "Primärknopf",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Der Arbeitsknopf für Formulare, Bestätigungen und Navigation innerhalb von Anwendungsflächen.",
+      "html": "<button class=\"ds-btn-primary\">Auswahl speichern</button>",
+      "css": ".ds-btn-primary { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 10px 20px; background: var(--color-ink, #183229); color: #ffffff; font-family: Inter, ui-sans-serif, system-ui, sans-serif; font-size: 14px; font-weight: 600; border: none; border-radius: 4px; cursor: pointer; transition: background-color 200ms ease-out; } .ds-btn-primary:hover { background: var(--color-forest, #285744); } .ds-btn-primary:focus-visible { outline: 2px solid var(--color-accent, #d7a64b); outline-offset: 2px; } .ds-btn-primary:disabled { opacity: 0.5; pointer-events: none; }"
+    },
+    {
+      "name": "Leiser Knopf",
+      "kind": "button",
+      "refersTo": "button-quiet",
+      "description": "Werkzeugleisten des Lebensraum-Checks: Zurücksetzen, Panelgröße, Navigation zwischen Räumen.",
+      "html": "<button class=\"ds-btn-quiet\">Alle Räume</button>",
+      "css": ".ds-btn-quiet { display: inline-flex; align-items: center; min-height: 40px; padding: 0 12px; background: transparent; color: var(--color-forest, #285744); font-family: Inter, ui-sans-serif, system-ui, sans-serif; font-size: 12px; font-weight: 600; border: none; border-radius: 4px; cursor: pointer; transition: background-color 180ms ease-out; } .ds-btn-quiet:hover { background: rgba(24, 50, 41, 0.05); } .ds-btn-quiet:focus-visible { outline: 2px solid var(--color-accent, #d7a64b); outline-offset: 2px; } .ds-btn-quiet:disabled { color: var(--color-muted, #657069); opacity: 0.5; }"
+    },
+    {
+      "name": "Filter-Chip",
+      "kind": "chip",
+      "refersTo": "chip-filter",
+      "description": "Kategorienfilter der Projektliste. Der aktive Zustand ist an Fläche und Häkchen ablesbar, nicht nur an Farbe.",
+      "html": "<button class=\"ds-chip\">Moore</button><button class=\"ds-chip ds-chip-active\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"3\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M20 6L9 17l-5-5\"/></svg>Wildbienen</button>",
+      "css": ".ds-chip { display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 0 16px; margin-right: 8px; background: #ffffff; color: var(--color-ink, #183229); font-family: Inter, ui-sans-serif, system-ui, sans-serif; font-size: 12px; font-weight: 700; border: 1px solid rgba(0, 0, 0, 0.1); border-radius: 2px; cursor: pointer; transition: border-color 180ms ease-out, background-color 180ms ease-out; } .ds-chip svg { width: 14px; height: 14px; } .ds-chip:hover { border-color: rgba(0, 0, 0, 0.25); background: #faf9f5; } .ds-chip:focus-visible { outline: 2px solid var(--color-forest, #285744); outline-offset: 2px; } .ds-chip-active { background: var(--color-forest, #285744); color: #ffffff; border-color: var(--color-forest, #285744); } .ds-chip-active:hover { background: #1f4636; border-color: #1f4636; }"
+    },
+    {
+      "name": "Projektkarte",
+      "kind": "card",
+      "refersTo": "card-project",
+      "description": "Die zentrale Einheit der Plattform. Genau ein Link liegt über der gesamten Fläche; im Ruhezustand flach.",
+      "html": "<article class=\"ds-card\"><div class=\"ds-card-media\"><span class=\"ds-card-tag\">Moore</span></div><div class=\"ds-card-body\"><p class=\"ds-card-meta\">Olang · Lebensräume Pustertal</p><h3 class=\"ds-card-title\"><a href=\"#\">Moorfenster Pustertal</a></h3><p class=\"ds-card-summary\">Entwässerte Teilflächen werden hydrologisch verbessert und als Feuchtlebensraum wieder sichtbar gemacht.</p><div class=\"ds-card-funding\"><span class=\"ds-card-amount\">61.700 €</span><span class=\"ds-card-goal\">von 92.000 €</span><span class=\"ds-card-pct\">67 %</span></div><div class=\"ds-card-track\"><div class=\"ds-card-fill\"></div></div></div></article>",
+      "css": ".ds-card { position: relative; display: flex; flex-direction: column; width: 320px; overflow: hidden; background: #ffffff; border: 1px solid rgba(24, 50, 41, 0.12); border-radius: 6px; font-family: Inter, ui-sans-serif, system-ui, sans-serif; transition: transform 300ms ease-out, border-color 300ms ease-out, box-shadow 300ms ease-out; } .ds-card:hover { border-color: rgba(40, 87, 68, 0.3); box-shadow: 0 18px 45px rgba(33, 56, 44, 0.12); } .ds-card:focus-within { outline: 2px solid var(--color-forest, #285744); outline-offset: 2px; } .ds-card-media { position: relative; aspect-ratio: 16 / 10; background: rgba(223, 232, 214, 0.4); } .ds-card-tag { position: absolute; left: 16px; top: 16px; padding: 4px 12px; background: #ffffff; color: var(--color-forest, #285744); font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; border-radius: 2px; } .ds-card-body { padding: 24px; } .ds-card-meta { margin: 0; color: var(--color-muted, #657069); font-size: 12px; } .ds-card-title { margin: 8px 0 0; font-size: 20px; font-weight: 600; letter-spacing: -0.03em; line-height: 1.375; } .ds-card-title a { color: var(--color-ink, #183229); text-decoration: none; transition: color 300ms ease-out; } .ds-card-title a::after { content: ''; position: absolute; inset: 0; } .ds-card:hover .ds-card-title a { color: var(--color-forest, #285744); } .ds-card-summary { margin: 8px 0 0; color: var(--color-muted, #657069); font-size: 14px; line-height: 1.7; } .ds-card-funding { display: flex; align-items: baseline; gap: 6px; margin-top: 20px; font-size: 14px; } .ds-card-amount { font-weight: 600; color: var(--color-ink, #183229); font-variant-numeric: tabular-nums; } .ds-card-goal { color: var(--color-muted, #657069); } .ds-card-pct { margin-left: auto; font-weight: 600; color: var(--color-forest, #285744); font-variant-numeric: tabular-nums; } .ds-card-track { height: 6px; margin-top: 8px; overflow: hidden; background: var(--color-stone, #e9e8e0); border-radius: 0; } .ds-card-fill { width: 67%; height: 100%; background: var(--color-forest, #285744); }"
+    },
+    {
+      "name": "Suchfeld",
+      "kind": "input",
+      "refersTo": "input-search",
+      "description": "Freitextsuche der Projektliste. Fokus verstärkt die Linie, ohne die Größe zu verändern.",
+      "html": "<div class=\"ds-field\"><svg class=\"ds-field-icon\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" aria-hidden=\"true\"><circle cx=\"11\" cy=\"11\" r=\"8\"/><path d=\"M21 21l-4.3-4.3\"/></svg><input class=\"ds-input-search\" type=\"search\" placeholder=\"Projekt oder Gemeinde suchen\"></div>",
+      "css": ".ds-field { position: relative; width: 260px; font-family: Inter, ui-sans-serif, system-ui, sans-serif; } .ds-field-icon { position: absolute; left: 14px; top: 50%; width: 16px; height: 16px; transform: translateY(-50%); color: var(--color-muted, #657069); pointer-events: none; } .ds-input-search { width: 100%; height: 40px; padding: 0 16px 0 36px; background: #ffffff; color: var(--color-ink, #183229); font-size: 12px; border: 1px solid rgba(0, 0, 0, 0.1); border-radius: 4px; transition: border-color 180ms ease-out, box-shadow 180ms ease-out; } .ds-input-search::placeholder { color: var(--color-muted, #657069); } .ds-input-search:focus { outline: none; border-color: var(--color-forest, #285744); box-shadow: 0 0 0 2px rgba(40, 87, 68, 0.2); }"
+    },
+    {
+      "name": "Navigationslink",
+      "kind": "nav",
+      "refersTo": "nav-link",
+      "description": "Kopfbereich der öffentlichen Seiten. Nebelgrau im Ruhezustand, Tannentinte bei Berührung.",
+      "html": "<nav class=\"ds-nav\"><a class=\"ds-nav-link\" href=\"#\">Lebensraum-Check</a><a class=\"ds-nav-link\" href=\"#\">Projekte</a><a class=\"ds-nav-link\" href=\"#\">Methodik</a></nav>",
+      "css": ".ds-nav { display: flex; align-items: center; gap: 28px; padding: 0 8px; background: rgba(247, 246, 240, 0.88); backdrop-filter: blur(16px); font-family: Inter, ui-sans-serif, system-ui, sans-serif; } .ds-nav-link { display: inline-flex; align-items: center; min-height: 44px; padding: 0 8px; color: var(--color-muted, #657069); font-size: 14px; font-weight: 500; text-decoration: none; border-radius: 2px; transition: color 180ms ease-out; } .ds-nav-link:hover { color: var(--color-ink, #183229); } .ds-nav-link:focus-visible { outline: 2px solid var(--color-forest, #285744); outline-offset: 2px; }"
+    },
+    {
+      "name": "Wirkungsdiagramm",
+      "kind": "custom",
+      "refersTo": null,
+      "description": "Der einzige zweiseitige Balken des Systems. Mitte ist Null, rechts in Bergwald verbessert, links in Lehm belastet.",
+      "html": "<div class=\"ds-impact\"><div class=\"ds-impact-row\"><span class=\"ds-impact-label\">Natur</span><div class=\"ds-impact-track\"><span class=\"ds-impact-zero\"></span><span class=\"ds-impact-bar ds-impact-pos\"></span></div><span class=\"ds-impact-val ds-impact-val-pos\">+8</span></div><div class=\"ds-impact-row\"><span class=\"ds-impact-label\">Wasser</span><div class=\"ds-impact-track\"><span class=\"ds-impact-zero\"></span><span class=\"ds-impact-bar ds-impact-neg\"></span></div><span class=\"ds-impact-val ds-impact-val-neg\">−5</span></div><div class=\"ds-impact-scale\"><span>belastet</span><span>verbessert</span></div></div>",
+      "css": ".ds-impact { width: 320px; font-family: Inter, ui-sans-serif, system-ui, sans-serif; } .ds-impact-row { display: grid; grid-template-columns: 4.5rem minmax(0, 1fr) 2rem; align-items: center; gap: 12px; margin-bottom: 12px; } .ds-impact-label { font-size: 11px; font-weight: 500; color: var(--color-muted, #657069); } .ds-impact-track { position: relative; height: 8px; overflow: hidden; background: rgba(0, 0, 0, 0.06); border-radius: 0; } .ds-impact-zero { position: absolute; inset-block: 0; left: 50%; width: 1px; background: rgba(0, 0, 0, 0.15); } .ds-impact-bar { position: absolute; inset-block: 0; } .ds-impact-pos { left: 50%; width: 40%; background: var(--color-forest, #285744); } .ds-impact-neg { left: 25%; width: 25%; background: var(--color-clay, #b06a52); } .ds-impact-val { text-align: right; font-size: 12px; font-weight: 600; font-variant-numeric: tabular-nums; } .ds-impact-val-pos { color: var(--color-forest, #285744); } .ds-impact-val-neg { color: var(--color-clay-ink, #8d5240); } .ds-impact-scale { display: flex; justify-content: space-between; padding: 0 32px 0 96px; font-size: 11px; color: var(--color-muted, #657069); }"
+    },
+    {
+      "name": "Südtirol-Karte",
+      "kind": "custom",
+      "refersTo": null,
+      "description": "Standortnachweis als stilisierter Umriss. Ein Punkt je Projekt in der Markerfarbe seines primären Lebensraums; kein Netzwerk-Request.",
+      "html": "<figure class=\"ds-map\"><div class=\"ds-map-frame\"><svg viewBox=\"0 0 200 120\" role=\"img\" aria-label=\"Südtirol im Umriss mit Projektstandorten\"><path d=\"M10 55 30 30 70 22 110 14 150 20 178 34 190 52 168 66 140 62 120 78 96 96 70 88 44 74Z\" fill=\"#dfe8d6\" stroke=\"#285744\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/><circle cx=\"146\" cy=\"42\" r=\"9\" fill=\"#f7f6f0\"/><circle cx=\"146\" cy=\"42\" r=\"6\" fill=\"#5c8581\" stroke=\"#183229\" stroke-width=\"1.2\"/><circle cx=\"146\" cy=\"42\" r=\"13\" fill=\"none\" stroke=\"#5c8581\" stroke-width=\"1\" opacity=\"0.4\"/><circle cx=\"104\" cy=\"56\" r=\"6\" fill=\"#f7f6f0\"/><circle cx=\"104\" cy=\"56\" r=\"4\" fill=\"#9a8054\"/><circle cx=\"82\" cy=\"72\" r=\"6\" fill=\"#f7f6f0\"/><circle cx=\"82\" cy=\"72\" r=\"4\" fill=\"#8b7768\"/></svg></div><figcaption class=\"ds-map-caption\">Punktfarbe = primärer Lebensraum · Umriss: © OpenStreetMap-Mitwirkende (ODbL)</figcaption></figure>",
+      "css": ".ds-map { margin: 0; width: 340px; font-family: 'Public Sans', ui-sans-serif, system-ui, sans-serif; } .ds-map-frame { padding: 16px; background: var(--color-paper, #f7f6f0); border: 1px solid var(--color-line, rgba(24,50,41,0.12)); border-radius: 6px; } .ds-map-frame svg { display: block; width: 100%; height: auto; } .ds-map-caption { margin-top: 12px; font-size: 11px; line-height: 1.45; color: var(--color-muted, #657069); }"
+    }
+  ],
+  "narrative": {
+    "northStar": "Die kultivierte Landschaft",
+    "overview": "Südtirol ist keine Wildnis. Es ist eine Landschaft, die seit Jahrhunderten bearbeitet wird — Terrassen, Mähwiesen, Trockenmauern, Obstanger. Genau daraus bezieht dieses System sein Material: Bergpapier statt Weiß, Tannentinte statt Schwarz, Almmoos und Salbei als Flächen, Lehm als Warnung, Almgold als das eine Licht, das den Blick lenkt. Die Farben kommen aus dem Ort, den die Plattform vertritt. Nichts davon leuchtet, und nichts davon behauptet Ökologie — es zeigt sie.\n\nDie Form dagegen ist Kultur, nicht Natur: gerade Kanten, knappe Radien, lineare Trennungen. Wo die Farbwelt warm und gewachsen ist, ist die Geometrie gemessen. Diese Spannung ist der Kern des Systems — eine Wiese, die vermessen wurde. Sie hält die Plattform gleichzeitig glaubwürdig für Fördergeber und zugänglich für Menschen, die zum ersten Mal über den eigenen Haushalt nachdenken. Fläche schafft Tiefe, nicht Schatten: Papier trägt Weiß, Weiß trägt Salbei, eine Haarlinie trennt. Erst wenn jemand mit dem Zeiger oder der Tastatur etwas berührt, antwortet die Oberfläche.\n\nAusdrücklich verworfen: leuchtende Öko-Signalfarben (Neon-Lime, Mint, Koralle — diese Werte standen hier bereits einmal im Hero und wurden entfernt), Spendenplattform-Dramaturgie mit Countdown und Druckzählern, Startup-SaaS-Optik mit Verlaufsmarken und Glasmorphismus, sowie dekorative Illustration ohne Informationswert.",
+    "keyCharacteristics": [
+      "Papierfarbener Grund (#f7f6f0), nie reines Weiß als Seitenhintergrund",
+      "Ein einziger Akzent — Almgold — und der trägt Text, statt welcher zu sein",
+      "Farbe bedeutet etwas: Bergwald positiv, Lehm belastend, Gold handlungsfähig",
+      "Tonale Schichtung statt Schatten; Schatten sind Zustandsantwort",
+      "Präzise, knappe Radien (0–8 px); die Pille ist abgeschafft",
+      "Zwei Schriften, streng getrennt: Newsreader spricht, Public Sans arbeitet",
+      "Zahlen immer tabular-nums — Werte sollen beim Ändern nicht springen"
+    ],
+    "rules": [
+      {
+        "name": "Die Trägerregel",
+        "body": "Almgold ist eine Flächenfarbe, keine Textfarbe. Es füllt Knöpfe und markiert Fokus; es steht nie als Schrift auf Foto, Verlauf oder Papier. Braucht Text den Akzentton, gilt Almmoos auf Dunkel und Bergwald auf Papier. Grund: Gold hat eine relative Leuchtdichte von 0,422 und verlangt darunter einen Hintergrund unter 0,107 — der Hero liefert 0,118, gemessen 2,81:1 gegen geforderte 3:1.",
+        "section": "colors"
+      },
+      {
+        "name": "Die Bedeutungsregel",
+        "body": "Bergwald heißt positiv, Lehm heißt belastend. Keine der beiden Farben darf dekorativ eingesetzt werden, solange der Lebensraum-Check sie semantisch führt. Wer eine Fläche einfärben will, nimmt Salbei oder Kalkstein.",
+        "section": "colors"
+      },
+      {
+        "name": "Die Ein-Licht-Regel",
+        "body": "Pro Ansicht trägt höchstens ein Element Almgold als Fläche. Zwei goldene Knöpfe nebeneinander gibt es nicht — der Akzent lebt von seiner Seltenheit.",
+        "section": "colors"
+      },
+      {
+        "name": "Die Elf-Pixel-Regel",
+        "body": "Keine Schrift unter 11 px. Öffentliche Flächen und der Lebensraum-Check erfüllen das vollständig; die einzigen Unterschreitungen liegen im Möbel-Editor hinter NODE_ENV === \"development\" und erreichen Nutzer nie.",
+        "section": "typography"
+      },
+      {
+        "name": "Die Zahlenregel",
+        "body": "Jede Zahl, die sich ändern kann — Score, Delta, Prozentsatz, Betrag — läuft in tabular-nums. Werte dürfen beim Aktualisieren nicht seitlich wandern.",
+        "section": "typography"
+      },
+      {
+        "name": "Die Vierundvierzig-Regel",
+        "body": "Jedes bedienbare Element ist mindestens 44 px hoch. Im Bestand konsequent über min-h-11 und min-h-12 durchgesetzt.",
+        "section": "layout"
+      },
+      {
+        "name": "Die Ruhe-Regel",
+        "body": "Flächen liegen im Ruhezustand flach. Wer einen Schatten setzt, muss den Zustand benennen können, der ihn auslöst.",
+        "section": "elevation"
+      },
+      {
+        "name": "Die Grünschatten-Regel",
+        "body": "Jeder Schatten ist grün getönt (rgba(3x, 5x, 4x, α)). Neutralgraue oder schwarze Schatten sind verboten, außer über Fotografie.",
+        "section": "elevation"
+      },
+      {
+        "name": "Die Lineal-Regel",
+        "body": "Kein Radius über 8 px, keine Pille. Ein rundes Element ist nur dann rund, wenn es tatsächlich ein Kreis ist — Signet, Zähler, Schritt-Nummer, Icon-Knopf.",
+        "section": "shapes"
+      },
+      {
+        "name": "Die Ein-Kanten-Regel",
+        "body": "Ein Element trennt sich vom Untergrund entweder durch seine Fläche oder durch seine Linie, nie durch beides plus Schatten.",
+        "section": "shapes"
+      },
+      {
+        "name": "Die Stimmenregel",
+        "body": "Newsreader trägt Display und Headline, sonst nichts. Ein Serifen-Fließtext, ein Serifen-Knopf oder eine Serifen-Tabelle bricht die Arbeitsteilung, auf der dieses System beruht.",
+        "section": "typography"
+      },
+      {
+        "name": "Die Gegenlichtregel",
+        "body": "Heller Text auf dunklem Grund oder Fotografie bekommt eine Spur mehr Durchschuss (1.75 statt 1.7) und leicht positive Laufweite (+0.01em). Ohne diese Kompensation wirkt Public Sans auf Tannentinte gedrängt.",
+        "section": "typography"
+      }
+    ],
+    "dos": [
+      "Do Almgold ausschließlich als Fläche einsetzen — Knopf oder Fokusring — und höchstens einmal pro Ansicht (Trägerregel, Ein-Licht-Regel).",
+      "Do Akzenttext grün setzen: Almmoos #bdd5a9 auf Dunkel und Foto, Bergwald #285744 auf Bergpapier.",
+      "Do Tiefe über Flächenwechsel bauen: Bergpapier → Reinweiß → Salbei, dazu 1 px Feldlinie.",
+      "Do Schatten nur als Antwort auf Hover oder Fokus setzen, und immer grün getönt.",
+      "Do jede veränderliche Zahl in tabular-nums setzen.",
+      "Do jedes bedienbare Element auf mindestens 44 px Höhe bringen.",
+      "Do Zustände doppelt kodieren — Farbe und Symbol oder Text, nie Farbe allein.",
+      "Do Kontraste hinter den tatsächlichen Glyphen messen, wenn Text auf Foto oder Verlauf liegt; deklarierte Werte gelten dort nicht.",
+      "Do bei prefers-reduced-motion einen vollständigen, gleichwertigen Pfad liefern — der Ruhezustand jeder Animation ist sichtbar.",
+      "Do Radien ausschließlich über var(--radius-*) setzen, nie als Zahl in einer Komponente.",
+      "Do die Bausteine aus src/components/ui/ importieren, statt Label, Fläche, Chip, Balken oder Fokusring neu auszuschreiben.",
+      "Do Newsreader ausschließlich für Display und Headline einsetzen; alles Bediente und Gerechnete ist Public Sans."
+    ],
+    "donts": [
+      "Don't Almgold als Schriftfarbe verwenden, auf keinem Untergrund. Im Hero steht das derzeit noch so (src/components/home/hero/index.tsx:30) und misst 2,81:1 bei 390 px — ein offener WCAG-1.4.3-Verstoß, kein Vorbild.",
+      "Don't Lehm oder gebrannten Lehm dekorativ einsetzen. Beide bedeuten „belastet\", solange der Lebensraum-Check sie semantisch führt.",
+      "Don't Bergwald als Markenakzent zweckentfremden — es bedeutet bereits Aktion und positiven Wert; eine dritte Bedeutung löscht die ersten beiden.",
+      "Don't leuchtende Öko-Signalfarben einführen: kein Neon-Lime #dcff58, kein Mint #67efc3, keine Koralle #ff9278. Diese Werte standen hier bereits im Hero und wurden bewusst entfernt.",
+      "Don't neue Pillen bauen (rounded-full) außer für echte Kreise: Signet, Zähler, Schritt-Nummer, Icon-Knopf.",
+      "Don't Radien über 8 px vergeben.",
+      "Don't neutralgraue oder schwarze Schatten setzen.",
+      "Don't reines Weiß als Seitengrund verwenden — der Grund ist Bergpapier.",
+      "Don't Schrift unter 11 px setzen, auch nicht in der dichten Tour-Ansicht.",
+      "Don't Verlaufsflächen als Markenelement einsetzen. Verläufe existieren ausschließlich zur Textabsicherung über Fotografie.",
+      "Don't Dringlichkeitsdramaturgie einbauen: keine Countdowns, keine Live-Spendenzähler, keine Emotionsportraits als Druckmittel.",
+      "Don't Farbe als einzigen Zustandsträger verwenden.",
+      "Don't Schriftgrößen als Literal setzen — die Rollenleiter liegt in var(--text-*) und var(--leading-*)."
+    ]
+  }
+}

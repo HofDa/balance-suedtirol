@@ -1,0 +1,41 @@
+import type { ProjectCategoryId } from "@/config/project-categories";
+
+export type Sponsor = {
+  name: string;
+  /** Approved logo asset in /public. Falls back to a text wordmark when absent. */
+  logo?: string;
+  website?: string;
+  /** Short, factual description of what the sponsor enables. */
+  contribution?: string;
+  /** Makes prototype sponsorship visibly distinguishable from real funding. */
+  isPlaceholder?: boolean;
+};
+
+export type ProjectStatus = "support-needed" | "in-progress" | "monitoring" | "completed";
+
+export type Project = {
+  slug: string;
+  title: string;
+  summary: string;
+  description: string;
+  /** The first habitat is the project's primary visual category. */
+  categoryIds: ProjectCategoryId[];
+  status: ProjectStatus;
+  municipality: string;
+  organization: string;
+  location: { lat: number; lng: number };
+  image: string;
+  goal: number;
+  funded: number;
+  supporters: number;
+  whyItMatters: string;
+  impact: Array<{ value: string; label: string; description?: string }>;
+  monitoring: {
+    species: string;
+    surveys: string;
+    reporting: string;
+    summary: string;
+  };
+  mainSponsor?: Sponsor;
+  otherSponsors?: Sponsor[];
+};

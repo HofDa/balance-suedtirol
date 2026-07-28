@@ -1,44 +1,34 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
-
 # dependencies
 /node_modules
-/.pnp
-.pnp.*
-.yarn/*
-!.yarn/patches
-!.yarn/plugins
-!.yarn/releases
-!.yarn/versions
-
-# testing
-/coverage
 
 # next.js
-/.next/
-/out/
+/.next
+/.next-dev
+/out
 
 # production
 /build
 
-# misc
-.DS_Store
-*.pem
-*.zip
-.codex/
-.codex-home/
-
-# debug
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-.pnpm-debug.log*
-
-# env files (can opt-in for committing if needed)
-.env*
+# local environment files
+.env
+.env*.local
 
 # vercel
 .vercel
 
 # typescript
 *.tsbuildinfo
-next-env.d.ts
+
+# logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# system files
+.DS_Store
+
+# Zwischenstände der Haus-Renderings. Kein Skript erzeugt sie, nichts
+# referenziert sie — sie liegen nur bei, bis geklärt ist, ob sie noch gebraucht
+# werden. Siehe assets-source/README.md.
+/assets-source/house/processed

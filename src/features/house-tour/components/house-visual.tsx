@@ -40,6 +40,11 @@ interface HouseVisualProps {
 
 const GRID_STEPS = Array.from({ length: 19 }, (_, i) => (i + 1) * 5); // 5, 10, 15 ... 95
 const LAYOUT_EDITOR_ENABLED = process.env.NODE_ENV === "development";
+const ACTIVE_OBJECT_GLOW = [
+  "drop-shadow(0 0 1.5px rgba(244, 248, 241, 0.95)) drop-shadow(0 0 5px rgba(39, 91, 70, 0.52))",
+  "drop-shadow(0 0 2px rgba(244, 248, 241, 1)) drop-shadow(0 0 10px rgba(39, 91, 70, 0.82))",
+  "drop-shadow(0 0 1.5px rgba(244, 248, 241, 0.95)) drop-shadow(0 0 5px rgba(39, 91, 70, 0.52))"
+];
 
 // Interactive Room Hotspots mapped onto the Isometric House Template
 const ROOM_REGIONS: Record<RoomId, {
@@ -708,8 +713,15 @@ export function HouseVisual({
                     initial={reduceMotion ? false : { opacity: 0, y: -6, scale: 0.97 }}
                     animate={{
                       opacity: objectState?.skipped ? 0.52 : 1,
-                      y: objectState?.active && !reduceMotion ? [0, -1.5, 0] : 0,
-                      scale: objectState?.active && !reduceMotion ? [1, 1.035, 1] : 1,
+                      y: 0,
+                      scale: 1,
+                      filter: objectState?.active
+                        ? reduceMotion
+                          ? ACTIVE_OBJECT_GLOW[0]
+                          : ACTIVE_OBJECT_GLOW
+                        : objectState?.completed
+                          ? "drop-shadow(0 0 3px rgba(39, 91, 70, 0.35))"
+                          : "drop-shadow(0 0 0 rgba(39, 91, 70, 0))",
                       rotate: currentRotate
                     }}
                     exit={reduceMotion ? undefined : { opacity: 0 }}
@@ -717,8 +729,7 @@ export function HouseVisual({
                       objectState?.active && !reduceMotion
                         ? {
                             opacity: { duration: 0.28 },
-                            y: { duration: 2.4, ease: "easeInOut", repeat: Infinity },
-                            scale: { duration: 2.4, ease: "easeInOut", repeat: Infinity },
+                            filter: { duration: 3.2, ease: "easeInOut", repeat: Infinity },
                             rotate: { duration: 0.28 }
                           }
                         : { duration: reduceMotion ? 0 : 0.28 }
@@ -734,10 +745,6 @@ export function HouseVisual({
                       isEditMode
                         ? "cursor-grab active:cursor-grabbing hover:ring-2 hover:ring-amber-400 hover:scale-[1.02] pointer-events-auto"
                         : "pointer-events-none",
-                      objectState?.active &&
-                        "drop-shadow-[0_0_7px_rgba(39,91,70,0.75)]",
-                      objectState?.completed &&
-                        "drop-shadow-[0_0_3px_rgba(39,91,70,0.42)]",
                       isSelected && "ring-2 ring-amber-400 shadow-2xl",
                       isBeingDragged && "ring-2 ring-amber-300 scale-[1.03] shadow-2xl"
                     )}

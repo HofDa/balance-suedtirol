@@ -2,20 +2,29 @@
 
 import { CheckCircle2, MousePointer2, Search } from "lucide-react";
 import { Label } from "@/components/ui/label";
+import type { Locale } from "@/config/site";
+
+const headlineByLocale: Record<Locale, string> = {
+  de: "Hinter jedem Gegenstand steckt eine Verbindung zur Natur.",
+  it: "Ogni oggetto racchiude un legame con la natura.",
+  en: "Every object has a connection to nature."
+};
 
 export function HouseDiscoveryIntro({
   completedObjects,
-  totalObjects
+  totalObjects,
+  locale
 }: {
   completedObjects: number;
   totalObjects: number;
+  locale: Locale;
 }) {
   return (
     <section className="flex h-full min-h-0 flex-col justify-center overflow-y-auto bg-white px-4 py-6 sm:px-6 sm:py-8">
       <div className="mx-auto w-full max-w-lg">
         <Label size="dense">Interaktiver Lebensraum-Check</Label>
         <h1 className="mt-2 text-2xl font-semibold leading-tight tracking-[-0.03em] sm:text-3xl">
-          Entdecke die Geschichten in deinem Zuhause.
+          {headlineByLocale[locale]}
         </h1>
         <p className="mt-3 text-sm leading-6 text-[var(--color-muted)]">
           Wähle direkt im Haus einen Raum. Darin führen dich alltägliche Gegenstände Schritt für Schritt zu ihren Verbindungen mit Lebensräumen und Biodiversität.

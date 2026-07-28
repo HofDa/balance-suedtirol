@@ -11,8 +11,9 @@ import { ObjectContextPanel } from "./object-context-panel";
 import { TourToolbar } from "./tour-toolbar";
 import { RoomScene } from "../scenes/room-scenes";
 import { TourResults } from "./tour-results";
+import type { Locale } from "@/config/site";
 
-export function TourAppShell({ locale }: { locale: string }) {
+export function TourAppShell({ locale }: { locale: Locale }) {
   const { state, dispatch, scores, completedRooms } = useHouseTour();
   const reduce = useReducedMotion();
   const room = getRoom(state.activeRoom);
@@ -175,6 +176,7 @@ export function TourAppShell({ locale }: { locale: string }) {
           <HouseDiscoveryIntro
             completedObjects={completedObjects}
             totalObjects={totalObjects}
+            locale={locale}
           />
         ) : room && question ? (
           <ObjectContextPanel

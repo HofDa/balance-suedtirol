@@ -14,8 +14,8 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
     <div data-home-page>
       <HomeMotionController />
       <Hero locale={locale} />
-      <HouseIntro locale={locale} />
       <FeaturedProjects locale={locale} />
+      <HouseIntro locale={locale} />
       <ImpactBridge locale={locale} />
     </div>
   );

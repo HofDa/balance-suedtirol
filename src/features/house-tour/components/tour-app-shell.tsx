@@ -1,5 +1,7 @@
 "use client";
 
+import { useCallback, useMemo } from "react";
+import dynamic from "next/dynamic";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { getRoom, availableRooms } from "../config/rooms";
@@ -10,26 +12,27 @@ import { HouseDiscoveryIntro } from "./house-discovery-intro";
 import { ObjectContextPanel } from "./object-context-panel";
 import { TourToolbar } from "./tour-toolbar";
 import { RoomScene } from "../scenes/room-scenes";
-import { TourResults } from "./tour-results";
 import type { Locale } from "@/config/site";
+import { getTourProgress } from "../model/scoring";
+
+const TourResults = dynamic(
+  () => import("./tour-results").then((module) => module.TourResults),
+  { loading: () => <div className="h-full bg-[var(--color-paper)]" aria-busy="true" /> }
+);
 
 export function TourAppShell({ locale }: { locale: Locale }) {
-  const { state, dispatch, scores, completedRooms } = useHouseTour();
+  const { state, dispatch, scores, totals, completedRooms } = useHouseTour();
   const reduce = useReducedMotion();
   const room = getRoom(state.activeRoom);
   const question = room?.questions[state.activeQuestionIndex];
-  const totalObjects = availableRooms.reduce((total, item) => total + item.questions.length, 0);
-  const completedObjects = availableRooms.reduce(
-    (total, item) =>
-      total +
-      item.questions.filter(
-        (itemQuestion) =>
-          state.answers[itemQuestion.id] || state.skippedQuestions[itemQuestion.id]
-      ).length,
-    0
+  const progress = useMemo(
+    () => getTourProgress(state.answers, state.skippedQuestions),
+    [state.answers, state.skippedQuestions]
   );
+  const totalObjects = progress.total;
+  const completedObjects = progress.handled;
 
-  const openRoom = (roomId: RoomId, questionIndex?: number) => {
+  const openRoom = useCallback((roomId: RoomId, questionIndex?: number) => {
     const target = getRoom(roomId);
     if (questionIndex !== undefined) {
       dispatch({ type: "OPEN_ROOM", roomId, questionIndex });
@@ -40,9 +43,13 @@ export function TourAppShell({ locale }: { locale: Locale }) {
         ) ?? 0;
       dispatch({ type: "OPEN_ROOM", roomId, questionIndex: Math.max(0, firstOpen) });
     }
-  };
+  }, [dispatch, state.answers, state.skippedQuestions]);
 
-  const findNextQuestion = () => {
+  const selectObject = useCallback((questionIndex: number) => {
+    dispatch({ type: "OPEN_OBJECT", questionIndex });
+  }, [dispatch]);
+
+  const findNextQuestion = useCallback(() => {
     if (!room) return -1;
     const order = [
       ...room.questions.map((_, index) => index).slice(state.activeQuestionIndex + 1),
@@ -54,30 +61,91 @@ export function TourAppShell({ locale }: { locale: Locale }) {
         return !state.answers[item.id] && !state.skippedQuestions[item.id];
       }) ?? -1
     );
-  };
+  }, [room, state.activeQuestionIndex, state.answers, state.skippedQuestions]);
 
-  const continueToNextObject = () => {
+  const continueToNextObject = useCallback(() => {
     const nextIndex = findNextQuestion();
-    if (nextIndex >= 0) dispatch({ type: "SET_QUESTION", index: nextIndex });
-  };
+    // Das nächste Objekt öffnet sich direkt. Ein Umweg über die Szene wäre ein
+    // zweiter Klick an einer zweiten Stelle für dieselbe Absicht.
+    if (nextIndex >= 0) {
+      dispatch({ type: "SET_QUESTION", index: nextIndex, open: true });
+      return;
+    }
+    // Kein offenes Objekt mehr: schließen, damit der Raumabschluss erscheint.
+    dispatch({ type: "SET_QUESTION", index: state.activeQuestionIndex });
+  }, [dispatch, findNextQuestion, state.activeQuestionIndex]);
 
-  const skipCurrentObject = () => {
+  const skipCurrentObject = useCallback(() => {
     if (!question) return;
     const nextIndex = findNextQuestion();
     dispatch({ type: "SKIP_QUESTION", questionId: question.id });
-    if (nextIndex >= 0) dispatch({ type: "SET_QUESTION", index: nextIndex });
-  };
+    if (nextIndex >= 0) dispatch({ type: "SET_QUESTION", index: nextIndex, open: true });
+  }, [dispatch, findNextQuestion, question]);
+
+  /** Zurück zum vorherigen Objekt des Raums, um eine Antwort zu korrigieren. */
+  const goToPreviousObject = useCallback(() => {
+    if (!room || state.activeQuestionIndex <= 0) return;
+    dispatch({ type: "SET_QUESTION", index: state.activeQuestionIndex - 1, open: true });
+  }, [dispatch, room, state.activeQuestionIndex]);
 
   const nextRoom = room
     ? [...availableRooms.slice(availableRooms.indexOf(room) + 1), ...availableRooms.slice(0, availableRooms.indexOf(room))]
         .find((item) => !completedRooms.includes(item.id))
     : undefined;
 
-  const reset = () => {
+  const reset = useCallback(() => {
     if (window.confirm("Möchtest du alle Antworten des Lebensraum-Checks zurücksetzen?")) {
       dispatch({ type: "RESET" });
     }
-  };
+  }, [dispatch]);
+
+  const answerQuestion = useCallback((questionId: string, optionId: string) => {
+    dispatch({ type: "SELECT_ANSWER", questionId, optionId });
+  }, [dispatch]);
+  const adjustQuestion = useCallback((questionId: string, quantity: number) => {
+    dispatch({ type: "SET_ADJUSTMENT", questionId, quantity });
+  }, [dispatch]);
+  const clearAdjustment = useCallback((questionId: string) => {
+    dispatch({ type: "CLEAR_ADJUSTMENT", questionId });
+  }, [dispatch]);
+  const openHouse = useCallback(() => dispatch({ type: "OPEN_HOUSE" }), [dispatch]);
+  const showResults = useCallback(() => dispatch({ type: "SHOW_RESULTS" }), [dispatch]);
+  const openCurrentObject = useCallback(
+    () => dispatch({ type: "OPEN_OBJECT", questionIndex: state.activeQuestionIndex }),
+    [dispatch, state.activeQuestionIndex]
+  );
+  const openNextRoom = useCallback(() => {
+    if (nextRoom) openRoom(nextRoom.id);
+  }, [nextRoom, openRoom]);
+
+  // Die Bilanz ist eine Lesefläche, keine Werkzeugansicht: sie verlässt das
+  // Zweispaltenraster, statt mobil in einem 42dvh hohen Fenster zu scrollen.
+  if (state.view === "results") {
+    return (
+      <div className="flex h-full min-h-0 flex-col overflow-hidden bg-[var(--color-paper)]">
+        <div className="h-14 shrink-0">
+          <TourToolbar
+            view={state.view}
+            completedObjects={completedObjects}
+            totalObjects={totalObjects}
+            onHouse={openHouse}
+            onReset={reset}
+            onResults={showResults}
+          />
+        </div>
+        <div className="min-h-0 flex-1 overflow-y-auto">
+          <TourResults
+            scores={scores}
+            totals={totals}
+            completedRooms={completedRooms}
+            locale={locale}
+            onContinue={openHouse}
+            onOpenRoom={(id) => openRoom(id)}
+          />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div
@@ -94,26 +162,16 @@ export function TourAppShell({ locale }: { locale: Locale }) {
           view={state.view}
           completedObjects={completedObjects}
           totalObjects={totalObjects}
-          onHouse={() => dispatch({ type: "OPEN_HOUSE" })}
+          onHouse={openHouse}
           onReset={reset}
-          onResults={() => dispatch({ type: "SHOW_RESULTS" })}
+          onResults={showResults}
         />
       </div>
 
       {/* Mobil obere Hälfte, auf dem Desktop linke Spalte: die Szene */}
       <main className="relative flex h-full min-h-0 min-w-0 items-center justify-center overflow-hidden border-b border-[var(--color-line)] md:col-start-1 md:row-span-2 md:row-start-1 md:border-b-0 md:border-r">
         <AnimatePresence mode="wait" initial={false}>
-          {state.view === "results" ? (
-            <motion.div
-              key="results"
-              className="h-full"
-              initial={reduce ? false : { opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={reduce ? undefined : { opacity: 0 }}
-            >
-              <TourResults scores={scores} completedRooms={completedRooms} locale={locale} onContinue={() => dispatch({ type: "OPEN_HOUSE" })} />
-            </motion.div>
-          ) : state.view === "house" ? (
+          {state.view === "house" ? (
             <motion.div
               key="house"
               className="h-full"
@@ -142,9 +200,7 @@ export function TourAppShell({ locale }: { locale: Locale }) {
                 roomId={room.id}
                 answers={state.answers}
                 skippedQuestions={state.skippedQuestions}
-                onSelectObject={(questionIndex) =>
-                  dispatch({ type: "OPEN_OBJECT", questionIndex })
-                }
+                onSelectObject={selectObject}
               />
             </motion.div>
           ) : null}
@@ -156,27 +212,15 @@ export function TourAppShell({ locale }: { locale: Locale }) {
         className="flex min-h-0 min-w-0 flex-col overflow-hidden bg-white md:col-start-2 md:row-start-2"
         aria-label="Fragen, Werte und Steuerung"
       >
-        {state.view === "results" ? (
-          // Die Werte stehen bereits in der Bilanz links, hier wäre die Tafel eine Dopplung.
-          <div className="flex min-h-0 flex-1 items-center justify-center px-4 py-6 text-center sm:px-6">
-            <div className="max-w-xs">
-              <p className="text-sm font-semibold">Weiter geht es im Haus</p>
-              <p className="mt-2 text-xs leading-5 text-[var(--color-muted)]">
-                Jeder weitere Raum macht die Bilanz vollständiger.
-              </p>
-              <button
-                onClick={() => dispatch({ type: "OPEN_HOUSE" })}
-                className="mt-6 min-h-11 rounded-[var(--radius-md)] bg-[var(--color-ink)] px-5 text-xs font-semibold text-white"
-              >
-                Zur Hausübersicht
-              </button>
-            </div>
-          </div>
-        ) : state.view === "house" ? (
+        {state.view === "house" ? (
           <HouseDiscoveryIntro
             completedObjects={completedObjects}
             totalObjects={totalObjects}
             locale={locale}
+            answers={state.answers}
+            skippedQuestions={state.skippedQuestions}
+            onSelectRoom={(id) => openRoom(id)}
+            onResults={showResults}
           />
         ) : room && question ? (
           <ObjectContextPanel
@@ -185,18 +229,22 @@ export function TourAppShell({ locale }: { locale: Locale }) {
             questionIndex={state.activeQuestionIndex}
             objectOpen={state.objectOpen}
             answers={state.answers}
+            adjustments={state.adjustments}
             skippedQuestions={state.skippedQuestions}
-            tab={state.panelTab}
-            houseHandled={completedObjects}
-            houseTotal={totalObjects}
+            totals={totals}
             nextRoom={nextRoom}
-            onAnswer={(questionId, optionId) => dispatch({ type: "SELECT_ANSWER", questionId, optionId })}
+            locale={locale}
+            onAnswer={answerQuestion}
+            onAdjust={adjustQuestion}
+            onClearAdjust={clearAdjustment}
             onContinue={continueToNextObject}
             onSkip={skipCurrentObject}
-            onEdit={() => dispatch({ type: "SET_PANEL_TAB", tab: "decision" })}
-            onHouse={() => dispatch({ type: "OPEN_HOUSE" })}
-            onNextRoom={() => nextRoom && openRoom(nextRoom.id)}
-            onResults={() => dispatch({ type: "SHOW_RESULTS" })}
+            onBack={goToPreviousObject}
+            onOpenObject={openCurrentObject}
+            onHouse={openHouse}
+            onSelectRoom={(id) => openRoom(id)}
+            onNextRoom={openNextRoom}
+            onResults={showResults}
             allComplete={completedRooms.length === availableRooms.length}
           />
         ) : null}

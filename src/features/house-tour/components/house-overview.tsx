@@ -1,5 +1,6 @@
 "use client";
 
+import { memo } from "react";
 import type { RoomId } from "../model/types";
 import { HouseVisual } from "./house-visual";
 
@@ -10,7 +11,7 @@ interface HouseOverviewProps {
   activeRoom?: RoomId | null;
 }
 
-export function HouseOverview({
+export const HouseOverview = memo(function HouseOverview({
   onRoom,
   answers = {},
   skippedQuestions = {},
@@ -26,4 +27,4 @@ export function HouseOverview({
       />
     </div>
   );
-}
+});

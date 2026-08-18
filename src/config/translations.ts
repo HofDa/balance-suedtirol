@@ -14,6 +14,7 @@ const translations = {
       mission: "Eine digitale Plattform, die Menschen, Projekte und Biodiversität in Südtirol verbindet.",
       science: "Wissenschaftlich fundierte Methodik und transparente Projektdokumentation.",
       methodology: "Methodik",
+      carbonStance: "CO₂ & Biodiversität",
       explore: "Entdecken",
       habitatCheck: "Lebensraum-Check",
       projects: "Projekte",
@@ -66,6 +67,36 @@ const translations = {
         ["Transparent", "Klare Kriterien sowie offen dokumentierte Maßnahmen und Fortschritte."],
         ["Wirksam", "Jedes Projekt stärkt Lebensräume und fördert die Biodiversität in Südtirol."]
       ]
+    },
+    carbonStance: {
+      eyebrow: "CO₂ & Biodiversität",
+      title: "Warum es hier keinen Kompensationsrechner gibt.",
+      lead: "Der Lebensraum-Check rechnet aus, wie viel CO₂ dein Alltag verursacht. Er bietet dir aber nicht an, diese Menge gegen einen Betrag wieder auszugleichen. Das ist keine Lücke, sondern eine Entscheidung — und hier stehen die Gründe dafür.",
+      scopeEyebrow: "Bilanzgrenze",
+      scopeTitle: "Was der Check rechnet, und was er nicht behauptet.",
+      scopeCopy: "Der CO₂-Wert im Ergebnis ist ein voller Fußabdruck einschließlich Vorkette, pro Person und Jahr. Er ist als Größenordnung gebaut, damit du siehst, welcher Bereich deines Alltags schwer wiegt — nicht als geprüfte Ökobilanz. Aus einer bewusst vereinfachten Zahl einen Euro-Betrag abzuleiten, würde ihr eine Genauigkeit geben, die sie nicht hat.",
+      reasonsEyebrow: "Vier Gründe",
+      reasonsTitle: "Warum sich Ausstoß nicht sauber gegenrechnen lässt.",
+      reasons: [
+        ["Eine Tonne ist überall gleich. Ein Lebensraum nicht.", "Kompensation lebt davon, dass eine Tonne hier gegen eine Tonne irgendwo tauschbar ist. Ein Moor im Pustertal hat diesen Tauschwert nicht. Was dort verloren geht, entsteht anderswo nicht noch einmal — nicht mit denselben Arten, nicht im selben Wasserhaushalt, nicht an derselben Stelle im Gefüge."],
+        ["Die Emission wirkt sofort, die Speicherung braucht Jahrzehnte.", "Kohlenstoff, der heute frei wird, wirkt heute. Eine Hecke, eine Magerwiese, ein wiedervernässtes Moor binden ihn über Jahrzehnte — und nur so lange, wie die Fläche bleibt, was sie ist. Dürre, Brand oder eine geänderte Nutzung drehen die Bindung wieder zurück. Diese zeitliche Lücke verschwindet nicht dadurch, dass eine Bilanz sie auf null setzt."],
+        ["Bezahlt ist nicht vermieden.", "Ein Rechner, der am Ende einen Betrag nennt, verschiebt die Frage von „Was ändere ich?“ zu „Was kostet es?“. Der Check ist für die erste Frage gebaut. Er zeigt dir, wo deine eigenen Zahlen groß sind — weil dort auch dein Handlungsspielraum am größten ist."],
+        ["Wir könnten das Versprechen nicht belegen.", "Ein Ausgleich müsste nachweisen, dass eine Fläche ohne die Zahlung nicht entstanden wäre und dass sie dauerhaft bleibt. Diesen Nachweis kann die Plattform heute nicht führen. Eine Aussage ohne Beleg gehört nach unseren eigenen Regeln gestrichen, nicht eingebaut."]
+      ],
+      insteadEyebrow: "Was stattdessen zählt",
+      insteadTitle: "Lebensräume erhalten und wiederherstellen.",
+      insteadCopy: "Biodiversität ist hier kein Ersatzmaß für Klimaschutz, sondern ein eigener Grund. Eine artenreiche Wiese bestäubt, hält Wasser im Hang, trägt Boden und übersteht ein trockenes Jahr besser als eine verarmte. Wer sie erhält, gleicht damit nichts aus — er erhält die Grundlage, auf der alles andere steht.",
+      storageTitle: "Kohlenstoff kommt trotzdem vor — als Wirkung, nicht als Ware.",
+      storageCopy: "Intakte Moore, alte Wiesenböden, Hecken und Streuobstbestände speichern Kohlenstoff. Das ist eine reale Wirkung intakter Lebensräume und ein guter Grund, sie zu schützen. Wir schreiben diese Speicherung aber niemandem gut und rechnen sie nicht in Tonnen um. In dem Moment, in dem man sie als Gegenwert verkauft, steht man wieder bei dem Versprechen, das wir gerade nicht geben wollen.",
+      pathEyebrow: "Der Weg stattdessen",
+      pathTitle: "Verstehen, verringern, vor Ort stärken.",
+      path: [
+        ["Verstehen", "Der Check zeigt dir Größenordnungen statt einer Rechnung, die sich begleichen lässt."],
+        ["Verringern", "Dort ansetzen, wo die eigenen Zahlen groß sind — das bleibt der wirksamste Schritt."],
+        ["Vor Ort stärken", "Ein Projekt in Südtirol unterstützen, das sich besuchen und nachprüfen lässt."]
+      ],
+      ctaProjects: "Projekte ansehen",
+      ctaMethod: "Methodik & Annahmen"
     },
     projectSubmission: {
       eyebrow: "Für Projektträger",
@@ -187,6 +218,7 @@ const translations = {
       mission: "Una piattaforma digitale che connette persone, progetti e biodiversità in Alto Adige.",
       science: "Metodologia scientificamente fondata e documentazione trasparente dei progetti.",
       methodology: "Metodo",
+      carbonStance: "CO₂ e biodiversità",
       explore: "Scopri",
       habitatCheck: "Check degli habitat",
       projects: "Progetti",
@@ -239,6 +271,36 @@ const translations = {
         ["Trasparente", "Criteri chiari ed azioni e progressi documentati apertamente."],
         ["Efficace", "Ogni progetto rafforza gli habitat e promuove la biodiversità in Alto Adige."]
       ]
+    },
+    carbonStance: {
+      eyebrow: "CO₂ e biodiversità",
+      title: "Perché qui non trovi un calcolatore di compensazione.",
+      lead: "L’habitat check calcola quanta CO₂ produce la tua vita quotidiana. Non ti propone però di compensare quella quantità con un pagamento. Non è una mancanza, è una scelta — e qui trovi le ragioni.",
+      scopeEyebrow: "Confine di bilancio",
+      scopeTitle: "Che cosa calcola il check e che cosa non pretende di dire.",
+      scopeCopy: "Il valore di CO₂ nel risultato è un’impronta completa, filiera inclusa, per persona e per anno. È costruito come ordine di grandezza, per mostrarti quale ambito della tua quotidianità pesa di più — non come bilancio ambientale certificato. Ricavare un importo in euro da un numero volutamente semplificato gli attribuirebbe una precisione che non ha.",
+      reasonsEyebrow: "Quattro ragioni",
+      reasonsTitle: "Perché le emissioni non si compensano in modo pulito.",
+      reasons: [
+        ["Una tonnellata è uguale ovunque. Un habitat no.", "La compensazione si regge sull’idea che una tonnellata qui valga una tonnellata altrove. Una torbiera in Val Pusteria non ha questo valore di scambio. Ciò che si perde lì non ricompare altrove — non con le stesse specie, non nello stesso regime idrico, non nello stesso punto della rete."],
+        ["L’emissione agisce subito, l’accumulo richiede decenni.", "Il carbonio liberato oggi agisce oggi. Una siepe, un prato magro, una torbiera riumidificata lo fissano nell’arco di decenni — e solo finché quella superficie resta ciò che è. Siccità, incendio o un cambio d’uso annullano il processo. Questo scarto temporale non sparisce perché un bilancio lo azzera."],
+        ["Pagato non significa evitato.", "Un calcolatore che alla fine indica un importo sposta la domanda da «che cosa cambio?» a «quanto costa?». Il check è costruito per la prima domanda. Ti mostra dove i tuoi numeri sono grandi — perché è lì che hai anche il margine d’azione più ampio."],
+        ["Non potremmo dimostrare quella promessa.", "Una compensazione dovrebbe dimostrare che una superficie non sarebbe nata senza quel pagamento e che resterà nel tempo. Oggi la piattaforma non può fornire questa prova. Secondo le nostre stesse regole, un’affermazione senza prova va tolta, non aggiunta."]
+      ],
+      insteadEyebrow: "Che cosa conta invece",
+      insteadTitle: "Conservare e ripristinare gli habitat.",
+      insteadCopy: "Qui la biodiversità non è una misura sostitutiva della protezione del clima, ma una ragione a sé. Un prato ricco di specie impollina, trattiene l’acqua sul versante, sostiene il suolo e supera un’annata secca meglio di uno impoverito. Chi lo conserva non compensa nulla: conserva la base su cui poggia tutto il resto.",
+      storageTitle: "Il carbonio c’è comunque — come effetto, non come merce.",
+      storageCopy: "Torbiere intatte, suoli prativi antichi, siepi e frutteti tradizionali immagazzinano carbonio. È un effetto reale degli habitat integri ed è un buon motivo per proteggerli. Non accreditiamo però questo accumulo a nessuno e non lo convertiamo in tonnellate. Nel momento in cui lo si vende come controvalore, si torna alla promessa che qui non vogliamo fare.",
+      pathEyebrow: "La strada che proponiamo",
+      pathTitle: "Capire, ridurre, rafforzare sul posto.",
+      path: [
+        ["Capire", "Il check ti mostra ordini di grandezza, non un conto da saldare."],
+        ["Ridurre", "Agire dove i propri numeri sono grandi resta il passo più efficace."],
+        ["Rafforzare sul posto", "Sostenere un progetto in Alto Adige che si può visitare e verificare."]
+      ],
+      ctaProjects: "Vedi i progetti",
+      ctaMethod: "Metodo e assunzioni"
     },
     projectSubmission: {
       eyebrow: "Per chi propone progetti",
@@ -360,6 +422,7 @@ const translations = {
       mission: "A digital platform connecting people, projects and biodiversity in South Tyrol.",
       science: "Scientifically grounded methodology and transparent project documentation.",
       methodology: "Methodology",
+      carbonStance: "CO₂ & biodiversity",
       explore: "Explore",
       habitatCheck: "Habitat Check",
       projects: "Projects",
@@ -412,6 +475,36 @@ const translations = {
         ["Transparent", "Clear criteria and openly documented measures and progress."],
         ["Effective", "Every project strengthens habitats and fosters biodiversity in South Tyrol."]
       ]
+    },
+    carbonStance: {
+      eyebrow: "CO₂ & biodiversity",
+      title: "Why there is no offset calculator here.",
+      lead: "The habitat check works out how much CO₂ your everyday life causes. What it does not do is offer to cancel that amount out against a payment. This is not a gap, it is a decision — and these are the reasons for it.",
+      scopeEyebrow: "Accounting boundary",
+      scopeTitle: "What the check calculates, and what it does not claim.",
+      scopeCopy: "The CO₂ figure in your result is a full footprint including supply chains, per person and year. It is built as an order of magnitude, so you can see which part of your everyday life weighs heavily — not as an audited life-cycle assessment. Deriving a euro amount from a deliberately simplified number would lend it a precision it does not have.",
+      reasonsEyebrow: "Four reasons",
+      reasonsTitle: "Why emissions cannot be cleanly cancelled out.",
+      reasons: [
+        ["A tonne is the same everywhere. A habitat is not.", "Offsetting rests on the idea that a tonne here trades against a tonne somewhere else. A bog in the Puster Valley has no such exchange rate. What is lost there does not reappear elsewhere — not with the same species, not in the same water regime, not at the same point in the fabric."],
+        ["The emission acts now, the storage takes decades.", "Carbon released today acts today. A hedgerow, a species-rich meadow, a rewetted bog bind it over decades — and only for as long as the site stays what it is. Drought, fire or a change of use reverse it. That gap in time does not disappear because a balance sheet sets it to zero."],
+        ["Paid for is not avoided.", "A calculator that ends in an amount shifts the question from “what do I change?” to “what does it cost?”. The check is built for the first question. It shows you where your own numbers are large — because that is where your room to act is largest too."],
+        ["We could not back the promise up.", "An offset would have to show that a site would not have existed without the payment, and that it will last. The platform cannot provide that evidence today. By our own rules, a claim without evidence gets cut, not built in."]
+      ],
+      insteadEyebrow: "What counts instead",
+      insteadTitle: "Keeping habitats, and bringing them back.",
+      insteadCopy: "Biodiversity here is not a stand-in measure for climate action, it is a reason in its own right. A species-rich meadow pollinates, holds water on the slope, carries soil and gets through a dry year better than a depleted one. Keeping it does not balance anything out — it keeps the ground everything else stands on.",
+      storageTitle: "Carbon is still part of it — as an effect, not as a product.",
+      storageCopy: "Intact bogs, old meadow soils, hedgerows and traditional orchards store carbon. That is a real effect of intact habitats and a good reason to protect them. But we do not credit that storage to anyone and we do not convert it into tonnes. The moment it is sold as a counter-value, you are back at the promise we are choosing not to make.",
+      pathEyebrow: "The path we suggest instead",
+      pathTitle: "Understand, reduce, strengthen locally.",
+      path: [
+        ["Understand", "The check shows you orders of magnitude, not a bill that can be settled."],
+        ["Reduce", "Starting where your own numbers are large remains the most effective step."],
+        ["Strengthen locally", "Support a project in South Tyrol that you can visit and check for yourself."]
+      ],
+      ctaProjects: "View projects",
+      ctaMethod: "Method & assumptions"
     },
     projectSubmission: {
       eyebrow: "For project teams",

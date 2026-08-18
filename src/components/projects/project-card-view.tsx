@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, MapPin } from "lucide-react";
-import type { Project } from "@/types/project";
+import type { ProjectCardData } from "@/types/project";
 import type { Locale } from "@/config/site";
 import { ProjectCardSponsor } from "./project-card-sponsor";
 import { ProjectCategoryBadge, ProjectCategoryMarker } from "./project-category";
@@ -28,7 +28,7 @@ export function ProjectCardView({
    */
   transitionName
 }: {
-  project: Project;
+  project: ProjectCardData;
   locale: Locale;
   copy: ProjectCardViewCopy;
   categoryLabels: Record<ProjectCategoryId, string>;
@@ -87,7 +87,7 @@ export function ProjectCardView({
         {project.mainSponsor ? (
           <ProjectCardSponsor
             mainSponsor={project.mainSponsor}
-            additionalCount={project.otherSponsors?.length}
+            additionalCount={project.additionalSponsorCount}
             copy={{
               mainSponsor: copy.mainSponsor,
               placeholder: copy.placeholder,

@@ -158,8 +158,8 @@ export const overlayRules: OverlayRule[] = [
   { questionId: "mobility-short", options: ["car"], sprites: ["car"] },
   { questionId: "mobility-short", options: ["mixed"], sprites: ["car", "bike"] },
   { questionId: "mobility-short", options: ["active"], sprites: ["bike"] },
-  { questionId: "mobility-km", options: ["high"], sprites: ["car"] },
-  { questionId: "mobility-km", options: ["low"], sprites: ["bike"] },
+  { questionId: "mobility-km", options: ["car-combustion", "car-efficient", "car-electric"], sprites: ["car"] },
+  { questionId: "mobility-km", options: ["car-none"], sprites: ["bike"] },
   // Garden – the terrace greens up the more nature-friendly the answer is
   { questionId: "garden-ground", options: ["natural-bed"], sprites: ["gardenPlant1"] },
   { questionId: "garden-plants", options: ["ornamental"], sprites: ["gardenPlant2"] },

@@ -1,4 +1,4 @@
-import type { Project } from "@/types/project";
+import type { Project, ProjectCardData, ProjectListItem } from "@/types/project";
 import type { Locale } from "@/config/site";
 
 export const projects: Project[] = [
@@ -245,4 +245,28 @@ const projectTranslations: Record<Exclude<Locale, "de">, Record<string, Partial<
 export function getProjects(locale: Locale): Project[] {
   if (locale === "de") return projects;
   return projects.map((project) => ({ ...project, ...projectTranslations[locale][project.slug] }));
+}
+
+export function toProjectCardData(project: Project): ProjectCardData {
+  return {
+    slug: project.slug,
+    title: project.title,
+    summary: project.summary,
+    categoryIds: project.categoryIds,
+    status: project.status,
+    municipality: project.municipality,
+    organization: project.organization,
+    image: project.image,
+    mainSponsor: project.mainSponsor,
+    additionalSponsorCount: project.otherSponsors?.length ?? 0
+  };
+}
+
+/** Nur Felder, die Filter und Karten im Client tatsächlich benötigen. */
+export function getProjectListItems(locale: Locale): ProjectListItem[] {
+  return getProjects(locale).map((project) => ({
+    ...toProjectCardData(project),
+    goal: project.goal,
+    funded: project.funded
+  }));
 }

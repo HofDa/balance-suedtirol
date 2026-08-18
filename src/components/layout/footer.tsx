@@ -45,6 +45,9 @@ export function Footer({ locale }: { locale: Locale }) {
               <li>
                 <Link href={`/${locale}/projekt-einreichen`} className={linkClass}>{t.submitProject}</Link>
               </li>
+              <li>
+                <Link href={`/${locale}/co2-und-biodiversitaet`} className={linkClass}>{t.carbonStance}</Link>
+              </li>
             </ul>
           </nav>
 

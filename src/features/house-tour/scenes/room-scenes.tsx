@@ -1,5 +1,6 @@
 "use client";
 
+import { memo } from "react";
 import { motion } from "framer-motion";
 import type { RoomId } from "../model/types";
 import { HouseVisual } from "../components/house-visual";
@@ -11,7 +12,7 @@ interface SceneProps {
   onSelectObject: (questionIndex: number) => void;
 }
 
-export function RoomScene({ roomId, answers, skippedQuestions, onSelectObject }: SceneProps) {
+export const RoomScene = memo(function RoomScene({ roomId, answers, skippedQuestions, onSelectObject }: SceneProps) {
   return (
     <motion.div
       layoutId={`room-frame-${roomId}`}
@@ -26,4 +27,4 @@ export function RoomScene({ roomId, answers, skippedQuestions, onSelectObject }:
       />
     </motion.div>
   );
-}
+});

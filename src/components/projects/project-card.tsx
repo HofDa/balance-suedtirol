@@ -1,4 +1,5 @@
 import type { Project } from "@/types/project";
+import { toProjectCardData } from "@/data/projects";
 import type { Locale } from "@/config/site";
 import { getTranslations } from "@/config/translations";
 import { getProjectCategories, type ProjectCategoryId } from "@/config/project-categories";
@@ -12,7 +13,7 @@ export function ProjectCard({ project, locale }: { project: Project; locale: Loc
 
   return (
     <ProjectCardView
-      project={project}
+      project={toProjectCardData(project)}
       locale={locale}
       categoryLabels={categoryLabels}
       copy={{

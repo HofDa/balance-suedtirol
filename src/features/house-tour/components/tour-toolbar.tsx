@@ -37,19 +37,34 @@ export function TourToolbar({
       </button>
 
       <div className="flex items-center gap-1">
+        {/* „12/21 Objekte“ las sich wie eine Anzeige, nicht wie ein Weg. Das
+            Verb steht jetzt vorn, der Zähler dahinter. */}
         <button
           type="button"
           onClick={onResults}
           disabled={!completedObjects}
-          aria-label={`${completedObjects} von ${totalObjects} Objekten bearbeitet. Ergebnis öffnen`}
+          aria-current={view === "results" ? "page" : undefined}
+          title={
+            completedObjects
+              ? "Deine Jahresbilanz ansehen"
+              : "Beantworte ein Objekt, dann wird die Bilanz sichtbar"
+          }
+          aria-label={
+            completedObjects
+              ? `Bilanz ansehen. ${completedObjects} von ${totalObjects} Objekten bearbeitet`
+              : `Bilanz noch nicht verfügbar. Beantworte zuerst ein Objekt von ${totalObjects}`
+          }
           className={cn(
             "inline-flex min-h-11 items-center gap-2 rounded-[var(--radius-md)] px-3 text-xs font-semibold text-[var(--color-forest)] transition-colors hover:bg-[var(--color-ink)]/5 disabled:opacity-45",
+            view === "results" && "bg-[var(--color-ink)]/5",
             focusRingTool
           )}
         >
           <BarChart3 className="size-4" aria-hidden />
-          <span className="tabular-nums">{completedObjects}/{totalObjects}</span>
-          <span className="hidden sm:inline">Objekte</span>
+          Bilanz
+          <span className="tabular-nums text-[var(--color-ink)]/40">
+            {completedObjects}/{totalObjects}
+          </span>
         </button>
         <button
           type="button"

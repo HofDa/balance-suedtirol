@@ -39,3 +39,18 @@ export type Project = {
   mainSponsor?: Sponsor;
   otherSponsors?: Sponsor[];
 };
+
+export type ProjectCardData = Pick<
+  Project,
+  | "slug"
+  | "title"
+  | "summary"
+  | "categoryIds"
+  | "status"
+  | "municipality"
+  | "organization"
+  | "image"
+  | "mainSponsor"
+> & { additionalSponsorCount: number };
+
+export type ProjectListItem = ProjectCardData & Pick<Project, "goal" | "funded">;

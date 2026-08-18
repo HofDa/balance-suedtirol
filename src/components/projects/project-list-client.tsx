@@ -1,10 +1,10 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useCallback, useState, useMemo } from "react";
 import { useSearchParams } from "next/navigation";
 import { Search, Check, SlidersHorizontal } from "lucide-react";
 import { ProjectCardView } from "@/components/projects/project-card-view";
-import type { Project, ProjectStatus } from "@/types/project";
+import type { ProjectListItem, ProjectStatus } from "@/types/project";
 import type { Locale } from "@/config/site";
 import { chipClass } from "@/components/ui/chip";
 import { focusRing } from "@/components/ui/focus";
@@ -15,7 +15,7 @@ import { ProjectCategoryIcon } from "./project-category";
 import type { getTranslations } from "@/config/translations";
 
 interface ProjectListClientProps {
-  projects: Project[];
+  projects: ProjectListItem[];
   locale: Locale;
   categories: Array<{ id: ProjectCategoryId; label: string }>;
   allCategoryLabel: string;
@@ -54,7 +54,16 @@ export function ProjectListClient({
   const [showMoreFilters, setShowMoreFilters] = useState(false);
   const [searchQuery, setSearchQuery] = useState<string>("");
 
+  const resetFilters = useCallback(() => {
+    setSelectedCategory("all");
+    setSelectedStatus("all");
+    setSelectedCrowdfunding("all");
+    setSelectedPhase("all");
+    setSearchQuery("");
+  }, []);
+
   const filteredProjects = useMemo(() => {
+    const normalizedQuery = searchQuery.trim().toLocaleLowerCase(locale);
     return projects.filter((project) => {
       const matchesCategory =
         selectedCategory === "all" ||
@@ -73,14 +82,14 @@ export function ProjectListClient({
         statusToPhase[project.status] === selectedPhase;
 
       const matchesSearch =
-        !searchQuery ||
-        project.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        project.summary.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        project.municipality.toLowerCase().includes(searchQuery.toLowerCase());
+        !normalizedQuery ||
+        project.title.toLocaleLowerCase(locale).includes(normalizedQuery) ||
+        project.summary.toLocaleLowerCase(locale).includes(normalizedQuery) ||
+        project.municipality.toLocaleLowerCase(locale).includes(normalizedQuery);
 
       return matchesCategory && matchesStatus && matchesCrowdfunding && matchesPhase && matchesSearch;
     });
-  }, [projects, selectedCategory, selectedStatus, selectedCrowdfunding, selectedPhase, searchQuery]);
+  }, [projects, locale, selectedCategory, selectedStatus, selectedCrowdfunding, selectedPhase, searchQuery]);
 
   const statuses = Object.entries(copy.statuses) as Array<[ProjectStatus, string]>;
   const phases = Object.entries(copy.phases) as Array<[ProjectPhase, string]>;
@@ -220,13 +229,7 @@ export function ProjectListClient({
         {hasActiveFilters && (
           <button
             onClick={() =>
-              withViewTransition(() => {
-                setSelectedCategory("all");
-                setSelectedStatus("all");
-                setSelectedCrowdfunding("all");
-                setSelectedPhase("all");
-                setSearchQuery("");
-              })
+              withViewTransition(resetFilters)
             }
             className={`min-h-11 text-[var(--color-forest)] underline hover:text-[var(--color-ink)] cursor-pointer ${focusRing}`}
           >
@@ -264,13 +267,7 @@ export function ProjectListClient({
           </p>
           <Button
             onClick={() =>
-              withViewTransition(() => {
-                setSelectedCategory("all");
-                setSelectedStatus("all");
-                setSelectedCrowdfunding("all");
-                setSelectedPhase("all");
-                setSearchQuery("");
-              })
+              withViewTransition(resetFilters)
             }
             className="mt-5 bg-[var(--color-forest)] text-xs font-bold"
           >

@@ -5,7 +5,7 @@ import { notFound } from "next/navigation";
 import { ArrowRight } from "lucide-react";
 import { Container } from "@/components/ui/container";
 import { ProjectListClient } from "@/components/projects/project-list-client";
-import { getProjects } from "@/data/projects";
+import { getProjectListItems } from "@/data/projects";
 import { isLocale } from "@/config/site";
 import { getTranslations } from "@/config/translations";
 import { Label } from "@/components/ui/label";
@@ -28,7 +28,7 @@ export default async function ProjectsPage({ params }: { params: Promise<{ local
   const submission = translations.projectSubmission;
   const page = translations.projectsPage;
   const categories = getProjectCategories(locale);
-  const localizedProjects = getProjects(locale);
+  const localizedProjects = getProjectListItems(locale);
   const categoryLabels = Object.fromEntries(
     categories.map(({ id, label }) => [id, label])
   ) as Record<ProjectCategoryId, string>;

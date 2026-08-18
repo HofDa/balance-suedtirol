@@ -1,5 +1,5 @@
 import { availableRooms } from "../config/rooms";
-import type { RoomId, ScoreDimension, Scores } from "./types";
+import type { RoomId, ScoreDimension, Scores, TourRoom } from "./types";
 
 export const scoreDimensions: { id: ScoreDimension; label: string; compact: string }[] = [
   { id: "biodiversity", label: "Biodiversität", compact: "Natur" },
@@ -10,6 +10,47 @@ export const scoreDimensions: { id: ScoreDimension; label: string; compact: stri
 
 export const baseScores: Scores = { biodiversity: 50, carbon: 50, water: 50, resources: 50 };
 const clamp = (value: number) => Math.max(0, Math.min(100, value));
+
+export type RoomProgress = {
+  total: number;
+  handled: number;
+  isStarted: boolean;
+  isComplete: boolean;
+};
+
+/** Einheitliche Semantik für beantwortete und bewusst übersprungene Fragen. */
+export function getRoomProgress(
+  room: TourRoom,
+  answers: Record<string, string>,
+  skippedQuestions: Record<string, boolean> = {}
+): RoomProgress {
+  const total = room.questions.length;
+  const handled = room.questions.reduce(
+    (count, question) => count + Number(Boolean(answers[question.id] || skippedQuestions[question.id])),
+    0
+  );
+  return {
+    total,
+    handled,
+    isStarted: handled > 0,
+    isComplete: total > 0 && handled === total
+  };
+}
+
+export function getTourProgress(
+  answers: Record<string, string>,
+  skippedQuestions: Record<string, boolean> = {}
+) {
+  return availableRooms.reduce(
+    (progress, room) => {
+      const roomProgress = getRoomProgress(room, answers, skippedQuestions);
+      progress.total += roomProgress.total;
+      progress.handled += roomProgress.handled;
+      return progress;
+    },
+    { total: 0, handled: 0 }
+  );
+}
 
 export function calculateScores(answers: Record<string, string>): Scores {
   const scores = { ...baseScores };
@@ -30,10 +71,7 @@ export function isRoomComplete(
   skippedQuestions: Record<string, boolean> = {}
 ) {
   const room = availableRooms.find((item) => item.id === roomId);
-  return Boolean(
-    room?.questions.length &&
-      room.questions.every((question) => answers[question.id] || skippedQuestions[question.id])
-  );
+  return room ? getRoomProgress(room, answers, skippedQuestions).isComplete : false;
 }
 
 export function completedRoomIds(
@@ -41,6 +79,6 @@ export function completedRoomIds(
   skippedQuestions: Record<string, boolean> = {}
 ) {
   return availableRooms
-    .filter((room) => isRoomComplete(room.id, answers, skippedQuestions))
+    .filter((room) => getRoomProgress(room, answers, skippedQuestions).isComplete)
     .map((room) => room.id);
 }

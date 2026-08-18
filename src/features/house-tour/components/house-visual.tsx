@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useRef } from "react";
+import { memo, useState, useMemo, useRef } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import {
   Bath,
@@ -28,6 +28,7 @@ import { focusRingTool } from "@/components/ui/focus";
 import { rooms } from "../config/rooms";
 import { houseObjects, objectSprites, visibleSprites } from "../config/house-overlays";
 import type { RoomId } from "../model/types";
+import { getRoomProgress } from "../model/scoring";
 
 interface HouseVisualProps {
   activeRoom: RoomId | null;
@@ -35,16 +36,26 @@ interface HouseVisualProps {
   skippedQuestions?: Record<string, boolean>;
   onSelectRoom?: (roomId: RoomId) => void;
   onSelectObject?: (questionIndex: number) => void;
-  isMobileSplit?: boolean;
 }
 
 const GRID_STEPS = Array.from({ length: 19 }, (_, i) => (i + 1) * 5); // 5, 10, 15 ... 95
 const LAYOUT_EDITOR_ENABLED = process.env.NODE_ENV === "development";
-const ACTIVE_OBJECT_GLOW = [
-  "drop-shadow(0 0 1.5px rgba(244, 248, 241, 0.95)) drop-shadow(0 0 5px rgba(39, 91, 70, 0.52))",
-  "drop-shadow(0 0 2px rgba(244, 248, 241, 1)) drop-shadow(0 0 10px rgba(39, 91, 70, 0.82))",
-  "drop-shadow(0 0 1.5px rgba(244, 248, 241, 0.95)) drop-shadow(0 0 5px rgba(39, 91, 70, 0.52))"
-];
+/**
+ * Fokus im geöffneten Raum.
+ *
+ * Der frühere weiche Halo erreichte gegen den Sage-Canvas (#dfe8d6) nur 1,15:1
+ * und war damit praktisch unsichtbar; WCAG 1.4.11 verlangt 3:1 für ein
+ * wahrnehmbares UI-Signal. Stattdessen eine harte Kontur: ein heller Kern, der
+ * gegen dunkle Möbel trägt, darum ein Ring in Forest, der gegen den hellen
+ * Canvas trägt. Die Ringe sind verkettet, jeder legt sich um das Ergebnis des
+ * vorherigen — daraus entsteht die geschlossene Silhouette.
+ */
+const ACTIVE_OBJECT_OUTLINE =
+  "drop-shadow(0 0 1px rgba(247, 246, 240, 0.95)) drop-shadow(1px 0 0 #285744) drop-shadow(-1px 0 0 #285744) drop-shadow(0 1px 0 #285744) drop-shadow(0 -1px 0 #285744) drop-shadow(0 5px 9px rgba(24, 50, 41, 0.26))";
+
+/** Objekte im Raum, die gerade nicht dran sind, treten farblich zurück. */
+const RESTING_OBJECT_FILTER = "saturate(0.45)";
+const COMPLETED_OBJECT_FILTER = "saturate(0.8)";
 
 // Interactive Room Hotspots mapped onto the Isometric House Template
 const ROOM_REGIONS: Record<RoomId, {
@@ -68,25 +79,31 @@ const ROOM_REGIONS: Record<RoomId, {
   living: {
     title: "Wohnzimmer",
     openingClass: "left-[16%] top-[52%] h-[34%] w-[33%]",
-    zoomClass: "scale-[2.45] origin-[33.5%_82%] max-md:origin-[33.5%_69%] max-md:translate-x-[16.5%] max-md:translate-y-[-19%]",
+    // Untere Räume brauchen auf Desktop einen höhenabhängigen Ausgleich: bis
+    // zur maximalen Canvas-Höhe reichen 3,6 %, danach wächst nur der Rahmen.
+    zoomClass: "scale-[2.45] origin-[33.5%_82%] md:translate-x-[14%] md:translate-y-[max(3.6%,calc(46.4%_-_283px))] max-md:origin-[33.5%_69%] max-md:translate-x-[16.5%] max-md:translate-y-[-19%]",
     icon: Sofa
   },
   kitchen: {
     title: "Küche & Essen",
     openingClass: "left-[50%] top-[52%] h-[34%] w-[33%]",
-    zoomClass: "scale-[2.45] origin-[66.5%_82%] max-md:origin-[66.5%_69%] max-md:translate-x-[-16.5%] max-md:translate-y-[-19%]",
+    zoomClass: "scale-[2.45] origin-[66.5%_82%] md:translate-x-[-11.5%] md:translate-y-[max(3.6%,calc(46.4%_-_283px))] max-md:origin-[66.5%_69%] max-md:translate-x-[-16.5%] max-md:translate-y-[-19%]",
     icon: CookingPot
   },
   mobility: {
     title: "Garage & Mobilität",
     openingClass: "left-0 top-[54%] h-[27%] w-[16%]",
-    zoomClass: "scale-[2.45] origin-[8%_67.5%] max-md:translate-x-[42%] max-md:translate-y-[-17.5%]",
+    // Die Garage klebt am linken Bildrand: Der Ursprung sitzt in ihrer Mitte,
+    // das Translate schiebt die abgeschnittene Kante wieder ins Bild.
+    zoomClass: "scale-[3.8] origin-[8%_66%] translate-x-[-2%] translate-y-[-9.6%] max-md:scale-[3.2] max-md:translate-x-[-3.1%] max-md:translate-y-[-19.3%]",
     icon: CarFront
   },
   garden: {
     title: "Garten & Außenbereich",
     openingClass: "left-[83%] top-[58%] h-[42%] w-[17%]",
-    zoomClass: "scale-[2.2] origin-[91.5%_79%] max-md:translate-x-[-41.5%] max-md:translate-y-[-29%]",
+    // Der Gartenstreifen ist schmal und läuft bis an den rechten und unteren
+    // Bildrand: enger Zoom, rechte Bildkante bündig zur Rahmenkante.
+    zoomClass: "scale-[4.9] origin-[91.5%_79%] translate-x-[-2.1%] translate-y-[1.2%] max-md:scale-[3.8] max-md:translate-x-[0.9%] max-md:translate-y-[-15.6%]",
     icon: Flower2
   },
   travel: {
@@ -122,7 +139,7 @@ const META_ASPECTS: Record<string, number> = {
   "tv.webp": 0.2363
 };
 
-export function HouseVisual({
+export const HouseVisual = memo(function HouseVisual({
   activeRoom,
   answers,
   skippedQuestions = {},
@@ -138,11 +155,12 @@ export function HouseVisual({
   const roomStatus = useMemo(() => {
     const status: Record<string, { total: number; answered: number; isComplete: boolean }> = {};
     for (const room of rooms) {
-      const total = room.questions.length;
-      const answered = room.questions.filter(
-        (question) => Boolean(answers[question.id] || skippedQuestions[question.id])
-      ).length;
-      status[room.id] = { total, answered, isComplete: total > 0 && answered === total };
+      const progress = getRoomProgress(room, answers, skippedQuestions);
+      status[room.id] = {
+        total: progress.total,
+        answered: progress.handled,
+        isComplete: progress.isComplete
+      };
     }
     return status;
   }, [answers, skippedQuestions]);
@@ -175,6 +193,8 @@ export function HouseVisual({
         primary: boolean;
       }
     > = {};
+    // Nur im geöffneten Raum; in der Hausübersicht bleibt jedes Möbel gleich hell.
+    if (!isFocusedRoom) return state;
     focusedRoom?.questions.forEach((question, questionIndex) => {
       const object = houseObjects[question.id as keyof typeof houseObjects];
       (object?.sprites ?? []).forEach((spriteId, spriteIndex) => {
@@ -189,7 +209,65 @@ export function HouseVisual({
       });
     });
     return state;
-  }, [activeObjectIndex, answers, focusedRoom, skippedQuestions]);
+  }, [activeObjectIndex, answers, focusedRoom, isFocusedRoom, skippedQuestions]);
+
+  /**
+   * Der Spotlight legt alles außer dem aktiven Objekt in einen hellen Schleier.
+   * Das trifft auch die eingezeichnete Kulisse (Wände, Böden, PV-Anlage), die
+   * ein reiner Sprite-Effekt nicht erreichen kann.
+   *
+   * Mitte und Radius kommen aus der tatsächlichen Bounding-Box der Sprites, nicht
+   * aus handgesetzten Werten: so umfasst das Loch jedes Objekt sicher, vom 4 %
+   * breiten WC bis zur 31 % breiten Küchenzeile.
+   */
+  const spotlight = useMemo(() => {
+    if (!isFocusedRoom || !focusedRoom) return null;
+    const activeQuestion = focusedRoom.questions[activeObjectIndex];
+    if (!activeQuestion) return null;
+
+    const activeSprites = sprites.filter((sprite) => objectStateBySprite[sprite.id]?.active);
+    let centerX: number;
+    let centerY: number;
+    let reach: number;
+
+    if (activeSprites.length > 0) {
+      let left = 100;
+      let top = 100;
+      let right = 0;
+      let bottom = 0;
+      for (const sprite of activeSprites) {
+        const aspect = META_ASPECTS[sprite.src] || 1;
+        const height = sprite.height ?? sprite.width / aspect;
+        left = Math.min(left, sprite.left);
+        top = Math.min(top, sprite.top);
+        right = Math.max(right, sprite.left + sprite.width);
+        bottom = Math.max(bottom, sprite.top + height);
+      }
+      centerX = (left + right) / 2;
+      centerY = (top + bottom) / 2;
+      reach = Math.hypot(right - left, bottom - top) / 2;
+    } else {
+      // Objekte ohne Sprite (etwa Fernreisen) sind nur in die Kulisse gemalt.
+      const hotspot = houseObjects[activeQuestion.id as keyof typeof houseObjects]?.hotspot;
+      if (!hotspot) return null;
+      centerX = hotspot.left;
+      centerY = hotspot.top;
+      reach = 6;
+    }
+
+    // Der Schleier darf den Raum nicht schlucken und nicht zum Schlüsselloch werden.
+    const radius = Math.min(42, Math.max(14, reach * 3));
+    const clearStop = Math.min(72, Math.round(((reach * 1.25) / radius) * 100));
+
+    return {
+      key: activeQuestion.id,
+      centerX: Math.round(centerX * 10) / 10,
+      centerY: Math.round(centerY * 10) / 10,
+      radius: Math.round(radius * 10) / 10,
+      clearStop,
+      midStop: Math.round(clearStop + (100 - clearStop) * 0.45)
+    };
+  }, [activeObjectIndex, focusedRoom, isFocusedRoom, objectStateBySprite, sprites]);
 
   const [isEditMode, setIsEditMode] = useState(false);
   const [isPanelOpen, setIsPanelOpen] = useState(false);
@@ -620,7 +698,7 @@ export function HouseVisual({
           ref={canvasRef}
           onMouseMove={handleMouseMove}
           onMouseLeave={() => setHoverPos(null)}
-          className="relative aspect-square h-[min(92%,38rem)] w-auto max-w-[92%] shrink-0"
+          className="relative shrink-0 aspect-square h-[min(92%,38rem)] w-auto max-w-[92%]"
         >
           {/* Base Empty House Structure Canvas.
               Als WebP 86 KB statt 1,74 MB als PNG; die Quelldatei liegt unter
@@ -694,6 +772,18 @@ export function HouseVisual({
               const objectInteractive = Boolean(
                 objectState && (objectState.active || objectState.completed || objectState.skipped)
               );
+              const isActiveObject = Boolean(objectState?.active);
+              // Fokus entsteht aus Differenz: das aktive Objekt bleibt voll,
+              // alles andere im Raum tritt zurück statt gleich hell zu bleiben.
+              const objectOpacity = !objectState
+                ? 1
+                : objectState.active
+                  ? 1
+                  : objectState.skipped
+                    ? 0.42
+                    : objectState.completed
+                      ? 0.7
+                      : 0.45;
 
               return (
                 <div
@@ -703,7 +793,10 @@ export function HouseVisual({
                     top: `${currentTop}%`,
                     width: `${currentWidth}%`,
                     height: `${currentHeight}%`,
-                    zIndex: isBeingDragged ? 999 : isSelected ? 990 : currentZ
+                    // Das aktuelle Objekt bleibt über den kleinen Markern
+                    // erledigter Fragen klickbar, falls sich ihre Flächen
+                    // überschneiden (besonders Auto und Fahrrad in der Garage).
+                    zIndex: isBeingDragged ? 999 : isSelected ? 990 : isActiveObject ? 45 : currentZ
                   }}
                   className="absolute"
                 >
@@ -712,25 +805,33 @@ export function HouseVisual({
                     onWheel={(e) => handleWheelSprite(sprite.id, e)}
                     initial={reduceMotion ? false : { opacity: 0, y: -6, scale: 0.97 }}
                     animate={{
-                      opacity: objectState?.skipped ? 0.52 : 1,
-                      y: 0,
-                      scale: 1,
-                      filter: objectState?.active
+                      opacity: objectOpacity,
+                      y: isActiveObject ? -1.5 : 0,
+                      // Größe und Bewegung tragen dort, wo Farbe es nicht tut:
+                      // auf dem schmalen mobilen Split und bei kleinen Objekten.
+                      scale: isActiveObject
                         ? reduceMotion
-                          ? ACTIVE_OBJECT_GLOW[0]
-                          : ACTIVE_OBJECT_GLOW
+                          ? 1.05
+                          : [1.05, 1.085, 1.05]
+                        : 1,
+                      filter: isActiveObject
+                        ? ACTIVE_OBJECT_OUTLINE
                         : objectState?.completed
-                          ? "drop-shadow(0 0 3px rgba(39, 91, 70, 0.35))"
-                          : "drop-shadow(0 0 0 rgba(39, 91, 70, 0))",
+                          ? COMPLETED_OBJECT_FILTER
+                          : objectState
+                            ? RESTING_OBJECT_FILTER
+                            : "none",
                       rotate: currentRotate
                     }}
                     exit={reduceMotion ? undefined : { opacity: 0 }}
                     transition={
-                      objectState?.active && !reduceMotion
+                      isActiveObject && !reduceMotion
                         ? {
                             opacity: { duration: 0.28 },
-                            filter: { duration: 3.2, ease: "easeInOut", repeat: Infinity },
-                            rotate: { duration: 0.28 }
+                            filter: { duration: 0.28 },
+                            y: { duration: 0.32, ease: "easeOut" },
+                            rotate: { duration: 0.28 },
+                            scale: { duration: 2.8, ease: "easeInOut", repeat: Infinity }
                           }
                         : { duration: reduceMotion ? 0 : 0.28 }
                     }
@@ -738,7 +839,10 @@ export function HouseVisual({
                     alt={sprite.id}
                     style={{
                       width: "100%",
-                      height: "100%"
+                      height: "100%",
+                      // Das aktive Objekt wächst aus seiner Standfläche nach oben,
+                      // statt in den Boden zu sinken.
+                      transformOrigin: isActiveObject ? "50% 100%" : "50% 50%"
                     }}
                     className={cn(
                       "h-full w-full object-fill transition-shadow",
@@ -777,6 +881,37 @@ export function HouseVisual({
             })}
           </AnimatePresence>
 
+          {/* Spotlight über Kulisse und ruhenden Möbeln, mit einem Loch über dem
+              aktiven Objekt. Heller Schleier statt dunkler Vignette, damit die
+              Szene zur hellen Palette passt. Liegt unter den Statusmarken (z-40),
+              damit erledigte Objekte auffindbar bleiben. */}
+          {!isEditMode && spotlight && (
+            <AnimatePresence>
+              <motion.div
+                key={spotlight.key}
+                aria-hidden
+                initial={reduceMotion ? false : { opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: reduceMotion ? 0 : 0.42, ease: "easeOut" }}
+                className="pointer-events-none absolute inset-0 z-[35] rounded-[var(--radius-sharp)]"
+                style={{
+                  // Ein Farbschleier bringt hier nichts: die Kulisse liegt selbst
+                  // schon nahe an Paper, ein Paper-Schleier verschiebt sie um
+                  // wenige Prozent Helligkeit. Stattdessen wird der Peripherie
+                  // die Farbe entzogen — das wirkt über jedem Untergrund.
+                  backdropFilter: "saturate(0.28) brightness(1.05)",
+                  WebkitBackdropFilter: "saturate(0.28) brightness(1.05)",
+                  background: "rgba(247, 246, 240, 0.26)",
+                  // Ellipse statt circle: nur so sind prozentuale Radien erlaubt.
+                  // Der Canvas ist quadratisch, gleiche Werte ergeben einen Kreis.
+                  maskImage: `radial-gradient(ellipse ${spotlight.radius}% ${spotlight.radius}% at ${spotlight.centerX}% ${spotlight.centerY}%, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) ${spotlight.clearStop}%, rgba(0, 0, 0, 0.6) ${spotlight.midStop}%, rgb(0, 0, 0) 100%)`,
+                  WebkitMaskImage: `radial-gradient(ellipse ${spotlight.radius}% ${spotlight.radius}% at ${spotlight.centerX}% ${spotlight.centerY}%, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) ${spotlight.clearStop}%, rgba(0, 0, 0, 0.6) ${spotlight.midStop}%, rgb(0, 0, 0) 100%)`
+                }}
+              />
+            </AnimatePresence>
+          )}
+
           {/* Quiet status marks; the cut-out objects themselves carry the interaction. */}
           {!isEditMode && isFocusedRoom && focusedRoom && (
             <div className="pointer-events-none absolute inset-0 z-40">
@@ -811,7 +946,10 @@ export function HouseVisual({
                         : { duration: 0.2 }
                     }
                     whileHover={!reduceMotion ? { y: -2, scale: 1.06 } : undefined}
-                    style={{ left: `${object.hotspot.left}%`, top: `${object.hotspot.top}%` }}
+                    style={{
+                      left: `${object.hotspot.left}%`,
+                      top: `${object.hotspot.top}%`
+                    }}
                     className={cn(
                       "pointer-events-auto absolute grid size-5 -translate-x-1/2 -translate-y-1/2 cursor-pointer place-items-center rounded-full border shadow-sm backdrop-blur-sm",
                       focusRingTool,
@@ -895,4 +1033,4 @@ export function HouseVisual({
       </div>
     </div>
   );
-}
+});

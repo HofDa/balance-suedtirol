@@ -54,25 +54,37 @@ export const bathRoom: TourRoom = {
         "Diese Antwort entscheidet mit, was jede Dusche kostet: dieselbe Menge warmes Wasser verursacht je nach System sehr unterschiedliche Emissionen. Die Zahl hier zählt das Warmwasser außerhalb der Dusche — Hände waschen, Spülen, Putzen.",
       impactText:
         "Eine Wärmepumpe holt aus einer Kilowattstunde Strom das Dreifache an Wärme. Solarthermie deckt im Sommer fast den gesamten Bedarf, ohne dass dafür Brennstoff verbrannt wird.",
-      tip: "Prüfe zuerst die Speichertemperatur: viele Boiler laufen unnötig auf über 60 °C. 50 °C reichen aus und senken die Bereitschaftsverluste spürbar.",
+      tip: "Spartemperaturen nie pauschal einstellen: Bei zentralen Speichern und Zirkulation gelten zum Schutz vor Legionellen meist mindestens 60 °C am Speicher und 55 °C im System. Fachbetrieb oder Betreiber fragen.",
       options: [
         {
           id: "electric-boiler",
           label: "Elektroboiler oder Durchlauferhitzer",
-          params: { co2PerKwh: 0.28, efficiency: 1 },
+          params: { co2PerKwh: 0.214, efficiency: 1 },
           impact: { carbon: -5, resources: -3 },
         },
         {
           id: "gas-boiler",
-          label: "Gastherme oder Ölheizung",
-          params: { co2PerKwh: 0.24, efficiency: 1 },
+          label: "Gastherme",
+          params: { co2PerKwh: 0.24, efficiency: 0.9 },
           impact: { carbon: -2, resources: -1 },
         },
         {
-          id: "heat-pump-solar",
-          label: "Wärmepumpe, Solarthermie oder Biomasse-Fernwärme",
-          params: { co2PerKwh: 0.28, efficiency: 3 },
+          id: "oil-boiler",
+          label: "Ölheizung",
+          params: { co2PerKwh: 0.31, efficiency: 0.85 },
+          impact: { carbon: -6, resources: -3 },
+        },
+        {
+          id: "heat-pump",
+          label: "Warmwasser-Wärmepumpe",
+          params: { co2PerKwh: 0.214, efficiency: 3 },
           impact: { carbon: 7, resources: 5 },
+        },
+        {
+          id: "solar-district",
+          label: "Solarthermie oder emissionsarme Fernwärme",
+          params: { co2PerKwh: 0.08, efficiency: 1 },
+          impact: { carbon: 7, resources: 4 },
         }
       ]
     },

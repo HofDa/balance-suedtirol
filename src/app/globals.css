@@ -393,3 +393,24 @@ button {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* Ausdruck der Projekteinreichung. Der Bogen soll aufs Papier, die Bedienung
+   nicht: Kopfzeile, Fußzeile, Schrittleiste und Knöpfe entfallen, und das
+   weiße Blatt legt seine Erhebung ab — auf Papier gibt es keine Tiefe zu
+   erzeugen. */
+@media print {
+  .submission-print-hide {
+    display: none !important;
+  }
+
+  body > header,
+  body > footer {
+    display: none !important;
+  }
+
+  .submission-sheet {
+    border: 0 !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+  }
+}

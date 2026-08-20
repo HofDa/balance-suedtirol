@@ -5,43 +5,40 @@ export const livingRoom: TourRoom = {
   title: "Wohnzimmer",
   shortTitle: "Wohnen",
   available: true,
-  description: "Elektronik, Beleuchtung, Raumtemperatur und Zimmerpflanzen im Wohnbereich.",
+  description: "Haushaltsstrom, Beleuchtung und der bewusste Umgang mit Geräten im Wohnbereich.",
   questions: [
     {
       id: "living-tv-streaming",
-      title: "Wie viele Stunden läuft der Bildschirm?",
+      title: "Wie viel Haushaltsstrom entfällt im Jahr auf dich?",
       sceneLabel: "Fernseher & TV-Schrank",
       description:
-        "Zwei Posten addieren sich: das Gerät im Wohnzimmer und die Rechenzentren, die den Stream ausliefern. Bei 4K ist der Anteil der Infrastruktur deutlich höher als bei HD.",
+        "Der Jahresverbrauch aus der Stromrechnung umfasst Kühlgeräte, Kochen, Waschen, Spülen, Beleuchtung, Unterhaltungselektronik und weitere Geräte. Damit ist er belastbarer als einzelne Geräteschätzungen.",
       impactText:
-        "Ein großer 4K-Fernseher zieht rund 130 Watt, ein sparsames Gerät ein Drittel davon. Über fünf Stunden am Tag summiert sich der Unterschied auf mehrere hundert Kilowattstunden im Jahr.",
-      tip: "Der Eco-Modus ab Werk ist meist zu dunkel eingestellt, die Standardvorgabe zu hell. Ein Zwischenwert spart spürbar, ohne dass das Bild leidet.",
+        "Gerechnet wird dein Anteil am gemessenen Netzbezug mit dem italienischen Stromerzeugungsfaktor. Ein eigener Ökostromvertrag oder eine PV-Anlage wird in dieser vereinfachten location-based Rechnung nicht individuell gutgeschrieben.",
+      tip: "Nimm den Verbrauch der letzten Jahresrechnung und teile ihn durch die Zahl der Personen. Strom für eine separat erfasste Wärmepumpe bitte abziehen.",
       adjust: {
-        label: "Bildschirmstunden pro Tag",
-        unit: "Std.",
+        label: "Haushaltsstrom pro Person und Jahr",
+        unit: "kWh",
         min: 0,
-        max: 12,
-        step: 0.5,
-        defaults: { "screen-large": 5, "screen-normal": 3, "screen-light": 1.5 },
-        hint: "Nur Fernseher und Streaming, ohne Arbeitsbildschirm."
+        max: 6000,
+        step: 50,
+        defaults: { "electricity-high": 2500, "electricity-medium": 1500, "electricity-low": 800 },
+        hint: "Alle Haushaltsgeräte zusammen; Wärmepumpenstrom abziehen, wenn er bei Heizung steht."
       },
       options: [
         {
-          id: "screen-large",
-          label: "Großer Fernseher, überwiegend 4K",
-          params: { kwhPerHour: 0.21 },
+          id: "electricity-high",
+          label: "Hoher Verbrauch",
           impact: { carbon: -6, resources: -5 },
         },
         {
-          id: "screen-normal",
-          label: "Mittleres Gerät, überwiegend HD",
-          params: { kwhPerHour: 0.1 },
+          id: "electricity-medium",
+          label: "Mittlerer Verbrauch",
           impact: { carbon: 1, resources: 1 },
         },
         {
-          id: "screen-light",
-          label: "Kleines, sparsames Gerät",
-          params: { kwhPerHour: 0.065 },
+          id: "electricity-low",
+          label: "Niedriger Verbrauch",
           impact: { carbon: 6, resources: 5 },
         }
       ]
@@ -55,6 +52,8 @@ export const livingRoom: TourRoom = {
       impactText:
         "Gerechnet wird mit drei Brennstunden am Tag über alle Leuchtstellen. Der Unterschied zwischen einem Haushalt mit Halogen und einem mit durchgehend LED liegt bei mehreren hundert Kilowattstunden im Jahr.",
       tip: "Warmweiße LEDs mit 2700 Kelvin geben dasselbe gemütliche Licht wie eine Glühlampe. Der oft beklagte kalte LED-Eindruck kommt von der falschen Farbtemperatur, nicht von der Technik.",
+      scopeNote:
+        "Der Stromverbrauch der Beleuchtung steckt bereits im eingegebenen Haushaltsstrom. Die Antwort wird nicht zusätzlich addiert und wirkt nur auf das qualitative Profil.",
       adjust: {
         label: "Leuchtstellen in der Wohnung",
         unit: "Stück",
@@ -89,27 +88,27 @@ export const livingRoom: TourRoom = {
       title: "Welche Rolle spielen Pflanzen im Wohnraum?",
       sceneLabel: "Zimmerpflanzen & Sofa",
       description:
-        "Zimmerpflanzen verbessern die Luftfeuchtigkeit und den Aufenthaltskomfort. Auf CO₂, Wasser und Energie wirken sie praktisch nicht — ihr Beitrag liegt woanders.",
+        "Zimmerpflanzen können Aufenthaltsqualität und Naturverbundenheit unterstützen. Ein belastbarer Beitrag zur lokalen Artenvielfalt lässt sich daraus nicht ableiten.",
       impactText:
-        "Grün im Alltag hält die Aufmerksamkeit für Natur wach, und das ist die Voraussetzung für jede weitere Entscheidung. Messbar ist dieser Effekt nicht, deshalb steht diese Frage bewusst ohne Zahl da.",
+        "Diese Frage wird nicht als Biodiversitätsmaß verwendet. Für wildlebende Arten sind Außenflächen, heimische Pflanzen und unbeleuchtete Strukturen entscheidend.",
       tip: "Robuste Arten wie Grünlilie oder Bogenhanf brauchen wenig Wasser und verzeihen unregelmäßige Pflege.",
       scopeNote:
-        "Zahlt auf keine der drei Kennzahlen ein. Diese Frage wirkt auf die Biodiversitäts-Einschätzung, nicht auf die Jahresbilanz.",
+        "Zahlt weder auf die Messwerte noch auf den Biodiversitätsindex ein; sie dient nur als Reflexionsfrage.",
       options: [
         {
           id: "no-plants",
           label: "Keine Pflanzen im Raum",
-          impact: { biodiversity: -2, resources: -1 },
+          impact: {},
         },
         {
           id: "some-plants",
           label: "Einige Zimmerpflanzen",
-          impact: { biodiversity: 3, resources: 2 },
+          impact: {},
         },
         {
           id: "green-oasis",
           label: "Viel Grün und Naturmaterialien",
-          impact: { biodiversity: 7, resources: 5 },
+          impact: {},
         }
       ]
     }

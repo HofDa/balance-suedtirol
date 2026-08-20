@@ -10,13 +10,7 @@ import type { ProjectCategoryId } from "@/config/project-categories";
 import { getProjectCategoryLabel } from "@/config/project-categories";
 import type { Locale } from "@/config/site";
 import { baseScores, scoreDimensions } from "../model/scoring";
-import {
-  co2TargetKg,
-  formatMetric,
-  fullFootprintNote,
-  metrics,
-  referenceValues
-} from "../model/calculator";
+import { formatMetric, fullFootprintNote, metrics, referenceValues } from "../model/calculator";
 import type { AnnualValues, RoomId, ScoreDimension, Scores } from "../model/types";
 import { availableRooms, rooms } from "../config/rooms";
 
@@ -58,15 +52,13 @@ function MeasuredMetric({
   scopeNote,
   value,
   reference,
-  formatted,
-  target
+  formatted
 }: {
   label: string;
   scopeNote: string;
   value: number;
   reference: number;
   formatted: { value: string; unit: string };
-  target?: { share: number; label: string };
 }) {
   const reduceMotion = useReducedMotion();
   const share = reference > 0 ? value / reference : 0;
@@ -100,34 +92,21 @@ function MeasuredMetric({
             style={{ left: `${referenceAt}%` }}
             aria-hidden
           />
-          {target && target.share < scale && (
-            <span
-              className="absolute inset-y-[-2px] w-px bg-[var(--color-forest)]"
-              style={{ left: `${(target.share / scale) * 100}%` }}
-              aria-hidden
-            />
-          )}
         </div>
 
         {/* Die Marken beschriftet: eine Haarlinie ohne Legende ist Dekoration. */}
         <span className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] leading-4 text-[var(--color-muted)]">
           <span className="inline-flex items-center gap-1.5">
             <span className="h-2.5 w-px bg-[var(--color-ink)]/45" aria-hidden />
-            Durchschnitt
+            Modellvergleich
           </span>
-          {target && (
-            <span className="inline-flex items-center gap-1.5">
-              <span className="h-2.5 w-px bg-[var(--color-forest)]" aria-hidden />
-              {target.label}
-            </span>
-          )}
           <span
             className={cn(
               "tabular-nums font-semibold",
               share > 1 ? "text-[var(--color-clay-ink)]" : "text-[var(--color-forest)]"
             )}
           >
-            {Math.round(share * 100)} % des Durchschnitts
+            {Math.round(share * 100)} % des Modellvergleichs
           </span>
         </span>
 
@@ -142,23 +121,29 @@ function MeasuredMetric({
 export function TourResults({
   scores,
   totals,
-  completedRooms,
+  answeredRooms,
+  answeredCount,
+  totalQuestions,
   locale,
   onContinue,
   onOpenRoom
 }: {
   scores: Scores;
   totals: AnnualValues;
-  completedRooms: RoomId[];
+  answeredRooms: RoomId[];
+  answeredCount: number;
+  totalQuestions: number;
   locale: Locale;
   onContinue: () => void;
   onOpenRoom: (id: RoomId) => void;
 }) {
   const sorted = [...scoreDimensions].sort((a, b) => scores[b.id] - scores[a.id]);
   const co2Formatted = formatMetric("co2", totals.co2Kg);
-  const targetFactor = totals.co2Kg > 0 ? totals.co2Kg / co2TargetKg : 0;
-
-  const openRooms = availableRooms.filter((room) => !completedRooms.includes(room.id));
+  const hasAnswers = answeredCount > 0;
+  const isComplete = answeredCount === totalQuestions;
+  const isRepresentative = answeredCount >= Math.ceil(totalQuestions * 0.75);
+  const comparison = referenceValues.co2Kg > 0 ? totals.co2Kg / referenceValues.co2Kg : 0;
+  const openRooms = availableRooms.filter((room) => !answeredRooms.includes(room.id));
   const lowest = sorted.at(-1) ?? scoreDimensions[0];
   const recommendation = recommendationByDimension[lowest.id];
   const categoryLabel = getProjectCategoryLabel(recommendation.category, locale);
@@ -172,25 +157,26 @@ export function TourResults({
       </span>
       <Label size="dense" className="mt-6">Deine Jahresbilanz</Label>
       <h1 className="mt-3 font-display text-[length:var(--text-display)] leading-[var(--leading-display)]">
-        {co2Formatted.value} {co2Formatted.unit} CO₂ im Jahr.
+        {hasAnswers
+          ? `${co2Formatted.value} ${co2Formatted.unit} CO₂e im Jahr.`
+          : "Noch keine Bilanz berechnet."}
       </h1>
       <p className="mt-4 max-w-xl text-sm leading-6 text-[var(--color-muted)]">
-        {targetFactor > 1
-          ? `Das ist rund das ${targetFactor.toLocaleString("de-DE", {
-              minimumFractionDigits: 1,
-              maximumFractionDigits: 1
-            })}-Fache dessen, was langfristig pro Person tragfähig wäre. `
-          : "Damit liegst du im Bereich dessen, was langfristig pro Person tragfähig wäre. "}
+        {!hasAnswers
+          ? "Beantworte mindestens eine Frage, bevor Zahlen und Empfehlungen eingeordnet werden. "
+          : isComplete
+            ? `Das entspricht rund ${Math.round(comparison * 100)} % des Vergleichswerts für den erfassten Ausschnitt. `
+            : "Diese Summe ist ein Zwischenstand und darf nicht als vollständiges persönliches Ergebnis gelesen werden. "}
         {fullFootprintNote}
       </p>
       <p className="mt-3 max-w-xl text-xs leading-5 text-[var(--color-muted)]">
-        Grundlage sind{" "}
+        Beantwortet sind{" "}
         <strong className="font-semibold text-[var(--color-ink)] tabular-nums">
-          {completedRooms.length} von {availableRooms.length} Räumen
+          {answeredCount} von {totalQuestions} Fragen
         </strong>
-        {openRooms.length > 0
-          ? ". Mit jedem weiteren Raum steigen diese Summen — sie sind ein Zwischenstand, keine vollständige Bilanz."
-          : ". Damit ist jeder Raum des Hauses erfasst."}
+        {answeredCount < totalQuestions
+          ? `. ${totalQuestions - answeredCount} fehlen oder wurden übersprungen.`
+          : ". Damit sind alle Fragen in diesem Check erfasst."}
       </p>
 
       {/* ② Die gerechneten Messwerte. */}
@@ -216,19 +202,14 @@ export function TourResults({
                 value={value}
                 reference={reference}
                 formatted={formatMetric(metric.id, value, Math.max(value, reference))}
-                target={
-                  metric.id === "co2"
-                    ? { share: co2TargetKg / reference, label: "1,5-Grad-Ziel" }
-                    : undefined
-                }
               />
             );
           })}
         </dl>
 
         <p className="mt-3 text-[11px] leading-4 text-[var(--color-muted)]">
-          Vergleichswert ist der Durchschnitt für die hier erfassten Bereiche, pro Person und Jahr —
-          nicht der volle Fußabdruck.{" "}
+          Vergleichswert ist ein mittleres, reproduzierbares Antwortprofil dieses Checks —
+          kein Bevölkerungsdurchschnitt und kein Klimaziel.{" "}
           <Link
             href={`/${locale}/methodik`}
             className={cn(
@@ -258,13 +239,13 @@ export function TourResults({
 
       {/* ③ Die qualitativen Indizes — ausdrücklich getrennt, weil „CO₂" hier
           eine Punktzahl meint und oben ein Gewicht in Kilogramm. */}
-      <section className="mt-10" aria-labelledby="results-profile">
+      {hasAnswers && <section className="mt-10" aria-labelledby="results-profile">
         <div className="flex flex-wrap items-baseline justify-between gap-2 border-b border-[var(--color-line)] pb-3">
           <h2 id="results-profile" className="text-xl font-semibold tracking-[-0.02em]">
             Eingeschätzt
           </h2>
           <p className="text-[11px] text-[var(--color-muted)]">
-            Punkte von 0 bis 100, Start bei 50
+            Didaktischer Index von 0 bis 100
           </p>
         </div>
 
@@ -298,9 +279,9 @@ export function TourResults({
         </dl>
 
         <p className="mt-3 text-[11px] leading-4 text-[var(--color-muted)]">
-          Diese vier Werte sind keine Messwerte, sondern eine didaktisch vereinfachte Einschätzung:
-          Jede Antwort verschiebt den Startwert 50 nach oben oder unten. Was sich in Kilogramm,
-          Litern und Kilowattstunden fassen lässt, steht oben unter „Gerechnet&ldquo;.
+          Diese vier Werte sind keine validierten Messwerte. Mengenregler verändern den Index
+          entlang der berechneten Belastung; nicht quantifizierbare Wirkungen bleiben als
+          vorsichtige qualitative Punkte getrennt von den Messwerten oben.
         </p>
 
         <div className="mt-4 grid gap-4 sm:grid-cols-2">
@@ -313,18 +294,18 @@ export function TourResults({
             <strong className="mt-1 block text-sm">{lowest.label}</strong>
           </div>
         </div>
-      </section>
+      </section>}
 
       {/* ④ Was noch fehlt — als Weg zurück ins Haus, nicht als Vorwurf. */}
-      {(openRooms.length > 0 || completedRooms.length > 0) && (
+      {(openRooms.length > 0 || answeredRooms.length > 0) && (
         <section className="mt-10" aria-labelledby="results-coverage">
           <h2 id="results-coverage" className="sr-only">
             Abdeckung der Bilanz
           </h2>
 
-          {completedRooms.length > 0 && (
+          {answeredRooms.length > 0 && (
             <div className="flex flex-wrap gap-2">
-              {completedRooms.map((id) => (
+              {answeredRooms.map((id) => (
                 <span
                   key={id}
                   className="flex items-center gap-1.5 rounded-[var(--radius-md)] border border-[var(--color-line)] bg-white px-3 py-1.5 text-[11px] font-semibold"
@@ -361,7 +342,7 @@ export function TourResults({
       )}
 
       {/* ⑤ Der Weg vom Ergebnis zum Projekt. */}
-      <section
+      {isRepresentative && <section
         className="mt-10 rounded-[var(--radius-xl)] border border-[var(--color-forest)]/20 bg-[var(--color-forest)]/5 p-5 sm:p-6"
         aria-labelledby="results-recommendation"
       >
@@ -413,7 +394,7 @@ export function TourResults({
             </button>
           )}
         </div>
-      </section>
+      </section>}
     </div>
   );
 }

@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import {
   ArrowRight,
@@ -11,7 +12,7 @@ import { Container } from "@/components/ui/container";
 import { isLocale, type Locale } from "@/config/site";
 import { Label } from "@/components/ui/label";
 import { Surface } from "@/components/ui/surface";
-import { Button } from "@/components/ui/button";
+import { focusRing } from "@/components/ui/focus";
 
 const stepIcons = [Lightbulb, Leaf, ClipboardList, ChartNoAxesCombined, FileCheck2];
 
@@ -215,10 +216,13 @@ export default async function SubmitProjectPage({
             </ol>
 
             <div className="mt-8 border-t border-[var(--color-line)] pt-6">
-              <Button className="min-h-12 w-full gap-2 font-bold sm:w-auto">
+              <Link
+                href={`/${locale}/projekt-einreichen/formular`}
+                className={`inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-[var(--radius-md)] bg-[var(--color-ink)] px-5 text-sm font-bold text-white transition-colors hover:bg-[var(--color-forest)] sm:w-auto ${focusRing}`}
+              >
                 {copy.cta}
                 <ArrowRight className="size-4" aria-hidden />
-              </Button>
+              </Link>
               <p className="mt-4 max-w-2xl text-xs leading-5 text-[var(--color-muted)]">
                 {copy.note}
               </p>

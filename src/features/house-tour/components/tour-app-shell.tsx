@@ -31,6 +31,13 @@ export function TourAppShell({ locale }: { locale: Locale }) {
   );
   const totalObjects = progress.total;
   const completedObjects = progress.handled;
+  const answeredObjects = Object.keys(state.answers).length;
+  const answeredRooms = useMemo(
+    () => availableRooms
+      .filter((candidate) => candidate.questions.every((item) => Boolean(state.answers[item.id])))
+      .map((candidate) => candidate.id),
+    [state.answers]
+  );
 
   const openRoom = useCallback((roomId: RoomId, questionIndex?: number) => {
     const target = getRoom(roomId);
@@ -137,7 +144,9 @@ export function TourAppShell({ locale }: { locale: Locale }) {
           <TourResults
             scores={scores}
             totals={totals}
-            completedRooms={completedRooms}
+            answeredRooms={answeredRooms}
+            answeredCount={answeredObjects}
+            totalQuestions={totalObjects}
             locale={locale}
             onContinue={openHouse}
             onOpenRoom={(id) => openRoom(id)}

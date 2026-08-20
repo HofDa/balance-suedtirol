@@ -80,7 +80,7 @@ export const mobilityRoom: TourRoom = {
         {
           id: "car-electric",
           label: "Elektroauto",
-          params: { co2PerKm: 0.055, kwhPerKm: 0.19 },
+          params: { co2PerKm: 0.041, kwhPerKm: 0.19 },
           impact: { carbon: 5, resources: 2 },
         },
         {
@@ -98,7 +98,7 @@ export const mobilityRoom: TourRoom = {
       description:
         "Eine einzige Flugreise kann mehr wiegen als ein ganzes Jahr Alltagsmobilität. Deshalb steht sie hier als eigene Option und nicht in einer Sammelkategorie.",
       impactText:
-        "Gerechnet wird pro Personenkilometer: Bahn rund 0,035 kg CO₂e, Auto mit zwei Personen etwa 0,15 kg, Flugzeug rund 0,25 kg. Die Klimawirkung des Fliegens liegt durch Effekte in großer Höhe noch einmal deutlich höher.",
+        "Gerechnet wird pro Personenkilometer: Bahn rund 0,035 kg CO₂e, Auto mit zwei Personen etwa 0,15 kg, Flugzeug als pauschaler CO₂e-Wirkungswert rund 0,25 kg einschließlich eines Zuschlags für Effekte in großer Höhe.",
       tip: "Ein Nachtzug ersetzt eine Übernachtung und einen Flug zugleich. Bei Strecken bis rund 1.000 Kilometern ist die Bahn von Tür zu Tür oft nicht einmal langsamer.",
       adjust: {
         label: "Fernreise-Kilometer pro Jahr",

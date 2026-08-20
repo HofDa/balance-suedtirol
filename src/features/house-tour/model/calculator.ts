@@ -2,7 +2,7 @@ import { availableRooms } from "../config/rooms";
 import type { AnnualValues, MetricId, TourOption, TourQuestion } from "./types";
 
 /**
- * Jahresbilanz des Lebensraum-Checks: CO₂, Trinkwasser und Endenergie.
+ * Jahresbilanz des Lebensraum-Checks: CO₂e, Trinkwasser und Energieeinsatz.
  *
  * Alle Werte gelten pro Person und Jahr. Die Faktoren sind in
  * `docs/BILANZ-FAKTOREN.md` mit Quelle und Annahme dokumentiert; hier stehen
@@ -10,15 +10,15 @@ import type { AnnualValues, MetricId, TourOption, TourQuestion } from "./types";
  *
  * Drei Bilanzgrenzen, die bewusst unterschiedlich gezogen sind:
  *
- * - **CO₂** ist der volle Fußabdruck einschließlich Vorkette. Nur so tauchen
- *   Ernährung und Textilien überhaupt auf, und genau das erwarten Nutzer.
+ * - **Klima** zählt CO₂e der abgefragten Aktivitäten. Vorketten sind nur dort
+ *   enthalten, wo der jeweilige Faktor sie ausdrücklich einschließt. Der Wert
+ *   ist deshalb ein transparenter Ausschnitt, kein vollständiger Fußabdruck.
  * - **Wasser** zählt ausschließlich direktes Leitungswasser. Das virtuelle
  *   Wasser hinter Ernährung und Kleidung liegt bei rund 1,3 Millionen Litern
  *   im Jahr und wäre gegenüber 78.000 Litern Haushaltswasser so erdrückend,
  *   dass jede Entscheidung im Bad bedeutungslos aussähe.
- * - **Energie** zählt Endenergie, die die Person selbst verbraucht: Strom,
- *   Wärme, Kraftstoff. Graue Energie aus Produkten bleibt außen vor, sie steckt
- *   bereits im CO₂-Wert.
+ * - **Energie** zählt den den abgefragten Aktivitäten zugeordneten direkten
+ *   Energieeinsatz: Haushaltsstrom, Wärme, Kraftstoff und Wasserbereitstellung.
  *
  * Wo eine Bilanzgrenze einen Wert ausschließt, bleibt er null. Das Panel
  * schreibt dazu, warum — eine Null ohne Erklärung liest sich wie ein Fehler.
@@ -28,17 +28,8 @@ import type { AnnualValues, MetricId, TourOption, TourQuestion } from "./types";
 // Faktoren
 // ---------------------------------------------------------------------------
 
-/** Italienischer Strommix, kg CO₂e je kWh. */
-const GRID_CO2_PER_KWH = 0.28;
-
-/** Wärme aus dem Südtiroler Mix (hoher Anteil Biomasse-Fernwärme), kg CO₂e/kWh. */
-const HEAT_CO2_PER_KWH = 0.19;
-
-/** Raumwärmebedarf pro Person bei 20 °C Zieltemperatur, kWh/a. */
-const HEAT_DEMAND_AT_20C = 4200;
-
-/** Faustregel: je Grad Raumtemperatur rund 6 % Heizenergie. */
-const HEAT_PER_KELVIN = 0.06;
+/** Italienische Stromerzeugung 2025 (vorläufig), direkte Emissionen, kg CO₂/kWh. */
+export const GRID_CO2_PER_KWH = 0.214;
 
 /** Aufheizen von 12 °C auf 38 °C: 4,186 kJ/(kg·K) × 26 K, kWh je Liter. */
 const HOT_WATER_KWH_PER_LITER = 0.0302;
@@ -71,24 +62,19 @@ export const FUEL_KWH_PER_LITER = 9.7;
  * Vergleichsanker, nicht Zielwert — und ausdrücklich nur für die Bereiche, die
  * dieser Check abfragt.
  *
- * Der volle italienische Pro-Kopf-Fußabdruck liegt bei rund 7.000 kg CO₂e und
- * 78.000 Litern Haushaltswasser. Der Check erfasst davon nicht alles: keine
- * Konsumgüter, keinen Wohnungsbau, keine Waschmaschine, keinen Geschirrspüler.
- * Gegen den Gesamtwert zu vergleichen ließe jeden Nutzer besser dastehen als er
- * ist, deshalb steht hier der Durchschnitt für den erfassten Ausschnitt.
+ * Der Check erfasst keinen vollständigen Lebensstil. Der Vergleichsanker ist
+ * deshalb ein reproduzierbares mittleres Modellprofil innerhalb der 18 Fragen,
+ * kein amtlicher Bevölkerungsdurchschnitt und kein Klimaziel.
  */
 export const referenceValues: AnnualValues = {
-  co2Kg: 5200,
-  waterL: 55000,
-  energyKwh: 11000
+  co2Kg: 4000,
+  waterL: 53000,
+  energyKwh: 9500
 };
 
 /** Die vollen Durchschnittswerte, für die Einordnung in der Bilanz. */
 export const fullFootprintNote =
-  "Der gesamte Pro-Kopf-Fußabdruck in Italien liegt bei rund 7 t CO₂e im Jahr. Dieser Check deckt davon die Bereiche Wohnen, Ernährung und Mobilität ab.";
-
-/** Pariskompatibles Ziel pro Person und Jahr, zum Einordnen der CO₂-Zahl. */
-export const co2TargetKg = 1500;
+  "Der Check erfasst ausgewählte Beiträge aus Wohnen, Ernährung und Mobilität. Konsum, Gebäude, öffentliche Leistungen und weitere Alltagsbereiche fehlen; die Summe ist kein vollständiger persönlicher Fußabdruck.";
 
 export const metrics: {
   id: MetricId;
@@ -101,10 +87,10 @@ export const metrics: {
   {
     id: "co2",
     key: "co2Kg",
-    label: "CO₂-Fußabdruck",
+    label: "Erfasste Klimawirkung",
     short: "CO₂",
     unit: "kg/Jahr",
-    scopeNote: "Einschließlich Vorkette aus Herstellung, Transport und Entsorgung."
+    scopeNote: "CO₂e der abgefragten Aktivitäten; Vorketten nur, wenn sie im jeweiligen Faktor genannt sind."
   },
   {
     id: "water",
@@ -117,10 +103,10 @@ export const metrics: {
   {
     id: "energy",
     key: "energyKwh",
-    label: "Endenergie",
+    label: "Energieeinsatz",
     short: "Energie",
     unit: "kWh/Jahr",
-    scopeNote: "Strom, Wärme und Kraftstoff, die du selbst verbrauchst. Ohne graue Energie."
+    scopeNote: "Zugeordneter direkter Einsatz von Strom, Wärme, Kraftstoff und Wasserbereitstellung; ohne graue Energie von Produkten."
   }
 ];
 
@@ -166,11 +152,11 @@ function fromTapWater(liters: number): AnnualValues {
  * Dusche. Die Frage im Bad setzt diesen Faktor, deshalb liest ihn die
  * Duschfrage dort aus statt einen Durchschnitt anzunehmen.
  */
-function hotWaterCo2PerKwh(optionOf: ContributionInput["optionOf"]) {
+function hotWaterSystem(optionOf: ContributionInput["optionOf"]) {
   const system = optionOf("bath-water-heating");
-  if (!system) return 0.22; // Italienischer Mix, solange nicht geantwortet wurde.
+  if (!system) return { co2PerKwh: 0.22, efficiency: 1 };
   const efficiency = param(system, "efficiency", 1);
-  return param(system, "co2PerKwh", 0.22) / efficiency;
+  return { co2PerKwh: param(system, "co2PerKwh", 0.22), efficiency };
 }
 
 const contributions: Record<string, Contribution> = {
@@ -180,11 +166,13 @@ const contributions: Record<string, Contribution> = {
   "bath-shower": ({ option, quantity, optionOf }) => {
     const liters = param(option, "litersPerMinute") * quantity * 365;
     const heatKwh = liters * HOT_WATER_KWH_PER_LITER;
+    const system = hotWaterSystem(optionOf);
+    const usedKwh = heatKwh / system.efficiency;
     const water = fromTapWater(liters);
     return addValues(water, {
-      co2Kg: heatKwh * hotWaterCo2PerKwh(optionOf),
+      co2Kg: usedKwh * system.co2PerKwh,
       waterL: 0,
-      energyKwh: heatKwh
+      energyKwh: usedKwh
     });
   },
 
@@ -207,11 +195,12 @@ const contributions: Record<string, Contribution> = {
 
   // --- Schlafen ------------------------------------------------------------
 
-  /** Zieltemperatur gegen den Bedarf bei 20 °C, 6 % je Kelvin. */
-  "bedroom-heating": ({ quantity }) => {
-    const heatKwh = Math.max(0, HEAT_DEMAND_AT_20C * (1 + HEAT_PER_KELVIN * (quantity - 20)));
-    return { co2Kg: heatKwh * HEAT_CO2_PER_KWH, waterL: 0, energyKwh: heatKwh };
-  },
+  /** Persönlicher Anteil am abgerechneten Heizenergieverbrauch. */
+  "bedroom-heating": ({ option, quantity }) => ({
+    co2Kg: quantity * param(option, "co2PerKwh"),
+    waterL: 0,
+    energyKwh: quantity
+  }),
 
   /**
    * Kleidungsstücke pro Jahr. Nur CO₂: die rund 2.700 Liter hinter einem
@@ -223,25 +212,20 @@ const contributions: Record<string, Contribution> = {
     energyKwh: 0
   }),
 
-  /** Geräte im Dauerbetrieb × mittlere Standby-Leistung. */
-  "bedroom-standby": ({ option, quantity }) => {
-    const kwh = param(option, "standbyWatts") * quantity * KWH_PER_STANDBY_WATT;
-    return { co2Kg: kwh * GRID_CO2_PER_KWH, waterL: 0, energyKwh: kwh };
-  },
+  /** Bereits im eingegebenen Haushaltsstrom enthalten; wirkt nur qualitativ. */
+  "bedroom-standby": () => emptyValues,
 
   // --- Wohnen --------------------------------------------------------------
 
-  /** Bildschirmstunden pro Tag × Gerät und Streaming-Infrastruktur. */
-  "living-tv-streaming": ({ option, quantity }) => {
-    const kwh = param(option, "kwhPerHour") * quantity * 365;
-    return { co2Kg: kwh * GRID_CO2_PER_KWH, waterL: 0, energyKwh: kwh };
-  },
+  /** Persönlicher Anteil am abgerechneten Haushaltsstrom. */
+  "living-tv-streaming": ({ quantity }) => ({
+    co2Kg: quantity * GRID_CO2_PER_KWH,
+    waterL: 0,
+    energyKwh: quantity
+  }),
 
-  /** Leuchtstellen × Leistung, gerechnet mit drei Brennstunden am Tag. */
-  "living-lighting": ({ option, quantity }) => {
-    const kwh = (param(option, "wattsPerLamp") * quantity * 3 * 365) / 1000;
-    return { co2Kg: kwh * GRID_CO2_PER_KWH, waterL: 0, energyKwh: kwh };
-  },
+  /** Bereits im eingegebenen Haushaltsstrom enthalten; wirkt nur qualitativ. */
+  "living-lighting": () => emptyValues,
 
   /** Zimmerpflanzen wirken auf Wohlbefinden und Naturverbindung, nicht auf die Bilanz. */
   "living-plants": () => emptyValues,
@@ -326,8 +310,10 @@ export function quantityFor(
 ) {
   if (!question.adjust) return 0;
   const stored = adjustments[question.id];
-  if (typeof stored === "number" && Number.isFinite(stored)) return stored;
-  return question.adjust.defaults[optionId] ?? question.adjust.min;
+  const raw = typeof stored === "number" && Number.isFinite(stored)
+    ? stored
+    : question.adjust.defaults[optionId] ?? question.adjust.min;
+  return Math.min(question.adjust.max, Math.max(question.adjust.min, raw));
 }
 
 /** Ob der Nutzer den Regler dieser Frage selbst verstellt hat. */
@@ -525,9 +511,9 @@ export const questionBasis: Record<string, { factor: string; assumption?: string
     factor: `Spülungen am Tag × Spülmenge × 365. Jeder Liter Trinkwasser kostet zusätzlich ${num(WATER_SUPPLY_KWH_PER_LITER, 4)} kWh für Förderung, Aufbereitung und Verteilung.`
   },
   "bedroom-heating": {
-    factor: `${num(HEAT_DEMAND_AT_20C)} kWh Raumwärme je Person bei 20 °C, je Grad rund ${num(HEAT_PER_KELVIN * 100)} % mehr oder weniger. Wärmemix Südtirol: ${num(HEAT_CO2_PER_KWH, 2)} kg CO₂e/kWh.`,
+    factor: "Dein Anteil am abgerechneten Jahresverbrauch × Faktor des gewählten Heizsystems.",
     assumption:
-      "Die 6-Prozent-Regel ist eine Faustregel und gilt nur in engem Bereich. Der Wärmemix hat einen hohen Biomasse-Anteil und wäre für andere Regionen zu niedrig."
+      "Geteilte Verbräuche vorher durch die Zahl der Haushaltsmitglieder teilen. Der Rechnungswert ist belastbarer als eine pauschale Gebäudeschätzung."
   },
   "bedroom-textiles": {
     factor:
@@ -536,14 +522,16 @@ export const questionBasis: Record<string, { factor: string; assumption?: string
       "Nur CO₂: die rund 2.700 Liter hinter einem Baumwollshirt sind virtuelles Wasser und zählen im Wasserwert bewusst nicht mit."
   },
   "bedroom-standby": {
-    factor: `Geräte im Dauerbetrieb × Standby-Leistung × ${num(KWH_PER_STANDBY_WATT, 2)} kWh je Watt und Jahr (1 W × 8.760 h), Strommix ${num(GRID_CO2_PER_KWH, 2)} kg CO₂e/kWh.`
+    factor: "Keine zusätzliche Energiemenge: Standby ist bereits im eingegebenen Haushaltsstrom enthalten.",
+    assumption: `Zur Einordnung: 1 Watt Dauerlast entspricht ${num(KWH_PER_STANDBY_WATT, 2)} kWh im Jahr.`
   },
   "living-tv-streaming": {
-    factor: `Bildschirmstunden am Tag × Leistung von Gerät und Streaming × 365, Strommix ${num(GRID_CO2_PER_KWH, 2)} kg CO₂e/kWh.`
+    factor: `Persönlicher Haushaltsstrom im Jahr × italienischer Erzeugungsfaktor ${num(GRID_CO2_PER_KWH, 3)} kg CO₂/kWh.`,
+    assumption: "Den Haushaltsverbrauch aus der Stromrechnung durch die Zahl der Personen teilen; separat eingegebenen Wärmepumpenstrom abziehen."
   },
   "living-lighting": {
-    factor: "Leuchtstellen × Leistung × 3 Brennstunden am Tag × 365.",
-    assumption: "Drei Brennstunden sind ein Jahresmittel über helle und dunkle Monate."
+    factor: "Keine zusätzliche Energiemenge: Beleuchtung ist bereits im eingegebenen Haushaltsstrom enthalten.",
+    assumption: "Die Antwort beeinflusst nur das qualitative Ressourcenprofil und vermeidet eine Doppelzählung."
   },
   "living-plants": {
     factor: "Ohne Beitrag zu CO₂, Wasser und Energie.",
@@ -575,7 +563,7 @@ export const questionBasis: Record<string, { factor: string; assumption?: string
   "mobility-long": {
     factor: "Fernreise-Kilometer × Faktor des Verkehrsmittels.",
     assumption:
-      "Für Flüge zählt hier nur CO₂. Mit den Effekten in großer Höhe liegt die Klimawirkung etwa doppelt so hoch — bewusst konservativ gesetzt."
+      "Der Flugfaktor ist ein pauschaler CO₂e-Wirkungswert einschließlich eines Zuschlags für Nicht-CO₂-Effekte; einzelne Flüge können deutlich abweichen."
   },
   "garden-ground": {
     factor:

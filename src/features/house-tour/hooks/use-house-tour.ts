@@ -5,7 +5,9 @@ import { calculateScores, completedRoomIds } from "../model/scoring";
 import { totalValues } from "../model/calculator";
 import { initialTourState, tourReducer } from "../model/reducer";
 
-const STORAGE_KEY = "balance-house-tour-v2";
+// V3 trennt frühere Reglersemantiken (z. B. Bildschirmstunden) von den neuen
+// Jahresverbräuchen. Alte Mengen dürfen nicht still als kWh interpretiert werden.
+const STORAGE_KEY = "balance-house-tour-v3";
 const STORAGE_WRITE_DELAY_MS = 300;
 
 export function useHouseTour() {
@@ -46,7 +48,10 @@ export function useHouseTour() {
     state.adjustments
   ]);
 
-  const scores = useMemo(() => calculateScores(state.answers), [state.answers]);
+  const scores = useMemo(
+    () => calculateScores(state.answers, state.adjustments),
+    [state.answers, state.adjustments]
+  );
   const totals = useMemo(
     () => totalValues(state.answers, state.adjustments),
     [state.answers, state.adjustments]

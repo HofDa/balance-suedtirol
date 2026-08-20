@@ -10,17 +10,17 @@ besonders die mit ⚠ markierten.
 
 ## Bezugsgröße
 
-Pro Person und Jahr. Bei Posten, die sich ein Haushalt teilt (Raumwärme,
-Warmwasser, Garten), sind die Werte bereits auf eine Person heruntergerechnet;
-angenommen sind 2,3 Personen je Haushalt.
+Pro Person und Jahr. Bei Strom, Wärme und gemeinsam genutzten Flächen fordert
+die Oberfläche deshalb ausdrücklich den persönlichen Anteil. Es findet keine
+unsichtbare pauschale Teilung durch eine angenommene Haushaltsgröße statt.
 
 ## Drei Bilanzgrenzen, bewusst unterschiedlich gezogen
 
 | Kennzahl | Grenze | Begründung |
 |---|---|---|
-| **CO₂** (kg CO₂e) | Voller Fußabdruck einschließlich Vorkette | Nur so tauchen Ernährung und Textilien überhaupt auf, und genau das erwarten Nutzer von einem CO₂-Rechner. |
+| **CO₂** (kg CO₂e) | Erfasste Klimawirkung; Vorketten nur, wenn der jeweilige Faktor sie enthält | Der Wert ist ein Ausschnitt und wird nicht als vollständiger persönlicher Fußabdruck bezeichnet. |
 | **Wasser** (Liter) | Nur direktes Leitungswasser | Das virtuelle Wasser hinter Ernährung und Kleidung liegt bei rund 1,3 Mio. Litern im Jahr. Gegen 78.000 Liter Haushaltswasser gerechnet wäre jede Entscheidung im Bad optisch bedeutungslos. |
-| **Energie** (kWh) | Endenergie, die die Person selbst verbraucht: Strom, Wärme, Kraftstoff | Graue Energie aus Produkten bleibt draußen — sie steckt bereits im CO₂-Wert und würde sonst doppelt zählen. |
+| **Energie** (kWh) | Zugeordneter direkter Energieeinsatz aus Strom, Wärme, Kraftstoff und Wasserbereitstellung | Graue Energie aus Produkten bleibt draußen. |
 
 Wo eine Grenze einen Wert ausschließt, bleibt er null, und die Frage trägt einen
 `scopeNote`, der das im Panel erklärt. Eine Null ohne Erklärung liest sich wie
@@ -30,20 +30,18 @@ ein Fehler.
 
 | Faktor | Wert | Annahme |
 |---|---|---|
-| Strommix Italien | 0,28 kg CO₂e/kWh | Produktionsmix, Größenordnung der letzten Jahre |
-| Wärmemix Südtirol ⚠ | 0,19 kg CO₂e/kWh | Hoher Anteil Biomasse-Fernwärme; für andere Regionen zu niedrig |
+| Stromerzeugung Italien | 0,214 kg CO₂/kWh | ISPRA 2026, vorläufiger direkter Erzeugungsfaktor 2025; keine Lebenszykluszahl |
 | Erdgas | 0,24 kg CO₂e/kWh | Endenergie inkl. Vorkette |
 | Heizöl | 0,31 kg CO₂e/kWh | Endenergie inkl. Vorkette |
 | Warmwasser aufheizen | 0,0302 kWh/Liter | 4,186 kJ/(kg·K) × 26 K (12 °C → 38 °C) |
 | Trinkwasser bereitstellen | 0,0005 kWh/Liter | Förderung, Aufbereitung, Verteilung |
-| Raumwärmebedarf | 4.200 kWh/Person/a bei 20 °C | Südtiroler Bestand, gemischte Baualtersklassen |
-| Temperaturregel | 6 % je Kelvin | Verbreitete Faustregel, gilt nur in engem Bereich |
+| Raumwärmebedarf | Eingabe aus der Jahresabrechnung | Persönlicher Anteil statt pauschaler Gebäudeschätzung |
 | Standby | 8,76 kWh je Watt Dauerlast | 1 W × 8.760 h |
 | Auto Verbrenner | 0,22 kg CO₂e/km · 0,66 kWh/km | Durchschnittsflotte, 6,8 l/100 km, Well-to-Wheel |
 | Auto Kurzstrecke | 0,24 kg CO₂e/km | Aufschlag für Kaltstart |
-| Elektroauto | 0,055 kg CO₂e/km · 0,19 kWh/km | 0,19 kWh/km im italienischen Strommix |
+| Elektroauto | 0,041 kg CO₂/km · 0,19 kWh/km | 0,19 kWh/km × aktueller italienischer Erzeugungsfaktor |
 | Bahn / Fernbus | 0,035 kg CO₂e/pkm | |
-| Flugzeug ⚠ | 0,25 kg CO₂e/pkm | **Nur CO₂.** Mit den Effekten in großer Höhe liegt die Klimawirkung etwa doppelt so hoch. Bewusst konservativ gesetzt, im Fragetext benannt. |
+| Flugzeug ⚠ | 0,25 kg CO₂e-Wirkungswert/pkm | Pauschale Näherung einschließlich Nicht-CO₂-Zuschlag; keine flugspezifische Inventur |
 | Ernährung Sockel ⚠ | 950 kg CO₂e/a | Überwiegend pflanzliche Kost |
 | Je Fleischmahlzeit/Woche ⚠ | 105 kg CO₂e/a | Mittelwert über Fleischarten; Rind liegt deutlich darüber, Geflügel darunter |
 | Importaufschlag Lebensmittel ⚠ | bis 400 kg CO₂e/a | Transport, Kühlung, beheizte Gewächshäuser |
@@ -71,24 +69,17 @@ Referenzwerte auf den erfassten Ausschnitt zugeschnitten:
 
 | Kennzahl | Referenz im Check | Voller Durchschnitt |
 |---|---|---|
-| CO₂ | 5.200 kg/a | ~7.000 kg/a (Konsum, Italien) |
-| Wasser | 55.000 L/a | ~78.000 L/a (215 L/Tag) |
-| Energie | 11.000 kWh/a | ~12.500 kWh/a inkl. Verkehr |
+| CO₂ | 4.000 kg/a | ~7.000 kg/a (Konsum, Italien) |
+| Wasser | 53.000 L/a | ~78.000 L/a (215 L/Tag) |
+| Energie | 9.500 kWh/a | ~12.500 kWh/a inkl. Verkehr |
 
-Als Zielmarke in der Ergebnisdarstellung dienen 1.500 kg CO₂e pro Person und Jahr.
+Eine persönliche „Paris-Zielmarke“ wird nicht angezeigt: Sie wäre für den hier
+erfassten, unvollständigen Ausschnitt methodisch nicht belastbar.
 
 ## Plausibilitätsprüfung
 
-Mit `npx tsx` lässt sich jede Option durchrechnen (siehe Verlauf in
-`model/calculator.ts`). Zum Zeitpunkt der Erstellung ergaben sich:
-
-| Szenario | CO₂ | Wasser | Energie |
-|---|---|---|---|
-| durchgehend ungünstigste Wahl | 8.955 kg | 67.130 L | 18.944 kWh |
-| durchgehend mittlere Wahl | 5.118 kg | 52.850 L | 11.055 kWh |
-| durchgehend beste Wahl | 3.977 kg | 26.278 L | 10.333 kWh |
-
-Die mittlere Wahl trifft die Referenz gut. Auffällig: selbst die beste Wahl kommt
-nicht unter rund 4 t CO₂ und 10.000 kWh, weil Raumwärme und Ernährungssockel
-kaum wegzudrücken sind. Das ist inhaltlich korrekt und sollte in der
-Ergebniskommunikation nicht als Versagen des Nutzers erscheinen.
+Die Plausibilitätsprüfung liegt als automatisierter Test vor. Sie prüft unter
+anderem Einheiten, gekoppelte Warmwasserwerte, nichtnegative und begrenzte
+Eingaben, monotone Mengenwirkungen, Reglerreaktionen der Indizes sowie leere
+und unvollständige Zustände. Szenariowerte werden nicht mehr von Hand in dieser
+Datei dupliziert, weil solche Momentaufnahmen bei Modelländerungen veralten.

@@ -1,9 +1,49 @@
 import type { TourAction, TourState } from "./types";
+import { availableRooms } from "../config/rooms";
 
 const recordOrEmpty = <T>(value: unknown): Record<string, T> =>
   value && typeof value === "object" && !Array.isArray(value)
     ? value as Record<string, T>
     : {};
+
+const questions = new Map(
+  availableRooms.flatMap((room) => room.questions.map((question) => [question.id, question] as const))
+);
+
+const clampAdjustment = (questionId: string, quantity: number) => {
+  const adjust = questions.get(questionId)?.adjust;
+  if (!adjust || !Number.isFinite(quantity)) return undefined;
+  return Math.min(adjust.max, Math.max(adjust.min, quantity));
+};
+
+function sanitizeAnswers(value: unknown) {
+  const source = recordOrEmpty<unknown>(value);
+  return Object.fromEntries(
+    Object.entries(source).filter(([questionId, optionId]) =>
+      typeof optionId === "string" && questions.get(questionId)?.options.some((option) => option.id === optionId)
+    )
+  ) as Record<string, string>;
+}
+
+function sanitizeAdjustments(value: unknown) {
+  const source = recordOrEmpty<unknown>(value);
+  const clean: Record<string, number> = {};
+  for (const [questionId, quantity] of Object.entries(source)) {
+    if (typeof quantity !== "number") continue;
+    const clamped = clampAdjustment(questionId, quantity);
+    if (clamped !== undefined) clean[questionId] = clamped;
+  }
+  return clean;
+}
+
+function sanitizeSkipped(value: unknown, answers: Record<string, string>) {
+  const source = recordOrEmpty<unknown>(value);
+  return Object.fromEntries(
+    Object.entries(source).filter(([questionId, skipped]) =>
+      skipped === true && questions.has(questionId) && !answers[questionId]
+    )
+  ) as Record<string, boolean>;
+}
 
 export const initialTourState: TourState = {
   view: "house",
@@ -44,11 +84,14 @@ export function tourReducer(state: TourState, action: TourAction): TourState {
         adjustments
       };
     }
-    case "SET_ADJUSTMENT":
+    case "SET_ADJUSTMENT": {
+      const quantity = clampAdjustment(action.questionId, action.quantity);
+      if (quantity === undefined) return state;
       return {
         ...state,
-        adjustments: { ...state.adjustments, [action.questionId]: action.quantity }
+        adjustments: { ...state.adjustments, [action.questionId]: quantity }
       };
+    }
     case "CLEAR_ADJUSTMENT": {
       const adjustments = { ...state.adjustments };
       delete adjustments[action.questionId];
@@ -87,6 +130,7 @@ export function tourReducer(state: TourState, action: TourAction): TourState {
         ? restoredView
         : initialTourState.view;
       const questionIndex = action.state.activeQuestionIndex;
+      const answers = sanitizeAnswers(action.state.answers);
       return {
         view: roomStillExists ? view : "house",
         activeRoom: roomStillExists ? action.state.activeRoom ?? null : null,
@@ -95,9 +139,9 @@ export function tourReducer(state: TourState, action: TourAction): TourState {
             ? Math.max(0, Math.floor(questionIndex))
             : 0,
         objectOpen: false,
-        answers: recordOrEmpty<string>(action.state.answers),
-        skippedQuestions: recordOrEmpty<boolean>(action.state.skippedQuestions),
-        adjustments: recordOrEmpty<number>(action.state.adjustments)
+        answers,
+        skippedQuestions: sanitizeSkipped(action.state.skippedQuestions, answers),
+        adjustments: sanitizeAdjustments(action.state.adjustments)
       };
     }
     case "RESET": return initialTourState;

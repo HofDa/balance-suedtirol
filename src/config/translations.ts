@@ -74,7 +74,7 @@ const translations = {
       lead: "Der Lebensraum-Check rechnet aus, wie viel CO₂ dein Alltag verursacht. Er bietet dir aber nicht an, diese Menge gegen einen Betrag wieder auszugleichen. Das ist keine Lücke, sondern eine Entscheidung — und hier stehen die Gründe dafür.",
       scopeEyebrow: "Bilanzgrenze",
       scopeTitle: "Was der Check rechnet, und was er nicht behauptet.",
-      scopeCopy: "Der CO₂-Wert im Ergebnis ist ein voller Fußabdruck einschließlich Vorkette, pro Person und Jahr. Er ist als Größenordnung gebaut, damit du siehst, welcher Bereich deines Alltags schwer wiegt — nicht als geprüfte Ökobilanz. Aus einer bewusst vereinfachten Zahl einen Euro-Betrag abzuleiten, würde ihr eine Genauigkeit geben, die sie nicht hat.",
+      scopeCopy: "Der CO₂e-Wert im Ergebnis ist ein transparenter Ausschnitt der abgefragten Aktivitäten pro Person und Jahr. Vorketten sind nur enthalten, wenn der jeweilige Faktor sie ausdrücklich abbildet; Konsum, Gebäude und öffentliche Leistungen fehlen. Aus dieser bewusst vereinfachten Zahl einen Euro-Betrag abzuleiten, würde ihr eine Genauigkeit geben, die sie nicht hat.",
       reasonsEyebrow: "Vier Gründe",
       reasonsTitle: "Warum sich Ausstoß nicht sauber gegenrechnen lässt.",
       reasons: [

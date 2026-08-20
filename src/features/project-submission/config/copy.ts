@@ -53,7 +53,7 @@ const copy: Record<Locale, SubmissionCopy> = {
   de: {
     eyebrow: "Projekteinreichung",
     title: "Ihr Projekt beschreiben.",
-    lead: "Fünf Schritte, dieselben wie im Weg mit B*alance. Sie können jederzeit zurückgehen; Ihre Eingaben bleiben in diesem Browser gespeichert, bis Sie sie verwerfen.",
+    lead: "Fünf Schritte von der Projektidee bis zur Einreichung. Sie können jederzeit zurückgehen und Angaben ändern.",
     backToOverview: "Zur Übersicht",
     stepOf: (current, total) => `Schritt ${current} von ${total}`,
     stepsLabel: "Schritte der Einreichung",
@@ -99,7 +99,7 @@ const copy: Record<Locale, SubmissionCopy> = {
   it: {
     eyebrow: "Presentazione del progetto",
     title: "Descrivere il vostro progetto.",
-    lead: "Cinque passaggi, gli stessi del percorso con B*alance. Potete tornare indietro in qualsiasi momento; i dati restano salvati in questo browser finché non li eliminate.",
+    lead: "Cinque passaggi, dall’idea di progetto alla presentazione. Potete tornare indietro e modificare i dati in qualsiasi momento.",
     backToOverview: "Torna alla panoramica",
     stepOf: (current, total) => `Passaggio ${current} di ${total}`,
     stepsLabel: "Passaggi della presentazione",
@@ -145,7 +145,7 @@ const copy: Record<Locale, SubmissionCopy> = {
   en: {
     eyebrow: "Project submission",
     title: "Describe your project.",
-    lead: "Five steps, the same ones as the journey with B*alance. You can go back at any time; your entries stay saved in this browser until you discard them.",
+    lead: "Five steps from project idea to submission. You can go back and change your entries at any time.",
     backToOverview: "Back to overview",
     stepOf: (current, total) => `Step ${current} of ${total}`,
     stepsLabel: "Submission steps",

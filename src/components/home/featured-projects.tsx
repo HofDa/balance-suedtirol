@@ -7,7 +7,7 @@ import { getProjects } from "@/data/projects";
 import type { Locale } from "@/config/site";
 import { getTranslations } from "@/config/translations";
 import { focusRing } from "@/components/ui/focus";
-import type { CSSProperties } from "react";
+import { ProjectCarousel, carouselItemClass } from "./project-carousel";
 
 export function FeaturedProjects({ locale }: { locale: Locale }) {
   const t = getTranslations(locale).featured;
@@ -29,16 +29,19 @@ export function FeaturedProjects({ locale }: { locale: Locale }) {
             <ArrowRight className="size-4 transition-transform duration-300 group-hover:translate-x-1" />
           </Link>
         </div>
-        <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {localizedProjects.map((project, index) => (
-            <div
-              key={project.slug}
-              data-home-reveal="rise"
-              style={{ "--home-reveal-delay": `${index * 85}ms` } as CSSProperties}
-            >
-              <ProjectCard project={project} locale={locale} />
-            </div>
-          ))}
+
+        {/* Die Einblendung liegt auf der Spur, nicht mehr gestaffelt auf den
+            einzelnen Karten: Wer seitlich aus dem Ausschnitt ragt, schneidet
+            den Viewport nie, und der IntersectionObserver ließe solche Karten
+            auf Deckkraft 0 stehen, bis man sie herangeblättert hat. */}
+        <div data-home-reveal="rise" className="mt-12">
+          <ProjectCarousel copy={{ previous: t.previous, next: t.next }}>
+            {localizedProjects.map((project) => (
+              <li key={project.slug} className={carouselItemClass}>
+                <ProjectCard project={project} locale={locale} />
+              </li>
+            ))}
+          </ProjectCarousel>
         </div>
       </Container>
     </section>

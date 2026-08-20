@@ -55,7 +55,9 @@ const translations = {
       eyebrow: "Lokale Projekte",
       title: "Entdecke Projekte, die Lebensräume stärken.",
       copy: "Jedes Projekt trägt dazu bei, Biodiversität in Südtirol zu erhalten oder wiederherzustellen. Verfolge den Fortschritt, lerne die Menschen dahinter kennen und unterstütze Projekte, die dir am Herzen liegen.",
-      all: "Alle Projekte"
+      all: "Alle Projekte",
+      previous: "Vorheriges Projekt",
+      next: "Nächstes Projekt"
     },
     impact: {
       eyebrow: "VOM WISSEN ZUM HANDELN",
@@ -259,7 +261,9 @@ const translations = {
       eyebrow: "Progetti locali",
       title: "Scopri i progetti che rafforzano gli habitat.",
       copy: "Ogni progetto contribuisce a tutelare o ripristinare la biodiversità in Alto Adige. Segui i progressi, conosci le persone coinvolte e sostieni i progetti a cui tieni di più.",
-      all: "Tutti i progetti"
+      all: "Tutti i progetti",
+      previous: "Progetto precedente",
+      next: "Progetto successivo"
     },
     impact: {
       eyebrow: "DALLA CONOSCENZA ALL’AZIONE",
@@ -463,7 +467,9 @@ const translations = {
       eyebrow: "Local projects",
       title: "Discover projects that strengthen habitats.",
       copy: "Every project contributes to preserving or restoring biodiversity in South Tyrol. Track progress, meet the people behind them, and support projects close to your heart.",
-      all: "All projects"
+      all: "All projects",
+      previous: "Previous project",
+      next: "Next project"
     },
     impact: {
       eyebrow: "FROM KNOWLEDGE TO ACTION",

@@ -1,7 +1,9 @@
 import { notFound } from "next/navigation";
 import { FeaturedProjects } from "@/components/home/featured-projects";
 import { Hero } from "@/components/home/hero";
-import { HouseIntro } from "@/components/home/house-intro";
+import { NewsEvents } from "@/components/home/news-events";
+import { Achievements } from "@/components/home/achievements";
+import { PlatformPartners, SciencePartners } from "@/components/home/partners";
 import { ImpactBridge } from "@/components/home/impact-bridge";
 import { HomeMotionController } from "@/components/home/home-motion-controller";
 import { isLocale } from "@/config/site";
@@ -15,7 +17,10 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
       <HomeMotionController />
       <Hero locale={locale} />
       <FeaturedProjects locale={locale} />
-      <HouseIntro locale={locale} />
+      <NewsEvents locale={locale} />
+      <Achievements locale={locale} />
+      <PlatformPartners locale={locale} />
+      <SciencePartners locale={locale} />
       <ImpactBridge locale={locale} />
     </div>
   );

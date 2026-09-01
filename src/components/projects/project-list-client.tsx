@@ -73,9 +73,13 @@ export function ProjectListClient({
         selectedStatus === "all" ||
         project.status === selectedStatus;
 
+      // Ohne Finanzierungsziel ist das Projekt weder offen noch finanziert;
+      // es erscheint deshalb nur unter „Alle Finanzierungsstände".
+      const funded = project.funded ?? 0;
       const matchesCrowdfunding =
         selectedCrowdfunding === "all" ||
-        (selectedCrowdfunding === "open" ? project.funded < project.goal : project.funded >= project.goal);
+        (typeof project.goal === "number" &&
+          (selectedCrowdfunding === "open" ? funded < project.goal : funded >= project.goal));
 
       const matchesPhase =
         selectedPhase === "all" ||

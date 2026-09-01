@@ -225,12 +225,55 @@ button {
     --hero-reveal-blur: 1.5px;
   }
 
+  .hero-reveal-quote {
+    --hero-reveal-duration: 1400ms;
+    --hero-reveal-delay: 420ms;
+    --hero-reveal-opacity: 0.7;
+    --hero-reveal-blur: 2px;
+  }
+
   .hero-cta::after {
     animation: hero-cta-sheen 1800ms cubic-bezier(0.22, 1, 0.36, 1) 900ms both;
   }
+
+  /* Zitatwechsel und Fortschrittsbalken.
+     Beide laufen ohne Fill-Mode: Der Ruhezustand ist der sichtbare Zustand,
+     damit ein stehendes Zitat auch dann lesbar bleibt, wenn keine Animation
+     läuft — dieselbe Regel wie bei der Ankunft des Heros oben. */
+  .hero-quote-body {
+    animation: hero-quote-in 620ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .hero-quote-progress {
+    animation: hero-quote-progress 7000ms linear;
+  }
+
+  .hero-quote-progress[data-paused="true"] {
+    animation-play-state: paused;
+  }
+}
+
+@keyframes hero-quote-in {
+  from {
+    opacity: 0.68;
+    transform: translateY(6px);
+    filter: blur(2px);
+  }
+}
+
+@keyframes hero-quote-progress {
+  from {
+    transform: scaleX(0);
+  }
+}
+
+.hero-quote-progress {
+  transform-origin: left;
+  transform: scaleX(1);
 }
 
 @media print {
+  .hero-quote-body,
   .hero-reveal,
   .header-reveal {
     animation: none;

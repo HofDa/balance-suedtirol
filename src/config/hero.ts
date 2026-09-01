@@ -1,3 +1,5 @@
+import type { Locale } from "./site";
+
 export type HeroImage = {
   src: string;
   alt: string;
@@ -63,3 +65,70 @@ export const heroStats = [
   { value: "100 %", label: "Projekte aus Südtirol" },
   { value: "DE · IT · EN", label: "dreisprachig angelegt" }
 ] as const;
+
+export type HeroQuoteMock = {
+  id: string;
+  /** Zitattext je Sprache — frei übersetzbar, weil es sich um Musterinhalte handelt. */
+  text: Record<Locale, string>;
+  /** Platzhaltername. Echte Personen erst nennen, wenn Zitat und Nennung freigegeben sind. */
+  author: string;
+  role: Record<Locale, string>;
+};
+
+/**
+ * Musterzitate für die Zitatebene im Hero.
+ *
+ * Bewusst erfundene Stimmen mit Platzhalternamen: Ein zugeordnetes Zitat ohne
+ * Freigabe wäre eine Behauptung über eine reale Person. Das belegte Zitat oben
+ * (`heroQuote`) läuft hier nicht mit, weil es wörtlich zitiert werden muss und
+ * sich deshalb nicht in drei Sprachen ausspielen lässt.
+ *
+ * Zum Ersetzen: `text` und `role` durch die freigegebene Fassung ersetzen,
+ * `author` auf den echten Namen setzen und `heroQuotesAreMockup` auf false stellen.
+ */
+export const heroQuotesAreMockup = true;
+
+export const heroQuotes: HeroQuoteMock[] = [
+  {
+    id: "wiese",
+    text: {
+      de: "Wenn die Wiese hinterm Hof im Juni wieder summt, weiß ich, dass wir etwas richtig gemacht haben.",
+      it: "Quando a giugno il prato dietro il maso torna a ronzare, so che abbiamo fatto qualcosa di giusto.",
+      en: "When the meadow behind the farm hums again in June, I know we got something right."
+    },
+    author: "Name Platzhalter",
+    role: {
+      de: "Bäuerin, Vinschgau",
+      it: "Agricoltrice, Val Venosta",
+      en: "Farmer, Vinschgau"
+    }
+  },
+  {
+    id: "hecke",
+    text: {
+      de: "Biodiversität ist nichts Fernes. Sie fängt an der Hecke am Feldrand an.",
+      it: "La biodiversità non è qualcosa di lontano. Comincia dalla siepe a bordo campo.",
+      en: "Biodiversity is not something distant. It starts at the hedge along the field."
+    },
+    author: "Name Platzhalter",
+    role: {
+      de: "Freiwilliger, Pustertal",
+      it: "Volontario, Val Pusteria",
+      en: "Volunteer, Puster Valley"
+    }
+  },
+  {
+    id: "zaehlen",
+    text: {
+      de: "Wir sehen erst, was fehlt, wenn wir anfangen zu zählen.",
+      it: "Ci accorgiamo di ciò che manca solo quando iniziamo a contare.",
+      en: "We only notice what is missing once we start counting."
+    },
+    author: "Name Platzhalter",
+    role: {
+      de: "Projektbegleitung, Eisacktal",
+      it: "Accompagnamento di progetto, Valle Isarco",
+      en: "Project support, Eisacktal"
+    }
+  }
+];

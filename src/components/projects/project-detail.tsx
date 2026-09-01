@@ -45,7 +45,12 @@ interface ProjectDetailProps {
 }
 
 export function ProjectDetail({ project, otherProjects, locale }: ProjectDetailProps) {
-  const progress = Math.min(100, Math.round((project.funded / project.goal) * 100));
+  // Ein Projekt ohne entschiedenes Ziel bekommt keinen Balken: 0 von 0 wäre
+  // weder 0 % noch 100 %, sondern eine Zahl, die es nicht gibt.
+  const hasFundingTarget = typeof project.goal === "number" && project.goal > 0;
+  const progress = hasFundingTarget
+    ? Math.min(100, Math.round(((project.funded ?? 0) / project.goal!) * 100))
+    : null;
   const copy = getTranslations(locale).projectDetail;
   const mapUrl = `https://www.openstreetmap.org/?mlat=${project.location.lat}&mlon=${project.location.lng}#map=14/${project.location.lat}/${project.location.lng}`;
   const timeline = [
@@ -269,15 +274,21 @@ export function ProjectDetail({ project, otherProjects, locale }: ProjectDetailP
           <section className="mt-20 grid gap-6 lg:grid-cols-[0.72fr_1.28fr]">
             <aside className="h-fit rounded-[var(--radius-xl)] border border-[var(--color-line)] bg-white p-6 sm:p-7">
               <Label size="section">{copy.funding}</Label>
-              <p className="mt-5 text-sm font-medium text-[var(--color-muted)]">{copy.fundingProgress}</p>
-              <div className="mt-1 flex items-end justify-between gap-3">
-                <p className="text-3xl font-bold tracking-[-0.03em] tabular-nums text-[var(--color-ink)]">{formatCurrency(project.funded)}</p>
-                <span className="text-sm font-bold tabular-nums text-[var(--color-forest)]">{progress} %</span>
-              </div>
-              <p className="mt-1 text-xs tabular-nums text-[var(--color-muted)]">
-                {copy.fundingTarget.replace("{goal}", formatCurrency(project.goal))}
-              </p>
-              <Progress value={progress} label={`${copy.fundingProgress}: ${progress} %`} className="mt-5" />
+              {progress === null ? (
+                <p className="mt-5 text-sm leading-6 text-[var(--color-muted)]">{copy.fundingOpen}</p>
+              ) : (
+                <>
+                  <p className="mt-5 text-sm font-medium text-[var(--color-muted)]">{copy.fundingProgress}</p>
+                  <div className="mt-1 flex items-end justify-between gap-3">
+                    <p className="text-3xl font-bold tracking-[-0.03em] tabular-nums text-[var(--color-ink)]">{formatCurrency(project.funded ?? 0)}</p>
+                    <span className="text-sm font-bold tabular-nums text-[var(--color-forest)]">{progress} %</span>
+                  </div>
+                  <p className="mt-1 text-xs tabular-nums text-[var(--color-muted)]">
+                    {copy.fundingTarget.replace("{goal}", formatCurrency(project.goal!))}
+                  </p>
+                  <Progress value={progress} label={`${copy.fundingProgress}: ${progress} %`} className="mt-5" />
+                </>
+              )}
               <p className="mt-3 inline-flex items-center gap-1.5 text-xs text-[var(--color-muted)]">
                 <Users className="size-4" aria-hidden />
                 {project.supporters} {copy.supporters}

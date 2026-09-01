@@ -14,3 +14,10 @@ traceability.
 The downloaded photographs were cropped to a consistent 8:5 aspect ratio,
 resized to 1600 × 1000 pixels, stripped of metadata, and converted to WebP.
 Replace them before launch if the final projects provide their own imagery.
+
+`meine-gemeinde-meine-natur.webp` is not a photograph: it is a generated
+placeholder in the platform palette (`scripts` are not needed to reproduce it —
+it is four flat shapes), used until the project provides its own image.
+
+`vorfahrt-fuer-den-igel.webp` is likewise a generated placeholder (an abstract
+hedge line with gaps standing for the hedgehog highways), not a photograph.

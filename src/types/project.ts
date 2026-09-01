@@ -25,8 +25,9 @@ export type Project = {
   organization: string;
   location: { lat: number; lng: number };
   image: string;
-  goal: number;
-  funded: number;
+  /** Fehlt, solange das Finanzierungsziel nicht entschieden ist. */
+  goal?: number;
+  funded?: number;
   supporters: number;
   whyItMatters: string;
   impact: Array<{ value: string; label: string; description?: string }>;

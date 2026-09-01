@@ -4,6 +4,7 @@ import { getTranslations } from "@/config/translations";
 import type { Locale } from "@/config/site";
 import { HeroActions } from "./hero-actions";
 import { HeroBackdrop } from "./hero-backdrop";
+import { HeroQuotes } from "./hero-quotes";
 import { Label } from "@/components/ui/label";
 import { focusRingOnDark } from "@/components/ui/focus";
 
@@ -40,6 +41,8 @@ export function Hero({ locale }: { locale: Locale }) {
 
           <HeroActions locale={locale} />
         </div>
+
+        <HeroQuotes locale={locale} />
 
         <p className="absolute bottom-3 right-5 text-xs font-medium text-white/90 sm:bottom-4 sm:text-sm">
           {t.photo}: <span className="text-white/80">{heroImage.photographer}</span> ·{" "}

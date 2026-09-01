@@ -35,7 +35,10 @@ const translations = {
       projects: "Geprüfte Projekte ansehen",
       trust: "Die Ergebnisse dienen der Orientierung.",
       methodology: "Methodik & Quellen",
-      photo: "Foto"
+      photo: "Foto",
+      quotesLabel: "Stimmen aus Südtirol",
+      quoteItem: "Zitat",
+      quotesMockup: "Musterzitate"
     },
     house: {
       eyebrow: "Von Räumen zu Lebensräumen",
@@ -58,6 +61,42 @@ const translations = {
       all: "Alle Projekte",
       previous: "Vorheriges Projekt",
       next: "Nächstes Projekt"
+    },
+    news: {
+      eyebrow: "Aktuelles",
+      title: "Neuigkeiten und Veranstaltungen.",
+      copy: "Was auf den Projektflächen passiert und wo man mitkommen kann: Begehungen, Pflanzaktionen und neue Ergebnisse aus dem Monitoring.",
+      kinds: {
+        news: "Neuigkeit",
+        event: "Veranstaltung"
+      },
+      empty: "Zurzeit sind keine Termine angekündigt."
+    },
+    achievements: {
+      eyebrow: "Bisher erreicht",
+      title: "Was auf den Flächen entstanden ist.",
+      copy: "Die Kennzahlen fassen den Stand aller Projekte auf der Plattform zusammen. Sie werden aus den Projektdaten gerechnet und ändern sich mit ihnen.",
+      stats: {
+        projects: "Projekte auf der Plattform",
+        habitats: "Lebensraumtypen",
+        supporters: "Unterstützerinnen und Unterstützer",
+        funded: "zugesagte Mittel"
+      },
+      completedEyebrow: "Abgeschlossen",
+      completedTitle: "Projekte, die fertig sind und weiterwirken.",
+      completedEmpty: "Noch ist kein Projekt abgeschlossen. Sobald das erste seine Pflegephase beendet, steht es hier."
+    },
+    partners: {
+      eyebrow: "Getragen von",
+      title: "Partner, die die Plattform möglich machen.",
+      copy: "b*alance wird von Organisationen unterstützt, die Betrieb, Prüfung und Reichweite mittragen. Was jede Partnerschaft beiträgt, steht offen dabei.",
+      placeholderNote: "Alle Einträge sind Platzhalter, bis eine Partnerschaft bestätigt und ihre Nennung freigegeben ist.",
+      become: "Partner werden"
+    },
+    sciencePartners: {
+      eyebrow: "Fachliche Begleitung",
+      title: "Wer die Methodik mitprüft.",
+      copy: "Lebensraumtypologie, Monitoringprotokolle und Kennzahlen werden fachlich begleitet. Die Begleitung prüft die Methodik — die Verantwortung für die Inhalte bleibt bei der Plattform."
     },
     impact: {
       eyebrow: "VOM WISSEN ZUM HANDELN",
@@ -179,6 +218,7 @@ const translations = {
       funding: "Projektfinanzierung",
       fundingProgress: "Finanzierungsstand",
       fundingTarget: "von {goal} Zielsumme",
+      fundingOpen: "Das Finanzierungsziel steht noch nicht fest. Sobald es die Trägerorganisation festgelegt hat, steht der Finanzierungsstand hier.",
       supporters: "Unterstützer",
       support: "Projekt unterstützen",
       tax: "Steuerlich absetzbar",
@@ -241,7 +281,10 @@ const translations = {
       projects: "Vedi i progetti verificati",
       trust: "I risultati servono da orientamento.",
       methodology: "Metodo & fonti",
-      photo: "Foto"
+      photo: "Foto",
+      quotesLabel: "Voci dall’Alto Adige",
+      quoteItem: "Citazione",
+      quotesMockup: "Citazioni di esempio"
     },
     house: {
       eyebrow: "Dagli ambienti agli habitat",
@@ -264,6 +307,42 @@ const translations = {
       all: "Tutti i progetti",
       previous: "Progetto precedente",
       next: "Progetto successivo"
+    },
+    news: {
+      eyebrow: "Attualità",
+      title: "Notizie ed eventi.",
+      copy: "Cosa succede sulle aree di progetto e dove è possibile partecipare: visite guidate, azioni di piantumazione e nuovi risultati del monitoraggio.",
+      kinds: {
+        news: "Notizia",
+        event: "Evento"
+      },
+      empty: "Al momento non ci sono appuntamenti in programma."
+    },
+    achievements: {
+      eyebrow: "Risultati finora",
+      title: "Ciò che è nato sulle superfici.",
+      copy: "Gli indicatori riassumono lo stato di tutti i progetti della piattaforma. Sono calcolati dai dati di progetto e cambiano insieme a essi.",
+      stats: {
+        projects: "progetti sulla piattaforma",
+        habitats: "tipi di habitat",
+        supporters: "sostenitrici e sostenitori",
+        funded: "fondi impegnati"
+      },
+      completedEyebrow: "Conclusi",
+      completedTitle: "Progetti conclusi che continuano a produrre effetti.",
+      completedEmpty: "Nessun progetto è ancora concluso. Non appena il primo termina la fase di cura, comparirà qui."
+    },
+    partners: {
+      eyebrow: "Sostenuta da",
+      title: "I partner che rendono possibile la piattaforma.",
+      copy: "b*alance è sostenuta da organizzazioni che contribuiscono al funzionamento, alla verifica e alla diffusione. Il contributo di ogni partnership è indicato in modo trasparente.",
+      placeholderNote: "Tutte le voci sono segnaposto finché una partnership non è confermata e la sua citazione autorizzata.",
+      become: "Diventare partner"
+    },
+    sciencePartners: {
+      eyebrow: "Accompagnamento tecnico-scientifico",
+      title: "Chi verifica la metodologia.",
+      copy: "La tipologia degli habitat, i protocolli di monitoraggio e gli indicatori sono accompagnati sul piano scientifico. L’accompagnamento verifica il metodo — la responsabilità dei contenuti resta della piattaforma."
     },
     impact: {
       eyebrow: "DALLA CONOSCENZA ALL’AZIONE",
@@ -385,6 +464,7 @@ const translations = {
       funding: "Finanziamento del progetto",
       fundingProgress: "Stato del finanziamento",
       fundingTarget: "su {goal} previsti",
+      fundingOpen: "L’obiettivo di finanziamento non è ancora stabilito. Non appena l’organizzazione promotrice lo definirà, lo stato del finanziamento comparirà qui.",
       supporters: "sostenitori",
       support: "Sostieni il progetto",
       tax: "Fiscalmente detraibile",
@@ -447,7 +527,10 @@ const translations = {
       projects: "View verified projects",
       trust: "Results serve as general guidance.",
       methodology: "Methodology & sources",
-      photo: "Photo"
+      photo: "Photo",
+      quotesLabel: "Voices from South Tyrol",
+      quoteItem: "Quote",
+      quotesMockup: "Sample quotes"
     },
     house: {
       eyebrow: "From rooms to habitats",
@@ -470,6 +553,42 @@ const translations = {
       all: "All projects",
       previous: "Previous project",
       next: "Next project"
+    },
+    news: {
+      eyebrow: "Latest",
+      title: "News and events.",
+      copy: "What is happening on the project sites and where you can join in: field walks, planting days and new monitoring results.",
+      kinds: {
+        news: "News",
+        event: "Event"
+      },
+      empty: "No dates are currently announced."
+    },
+    achievements: {
+      eyebrow: "Achieved so far",
+      title: "What has taken shape on the ground.",
+      copy: "These figures summarise the state of every project on the platform. They are calculated from the project data and change along with it.",
+      stats: {
+        projects: "projects on the platform",
+        habitats: "habitat types",
+        supporters: "supporters",
+        funded: "committed funding"
+      },
+      completedEyebrow: "Completed",
+      completedTitle: "Projects that are finished and still working.",
+      completedEmpty: "No project has been completed yet. As soon as the first finishes its care phase, it will appear here."
+    },
+    partners: {
+      eyebrow: "Supported by",
+      title: "The partners who make the platform possible.",
+      copy: "b*alance is supported by organisations that help carry its operation, its review process and its reach. What each partnership contributes is stated openly.",
+      placeholderNote: "Every entry is a placeholder until a partnership is confirmed and its mention approved.",
+      become: "Become a partner"
+    },
+    sciencePartners: {
+      eyebrow: "Scientific guidance",
+      title: "Who reviews the methodology.",
+      copy: "Habitat typology, monitoring protocols and key figures are reviewed by specialists. That guidance checks the method — responsibility for the content stays with the platform."
     },
     impact: {
       eyebrow: "FROM KNOWLEDGE TO ACTION",
@@ -591,6 +710,7 @@ const translations = {
       funding: "Project funding",
       fundingProgress: "Funding progress",
       fundingTarget: "of {goal} target",
+      fundingOpen: "The funding target has not been set yet. As soon as the lead organisation defines it, the funding progress will appear here.",
       supporters: "supporters",
       support: "Support this project",
       tax: "Tax deductible",

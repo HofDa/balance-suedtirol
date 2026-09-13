@@ -3,6 +3,49 @@ import type { Locale } from "@/config/site";
 
 export const projects: Project[] = [
   {
+    slug: "millander-au-erweiterung",
+    title: "Millander Au – Erweiterung",
+    summary:
+      "Das letzte Auen-Restbiotop im Brixner Süden wächst: Eine ehemalige Apfelanlage wird zu Teich, Feuchtwiese und Hecken für rund 130 Vogelarten im Jahr.",
+    description:
+      "Südlich an das bestehende Biotop von rund 4,5 Hektar schließt eine ehemals intensiv bewirtschaftete Apfelanlage an. Sie soll zu einem großen Schilfteich, einer bei Hochwasser überfluteten Feuchtwiese, Heckenstreifen, Erleninseln und einem mäandrierenden Wasserlauf werden. Steilwände aus Lehm und Sand bieten Bienenfresser, Uferschwalbe und Eisvogel Brutröhren; ein Aussichtsturm am Eisackdamm, eine Beobachtungswand und eine Beobachtungshütte machen das Biotop behutsam erlebbar. Weitere Grundeigentümer haben ihre Flächen für die Erweiterung in Aussicht gestellt – ihr Ankauf ist auf Spenden angewiesen.",
+    categoryIds: ["wetlands", "waters", "cultural-landscapes"],
+    status: "support-needed",
+    municipality: "Brixen",
+    organization: "AuRaum – Arbeitsgruppe für Natur Brixen",
+    location: { lat: 46.692, lng: 11.666 },
+    image: "/projects/millander-au-parzelle-mai-2026.webp",
+    beforeAfter: {
+      before: "/projects/millander-au-erweiterung-before.webp",
+      after: "/projects/millander-au-erweiterung-after.webp",
+      caption:
+        "Vergrößerung eines bestehenden Teichs im Jänner 2025 mit der Forststation Brixen – und dieselbe Fläche im Mai 2025. Wenige Monate später zog hier ein Zwergdommelpaar drei Junge auf, der erste Brutnachweis seit rund 30 Jahren."
+    },
+    gallery: [
+      { src: "/projects/millander-au-drohne.webp", alt: "Luftaufnahme der Millander Au mit Eisack, Biotop und angrenzenden Obstanlagen", caption: "Das Biotop zwischen Eisack und Obstanlagen – südlich schließen die Flächen der geplanten Erweiterung an." },
+      { src: "/projects/millander-au-parzelle-mai-2026.webp", alt: "Mäandrierender Wasserlauf auf der renaturierten Parzelle", caption: "Die im März 2026 renaturierte Parzelle mit neuem Wasserlauf, zwei Monate später." },
+      { src: "/projects/millander-au-hochwasser-2024.webp", alt: "Millander Au bei Hochwasser im Oktober 2024", caption: "Hochwasser im Oktober 2024: Die Au nimmt Wasser auf, das sonst flussabwärts drückt." },
+      { src: "/projects/millander-au-hecke.webp", alt: "Blühende Hecke am Unterrichterweg", caption: "Hecke am Unterrichterweg – Brutplatz und Herbstnahrung für Singvögel." },
+      { src: "/projects/millander-au-zwergdommel.webp", alt: "Zwergdommel im Schilf", caption: "Zwergdommel im Schilf – 2025 erstmals seit rund 30 Jahren wieder Brutvogel in der Au.", credit: "Sepp Gamper" },
+      { src: "/projects/millander-au-bekassine.webp", alt: "Bekassine am Ufer", caption: "Bekassine auf Nahrungssuche am Ufer – einer der Zugvögel, die hier rasten.", credit: "Sepp Gamper" }
+    ],
+    supporters: 0,
+    whyItMatters:
+      "Die Millander Au ist der Rest einer Auenlandschaft, die einst die gesamte Flusslandschaft von Brixen bis Albeins einnahm. 1988 wurde sie in letzter Sekunde vor der Nutzung als Bauschuttdeponie bewahrt und unter Schutz gestellt. Bei Schlechtwetterfronten über dem Alpenhauptkamm ist sie für Zugvögel eine überlebenswichtige Raststätte: Rund 130 Vogelarten werden hier jährlich nachgewiesen, 30 bis 35 davon brüten im Biotop. Die 2026 renaturierte Nachbarparzelle zeigt, wie schnell neue Lebensräume angenommen werden.",
+    impact: [
+      { value: "4,5 ha", label: "bestehendes Biotop" },
+      { value: "ca. 3 ha", label: "geplante Erweiterung" },
+      { value: "ca. 130", label: "Vogelarten pro Jahr" },
+      { value: "30–35", label: "Brutvogelarten" }
+    ],
+    monitoring: {
+      species: "Zug- und Brutvögel; mitprofitierend Amphibien, Libellen und weitere Insekten",
+      surveys: "Laufende Vogelbeobachtung durch AuRaum, hyla und AVK Südtirol",
+      reporting: "Noch festzulegen",
+      summary: "Die jährliche Artenliste des Biotops und die Nachweise auf der 2026 renaturierten Parzelle zeigen, ob die neuen Teiche, Feuchtwiesen und Hecken die Zielarten erreichen. Der Berichtsrhythmus wird mit der Arbeitsgruppe noch festgelegt."
+    }
+  },
+  {
     slug: "bluehende-vernetzung-bozen",
     title: "Blühende Vernetzung Bozen",
     summary:
@@ -15,6 +58,12 @@ export const projects: Project[] = [
     organization: "Netzwerk StadtNatur",
     location: { lat: 46.4983, lng: 11.3548 },
     image: "/projects/bluehende-vernetzung-bozen.webp",
+    beforeAfter: {
+      before: "/projects/bluehende-vernetzung-bozen-before.webp",
+      isPlaceholder: true,
+      after: "/projects/bluehende-vernetzung-bozen.webp",
+      caption: "Trittsteinfläche an einer Wohnanlage – vom gemähten Rasen zur Blühwiese."
+    },
     goal: 42000,
     funded: 28600,
     supporters: 184,
@@ -52,6 +101,12 @@ export const projects: Project[] = [
     organization: "Kulturlandschaft Eisacktal",
     location: { lat: 46.641, lng: 11.565 },
     image: "/projects/lebendige-streuobstwiese.webp",
+    beforeAfter: {
+      before: "/projects/lebendige-streuobstwiese-before.webp",
+      isPlaceholder: true,
+      after: "/projects/lebendige-streuobstwiese.webp",
+      caption: "Streuobstwiese im Eisacktal – vom Vielschnitt zur zweischürigen Wiese."
+    },
     goal: 68000,
     funded: 35500,
     supporters: 241,
@@ -89,6 +144,12 @@ export const projects: Project[] = [
     organization: "Lebensräume Pustertal",
     location: { lat: 46.759, lng: 12.031 },
     image: "/projects/moorfenster-pustertal.webp",
+    beforeAfter: {
+      before: "/projects/moorfenster-pustertal-before.webp",
+      isPlaceholder: true,
+      after: "/projects/moorfenster-pustertal.webp",
+      caption: "Moorfläche nach dem Rückbau der Entwässerungsgräben."
+    },
     goal: 92000,
     funded: 61700,
     supporters: 329,
@@ -192,6 +253,39 @@ export function getProject(slug: string) {
 
 const projectTranslations: Record<Exclude<Locale, "de">, Record<string, Partial<Project>>> = {
   it: {
+    "millander-au-erweiterung": {
+      title: "Millander Au – Ampliamento",
+      summary: "L’ultimo biotopo golenale a sud di Bressanone cresce: un ex meleto diventa stagno, prato umido e siepi per circa 130 specie di uccelli all’anno.",
+      description: "A sud del biotopo esistente di circa 4,5 ettari si trova un ex meleto a coltivazione intensiva. Diventerà un grande stagno con canneto, un prato umido inondato in caso di piena, fasce di siepi, isole di ontani e un corso d’acqua a meandri. Pareti ripide di argilla e sabbia offriranno cavità di nidificazione a gruccione, topino e martin pescatore; una torre panoramica sull’argine dell’Isarco, una parete di osservazione e un capanno renderanno il biotopo fruibile con discrezione. Altri proprietari hanno messo in prospettiva i loro terreni per l’ampliamento: il loro acquisto dipende dalle donazioni.",
+      whyItMatters: "La Millander Au è ciò che resta di un paesaggio golenale che un tempo occupava l’intera piana fluviale da Bressanone ad Albes. Nel 1988 è stata salvata all’ultimo momento dall’uso come discarica di macerie e posta sotto tutela. Con fronti di maltempo sulla cresta alpina principale è una sosta vitale per gli uccelli migratori: qui vengono rilevate circa 130 specie all’anno, di cui 30–35 nidificanti. La particella vicina rinaturalizzata nel 2026 mostra quanto rapidamente i nuovi habitat vengano colonizzati.",
+      municipality: "Bressanone",
+      organization: "AuRaum – Gruppo di lavoro per la natura Bressanone",
+      beforeAfter: {
+        before: "/projects/millander-au-erweiterung-before.webp",
+        after: "/projects/millander-au-erweiterung-after.webp",
+        caption: "Ampliamento di uno stagno esistente nel gennaio 2025 con la Stazione forestale di Bressanone – e la stessa area nel maggio 2025. Pochi mesi dopo una coppia di tarabusino ha allevato qui tre giovani, la prima nidificazione accertata da circa 30 anni."
+      },
+      gallery: [
+        { src: "/projects/millander-au-drohne.webp", alt: "Veduta aerea della Millander Au con Isarco, biotopo e meleti adiacenti", caption: "Il biotopo tra l’Isarco e i meleti – a sud si trovano le aree dell’ampliamento previsto." },
+        { src: "/projects/millander-au-parzelle-mai-2026.webp", alt: "Corso d’acqua a meandri sulla particella rinaturalizzata", caption: "La particella rinaturalizzata nel marzo 2026 con il nuovo corso d’acqua, due mesi dopo." },
+        { src: "/projects/millander-au-hochwasser-2024.webp", alt: "Millander Au durante la piena dell’ottobre 2024", caption: "Piena nell’ottobre 2024: la golena assorbe acqua che altrimenti preme a valle." },
+        { src: "/projects/millander-au-hecke.webp", alt: "Siepe in fiore lungo l’Unterrichterweg", caption: "Siepe lungo l’Unterrichterweg – sito di nidificazione e cibo autunnale per i passeriformi." },
+        { src: "/projects/millander-au-zwergdommel.webp", alt: "Tarabusino nel canneto", caption: "Tarabusino nel canneto – nel 2025 di nuovo nidificante nella golena per la prima volta da circa 30 anni.", credit: "Sepp Gamper" },
+        { src: "/projects/millander-au-bekassine.webp", alt: "Beccaccino sulla riva", caption: "Beccaccino in cerca di cibo sulla riva – uno dei migratori che sostano qui.", credit: "Sepp Gamper" }
+      ],
+      impact: [
+        { value: "4,5 ha", label: "biotopo esistente" },
+        { value: "ca. 3 ha", label: "ampliamento previsto" },
+        { value: "ca. 130", label: "specie di uccelli all’anno" },
+        { value: "30–35", label: "specie nidificanti" }
+      ],
+      monitoring: {
+        species: "Uccelli migratori e nidificanti; ne beneficiano anche anfibi, libellule e altri insetti",
+        surveys: "Osservazione ornitologica continua di AuRaum, hyla e AVK Südtirol",
+        reporting: "Da definire",
+        summary: "La lista annuale delle specie del biotopo e i rilievi sulla particella rinaturalizzata nel 2026 mostrano se i nuovi stagni, prati umidi e siepi raggiungono le specie target. La cadenza dei rapporti sarà concordata con il gruppo di lavoro."
+      }
+    },
     "bluehende-vernetzung-bozen": {
       title: "Rete fiorita di Bolzano",
       summary: "Biotopi diffusi collegano gli spazi verdi urbani e offrono nutrimento ad api selvatiche e farfalle.",
@@ -298,6 +392,39 @@ const projectTranslations: Record<Exclude<Locale, "de">, Record<string, Partial<
     }
   },
   en: {
+    "millander-au-erweiterung": {
+      title: "Millander Au – Expansion",
+      summary: "The last remnant of floodplain south of Brixen is growing: a former apple orchard becomes pond, wet meadow and hedgerows for around 130 bird species a year.",
+      description: "South of the existing 4.5-hectare reserve lies a former intensively farmed apple orchard. It is to become a large reed-fringed pond, a wet meadow that floods at high water, strips of hedgerow, alder islands and a meandering watercourse. Steep banks of clay and sand will give bee-eaters, sand martins and kingfishers nesting burrows; an observation tower on the Eisack embankment, a viewing screen and a hide will open the reserve to visitors without disturbing it. Further landowners have offered their plots for the expansion – buying them depends on donations.",
+      whyItMatters: "The Millander Au is what remains of a floodplain that once covered the entire river landscape from Brixen to Albeins. In 1988 it was saved at the last moment from becoming a rubble dump and placed under protection. When bad weather sits over the main Alpine ridge it is a vital stopover for migrating birds: around 130 species are recorded here each year, 30 to 35 of which breed in the reserve. The neighbouring plot restored in 2026 shows how quickly new habitats are taken up.",
+      municipality: "Brixen",
+      organization: "AuRaum – Brixen Nature Working Group",
+      beforeAfter: {
+        before: "/projects/millander-au-erweiterung-before.webp",
+        after: "/projects/millander-au-erweiterung-after.webp",
+        caption: "Enlarging an existing pond in January 2025 with the Brixen forestry station – and the same area in May 2025. A few months later a pair of little bitterns raised three young here, the first confirmed breeding in around 30 years."
+      },
+      gallery: [
+        { src: "/projects/millander-au-drohne.webp", alt: "Aerial view of the Millander Au with the Eisack, the reserve and adjacent orchards", caption: "The reserve between the Eisack and the orchards – the planned expansion areas adjoin to the south." },
+        { src: "/projects/millander-au-parzelle-mai-2026.webp", alt: "Meandering watercourse on the restored plot", caption: "The plot restored in March 2026 with its new watercourse, two months later." },
+        { src: "/projects/millander-au-hochwasser-2024.webp", alt: "Millander Au during the October 2024 flood", caption: "High water in October 2024: the floodplain takes up water that would otherwise push downstream." },
+        { src: "/projects/millander-au-hecke.webp", alt: "Flowering hedgerow along the Unterrichterweg", caption: "Hedgerow along the Unterrichterweg – nesting site and autumn food for songbirds." },
+        { src: "/projects/millander-au-zwergdommel.webp", alt: "Little bittern in the reeds", caption: "Little bittern in the reeds – breeding in the reserve again in 2025 for the first time in around 30 years.", credit: "Sepp Gamper" },
+        { src: "/projects/millander-au-bekassine.webp", alt: "Common snipe on the bank", caption: "Common snipe feeding on the bank – one of the migrants that rest here.", credit: "Sepp Gamper" }
+      ],
+      impact: [
+        { value: "4.5 ha", label: "existing reserve" },
+        { value: "approx. 3 ha", label: "planned expansion" },
+        { value: "approx. 130", label: "bird species per year" },
+        { value: "30–35", label: "breeding species" }
+      ],
+      monitoring: {
+        species: "Migrating and breeding birds; amphibians, dragonflies and other insects also benefit",
+        surveys: "Ongoing bird monitoring by AuRaum, hyla and AVK Südtirol",
+        reporting: "To be defined",
+        summary: "The reserve’s annual species list and the records from the plot restored in 2026 show whether the new ponds, wet meadows and hedgerows reach the target species. The reporting cycle is still to be agreed with the working group."
+      }
+    },
     "bluehende-vernetzung-bozen": {
       title: "Bolzano Blooming Network",
       summary: "Stepping-stone habitats connect urban green spaces and provide food for wild bees and butterflies.",

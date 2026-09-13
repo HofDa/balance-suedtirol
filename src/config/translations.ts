@@ -20,7 +20,7 @@ const translations = {
       projects: "Projekte",
       submitProject: "Projekt einreichen",
       about: "Über uns",
-      aboutBalance: "Über b*alance",
+      aboutBalance: "Über uns",
       privacy: "Datenschutz",
       imprint: "Impressum",
       copyright: "© 2026 b*alance",
@@ -60,7 +60,10 @@ const translations = {
       copy: "Jedes Projekt trägt dazu bei, Biodiversität in Südtirol zu erhalten oder wiederherzustellen. Verfolge den Fortschritt, lerne die Menschen dahinter kennen und unterstütze Projekte, die dir am Herzen liegen.",
       all: "Alle Projekte",
       previous: "Vorheriges Projekt",
-      next: "Nächstes Projekt"
+      next: "Nächstes Projekt",
+      stanceButton: "Warum nicht CO₂?",
+      stanceReadMore: "Ganze Haltung lesen",
+      stanceClose: "Schließen"
     },
     news: {
       eyebrow: "Aktuelles",
@@ -108,6 +111,68 @@ const translations = {
         ["Transparent", "Klare Kriterien sowie offen dokumentierte Maßnahmen und Fortschritte."],
         ["Wirksam", "Jedes Projekt stärkt Lebensräume und fördert die Biodiversität in Südtirol."]
       ]
+    },
+    biodiversityExplainer: {
+      button: "Was ist Biodiversität?",
+      eyebrow: "Biodiversität",
+      title: "Die Vielfalt, von der alles andere abhängt.",
+      lead: "Biodiversität ist die Vielfalt des Lebens auf drei Ebenen: die Vielfalt der Arten, die genetische Vielfalt innerhalb der Arten und die Vielfalt der Lebensräume, in denen sie vorkommen. In Südtirol reicht sie von der Trockenwiese im Vinschgau bis zum Hochmoor im Pustertal.",
+      servicesTitle: "Was sie leistet",
+      services: [
+        "Bestäubung: Wildbienen, Schmetterlinge und andere Insekten bestäuben Obst, Gemüse und Wildpflanzen.",
+        "Wasser und Boden: Artenreiche Wiesen und Hecken halten Wasser im Hang, schützen vor Erosion und bauen Boden auf.",
+        "Widerstandskraft: Vielfältige Lebensräume überstehen Dürre, Starkregen und Schädlinge besser als verarmte.",
+        "Klima: Intakte Moore, alte Wiesenböden und Hecken speichern Kohlenstoff – als Wirkung, nicht als Ware."
+      ],
+      economyTitle: "Warum der Verlust auch wirtschaftlich zählt",
+      economyCopy: "Der Weltbiodiversitätsrat beziffert die Geldflüsse in naturzerstörende Aktivitäten allein für 2023 auf rund 7,3 Billionen US-Dollar – etwa 33-mal so viel, wie Staaten und Unternehmen für den Erhalt der Natur ausgaben. In der Eurozone hängen rund 75 Prozent der Unternehmenskredite in hohem Maße von mindestens einer Ökosystemleistung ab; die Förderbank KfW schätzt, dass zwei Drittel der EU-Wirtschaftsleistung direkt oder indirekt auf Ökosystemleistungen beruhen. Naturverlust ist damit kein Randthema, sondern ein systemisches Risiko.",
+      localTitle: "Was das für Südtirol heißt",
+      localCopy: "Eine Landwirtschaft, die auf Bestäubung angewiesen ist, ein Tourismus, der von Landschaft lebt, und Siedlungen an Hängen, die stabile Böden brauchen: Hier ist Biodiversität keine abstrakte Größe, sondern die Grundlage von Alltag und Einkommen. Jedes Projekt auf dieser Plattform erhält oder stellt ein Stück davon wieder her.",
+      source: "Zahlen nach: Der Spiegel 37/2026, „Wenn die Umweltkrise zur Finanzkrise wird“ (Tim Bartz, Markus Becker), mit Bezug auf den Weltbiodiversitätsrat IPBES, eine Studie in „Nature“ (September 2025) und die KfW.",
+      cta: "Lebensraum-Check starten"
+    },
+    about: {
+      eyebrow: "Wer dahinter steht",
+      title: "Biodiversität vor Ort erhalten und stärken – das ist das Thema.",
+      lead: "b*alance ist aus der Arbeit einer Südtiroler Biologin/eines Südtiroler Biologen entstanden, die sich seit Jahren mit einer Frage beschäftigt: Wie lässt sich die Artenvielfalt dort bewahren und fördern, wo wir leben – in der Gemeinde, auf der Wiese hinterm Hof, am Bach im Ort?",
+      personEyebrow: "Die Person",
+      personName: "Name Platzhalter",
+      personRole: "Biolog:in, Südtirol",
+      personBio: [
+        "Ausbildung in Biologie, Schwerpunkt Ökologie und Naturschutz. Die Arbeit findet weniger am Schreibtisch als in der Fläche statt: Trockenrasen, Feuchtgebiete, Hecken und Streuobstwiesen in Südtirol kartieren, Pflegemaßnahmen planen und begleiten, mit Gemeinden, Bäuerinnen und Bauern, Schulen und Naturschutzgruppen zusammenarbeiten.",
+        "Die Überzeugung dahinter: Biodiversität ist kein Ersatzmaß für Klimaschutz und keine Ware, die sich verrechnen lässt. Sie ist die Grundlage, auf der alles andere steht – und sie lässt sich nur dort erhalten, wo sie ist. Deshalb geht es hier um konkrete Flächen in Südtirol, nicht um Zertifikate."
+      ],
+      personPlaceholder: "Platzhalter – Name, Foto und Lebenslauf folgen.",
+      orgsEyebrow: "Zwei Initiativen, ein Ziel",
+      orgsTitle: "b*nature und b*coop",
+      orgs: [
+        {
+          name: "b*nature",
+          role: "Naturschutz in der Fläche",
+          copy: "b*nature plant und führt Biodiversitätsprojekte in Südtirol durch: Biotoppflege mit Schaf- und Ziegenherden, Erhebungen zu gefährdeten Arten, Bildungsarbeit mit Gemeinden und Schulen. Auf dieser Plattform ist b*nature Trägerin der Projekte „Meine Gemeinde, meine Natur“ und „Vorfahrt für den Igel“.",
+          cta: "Projekte von b*nature"
+        },
+        {
+          name: "b*coop",
+          role: "Plattform und Beratung",
+          copy: "b*coop betreibt die Plattform b*alance: den Lebensraum-Check, die Prüfung und Dokumentation der Projekte und die Verbindung zu Fachberater:innen für Biodiversität, Energie und Ressourcen. Ziel ist, dass aus dem Verstehen ein Verringern wird – und aus dem Verringern ein Stärken vor Ort.",
+          cta: "Lebensraum-Check"
+        }
+      ],
+      principlesEyebrow: "Wie wir arbeiten",
+      principlesTitle: "Fünf Regeln, an denen wir uns messen lassen.",
+      principles: [
+        ["Vor Ort statt irgendwo", "Jedes Projekt liegt in Südtirol, hat eine Adresse und lässt sich besuchen."],
+        ["Geprüft, bevor es online geht", "Ein Fachgremium aus Ökologie, Agrar- und Umweltwissenschaften prüft Ziele, Laufzeit und Budget jedes Projekts."],
+        ["Messbar statt gefühlt", "Habitatfläche, Strukturvielfalt und Zielarten werden festgelegt und im Monitoring nachgehalten."],
+        ["Verringern vor Ausgleichen", "Der Check zeigt, wo die eigenen Zahlen groß sind. Ein Kompensationsversprechen geben wir nicht."],
+        ["Keine Aussage ohne Beleg", "Was wir nicht belegen können, streichen wir – auch auf dieser Seite."]
+      ],
+      ctaTitle: "Mitmachen",
+      ctaCopy: "Ein Projekt unterstützen, ein eigenes einreichen oder einfach mit dem Check anfangen.",
+      ctaProjects: "Projekte ansehen",
+      ctaSubmit: "Projekt einreichen",
+      ctaMethod: "Methodik & Quellen"
     },
     carbonStance: {
       eyebrow: "CO₂ & Biodiversität",
@@ -192,6 +257,15 @@ const translations = {
       openMap: "Auf OpenStreetMap ansehen",
       whyMatters: "Warum dieses Projekt wichtig ist",
       whatItDoes: "Was das Projekt konkret tut",
+      beforeAfterTitle: "Vorher / Nachher",
+      beforeAfterCopy: "Vorher und nachher vom selben Standpunkt – Regler ziehen, um zu vergleichen.",
+      before: "Vorher",
+      after: "Nachher",
+      beforeAfterSliderLabel: "Vergleich zwischen Vorher und Nachher",
+      beforeAfterPlaceholderNote: "Platzhalter: Bis echte Vorher-Fotos vorliegen, zeigt die linke Seite eine bearbeitete Version des Projektfotos.",
+      galleryTitle: "Blick in die Fläche",
+      galleryCopy: "Aufnahmen aus dem Projektgebiet: die Flächen, die Maßnahmen und die Arten, um die es hier geht.",
+      photo: "Foto",
       ecologicalImpact: "Ökologische Wirkung",
       impactCopy: "Messbare Ziele machen sichtbar, welchen Beitrag das Projekt für Lebensräume und Artenvielfalt leisten soll.",
       timeline: "Projektverlauf",
@@ -266,7 +340,7 @@ const translations = {
       projects: "Progetti",
       submitProject: "Proponi un progetto",
       about: "Informazioni",
-      aboutBalance: "Su b*alance",
+      aboutBalance: "Chi siamo",
       privacy: "Privacy",
       imprint: "Note legali",
       copyright: "© 2026 b*alance",
@@ -306,7 +380,10 @@ const translations = {
       copy: "Ogni progetto contribuisce a tutelare o ripristinare la biodiversità in Alto Adige. Segui i progressi, conosci le persone coinvolte e sostieni i progetti a cui tieni di più.",
       all: "Tutti i progetti",
       previous: "Progetto precedente",
-      next: "Progetto successivo"
+      next: "Progetto successivo",
+      stanceButton: "Perché non CO₂?",
+      stanceReadMore: "Leggi la posizione completa",
+      stanceClose: "Chiudi"
     },
     news: {
       eyebrow: "Attualità",
@@ -354,6 +431,68 @@ const translations = {
         ["Trasparente", "Criteri chiari ed azioni e progressi documentati apertamente."],
         ["Efficace", "Ogni progetto rafforza gli habitat e promuove la biodiversità in Alto Adige."]
       ]
+    },
+    biodiversityExplainer: {
+      button: "Cos’è la biodiversità?",
+      eyebrow: "Biodiversità",
+      title: "La varietà da cui dipende tutto il resto.",
+      lead: "La biodiversità è la varietà della vita su tre livelli: la varietà delle specie, la varietà genetica all’interno delle specie e la varietà degli habitat in cui vivono. In Alto Adige va dal prato arido della Val Venosta alla torbiera alta della Val Pusteria.",
+      servicesTitle: "Cosa fa per noi",
+      services: [
+        "Impollinazione: api selvatiche, farfalle e altri insetti impollinano frutta, verdura e piante spontanee.",
+        "Acqua e suolo: prati ricchi di specie e siepi trattengono l’acqua sui pendii, proteggono dall’erosione e costruiscono suolo.",
+        "Resilienza: habitat diversificati resistono a siccità, piogge intense e parassiti meglio di quelli impoveriti.",
+        "Clima: torbiere intatte, vecchi suoli prativi e siepi immagazzinano carbonio – come effetto, non come merce."
+      ],
+      economyTitle: "Perché la perdita conta anche economicamente",
+      economyCopy: "L’IPBES stima che nel solo 2023 siano confluiti circa 7.300 miliardi di dollari in attività che distruggono la natura – circa 33 volte quanto Stati e imprese hanno speso per conservarla. Nell’eurozona circa il 75 per cento dei crediti alle imprese dipende in misura elevata da almeno un servizio ecosistemico; la banca pubblica tedesca KfW stima che due terzi del prodotto economico dell’UE poggino direttamente o indirettamente sui servizi ecosistemici. La perdita di natura non è un tema marginale, ma un rischio sistemico.",
+      localTitle: "Cosa significa per l’Alto Adige",
+      localCopy: "Un’agricoltura che dipende dall’impollinazione, un turismo che vive di paesaggio e insediamenti sui pendii che hanno bisogno di suoli stabili: qui la biodiversità non è una grandezza astratta, ma la base della vita quotidiana e del reddito. Ogni progetto su questa piattaforma ne conserva o ne ripristina un pezzo.",
+      source: "Cifre da: Der Spiegel 37/2026, «Wenn die Umweltkrise zur Finanzkrise wird» (Tim Bartz, Markus Becker), con riferimento all’IPBES, a uno studio su «Nature» (settembre 2025) e alla KfW.",
+      cta: "Avvia l’habitat check"
+    },
+    about: {
+      eyebrow: "Chi c’è dietro",
+      title: "Conservare e rafforzare la biodiversità sul posto: questo è il tema.",
+      lead: "b*alance nasce dal lavoro di una biologa/un biologo altoatesino che da anni si occupa di una domanda: come conservare e favorire la varietà delle specie lì dove viviamo – nel comune, sul prato dietro il maso, lungo il torrente in paese?",
+      personEyebrow: "La persona",
+      personName: "Nome segnaposto",
+      personRole: "Biologa/biologo, Alto Adige",
+      personBio: [
+        "Formazione in biologia, con focus su ecologia e conservazione della natura. Il lavoro si svolge meno alla scrivania che sul campo: mappare prati aridi, zone umide, siepi e frutteti tradizionali in Alto Adige, pianificare e seguire interventi di cura, collaborare con comuni, contadine e contadini, scuole e gruppi naturalistici.",
+        "La convinzione di fondo: la biodiversità non è un sostituto della protezione del clima né una merce da conteggiare. È la base su cui poggia tutto il resto – e si conserva solo dove si trova. Per questo qui si parla di superfici concrete in Alto Adige, non di certificati."
+      ],
+      personPlaceholder: "Segnaposto – nome, foto e curriculum seguiranno.",
+      orgsEyebrow: "Due iniziative, un obiettivo",
+      orgsTitle: "b*nature e b*coop",
+      orgs: [
+        {
+          name: "b*nature",
+          role: "Tutela della natura sul campo",
+          copy: "b*nature pianifica e realizza progetti di biodiversità in Alto Adige: cura dei biotopi con greggi di pecore e capre, rilievi su specie minacciate, attività educative con comuni e scuole. Su questa piattaforma b*nature è responsabile dei progetti «Il mio comune, la mia natura» e «Precedenza al riccio».",
+          cta: "Progetti di b*nature"
+        },
+        {
+          name: "b*coop",
+          role: "Piattaforma e consulenza",
+          copy: "b*coop gestisce la piattaforma b*alance: l’habitat check, la verifica e la documentazione dei progetti e il collegamento con consulenti per biodiversità, energia e risorse. L’obiettivo è che dal capire nasca il ridurre – e dal ridurre il rafforzare sul posto.",
+          cta: "Habitat check"
+        }
+      ],
+      principlesEyebrow: "Come lavoriamo",
+      principlesTitle: "Cinque regole su cui ci facciamo misurare.",
+      principles: [
+        ["Sul posto, non altrove", "Ogni progetto è in Alto Adige, ha un indirizzo e si può visitare."],
+        ["Verificato prima di andare online", "Un comitato di esperti in ecologia, scienze agrarie e ambientali verifica obiettivi, durata e budget di ogni progetto."],
+        ["Misurabile, non a sensazione", "Superficie di habitat, diversità strutturale e specie target vengono definite e seguite nel monitoraggio."],
+        ["Ridurre prima di compensare", "Il check mostra dove i tuoi numeri sono grandi. Una promessa di compensazione non la facciamo."],
+        ["Nessuna affermazione senza prova", "Ciò che non possiamo documentare lo togliamo – anche da questa pagina."]
+      ],
+      ctaTitle: "Partecipa",
+      ctaCopy: "Sostieni un progetto, proponi il tuo o inizia semplicemente con il check.",
+      ctaProjects: "Vedi i progetti",
+      ctaSubmit: "Proponi un progetto",
+      ctaMethod: "Metodologia e fonti"
     },
     carbonStance: {
       eyebrow: "CO₂ e biodiversità",
@@ -438,6 +577,15 @@ const translations = {
       openMap: "Visualizza su OpenStreetMap",
       whyMatters: "Perché questo progetto è importante",
       whatItDoes: "Cosa fa concretamente il progetto",
+      beforeAfterTitle: "Prima / Dopo",
+      beforeAfterCopy: "Lo stesso punto di vista, prima e dopo l’intervento. Trascina il cursore per confrontare.",
+      before: "Prima",
+      after: "Dopo",
+      beforeAfterSliderLabel: "Confronto tra prima e dopo",
+      beforeAfterPlaceholderNote: "Segnaposto: finché non ci sono foto reali del prima, il lato sinistro mostra una versione modificata della foto del progetto.",
+      galleryTitle: "Uno sguardo sull’area",
+      galleryCopy: "Immagini dall’area di progetto: le superfici, gli interventi e le specie di cui si tratta.",
+      photo: "Foto",
       ecologicalImpact: "Effetto ecologico",
       impactCopy: "Obiettivi misurabili mostrano il contributo previsto per gli habitat e la biodiversità.",
       timeline: "Sviluppo del progetto",
@@ -512,7 +660,7 @@ const translations = {
       projects: "Projects",
       submitProject: "Submit a Project",
       about: "About",
-      aboutBalance: "About b*alance",
+      aboutBalance: "About us",
       privacy: "Privacy Policy",
       imprint: "Imprint",
       copyright: "© 2026 b*alance",
@@ -552,7 +700,10 @@ const translations = {
       copy: "Every project contributes to preserving or restoring biodiversity in South Tyrol. Track progress, meet the people behind them, and support projects close to your heart.",
       all: "All projects",
       previous: "Previous project",
-      next: "Next project"
+      next: "Next project",
+      stanceButton: "Why not CO₂?",
+      stanceReadMore: "Read the full position",
+      stanceClose: "Close"
     },
     news: {
       eyebrow: "Latest",
@@ -600,6 +751,68 @@ const translations = {
         ["Transparent", "Clear criteria and openly documented measures and progress."],
         ["Effective", "Every project strengthens habitats and fosters biodiversity in South Tyrol."]
       ]
+    },
+    biodiversityExplainer: {
+      button: "What is biodiversity?",
+      eyebrow: "Biodiversity",
+      title: "The variety everything else depends on.",
+      lead: "Biodiversity is the variety of life on three levels: the variety of species, the genetic variety within species, and the variety of habitats they live in. In South Tyrol it ranges from the dry grassland of the Vinschgau valley to the raised bog in the Puster valley.",
+      servicesTitle: "What it does for us",
+      services: [
+        "Pollination: wild bees, butterflies and other insects pollinate fruit, vegetables and wild plants.",
+        "Water and soil: species-rich meadows and hedgerows hold water on slopes, protect against erosion and build soil.",
+        "Resilience: diverse habitats withstand drought, heavy rain and pests better than depleted ones.",
+        "Climate: intact bogs, old meadow soils and hedgerows store carbon – as an effect, not as a commodity."
+      ],
+      economyTitle: "Why the loss also counts economically",
+      economyCopy: "The IPBES puts the money flowing into nature-destroying activities in 2023 alone at around 7.3 trillion US dollars – roughly 33 times what governments and companies spent on conserving nature. In the eurozone, around 75 percent of corporate loans depend heavily on at least one ecosystem service; the German development bank KfW estimates that two thirds of EU economic output rest directly or indirectly on ecosystem services. Nature loss is not a side issue but a systemic risk.",
+      localTitle: "What this means for South Tyrol",
+      localCopy: "Agriculture that relies on pollination, tourism that lives off the landscape, and settlements on slopes that need stable soils: here biodiversity is not an abstract quantity but the basis of everyday life and income. Every project on this platform preserves or restores a piece of it.",
+      source: "Figures from: Der Spiegel 37/2026, “Wenn die Umweltkrise zur Finanzkrise wird” (Tim Bartz, Markus Becker), citing the IPBES, a study in “Nature” (September 2025) and the KfW.",
+      cta: "Start the habitat check"
+    },
+    about: {
+      eyebrow: "Who is behind it",
+      title: "Preserving and strengthening biodiversity locally – that is the topic.",
+      lead: "b*alance grew out of the work of a South Tyrolean biologist who has spent years on one question: how can we preserve and enhance the variety of species where we live – in the municipality, on the meadow behind the farm, along the stream in the village?",
+      personEyebrow: "The person",
+      personName: "Name placeholder",
+      personRole: "Biologist, South Tyrol",
+      personBio: [
+        "Trained in biology with a focus on ecology and nature conservation. The work happens less at a desk than in the field: mapping dry grasslands, wetlands, hedgerows and traditional orchards in South Tyrol, planning and accompanying management measures, working with municipalities, farmers, schools and conservation groups.",
+        "The conviction behind it: biodiversity is not a substitute for climate protection and not a commodity that can be offset. It is the foundation everything else rests on – and it can only be preserved where it is. That is why this is about concrete sites in South Tyrol, not certificates."
+      ],
+      personPlaceholder: "Placeholder – name, photo and CV to follow.",
+      orgsEyebrow: "Two initiatives, one goal",
+      orgsTitle: "b*nature and b*coop",
+      orgs: [
+        {
+          name: "b*nature",
+          role: "Conservation in the field",
+          copy: "b*nature plans and carries out biodiversity projects in South Tyrol: habitat management with sheep and goat flocks, surveys of threatened species, education work with municipalities and schools. On this platform b*nature runs the projects “My municipality, my nature” and “Right of way for the hedgehog”.",
+          cta: "Projects by b*nature"
+        },
+        {
+          name: "b*coop",
+          role: "Platform and advice",
+          copy: "b*coop runs the b*alance platform: the habitat check, the review and documentation of projects, and the link to specialist advisers for biodiversity, energy and resources. The aim is for understanding to lead to reducing – and reducing to strengthening locally.",
+          cta: "Habitat check"
+        }
+      ],
+      principlesEyebrow: "How we work",
+      principlesTitle: "Five rules we can be measured against.",
+      principles: [
+        ["Local, not somewhere", "Every project is in South Tyrol, has an address and can be visited."],
+        ["Reviewed before it goes online", "A panel from ecology, agricultural and environmental science reviews each project’s goals, duration and budget."],
+        ["Measured, not felt", "Habitat area, structural diversity and target species are defined and tracked in monitoring."],
+        ["Reduce before offsetting", "The check shows where your own numbers are large. We make no offsetting promise."],
+        ["No claim without evidence", "What we cannot back up, we remove – on this page too."]
+      ],
+      ctaTitle: "Get involved",
+      ctaCopy: "Support a project, submit your own, or simply start with the check.",
+      ctaProjects: "View projects",
+      ctaSubmit: "Submit a project",
+      ctaMethod: "Method & sources"
     },
     carbonStance: {
       eyebrow: "CO₂ & biodiversity",
@@ -684,6 +897,15 @@ const translations = {
       openMap: "View on OpenStreetMap",
       whyMatters: "Why this project matters",
       whatItDoes: "What the project is doing",
+      beforeAfterTitle: "Before / After",
+      beforeAfterCopy: "The same viewpoint, before and after the intervention. Drag the handle to compare.",
+      before: "Before",
+      after: "After",
+      beforeAfterSliderLabel: "Comparison between before and after",
+      beforeAfterPlaceholderNote: "Placeholder: until real before photos are available, the left side shows an edited version of the project photo.",
+      galleryTitle: "A look at the site",
+      galleryCopy: "Images from the project area: the sites, the measures and the species this is about.",
+      photo: "Photo",
       ecologicalImpact: "Ecological impact",
       impactCopy: "Measurable goals show how the project is expected to benefit habitats and biodiversity.",
       timeline: "Project timeline",

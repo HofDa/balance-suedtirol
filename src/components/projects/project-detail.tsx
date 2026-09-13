@@ -5,13 +5,9 @@ import {
   ArrowRight,
   ArrowUpRight,
   Building2,
-  Check,
-  Circle,
   ExternalLink,
-  FileText,
   Leaf,
   MapPin,
-  Microscope,
   Sprout,
   Users,
   ShieldCheck
@@ -31,6 +27,7 @@ import { getProjectCategoryLabel } from "@/config/project-categories";
 import { getTranslations } from "@/config/translations";
 import { SouthTyrolMap } from "./south-tyrol-map";
 import { ProjectShareButton } from "./project-share-button";
+import { BeforeAfterSlider } from "./before-after-slider";
 import {
   ProjectSupportDialog,
   ProjectSupportTrigger,
@@ -53,19 +50,6 @@ export function ProjectDetail({ project, otherProjects, locale }: ProjectDetailP
     : null;
   const copy = getTranslations(locale).projectDetail;
   const mapUrl = `https://www.openstreetmap.org/?mlat=${project.location.lat}&mlon=${project.location.lng}#map=14/${project.location.lat}/${project.location.lng}`;
-  const timeline = [
-    { id: "planning", label: copy.steps.planning },
-    { id: "funding", label: copy.steps.funding },
-    { id: "implementation", label: copy.steps.implementation },
-    { id: "monitoring", label: copy.steps.monitoring },
-    { id: "evaluation", label: copy.steps.evaluation }
-  ] as const;
-  const currentTimelineIndex = {
-    "support-needed": 1,
-    "in-progress": 2,
-    monitoring: 3,
-    completed: 4
-  }[project.status];
   const supportCopy: ProjectSupportCopy = {
     close: copy.close,
     support: copy.support,
@@ -90,18 +74,46 @@ export function ProjectDetail({ project, otherProjects, locale }: ProjectDetailP
             <ArrowLeft className="size-4" /> {copy.back}
           </Link>
 
-          <Surface level="sheet" className="mt-7 overflow-hidden p-0 sm:p-0">
-            <div className="relative aspect-[21/9] min-h-[260px] overflow-hidden sm:min-h-[360px]">
-              <Image
-                src={withBasePath(project.image)}
+          {/* Gibt es ein Vorher/Nachher-Paar, ist es das Hero: Es erzählt die
+              Maßnahme besser als jedes Einzelbild. */}
+          {project.beforeAfter ? (
+            <figure className="mt-7">
+              <BeforeAfterSlider
+                before={project.beforeAfter.before}
+                after={project.beforeAfter.after}
                 alt={`${project.title}, ${project.municipality}`}
-                fill
+                labels={{ before: copy.before, after: copy.after, slider: copy.beforeAfterSliderLabel }}
+                aspectClassName="aspect-[8/5] sm:aspect-[2/1]"
                 priority
-                sizes="(min-width: 1280px) 1180px, 100vw"
-                className="object-cover"
+                className="rounded-[var(--radius-xl)]"
               />
-            </div>
-          </Surface>
+              <figcaption className="mt-3 flex flex-col gap-1 text-xs leading-5 text-[var(--color-muted)] sm:flex-row sm:items-start sm:justify-between sm:gap-6">
+                <span className="max-w-[72ch]">
+                  {project.beforeAfter.caption}
+                  {project.beforeAfter.isPlaceholder && (
+                    <>
+                      {project.beforeAfter.caption ? " " : ""}
+                      <em>{copy.beforeAfterPlaceholderNote}</em>
+                    </>
+                  )}
+                </span>
+                <span className="shrink-0 font-semibold text-[var(--color-forest)]">{copy.beforeAfterCopy}</span>
+              </figcaption>
+            </figure>
+          ) : (
+            <Surface level="sheet" className="mt-7 overflow-hidden p-0 sm:p-0">
+              <div className="relative aspect-[21/9] min-h-[260px] overflow-hidden sm:min-h-[360px]">
+                <Image
+                  src={withBasePath(project.image)}
+                  alt={`${project.title}, ${project.municipality}`}
+                  fill
+                  priority
+                  sizes="(min-width: 1280px) 1180px, 100vw"
+                  className="object-cover"
+                />
+              </div>
+            </Surface>
+          )}
 
           <header className="mt-9 max-w-4xl">
             <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-[var(--color-muted)]">
@@ -208,68 +220,40 @@ export function ProjectDetail({ project, otherProjects, locale }: ProjectDetailP
             </div>
           </section>
 
-          <section className="mt-20" aria-labelledby="project-timeline">
-            <h2 id="project-timeline" className="font-display text-[length:var(--text-headline)] leading-[var(--leading-headline)]">{copy.timeline}</h2>
-            <p className="mt-3 text-sm leading-6 text-[var(--color-muted)]">{copy.timelineCopy}</p>
-            <ol className="mt-8 grid gap-3 md:grid-cols-5">
-              {timeline.map((step, index) => {
-                const isComplete = project.status === "completed" || index < currentTimelineIndex;
-                const isCurrent = project.status !== "completed" && index === currentTimelineIndex;
-                return (
-                  <li
-                    key={step.id}
-                    className={`relative rounded-[var(--radius-lg)] border p-4 ${
-                      isCurrent
-                        ? "border-[var(--color-forest)] bg-[var(--color-sage)]/55"
-                        : "border-[var(--color-line)] bg-white"
-                    }`}
-                  >
-                    {isComplete ? (
-                      <Check className="size-5 text-[var(--color-forest)]" aria-hidden />
-                    ) : (
-                      <Circle className={`size-5 ${isCurrent ? "fill-[var(--color-forest)] text-[var(--color-forest)]" : "text-[var(--color-line)]"}`} aria-hidden />
-                    )}
-                    <p className="mt-4 text-sm font-bold text-[var(--color-ink)]">{step.label}</p>
-                    <p className="mt-1 text-xs text-[var(--color-muted)]">
-                      {isComplete ? copy.completed : isCurrent ? copy.current : copy.upcoming}
-                    </p>
+          {project.gallery && project.gallery.length > 0 && (
+            <section className="mt-20" aria-labelledby="project-gallery">
+              <div className="max-w-2xl">
+                <h2 id="project-gallery" className="font-display text-[length:var(--text-headline)] leading-[var(--leading-headline)]">
+                  {copy.galleryTitle}
+                </h2>
+                <p className="mt-3 text-sm leading-6 text-[var(--color-muted)]">{copy.galleryCopy}</p>
+              </div>
+              {/* Das erste Bild läuft über die volle Breite, die übrigen zu zweit. */}
+              <ul className="mt-8 grid gap-4 sm:grid-cols-2">
+                {project.gallery.map((item, index) => (
+                  <li key={item.src} className={index === 0 ? "sm:col-span-2" : ""}>
+                    <figure>
+                      <div className={`relative overflow-hidden rounded-[var(--radius-lg)] bg-[var(--color-sage)] ${index === 0 ? "aspect-[3/2] sm:aspect-[2/1]" : "aspect-[3/2]"}`}>
+                        <Image
+                          src={withBasePath(item.src)}
+                          alt={item.alt}
+                          fill
+                          sizes={index === 0 ? "(min-width: 1280px) 1180px, 100vw" : "(min-width: 1280px) 580px, (min-width: 640px) 50vw, 100vw"}
+                          className="object-cover"
+                        />
+                      </div>
+                      {(item.caption || item.credit) && (
+                        <figcaption className="mt-2 text-xs leading-5 text-[var(--color-muted)]">
+                          {item.caption}
+                          {item.credit && <span className="whitespace-nowrap"> · {copy.photo}: {item.credit}</span>}
+                        </figcaption>
+                      )}
+                    </figure>
                   </li>
-                );
-              })}
-            </ol>
-          </section>
-
-          <section className="mt-20 grid gap-8 lg:grid-cols-[0.85fr_1.15fr]" aria-labelledby="project-monitoring">
-            <div>
-              <h2 id="project-monitoring" className="font-display text-[length:var(--text-headline)] leading-[var(--leading-headline)]">{copy.monitoring}</h2>
-              <p className="mt-4 text-base leading-7 text-[var(--color-muted)]">{project.monitoring.summary}</p>
-              <p className="mt-3 text-sm leading-6 text-[var(--color-muted)]">{copy.monitoringCopy}</p>
-            </div>
-            <div className="grid gap-3 sm:grid-cols-3">
-              {[
-                { icon: Leaf, label: copy.species, value: project.monitoring.species },
-                { icon: Microscope, label: copy.surveys, value: project.monitoring.surveys },
-                { icon: FileText, label: copy.reporting, value: project.monitoring.reporting }
-              ].map(({ icon: Icon, label, value }) => (
-                <Surface key={label} tone="paper" framed={false} className="sm:p-5">
-                  <Icon className="size-5 text-[var(--color-forest)]" aria-hidden />
-                  <p className="mt-5 text-xs font-semibold text-[var(--color-muted)]">{label}</p>
-                  <p className="mt-1 text-sm font-bold leading-5 text-[var(--color-ink)]">{value}</p>
-                </Surface>
-              ))}
-              <details className="rounded-[var(--radius-lg)] border border-[var(--color-line)] bg-white p-5 sm:col-span-3">
-                <summary className="cursor-pointer text-sm font-bold text-[var(--color-forest)]">{copy.openReport}</summary>
-                <div className="mt-4 border-t border-[var(--color-line)] pt-4">
-                  <p className="font-semibold text-[var(--color-ink)]">{copy.reportTitle}</p>
-                  <p className="mt-2 text-sm leading-6 text-[var(--color-muted)]">{copy.reportNote}</p>
-                  <Link href={`/${locale}/methodik`} className={`mt-3 inline-flex min-h-11 items-center gap-1.5 text-sm font-bold text-[var(--color-forest)] hover:underline ${focusRing}`}>
-                    {copy.methodology}
-                    <ArrowUpRight className="size-4" aria-hidden />
-                  </Link>
-                </div>
-              </details>
-            </div>
-          </section>
+                ))}
+              </ul>
+            </section>
+          )}
 
           <section className="mt-20 grid gap-6 lg:grid-cols-[0.72fr_1.28fr]">
             <aside className="h-fit rounded-[var(--radius-xl)] border border-[var(--color-line)] bg-white p-6 sm:p-7">

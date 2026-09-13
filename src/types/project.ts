@@ -25,6 +25,19 @@ export type Project = {
   organization: string;
   location: { lat: number; lng: number };
   image: string;
+  /**
+   * Fotopaar vom selben Standpunkt, vor und nach der Maßnahme. Fehlt es,
+   * zeigt die Projektseite keinen Vorher/Nachher-Vergleich.
+   */
+  beforeAfter?: {
+    before: string;
+    after: string;
+    caption?: string;
+    /** Kennzeichnet ein bearbeitetes Platzhalterpaar statt echter Vorher-Fotos. */
+    isPlaceholder?: boolean;
+  };
+  /** Weitere Aufnahmen aus dem Projektgebiet; `credit` nur, wo eine Namensnennung gewünscht ist. */
+  gallery?: Array<{ src: string; alt: string; caption?: string; credit?: string }>;
   /** Fehlt, solange das Finanzierungsziel nicht entschieden ist. */
   goal?: number;
   funded?: number;

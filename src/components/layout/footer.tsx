@@ -55,7 +55,7 @@ export function Footer({ locale }: { locale: Locale }) {
             <p className="text-xs font-bold uppercase tracking-[0.16em] text-white/58">{t.about}</p>
             <ul className="mt-5 space-y-1">
               <li>
-                <Link href={`/${locale}#about-balance`} className={linkClass}>{t.aboutBalance}</Link>
+                <Link href={`/${locale}/ueber-uns`} className={linkClass}>{t.aboutBalance}</Link>
               </li>
               <li>
                 <Link href={`/${locale}/datenschutz`} className={linkClass}>{t.privacy}</Link>

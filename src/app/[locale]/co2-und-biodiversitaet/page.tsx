@@ -8,7 +8,7 @@ import { Surface } from "@/components/ui/surface";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { isLocale } from "@/config/site";
 import { getTranslations } from "@/config/translations";
-import { focusRingOnDark } from "@/components/ui/focus";
+import { focusRing, focusRingOnDark } from "@/components/ui/focus";
 
 export const metadata: Metadata = {
   title: "CO₂ & Biodiversität | b*alance Südtirol",
@@ -20,11 +20,10 @@ export const metadata: Metadata = {
  * Die Haltungsseite zur naheliegendsten Rückfrage an den Check: „Ihr rechnet
  * mein CO₂ aus — wo kann ich es ausgleichen?"
  *
- * Der Text argumentiert bewusst ohne Zahlen und ohne fremde Studien. Was die
- * Seite belegt, belegt sie aus dem eigenen Haus: die Bilanzgrenze des Rechners
- * (`docs/BILANZ-FAKTOREN.md`) und die eigene Methodikregel, dass eine Aussage
- * ohne Beleg gestrichen wird. Damit hält sie das Produktprinzip ein, statt es
- * mit geliehenen Kennzahlen zu unterlaufen.
+ * Die vier Gründe argumentieren ohne Zahlen aus dem eigenen Haus: Bilanzgrenze
+ * des Rechners (`docs/BILANZ-FAKTOREN.md`) und die Methodikregel, dass eine
+ * Aussage ohne Beleg gestrichen wird. Der Südtirol-Abschnitt („Und warum nicht
+ * hier?“) führt drei Kennzahlen – jede mit Quelle unter dem Block.
  */
 export default async function CarbonStancePage({
   params
@@ -80,6 +79,36 @@ export default async function CarbonStancePage({
                 <p className="mt-3 max-w-[58ch] leading-7 text-[var(--color-muted)]">{copy}</p>
               </Surface>
             ))}
+          </div>
+        </Container>
+      </section>
+
+      {/* ③b Der Südtirol-Grund: Kompensation braucht Fläche, und die gibt es hier
+          nicht. Drei belegte Zahlen tragen das Argument, die Quellen stehen dabei. */}
+      <section className="py-14 sm:py-20">
+        <Container>
+          <div className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
+            <SectionHeading eyebrow={t.localEyebrow} title={t.localTitle} copy={t.localCopy} />
+            <div>
+              <dl className="grid gap-3 sm:grid-cols-3">
+                {t.localFigures.map(([value, label]) => (
+                  <Surface key={value} level="sheet" className="sm:p-5">
+                    <dt className="font-display text-3xl tracking-[-0.03em] tabular-nums text-[var(--color-forest)]">{value}</dt>
+                    <dd className="mt-2 text-sm leading-6 text-[var(--color-muted)]">{label}</dd>
+                  </Surface>
+                ))}
+              </dl>
+              <p className="mt-6 max-w-[58ch] leading-7 text-[var(--color-ink)]">{t.localClosing}</p>
+              <ul className="mt-5 space-y-1 text-xs leading-5 text-[var(--color-muted)]">
+                {t.localSources.map((source) => (
+                  <li key={source.href}>
+                    <a href={source.href} target="_blank" rel="noreferrer" className={`underline underline-offset-2 hover:text-[var(--color-forest)] ${focusRing}`}>
+                      {source.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
         </Container>
       </section>

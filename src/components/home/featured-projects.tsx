@@ -49,9 +49,11 @@ export function FeaturedProjects({ locale }: { locale: Locale }) {
             title: stance.title,
             lead: stance.lead,
             sections: [
+              { heading: stance.localTitle, copy: stance.localCopy, items: stance.localFigures.map(([value, label]) => `${value}: ${label}`) },
               { heading: stance.reasonsTitle, items: stance.reasons.map(([title]) => title) },
-              { heading: stance.insteadTitle, copy: stance.insteadCopy }
+              { copy: stance.localClosing }
             ],
+            source: { label: stance.localSources.map((source) => source.label).join(" · ") },
             cta: { label: t.stanceReadMore, href: `/${locale}/co2-und-biodiversitaet` }
           }}
         />

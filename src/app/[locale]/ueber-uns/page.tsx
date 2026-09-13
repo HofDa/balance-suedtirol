@@ -13,13 +13,13 @@ import { focusRing, focusRingOnDark } from "@/components/ui/focus";
 export const metadata: Metadata = {
   title: "Über uns | b*alance Südtirol",
   description:
-    "Wer hinter b*alance steht: eine Südtiroler Biologin/ein Südtiroler Biologe, b*nature und b*coop – und wie wir arbeiten."
+    "Wer hinter b*alance steht: Südtiroler Biolog:innen, b*nature und b*coop – und wie wir arbeiten."
 };
 
 /**
- * Die Seite zur Frage „Wer steht dahinter?“. Person, die beiden Initiativen
- * und die Arbeitsregeln. Name, Foto und Lebenslauf sind noch Platzhalter und
- * als solche sichtbar markiert – wie die Musterzitate im Hero.
+ * Die Seite zur Frage „Wer steht dahinter?“. Das Team, die beiden Initiativen
+ * und die Arbeitsregeln. Namen, Fotos und Schwerpunkte sind noch Platzhalter
+ * und als solche sichtbar markiert – wie die Musterzitate im Hero.
  */
 export default async function AboutPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
@@ -44,31 +44,40 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
             </p>
           </div>
 
-          {/* ② Die Person – Porträt links, Text rechts. */}
-          <Surface as="section" level="sheet" className="mt-12 grid gap-8 sm:p-8 lg:grid-cols-[0.55fr_1.45fr] lg:gap-12">
-            <div>
-              <Label size="block">{t.personEyebrow}</Label>
-              <div
-                className="mt-5 flex aspect-[4/5] w-full max-w-[260px] items-end overflow-hidden rounded-[var(--radius-lg)] bg-[var(--color-sage)]"
-                aria-hidden
-              >
-                <div className="w-full bg-gradient-to-t from-[var(--color-forest)]/25 to-transparent p-4">
-                  <Leaf className="size-8 text-[var(--color-forest)]/70" />
-                </div>
+          {/* ② Das Team – gemeinsamer Text, darunter die Personen. Namen, Fotos
+              und Schwerpunkte sind Platzhalter und als solche markiert. */}
+          <Surface as="section" level="sheet" className="mt-12 sm:p-8">
+            <div className="grid gap-8 lg:grid-cols-[0.8fr_1.2fr] lg:gap-12">
+              <div>
+                <Label size="block">{t.teamEyebrow}</Label>
+                <h2 className="mt-4 font-display text-balance text-[length:var(--text-headline)] leading-[var(--leading-headline)]">
+                  {t.teamTitle}
+                </h2>
               </div>
-              <p className="mt-5 text-lg font-bold text-[var(--color-ink)]">{t.personName}</p>
-              <p className="text-sm text-[var(--color-muted)]">{t.personRole}</p>
-              <span className="mt-3 inline-block rounded-[var(--radius-sm)] bg-[var(--color-ink)]/6 px-2 py-1 text-[11px] font-bold uppercase tracking-[0.12em] text-[var(--color-muted)]">
-                {t.personPlaceholder}
-              </span>
+              <div className="space-y-5">
+                {t.teamBio.map((paragraph) => (
+                  <p key={paragraph} className="max-w-[60ch] leading-7 text-[var(--color-ink)]">
+                    {paragraph}
+                  </p>
+                ))}
+              </div>
             </div>
-            <div className="space-y-5 lg:pt-9">
-              {t.personBio.map((paragraph) => (
-                <p key={paragraph} className="max-w-[60ch] leading-7 text-[var(--color-ink)]">
-                  {paragraph}
-                </p>
+            <ul className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+              {[0, 1, 2, 3].map((index) => (
+                <li key={index} className="flex items-center gap-4 rounded-[var(--radius-lg)] border border-[var(--color-line)] bg-[var(--color-paper)] p-4">
+                  <div className="flex size-14 shrink-0 items-center justify-center rounded-full bg-[var(--color-sage)] text-[var(--color-forest)]" aria-hidden>
+                    <Leaf className="size-5" />
+                  </div>
+                  <div className="min-w-0">
+                    <p className="truncate font-bold text-[var(--color-ink)]">{t.teamMemberName}</p>
+                    <p className="text-sm text-[var(--color-muted)]">{t.teamMemberRole}</p>
+                  </div>
+                </li>
               ))}
-            </div>
+            </ul>
+            <p className="mt-4 inline-block rounded-[var(--radius-sm)] bg-[var(--color-ink)]/6 px-2 py-1 text-[11px] font-bold uppercase tracking-[0.12em] text-[var(--color-muted)]">
+              {t.teamPlaceholder}
+            </p>
           </Surface>
         </Container>
       </section>

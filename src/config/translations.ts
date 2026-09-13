@@ -99,7 +99,7 @@ const translations = {
     sciencePartners: {
       eyebrow: "Fachliche Begleitung",
       title: "Wer die Methodik mitprüft.",
-      copy: "Lebensraumtypologie, Monitoringprotokolle und Kennzahlen werden fachlich begleitet. Die Begleitung prüft die Methodik — die Verantwortung für die Inhalte bleibt bei der Plattform."
+      copy: "Lebensraumtypologie, Monitoringprotokolle und Kennzahlen werden fachlich begleitet. Die Begleitung prüft die Methodik. Die Verantwortung für die Inhalte bleibt bei der Plattform."
     },
     impact: {
       eyebrow: "VOM WISSEN ZUM HANDELN",
@@ -122,27 +122,28 @@ const translations = {
         "Bestäubung: Wildbienen, Schmetterlinge und andere Insekten bestäuben Obst, Gemüse und Wildpflanzen.",
         "Wasser und Boden: Artenreiche Wiesen und Hecken halten Wasser im Hang, schützen vor Erosion und bauen Boden auf.",
         "Widerstandskraft: Vielfältige Lebensräume überstehen Dürre, Starkregen und Schädlinge besser als verarmte.",
-        "Klima: Intakte Moore, alte Wiesenböden und Hecken speichern Kohlenstoff – als Wirkung, nicht als Ware."
+        "Klima: Intakte Moore, alte Wiesenböden und Hecken speichern Kohlenstoff."
       ],
       economyTitle: "Warum der Verlust auch wirtschaftlich zählt",
-      economyCopy: "Der Weltbiodiversitätsrat beziffert die Geldflüsse in naturzerstörende Aktivitäten allein für 2023 auf rund 7,3 Billionen US-Dollar – etwa 33-mal so viel, wie Staaten und Unternehmen für den Erhalt der Natur ausgaben. In der Eurozone hängen rund 75 Prozent der Unternehmenskredite in hohem Maße von mindestens einer Ökosystemleistung ab; die Förderbank KfW schätzt, dass zwei Drittel der EU-Wirtschaftsleistung direkt oder indirekt auf Ökosystemleistungen beruhen. Naturverlust ist damit kein Randthema, sondern ein systemisches Risiko.",
+      economyCopy: "Der Weltbiodiversitätsrat beziffert die Geldflüsse in naturzerstörende Aktivitäten allein für 2023 auf rund 7,3 Billionen US-Dollar. Das ist etwa 33-mal so viel, wie Staaten und Unternehmen für den Erhalt der Natur ausgaben. In der Eurozone hängen rund 75 Prozent der Unternehmenskredite stark von mindestens einer Ökosystemleistung ab. Die Förderbank KfW schätzt, dass zwei Drittel der EU-Wirtschaftsleistung direkt oder indirekt auf Ökosystemleistungen beruhen.",
       localTitle: "Was das für Südtirol heißt",
-      localCopy: "Eine Landwirtschaft, die auf Bestäubung angewiesen ist, ein Tourismus, der von Landschaft lebt, und Siedlungen an Hängen, die stabile Böden brauchen: Hier ist Biodiversität keine abstrakte Größe, sondern die Grundlage von Alltag und Einkommen. Jedes Projekt auf dieser Plattform erhält oder stellt ein Stück davon wieder her.",
+      localCopy: "Die Landwirtschaft braucht Bestäuber, der Tourismus lebt von der Landschaft, Siedlungen an Hängen brauchen stabile Böden. Jedes Projekt auf dieser Plattform erhält ein Stück davon oder stellt es wieder her.",
       source: "Zahlen nach: Der Spiegel 37/2026, „Wenn die Umweltkrise zur Finanzkrise wird“ (Tim Bartz, Markus Becker), mit Bezug auf den Weltbiodiversitätsrat IPBES, eine Studie in „Nature“ (September 2025) und die KfW.",
       cta: "Lebensraum-Check starten"
     },
     about: {
       eyebrow: "Wer dahinter steht",
-      title: "Biodiversität vor Ort erhalten und stärken – das ist das Thema.",
-      lead: "b*alance ist aus der Arbeit einer Südtiroler Biologin/eines Südtiroler Biologen entstanden, die sich seit Jahren mit einer Frage beschäftigt: Wie lässt sich die Artenvielfalt dort bewahren und fördern, wo wir leben – in der Gemeinde, auf der Wiese hinterm Hof, am Bach im Ort?",
-      personEyebrow: "Die Person",
-      personName: "Name Platzhalter",
-      personRole: "Biolog:in, Südtirol",
-      personBio: [
-        "Ausbildung in Biologie, Schwerpunkt Ökologie und Naturschutz. Die Arbeit findet weniger am Schreibtisch als in der Fläche statt: Trockenrasen, Feuchtgebiete, Hecken und Streuobstwiesen in Südtirol kartieren, Pflegemaßnahmen planen und begleiten, mit Gemeinden, Bäuerinnen und Bauern, Schulen und Naturschutzgruppen zusammenarbeiten.",
-        "Die Überzeugung dahinter: Biodiversität ist kein Ersatzmaß für Klimaschutz und keine Ware, die sich verrechnen lässt. Sie ist die Grundlage, auf der alles andere steht – und sie lässt sich nur dort erhalten, wo sie ist. Deshalb geht es hier um konkrete Flächen in Südtirol, nicht um Zertifikate."
+      title: "Artenvielfalt dort erhalten, wo wir leben.",
+      lead: "b*alance ist aus der Arbeit vieler Südtiroler Biolog:innen entstanden, die seit Jahren an einer Frage arbeiten: Wie lässt sich die Artenvielfalt in der eigenen Gemeinde bewahren und fördern, auf der Wiese hinterm Hof und am Bach im Ort?",
+      teamEyebrow: "Das Team",
+      teamTitle: "Biolog:innen aus Südtirol, die in der Fläche arbeiten.",
+      teamBio: [
+        "Alle haben Biologie studiert, mit Schwerpunkt Ökologie und Naturschutz, und arbeiten seit Jahren in Südtirol. Sie kartieren Trockenrasen, Feuchtgebiete, Hecken und Streuobstwiesen, planen und begleiten Pflegemaßnahmen und arbeiten dabei mit Gemeinden, Bäuerinnen und Bauern, Schulen und Naturschutzgruppen zusammen.",
+        "Was sie verbindet: Biodiversität lässt sich nur dort erhalten, wo sie vorkommt. Deshalb geht es auf dieser Plattform um konkrete Flächen in Südtirol."
       ],
-      personPlaceholder: "Platzhalter – Name, Foto und Lebenslauf folgen.",
+      teamMemberName: "Name Platzhalter",
+      teamMemberRole: "Biolog:in",
+      teamPlaceholder: "Platzhalter. Namen, Fotos und Schwerpunkte folgen.",
       orgsEyebrow: "Zwei Initiativen, ein Ziel",
       orgsTitle: "b*nature und b*coop",
       orgs: [
@@ -155,18 +156,18 @@ const translations = {
         {
           name: "b*coop",
           role: "Plattform und Beratung",
-          copy: "b*coop betreibt die Plattform b*alance: den Lebensraum-Check, die Prüfung und Dokumentation der Projekte und die Verbindung zu Fachberater:innen für Biodiversität, Energie und Ressourcen. Ziel ist, dass aus dem Verstehen ein Verringern wird – und aus dem Verringern ein Stärken vor Ort.",
+          copy: "b*coop betreibt die Plattform b*alance: den Lebensraum-Check, die Prüfung und Dokumentation der Projekte und die Verbindung zu Fachberater:innen für Biodiversität, Energie und Ressourcen. Wer seine Zahlen kennt, kann sie verringern und ein Projekt vor Ort unterstützen.",
           cta: "Lebensraum-Check"
         }
       ],
       principlesEyebrow: "Wie wir arbeiten",
       principlesTitle: "Fünf Regeln, an denen wir uns messen lassen.",
       principles: [
-        ["Vor Ort statt irgendwo", "Jedes Projekt liegt in Südtirol, hat eine Adresse und lässt sich besuchen."],
+        ["Vor Ort", "Jedes Projekt liegt in Südtirol, hat eine Adresse und lässt sich besuchen."],
         ["Geprüft, bevor es online geht", "Ein Fachgremium aus Ökologie, Agrar- und Umweltwissenschaften prüft Ziele, Laufzeit und Budget jedes Projekts."],
-        ["Messbar statt gefühlt", "Habitatfläche, Strukturvielfalt und Zielarten werden festgelegt und im Monitoring nachgehalten."],
+        ["Messbar", "Habitatfläche, Strukturvielfalt und Zielarten werden vorab festgelegt und im Monitoring nachgehalten."],
         ["Verringern vor Ausgleichen", "Der Check zeigt, wo die eigenen Zahlen groß sind. Ein Kompensationsversprechen geben wir nicht."],
-        ["Keine Aussage ohne Beleg", "Was wir nicht belegen können, streichen wir – auch auf dieser Seite."]
+        ["Keine Aussage ohne Beleg", "Was wir nicht belegen können, streichen wir. Das gilt auch für diese Seite."]
       ],
       ctaTitle: "Mitmachen",
       ctaCopy: "Ein Projekt unterstützen, ein eigenes einreichen oder einfach mit dem Check anfangen.",
@@ -177,28 +178,42 @@ const translations = {
     carbonStance: {
       eyebrow: "CO₂ & Biodiversität",
       title: "Warum es hier keinen Kompensationsrechner gibt.",
-      lead: "Der Lebensraum-Check rechnet aus, wie viel CO₂ dein Alltag verursacht. Er bietet dir aber nicht an, diese Menge gegen einen Betrag wieder auszugleichen. Das ist keine Lücke, sondern eine Entscheidung — und hier stehen die Gründe dafür.",
+      lead: "Der Lebensraum-Check rechnet aus, wie viel CO₂ dein Alltag verursacht. Er bietet dir aber nicht an, diese Menge gegen einen Betrag wieder auszugleichen. Das ist eine bewusste Entscheidung. Hier stehen die Gründe.",
       scopeEyebrow: "Bilanzgrenze",
       scopeTitle: "Was der Check rechnet, und was er nicht behauptet.",
       scopeCopy: "Der CO₂e-Wert im Ergebnis ist ein transparenter Ausschnitt der abgefragten Aktivitäten pro Person und Jahr. Vorketten sind nur enthalten, wenn der jeweilige Faktor sie ausdrücklich abbildet; Konsum, Gebäude und öffentliche Leistungen fehlen. Aus dieser bewusst vereinfachten Zahl einen Euro-Betrag abzuleiten, würde ihr eine Genauigkeit geben, die sie nicht hat.",
       reasonsEyebrow: "Vier Gründe",
       reasonsTitle: "Warum sich Ausstoß nicht sauber gegenrechnen lässt.",
       reasons: [
-        ["Eine Tonne ist überall gleich. Ein Lebensraum nicht.", "Kompensation lebt davon, dass eine Tonne hier gegen eine Tonne irgendwo tauschbar ist. Ein Moor im Pustertal hat diesen Tauschwert nicht. Was dort verloren geht, entsteht anderswo nicht noch einmal — nicht mit denselben Arten, nicht im selben Wasserhaushalt, nicht an derselben Stelle im Gefüge."],
-        ["Die Emission wirkt sofort, die Speicherung braucht Jahrzehnte.", "Kohlenstoff, der heute frei wird, wirkt heute. Eine Hecke, eine Magerwiese, ein wiedervernässtes Moor binden ihn über Jahrzehnte — und nur so lange, wie die Fläche bleibt, was sie ist. Dürre, Brand oder eine geänderte Nutzung drehen die Bindung wieder zurück. Diese zeitliche Lücke verschwindet nicht dadurch, dass eine Bilanz sie auf null setzt."],
-        ["Bezahlt ist nicht vermieden.", "Ein Rechner, der am Ende einen Betrag nennt, verschiebt die Frage von „Was ändere ich?“ zu „Was kostet es?“. Der Check ist für die erste Frage gebaut. Er zeigt dir, wo deine eigenen Zahlen groß sind — weil dort auch dein Handlungsspielraum am größten ist."],
-        ["Wir könnten das Versprechen nicht belegen.", "Ein Ausgleich müsste nachweisen, dass eine Fläche ohne die Zahlung nicht entstanden wäre und dass sie dauerhaft bleibt. Diesen Nachweis kann die Plattform heute nicht führen. Eine Aussage ohne Beleg gehört nach unseren eigenen Regeln gestrichen, nicht eingebaut."]
+        ["Eine Tonne ist überall gleich. Ein Lebensraum nicht.", "Kompensation lebt davon, dass eine Tonne hier gegen eine Tonne irgendwo tauschbar ist. Ein Moor im Pustertal hat diesen Tauschwert nicht. Was dort verloren geht, entsteht anderswo nicht noch einmal, weder mit denselben Arten noch im selben Wasserhaushalt."],
+        ["Die Emission wirkt sofort, die Speicherung braucht Jahrzehnte.", "Kohlenstoff, der heute frei wird, wirkt heute. Eine Hecke, eine Magerwiese, ein wiedervernässtes Moor binden ihn über Jahrzehnte, und nur so lange, wie die Fläche bleibt, was sie ist. Dürre, Brand oder eine geänderte Nutzung setzen ihn wieder frei. Eine Bilanz, die beides gleichsetzt, übergeht diese Lücke."],
+        ["Bezahlt ist nicht vermieden.", "Ein Rechner, der am Ende einen Betrag nennt, verschiebt die Frage von „Was ändere ich?“ zu „Was kostet es?“. Der Check ist für die erste Frage gebaut. Er zeigt dir, wo deine eigenen Zahlen groß sind, weil dort auch dein Handlungsspielraum am größten ist."],
+        ["Wir könnten das Versprechen nicht belegen.", "Ein Ausgleich müsste nachweisen, dass eine Fläche ohne die Zahlung nicht entstanden wäre und dass sie dauerhaft bleibt. Diesen Nachweis kann die Plattform heute nicht führen. Nach unseren eigenen Regeln wird eine Aussage ohne Beleg gestrichen."]
+      ],
+      localEyebrow: "Und warum nicht hier?",
+      localTitle: "In Südtirol gibt es die Fläche dafür nicht.",
+      localCopy: "Kompensation braucht Fläche: neuen Wald, der Kohlenstoff bindet, oder Wald, der ohne die Zahlung gerodet würde. Beides gibt es in Südtirol kaum. Sechs von zehn Hektar liegen über 1.600 Metern, ein Fünftel ist Fels und Gletscher, die Hälfte ist bereits Wald. Zieht man Fels, Wasser, Steilhänge, Höhe und Wald ab, bleiben nicht einmal zehn Prozent des Landes. Auf diesem Rest liegen Dörfer, Betriebe und Landwirtschaft. Was hier neu bewaldet werden könnte, ist entweder schon Wald oder wird anders gebraucht.",
+      localFigures: [
+        ["51 %", "der Landesfläche sind Wald: 375.351 von 739.997 Hektar."],
+        ["59,5 %", "der Landesfläche liegen über 1.600 Metern; nur 5,5 % sind überhaupt dauerhaft besiedelbar, knapp 3 % sind besiedelt."],
+        ["3-fach", "überhöht: 18 tropische Waldschutz-Projekte wurden genutzt, um fast dreimal so viel CO₂ auszugleichen, wie sie tatsächlich einsparten. Von 26 untersuchten Projekten verringerten die meisten die Entwaldung kaum."]
+      ],
+      localClosing: "Großflächige Kompensation findet deshalb im globalen Süden statt, weit weg von denen, die dafür zahlen. Und selbst dort hält sie oft nicht, was sie verspricht. Wir unterstützen stattdessen Projekte in Südtirol, die man besuchen, begleiten und über Jahre beobachten kann.",
+      localSources: [
+        { label: "Forstdienst Autonome Provinz Bozen: Südtirols Wald – Flächen und Zahlen", href: "https://forstdienst.provinz.bz.it/de/wald-holz/suedtirols-wald-flaechen" },
+        { label: "ASTAT – Landesinstitut für Statistik: Dauersiedlungsgebiet in Südtirol – 2012 (Übersichten 28–30)", href: "https://assets-eu-01.kc-usercontent.com/b5376750-8076-01cf-17d2-d343e29778a7/5d16ffd8-363e-4d29-93f6-cdb4d67f53c5/pressnote_899333_dsg_2012.pdf" },
+        { label: "West et al. (2023): Action needed to make carbon offsets from forest conservation work for climate change mitigation, Science 381 (2023)", href: "https://www.science.org/doi/10.1126/science.ade3535" }
       ],
       insteadEyebrow: "Was stattdessen zählt",
       insteadTitle: "Lebensräume erhalten und wiederherstellen.",
-      insteadCopy: "Biodiversität ist hier kein Ersatzmaß für Klimaschutz, sondern ein eigener Grund. Eine artenreiche Wiese bietet Lebensraum, hält Wasser im Hang, trägt Boden und übersteht ein trockenes Jahr besser als eine verarmte. Wer sie erhält, gleicht damit nichts aus — er erhält die Grundlage, auf der alles andere steht.",
-      storageTitle: "Kohlenstoff kommt trotzdem vor — als Wirkung, nicht als Ware.",
-      storageCopy: "Intakte Moore, alte Wiesenböden, Hecken und Streuobstbestände speichern Kohlenstoff. Das ist eine reale Wirkung intakter Lebensräume und ein guter Grund, sie zu schützen. Wir schreiben diese Speicherung aber niemandem gut und rechnen sie nicht in Tonnen um. In dem Moment, in dem man sie als Gegenwert verkauft, steht man wieder bei dem Versprechen, das wir gerade nicht geben wollen.",
+      insteadCopy: "Eine artenreiche Wiese bietet Lebensraum, hält Wasser im Hang, trägt Boden und übersteht ein trockenes Jahr besser als eine verarmte. Wer sie erhält, gleicht damit nichts aus. Er erhält, was für Landwirtschaft, Wasser und Boden gebraucht wird.",
+      storageTitle: "Kohlenstoff speichern diese Flächen trotzdem.",
+      storageCopy: "Intakte Moore, alte Wiesenböden, Hecken und Streuobstbestände speichern Kohlenstoff. Das ist ein guter Grund, sie zu schützen. Wir schreiben diese Speicherung aber niemandem gut und rechnen sie nicht in Tonnen um. Sobald man sie als Gegenwert verkauft, gibt man das Versprechen, das wir nicht geben wollen.",
       pathEyebrow: "Der Weg stattdessen",
       pathTitle: "Verstehen, verringern, vor Ort stärken.",
       path: [
         ["Verstehen", "Der Check zeigt dir Größenordnungen statt einer Rechnung, die sich begleichen lässt."],
-        ["Verringern", "Dort ansetzen, wo die eigenen Zahlen groß sind — das bleibt der wirksamste Schritt."],
+        ["Verringern", "Dort ansetzen, wo die eigenen Zahlen groß sind. Das bleibt der wirksamste Schritt."],
         ["Vor Ort stärken", "Ein Projekt in Südtirol unterstützen, das sich besuchen und nachprüfen lässt."]
       ],
       ctaProjects: "Projekte ansehen",
@@ -258,13 +273,13 @@ const translations = {
       whyMatters: "Warum dieses Projekt wichtig ist",
       whatItDoes: "Was das Projekt konkret tut",
       beforeAfterTitle: "Vorher / Nachher",
-      beforeAfterCopy: "Vorher und nachher vom selben Standpunkt – Regler ziehen, um zu vergleichen.",
+      beforeAfterCopy: "Vorher und nachher vom selben Standpunkt. Regler ziehen, um zu vergleichen.",
       before: "Vorher",
       after: "Nachher",
       beforeAfterSliderLabel: "Vergleich zwischen Vorher und Nachher",
       beforeAfterPlaceholderNote: "Platzhalter: Bis echte Vorher-Fotos vorliegen, zeigt die linke Seite eine bearbeitete Version des Projektfotos.",
       galleryTitle: "Blick in die Fläche",
-      galleryCopy: "Aufnahmen aus dem Projektgebiet: die Flächen, die Maßnahmen und die Arten, um die es hier geht.",
+      galleryCopy: "Aufnahmen aus dem Projektgebiet: Flächen, Maßnahmen und Arten.",
       photo: "Foto",
       ecologicalImpact: "Ökologische Wirkung",
       impactCopy: "Messbare Ziele machen sichtbar, welchen Beitrag das Projekt für Lebensräume und Artenvielfalt leisten soll.",
@@ -419,7 +434,7 @@ const translations = {
     sciencePartners: {
       eyebrow: "Accompagnamento tecnico-scientifico",
       title: "Chi verifica la metodologia.",
-      copy: "La tipologia degli habitat, i protocolli di monitoraggio e gli indicatori sono accompagnati sul piano scientifico. L’accompagnamento verifica il metodo — la responsabilità dei contenuti resta della piattaforma."
+      copy: "La tipologia degli habitat, i protocolli di monitoraggio e gli indicatori sono accompagnati sul piano scientifico. L’accompagnamento verifica il metodo. La responsabilità dei contenuti resta della piattaforma."
     },
     impact: {
       eyebrow: "DALLA CONOSCENZA ALL’AZIONE",
@@ -442,27 +457,28 @@ const translations = {
         "Impollinazione: api selvatiche, farfalle e altri insetti impollinano frutta, verdura e piante spontanee.",
         "Acqua e suolo: prati ricchi di specie e siepi trattengono l’acqua sui pendii, proteggono dall’erosione e costruiscono suolo.",
         "Resilienza: habitat diversificati resistono a siccità, piogge intense e parassiti meglio di quelli impoveriti.",
-        "Clima: torbiere intatte, vecchi suoli prativi e siepi immagazzinano carbonio – come effetto, non come merce."
+        "Clima: torbiere intatte, vecchi suoli prativi e siepi immagazzinano carbonio."
       ],
       economyTitle: "Perché la perdita conta anche economicamente",
-      economyCopy: "L’IPBES stima che nel solo 2023 siano confluiti circa 7.300 miliardi di dollari in attività che distruggono la natura – circa 33 volte quanto Stati e imprese hanno speso per conservarla. Nell’eurozona circa il 75 per cento dei crediti alle imprese dipende in misura elevata da almeno un servizio ecosistemico; la banca pubblica tedesca KfW stima che due terzi del prodotto economico dell’UE poggino direttamente o indirettamente sui servizi ecosistemici. La perdita di natura non è un tema marginale, ma un rischio sistemico.",
+      economyCopy: "L’IPBES stima che nel solo 2023 siano confluiti circa 7.300 miliardi di dollari in attività che distruggono la natura. È circa 33 volte quanto Stati e imprese hanno speso per conservarla. Nell’eurozona circa il 75 per cento dei crediti alle imprese dipende fortemente da almeno un servizio ecosistemico. La banca pubblica tedesca KfW stima che due terzi del prodotto economico dell’UE poggino direttamente o indirettamente sui servizi ecosistemici.",
       localTitle: "Cosa significa per l’Alto Adige",
-      localCopy: "Un’agricoltura che dipende dall’impollinazione, un turismo che vive di paesaggio e insediamenti sui pendii che hanno bisogno di suoli stabili: qui la biodiversità non è una grandezza astratta, ma la base della vita quotidiana e del reddito. Ogni progetto su questa piattaforma ne conserva o ne ripristina un pezzo.",
+      localCopy: "L’agricoltura ha bisogno di impollinatori, il turismo vive del paesaggio, gli insediamenti sui pendii hanno bisogno di suoli stabili. Ogni progetto su questa piattaforma ne conserva o ne ripristina un pezzo.",
       source: "Cifre da: Der Spiegel 37/2026, «Wenn die Umweltkrise zur Finanzkrise wird» (Tim Bartz, Markus Becker), con riferimento all’IPBES, a uno studio su «Nature» (settembre 2025) e alla KfW.",
       cta: "Avvia l’habitat check"
     },
     about: {
       eyebrow: "Chi c’è dietro",
-      title: "Conservare e rafforzare la biodiversità sul posto: questo è il tema.",
-      lead: "b*alance nasce dal lavoro di una biologa/un biologo altoatesino che da anni si occupa di una domanda: come conservare e favorire la varietà delle specie lì dove viviamo – nel comune, sul prato dietro il maso, lungo il torrente in paese?",
-      personEyebrow: "La persona",
-      personName: "Nome segnaposto",
-      personRole: "Biologa/biologo, Alto Adige",
-      personBio: [
-        "Formazione in biologia, con focus su ecologia e conservazione della natura. Il lavoro si svolge meno alla scrivania che sul campo: mappare prati aridi, zone umide, siepi e frutteti tradizionali in Alto Adige, pianificare e seguire interventi di cura, collaborare con comuni, contadine e contadini, scuole e gruppi naturalistici.",
-        "La convinzione di fondo: la biodiversità non è un sostituto della protezione del clima né una merce da conteggiare. È la base su cui poggia tutto il resto – e si conserva solo dove si trova. Per questo qui si parla di superfici concrete in Alto Adige, non di certificati."
+      title: "Conservare la biodiversità là dove viviamo.",
+      lead: "b*alance nasce dal lavoro di molte biologhe e biologi altoatesini che da anni lavorano a una domanda: come conservare e favorire la varietà delle specie nel proprio comune, sul prato dietro il maso e lungo il torrente in paese?",
+      teamEyebrow: "Il team",
+      teamTitle: "Biologhe e biologi dell’Alto Adige che lavorano sul campo.",
+      teamBio: [
+        "Tutte e tutti hanno studiato biologia, con focus su ecologia e conservazione della natura, e lavorano da anni in Alto Adige. Mappano prati aridi, zone umide, siepi e frutteti tradizionali, pianificano e seguono interventi di cura e collaborano con comuni, contadine e contadini, scuole e gruppi naturalistici.",
+        "Ciò che li unisce: la biodiversità si conserva solo dove si trova. Per questo su questa piattaforma si parla di superfici concrete in Alto Adige."
       ],
-      personPlaceholder: "Segnaposto – nome, foto e curriculum seguiranno.",
+      teamMemberName: "Nome segnaposto",
+      teamMemberRole: "Biologa/biologo",
+      teamPlaceholder: "Segnaposto. Nomi, foto e specializzazioni seguiranno.",
       orgsEyebrow: "Due iniziative, un obiettivo",
       orgsTitle: "b*nature e b*coop",
       orgs: [
@@ -475,18 +491,18 @@ const translations = {
         {
           name: "b*coop",
           role: "Piattaforma e consulenza",
-          copy: "b*coop gestisce la piattaforma b*alance: l’habitat check, la verifica e la documentazione dei progetti e il collegamento con consulenti per biodiversità, energia e risorse. L’obiettivo è che dal capire nasca il ridurre – e dal ridurre il rafforzare sul posto.",
+          copy: "b*coop gestisce la piattaforma b*alance: l’habitat check, la verifica e la documentazione dei progetti e il collegamento con consulenti per biodiversità, energia e risorse. Chi conosce i propri numeri può ridurli e sostenere un progetto sul posto.",
           cta: "Habitat check"
         }
       ],
       principlesEyebrow: "Come lavoriamo",
       principlesTitle: "Cinque regole su cui ci facciamo misurare.",
       principles: [
-        ["Sul posto, non altrove", "Ogni progetto è in Alto Adige, ha un indirizzo e si può visitare."],
+        ["Sul posto", "Ogni progetto è in Alto Adige, ha un indirizzo e si può visitare."],
         ["Verificato prima di andare online", "Un comitato di esperti in ecologia, scienze agrarie e ambientali verifica obiettivi, durata e budget di ogni progetto."],
-        ["Misurabile, non a sensazione", "Superficie di habitat, diversità strutturale e specie target vengono definite e seguite nel monitoraggio."],
+        ["Misurabile", "Superficie di habitat, diversità strutturale e specie target vengono definite in anticipo e seguite nel monitoraggio."],
         ["Ridurre prima di compensare", "Il check mostra dove i tuoi numeri sono grandi. Una promessa di compensazione non la facciamo."],
-        ["Nessuna affermazione senza prova", "Ciò che non possiamo documentare lo togliamo – anche da questa pagina."]
+        ["Nessuna affermazione senza prova", "Ciò che non possiamo documentare lo togliamo. Vale anche per questa pagina."]
       ],
       ctaTitle: "Partecipa",
       ctaCopy: "Sostieni un progetto, proponi il tuo o inizia semplicemente con il check.",
@@ -497,23 +513,37 @@ const translations = {
     carbonStance: {
       eyebrow: "CO₂ e biodiversità",
       title: "Perché qui non trovi un calcolatore di compensazione.",
-      lead: "L’habitat check calcola quanta CO₂ produce la tua vita quotidiana. Non ti propone però di compensare quella quantità con un pagamento. Non è una mancanza, è una scelta — e qui trovi le ragioni.",
+      lead: "L’habitat check calcola quanta CO₂ produce la tua vita quotidiana. Non ti propone però di compensare quella quantità con un pagamento. È una scelta consapevole. Qui trovi le ragioni.",
       scopeEyebrow: "Confine di bilancio",
       scopeTitle: "Che cosa calcola il check e che cosa non pretende di dire.",
-      scopeCopy: "Il valore di CO₂ nel risultato è un’impronta completa, filiera inclusa, per persona e per anno. È costruito come ordine di grandezza, per mostrarti quale ambito della tua quotidianità pesa di più — non come bilancio ambientale certificato. Ricavare un importo in euro da un numero volutamente semplificato gli attribuirebbe una precisione che non ha.",
+      scopeCopy: "Il valore di CO₂e nel risultato è una parte trasparente delle attività rilevate, per persona e per anno. Le filiere a monte sono incluse solo se il rispettivo fattore le rappresenta esplicitamente; consumi, edifici e servizi pubblici mancano. Ricavare un importo in euro da un numero volutamente semplificato gli attribuirebbe una precisione che non ha.",
       reasonsEyebrow: "Quattro ragioni",
       reasonsTitle: "Perché le emissioni non si compensano in modo pulito.",
       reasons: [
-        ["Una tonnellata è uguale ovunque. Un habitat no.", "La compensazione si regge sull’idea che una tonnellata qui valga una tonnellata altrove. Una torbiera in Val Pusteria non ha questo valore di scambio. Ciò che si perde lì non ricompare altrove — non con le stesse specie, non nello stesso regime idrico, non nello stesso punto della rete."],
-        ["L’emissione agisce subito, l’accumulo richiede decenni.", "Il carbonio liberato oggi agisce oggi. Una siepe, un prato magro, una torbiera riumidificata lo fissano nell’arco di decenni — e solo finché quella superficie resta ciò che è. Siccità, incendio o un cambio d’uso annullano il processo. Questo scarto temporale non sparisce perché un bilancio lo azzera."],
-        ["Pagato non significa evitato.", "Un calcolatore che alla fine indica un importo sposta la domanda da «che cosa cambio?» a «quanto costa?». Il check è costruito per la prima domanda. Ti mostra dove i tuoi numeri sono grandi — perché è lì che hai anche il margine d’azione più ampio."],
-        ["Non potremmo dimostrare quella promessa.", "Una compensazione dovrebbe dimostrare che una superficie non sarebbe nata senza quel pagamento e che resterà nel tempo. Oggi la piattaforma non può fornire questa prova. Secondo le nostre stesse regole, un’affermazione senza prova va tolta, non aggiunta."]
+        ["Una tonnellata è uguale ovunque. Un habitat no.", "La compensazione si regge sull’idea che una tonnellata qui valga una tonnellata altrove. Una torbiera in Val Pusteria non ha questo valore di scambio. Ciò che si perde lì non ricompare altrove, né con le stesse specie né nello stesso regime idrico."],
+        ["L’emissione agisce subito, l’accumulo richiede decenni.", "Il carbonio liberato oggi agisce oggi. Una siepe, un prato magro, una torbiera riumidificata lo fissano nell’arco di decenni, e solo finché quella superficie resta ciò che è. Siccità, incendio o un cambio d’uso lo liberano di nuovo. Un bilancio che mette le due cose sullo stesso piano ignora questo scarto."],
+        ["Pagato non significa evitato.", "Un calcolatore che alla fine indica un importo sposta la domanda da «che cosa cambio?» a «quanto costa?». Il check è costruito per la prima domanda. Ti mostra dove i tuoi numeri sono grandi, perché è lì che hai anche il margine d’azione più ampio."],
+        ["Non potremmo dimostrare quella promessa.", "Una compensazione dovrebbe dimostrare che una superficie non sarebbe nata senza quel pagamento e che resterà nel tempo. Oggi la piattaforma non può fornire questa prova. Secondo le nostre stesse regole, un’affermazione senza prova va tolta."]
+      ],
+      localEyebrow: "E perché non qui?",
+      localTitle: "In Alto Adige non c’è lo spazio per farlo.",
+      localCopy: "La compensazione ha bisogno di superficie: nuovo bosco che fissi carbonio, o bosco che senza il pagamento verrebbe abbattuto. In Alto Adige non c’è quasi né l’uno né l’altro. Sei ettari su dieci si trovano sopra i 1.600 metri, un quinto è roccia e ghiacciaio, la metà è già bosco. Tolti roccia, acqua, pendii ripidi, quota e bosco resta meno del dieci per cento del territorio. Su questo resto stanno paesi, aziende e agricoltura. Ciò che qui si potrebbe rimboschire o è già bosco o serve ad altro.",
+      localFigures: [
+        ["51 %", "del territorio provinciale è bosco: 375.351 su 739.997 ettari."],
+        ["59,5 %", "del territorio si trova sopra i 1.600 metri; solo il 5,5 % è in linea di principio insediabile in modo permanente, meno del 3 % è insediato."],
+        ["3 volte", "tanto: 18 progetti di tutela forestale tropicale sono stati usati per compensare quasi il triplo della CO₂ effettivamente risparmiata. Dei 26 progetti esaminati, la maggior parte ha ridotto appena la deforestazione."]
+      ],
+      localClosing: "La compensazione su larga scala avviene quindi nel Sud globale, lontano da chi paga. E anche lì spesso non mantiene ciò che promette. Noi sosteniamo invece progetti in Alto Adige che si possono visitare, seguire e osservare per anni.",
+      localSources: [
+        { label: "Servizio forestale Provincia autonoma di Bolzano: il bosco altoatesino – superfici e cifre", href: "https://forstdienst.provinz.bz.it/de/wald-holz/suedtirols-wald-flaechen" },
+        { label: "ASTAT – Istituto provinciale di statistica: Territorio insediativo in provincia di Bolzano – 2012 (prospetti 28–30)", href: "https://assets-eu-01.kc-usercontent.com/b5376750-8076-01cf-17d2-d343e29778a7/5d16ffd8-363e-4d29-93f6-cdb4d67f53c5/pressnote_899333_dsg_2012.pdf" },
+        { label: "West et al. (2023): Action needed to make carbon offsets from forest conservation work for climate change mitigation, Science 381 (2023)", href: "https://www.science.org/doi/10.1126/science.ade3535" }
       ],
       insteadEyebrow: "Che cosa conta invece",
       insteadTitle: "Conservare e ripristinare gli habitat.",
-      insteadCopy: "Qui la biodiversità non è una misura sostitutiva della protezione del clima, ma una ragione a sé. Un prato ricco di specie offre habitat, trattiene l’acqua sul versante, sostiene il suolo e supera un’annata secca meglio di uno impoverito. Chi lo conserva non compensa nulla: conserva la base su cui poggia tutto il resto.",
-      storageTitle: "Il carbonio c’è comunque — come effetto, non come merce.",
-      storageCopy: "Torbiere intatte, suoli prativi antichi, siepi e frutteti tradizionali immagazzinano carbonio. È un effetto reale degli habitat integri ed è un buon motivo per proteggerli. Non accreditiamo però questo accumulo a nessuno e non lo convertiamo in tonnellate. Nel momento in cui lo si vende come controvalore, si torna alla promessa che qui non vogliamo fare.",
+      insteadCopy: "Un prato ricco di specie offre habitat, trattiene l’acqua sul versante, sostiene il suolo e supera un’annata secca meglio di uno impoverito. Chi lo conserva non compensa nulla. Conserva ciò che serve ad agricoltura, acqua e suolo.",
+      storageTitle: "Queste superfici immagazzinano comunque carbonio.",
+      storageCopy: "Torbiere intatte, suoli prativi antichi, siepi e frutteti tradizionali immagazzinano carbonio. È un buon motivo per proteggerli. Non accreditiamo però questo accumulo a nessuno e non lo convertiamo in tonnellate. Appena lo si vende come controvalore, si fa la promessa che non vogliamo fare.",
       pathEyebrow: "La strada che proponiamo",
       pathTitle: "Capire, ridurre, rafforzare sul posto.",
       path: [
@@ -578,13 +608,13 @@ const translations = {
       whyMatters: "Perché questo progetto è importante",
       whatItDoes: "Cosa fa concretamente il progetto",
       beforeAfterTitle: "Prima / Dopo",
-      beforeAfterCopy: "Lo stesso punto di vista, prima e dopo l’intervento. Trascina il cursore per confrontare.",
+      beforeAfterCopy: "Prima e dopo dallo stesso punto di vista. Trascina il cursore per confrontare.",
       before: "Prima",
       after: "Dopo",
       beforeAfterSliderLabel: "Confronto tra prima e dopo",
       beforeAfterPlaceholderNote: "Segnaposto: finché non ci sono foto reali del prima, il lato sinistro mostra una versione modificata della foto del progetto.",
       galleryTitle: "Uno sguardo sull’area",
-      galleryCopy: "Immagini dall’area di progetto: le superfici, gli interventi e le specie di cui si tratta.",
+      galleryCopy: "Immagini dall’area di progetto: superfici, interventi e specie.",
       photo: "Foto",
       ecologicalImpact: "Effetto ecologico",
       impactCopy: "Obiettivi misurabili mostrano il contributo previsto per gli habitat e la biodiversità.",
@@ -739,7 +769,7 @@ const translations = {
     sciencePartners: {
       eyebrow: "Scientific guidance",
       title: "Who reviews the methodology.",
-      copy: "Habitat typology, monitoring protocols and key figures are reviewed by specialists. That guidance checks the method — responsibility for the content stays with the platform."
+      copy: "Habitat typology, monitoring protocols and key figures are reviewed by specialists. That guidance checks the method. Responsibility for the content stays with the platform."
     },
     impact: {
       eyebrow: "FROM KNOWLEDGE TO ACTION",
@@ -762,27 +792,28 @@ const translations = {
         "Pollination: wild bees, butterflies and other insects pollinate fruit, vegetables and wild plants.",
         "Water and soil: species-rich meadows and hedgerows hold water on slopes, protect against erosion and build soil.",
         "Resilience: diverse habitats withstand drought, heavy rain and pests better than depleted ones.",
-        "Climate: intact bogs, old meadow soils and hedgerows store carbon – as an effect, not as a commodity."
+        "Climate: intact bogs, old meadow soils and hedgerows store carbon."
       ],
       economyTitle: "Why the loss also counts economically",
-      economyCopy: "The IPBES puts the money flowing into nature-destroying activities in 2023 alone at around 7.3 trillion US dollars – roughly 33 times what governments and companies spent on conserving nature. In the eurozone, around 75 percent of corporate loans depend heavily on at least one ecosystem service; the German development bank KfW estimates that two thirds of EU economic output rest directly or indirectly on ecosystem services. Nature loss is not a side issue but a systemic risk.",
+      economyCopy: "The IPBES puts the money flowing into nature-destroying activities in 2023 alone at around 7.3 trillion US dollars. That is roughly 33 times what governments and companies spent on conserving nature. In the eurozone, around 75 percent of corporate loans depend heavily on at least one ecosystem service. The German development bank KfW estimates that two thirds of EU economic output rest directly or indirectly on ecosystem services.",
       localTitle: "What this means for South Tyrol",
-      localCopy: "Agriculture that relies on pollination, tourism that lives off the landscape, and settlements on slopes that need stable soils: here biodiversity is not an abstract quantity but the basis of everyday life and income. Every project on this platform preserves or restores a piece of it.",
+      localCopy: "Farming needs pollinators, tourism lives off the landscape, and settlements on slopes need stable soils. Every project on this platform preserves or restores a piece of that.",
       source: "Figures from: Der Spiegel 37/2026, “Wenn die Umweltkrise zur Finanzkrise wird” (Tim Bartz, Markus Becker), citing the IPBES, a study in “Nature” (September 2025) and the KfW.",
       cta: "Start the habitat check"
     },
     about: {
       eyebrow: "Who is behind it",
-      title: "Preserving and strengthening biodiversity locally – that is the topic.",
-      lead: "b*alance grew out of the work of a South Tyrolean biologist who has spent years on one question: how can we preserve and enhance the variety of species where we live – in the municipality, on the meadow behind the farm, along the stream in the village?",
-      personEyebrow: "The person",
-      personName: "Name placeholder",
-      personRole: "Biologist, South Tyrol",
-      personBio: [
-        "Trained in biology with a focus on ecology and nature conservation. The work happens less at a desk than in the field: mapping dry grasslands, wetlands, hedgerows and traditional orchards in South Tyrol, planning and accompanying management measures, working with municipalities, farmers, schools and conservation groups.",
-        "The conviction behind it: biodiversity is not a substitute for climate protection and not a commodity that can be offset. It is the foundation everything else rests on – and it can only be preserved where it is. That is why this is about concrete sites in South Tyrol, not certificates."
+      title: "Preserving biodiversity where we live.",
+      lead: "b*alance grew out of the work of many South Tyrolean biologists who have spent years on one question: how can the variety of species be preserved and enhanced in their own municipality, on the meadow behind the farm and along the stream in the village?",
+      teamEyebrow: "The team",
+      teamTitle: "Biologists from South Tyrol who work in the field.",
+      teamBio: [
+        "All of them studied biology with a focus on ecology and nature conservation and have worked in South Tyrol for years. They map dry grasslands, wetlands, hedgerows and traditional orchards, plan and accompany management measures, and work with municipalities, farmers, schools and conservation groups.",
+        "What they share: biodiversity can only be preserved where it occurs. That is why this platform is about concrete sites in South Tyrol."
       ],
-      personPlaceholder: "Placeholder – name, photo and CV to follow.",
+      teamMemberName: "Name placeholder",
+      teamMemberRole: "Biologist",
+      teamPlaceholder: "Placeholder. Names, photos and specialisms to follow.",
       orgsEyebrow: "Two initiatives, one goal",
       orgsTitle: "b*nature and b*coop",
       orgs: [
@@ -795,18 +826,18 @@ const translations = {
         {
           name: "b*coop",
           role: "Platform and advice",
-          copy: "b*coop runs the b*alance platform: the habitat check, the review and documentation of projects, and the link to specialist advisers for biodiversity, energy and resources. The aim is for understanding to lead to reducing – and reducing to strengthening locally.",
+          copy: "b*coop runs the b*alance platform: the habitat check, the review and documentation of projects, and the link to specialist advisers for biodiversity, energy and resources. Anyone who knows their numbers can reduce them and support a project nearby.",
           cta: "Habitat check"
         }
       ],
       principlesEyebrow: "How we work",
       principlesTitle: "Five rules we can be measured against.",
       principles: [
-        ["Local, not somewhere", "Every project is in South Tyrol, has an address and can be visited."],
+        ["Local", "Every project is in South Tyrol, has an address and can be visited."],
         ["Reviewed before it goes online", "A panel from ecology, agricultural and environmental science reviews each project’s goals, duration and budget."],
-        ["Measured, not felt", "Habitat area, structural diversity and target species are defined and tracked in monitoring."],
+        ["Measurable", "Habitat area, structural diversity and target species are defined up front and tracked in monitoring."],
         ["Reduce before offsetting", "The check shows where your own numbers are large. We make no offsetting promise."],
-        ["No claim without evidence", "What we cannot back up, we remove – on this page too."]
+        ["No claim without evidence", "What we cannot back up, we remove. That applies to this page as well."]
       ],
       ctaTitle: "Get involved",
       ctaCopy: "Support a project, submit your own, or simply start with the check.",
@@ -817,23 +848,37 @@ const translations = {
     carbonStance: {
       eyebrow: "CO₂ & biodiversity",
       title: "Why there is no offset calculator here.",
-      lead: "The habitat check works out how much CO₂ your everyday life causes. What it does not do is offer to cancel that amount out against a payment. This is not a gap, it is a decision — and these are the reasons for it.",
+      lead: "The habitat check works out how much CO₂ your everyday life causes. What it does not do is offer to cancel that amount out against a payment. That is a deliberate decision. These are the reasons.",
       scopeEyebrow: "Accounting boundary",
       scopeTitle: "What the check calculates, and what it does not claim.",
-      scopeCopy: "The CO₂ figure in your result is a full footprint including supply chains, per person and year. It is built as an order of magnitude, so you can see which part of your everyday life weighs heavily — not as an audited life-cycle assessment. Deriving a euro amount from a deliberately simplified number would lend it a precision it does not have.",
+      scopeCopy: "The CO₂e figure in your result is a transparent slice of the activities asked about, per person and year. Upstream emissions are included only where the respective factor explicitly covers them; consumption, buildings and public services are missing. Deriving a euro amount from a deliberately simplified number would lend it a precision it does not have.",
       reasonsEyebrow: "Four reasons",
       reasonsTitle: "Why emissions cannot be cleanly cancelled out.",
       reasons: [
-        ["A tonne is the same everywhere. A habitat is not.", "Offsetting rests on the idea that a tonne here trades against a tonne somewhere else. A bog in the Puster Valley has no such exchange rate. What is lost there does not reappear elsewhere — not with the same species, not in the same water regime, not at the same point in the fabric."],
-        ["The emission acts now, the storage takes decades.", "Carbon released today acts today. A hedgerow, a species-rich meadow, a rewetted bog bind it over decades — and only for as long as the site stays what it is. Drought, fire or a change of use reverse it. That gap in time does not disappear because a balance sheet sets it to zero."],
-        ["Paid for is not avoided.", "A calculator that ends in an amount shifts the question from “what do I change?” to “what does it cost?”. The check is built for the first question. It shows you where your own numbers are large — because that is where your room to act is largest too."],
-        ["We could not back the promise up.", "An offset would have to show that a site would not have existed without the payment, and that it will last. The platform cannot provide that evidence today. By our own rules, a claim without evidence gets cut, not built in."]
+        ["A tonne is the same everywhere. A habitat is not.", "Offsetting rests on the idea that a tonne here trades against a tonne somewhere else. A bog in the Puster Valley has no such exchange rate. What is lost there does not reappear elsewhere, not with the same species and not in the same water regime."],
+        ["The emission acts now, the storage takes decades.", "Carbon released today acts today. A hedgerow, a species-rich meadow, a rewetted bog bind it over decades, and only for as long as the site stays what it is. Drought, fire or a change of use release it again. A balance sheet that treats the two as equal ignores that gap."],
+        ["Paid for is not avoided.", "A calculator that ends in an amount shifts the question from “what do I change?” to “what does it cost?”. The check is built for the first question. It shows you where your own numbers are large, because that is where your room to act is largest too."],
+        ["We could not back the promise up.", "An offset would have to show that a site would not have existed without the payment, and that it will last. The platform cannot provide that evidence today. By our own rules, a claim without evidence gets cut."]
+      ],
+      localEyebrow: "And why not here?",
+      localTitle: "South Tyrol has no land to spare for it.",
+      localCopy: "Offsetting needs land: new forest that stores carbon, or forest that would be cleared without the payment. South Tyrol has hardly any of either. Six hectares in ten lie above 1,600 metres, a fifth is rock and glacier, half is already forest. Take away rock, water, steep slopes, altitude and forest and less than ten percent of the province remains. Villages, businesses and farms sit on that remainder. Whatever could be newly forested here is either forest already or needed for something else.",
+      localFigures: [
+        ["51%", "of the province is forest: 375,351 of 739,997 hectares."],
+        ["59.5%", "of the province lies above 1,600 metres; only 5.5% is permanently settleable at all, and under 3% is settled."],
+        ["3×", "over-credited: 18 tropical forest-protection projects were used to offset nearly three times the CO₂ they actually saved. Of 26 projects examined, most barely reduced deforestation."]
+      ],
+      localClosing: "Large-scale offsetting therefore happens in the global South, far from those who pay for it. And even there it often fails to deliver what it promises. We support projects in South Tyrol instead, ones you can visit, follow and watch over the years.",
+      localSources: [
+        { label: "Forest Service, Autonomous Province of Bolzano: South Tyrol’s forest – areas and figures", href: "https://forstdienst.provinz.bz.it/de/wald-holz/suedtirols-wald-flaechen" },
+        { label: "ASTAT – Provincial Statistics Institute: Permanent settlement area in South Tyrol – 2012 (tables 28–30)", href: "https://assets-eu-01.kc-usercontent.com/b5376750-8076-01cf-17d2-d343e29778a7/5d16ffd8-363e-4d29-93f6-cdb4d67f53c5/pressnote_899333_dsg_2012.pdf" },
+        { label: "West et al. (2023): Action needed to make carbon offsets from forest conservation work for climate change mitigation, Science 381 (2023)", href: "https://www.science.org/doi/10.1126/science.ade3535" }
       ],
       insteadEyebrow: "What counts instead",
       insteadTitle: "Keeping habitats, and bringing them back.",
-      insteadCopy: "Biodiversity here is not a stand-in measure for climate action, it is a reason in its own right. A species-rich meadow provides habitat, holds water on the slope, carries soil and gets through a dry year better than a depleted one. Keeping it does not balance anything out — it keeps the ground everything else stands on.",
-      storageTitle: "Carbon is still part of it — as an effect, not as a product.",
-      storageCopy: "Intact bogs, old meadow soils, hedgerows and traditional orchards store carbon. That is a real effect of intact habitats and a good reason to protect them. But we do not credit that storage to anyone and we do not convert it into tonnes. The moment it is sold as a counter-value, you are back at the promise we are choosing not to make.",
+      insteadCopy: "A species-rich meadow provides habitat, holds water on the slope, carries soil and gets through a dry year better than a depleted one. Keeping it does not balance anything out. It keeps what farming, water and soil depend on.",
+      storageTitle: "These sites store carbon all the same.",
+      storageCopy: "Intact bogs, old meadow soils, hedgerows and traditional orchards store carbon. That is a good reason to protect them. But we do not credit that storage to anyone and we do not convert it into tonnes. As soon as it is sold as a counter-value, you are making the promise we choose not to make.",
       pathEyebrow: "The path we suggest instead",
       pathTitle: "Understand, reduce, strengthen locally.",
       path: [
@@ -898,13 +943,13 @@ const translations = {
       whyMatters: "Why this project matters",
       whatItDoes: "What the project is doing",
       beforeAfterTitle: "Before / After",
-      beforeAfterCopy: "The same viewpoint, before and after the intervention. Drag the handle to compare.",
+      beforeAfterCopy: "Before and after from the same viewpoint. Drag the handle to compare.",
       before: "Before",
       after: "After",
       beforeAfterSliderLabel: "Comparison between before and after",
       beforeAfterPlaceholderNote: "Placeholder: until real before photos are available, the left side shows an edited version of the project photo.",
       galleryTitle: "A look at the site",
-      galleryCopy: "Images from the project area: the sites, the measures and the species this is about.",
+      galleryCopy: "Images from the project area: sites, measures and species.",
       photo: "Photo",
       ecologicalImpact: "Ecological impact",
       impactCopy: "Measurable goals show how the project is expected to benefit habitats and biodiversity.",

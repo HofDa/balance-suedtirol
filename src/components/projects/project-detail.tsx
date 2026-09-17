@@ -292,7 +292,7 @@ export function ProjectDetail({ project, otherProjects, locale }: ProjectDetailP
                 label={copy.support}
                 className="mt-6 w-full bg-[var(--color-forest)] font-bold hover:bg-[var(--color-ink)]"
               />
-              <ProjectShareButton copy={copy} title={project.title} description={project.summary} />
+              <ProjectShareButton copy={copy} title={project.title} description={project.summary} image={withBasePath(project.image)} />
               <p className="mt-3 text-xs text-[var(--color-muted)]">{copy.tax}</p>
             </aside>
             <Surface level="sheet" tone="paper" framed={false} className="h-fit sm:p-8">

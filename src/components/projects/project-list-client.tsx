@@ -2,7 +2,7 @@
 
 import { useCallback, useState, useMemo } from "react";
 import { useSearchParams } from "next/navigation";
-import { Search, Check, SlidersHorizontal } from "lucide-react";
+import { Search, Check, SlidersHorizontal, ChevronDown } from "lucide-react";
 import { ProjectCardView } from "@/components/projects/project-card-view";
 import type { ProjectListItem, ProjectStatus } from "@/types/project";
 import type { Locale } from "@/config/site";
@@ -51,6 +51,7 @@ export function ProjectListClient({
   const [selectedStatus, setSelectedStatus] = useState<ProjectStatus | "all">("all");
   const [selectedCrowdfunding, setSelectedCrowdfunding] = useState<CrowdfundingFilter>("all");
   const [selectedPhase, setSelectedPhase] = useState<ProjectPhase | "all">("all");
+  const [filtersOpen, setFiltersOpen] = useState(false);
   const [showMoreFilters, setShowMoreFilters] = useState(false);
   const [searchQuery, setSearchQuery] = useState<string>("");
 
@@ -102,11 +103,21 @@ export function ProjectListClient({
 
   return (
     <div className="mt-10">
-      <div>
-        <div className="mb-5">
-          <h2 className="text-lg font-semibold tracking-[-0.01em] text-[var(--color-ink)]">{copy.filterTitle}</h2>
-          <p className="mt-1 text-sm leading-6 text-[var(--color-muted)]">{copy.filterCopy}</p>
-        </div>
+      <div className="rounded-[var(--radius-lg)] border border-[var(--color-line)] bg-white/60">
+        <button
+          type="button"
+          onClick={() => setFiltersOpen((isOpen) => !isOpen)}
+          aria-expanded={filtersOpen}
+          aria-controls="project-filters"
+          className={`flex min-h-14 w-full items-center gap-3 rounded-[var(--radius-lg)] px-5 py-4 text-left transition hover:bg-[var(--color-sage)]/40 ${focusRing}`}
+        >
+          <SlidersHorizontal className="size-5 shrink-0 text-[var(--color-forest)]" aria-hidden />
+          <span className="flex-1 text-base font-semibold text-[var(--color-ink)]">{copy.filterTitle}</span>
+          {hasActiveFilters && <span className="flex size-6 items-center justify-center rounded-full bg-[var(--color-forest)] text-xs font-bold text-white">{Number(selectedCategory !== "all") + advancedFilterCount + Number(searchQuery.length > 0)}</span>}
+          <ChevronDown className={`size-5 shrink-0 text-[var(--color-forest)] transition-transform ${filtersOpen ? "rotate-180" : ""}`} aria-hidden />
+        </button>
+        <div id="project-filters" hidden={!filtersOpen} className="border-t border-[var(--color-line)] p-5">
+          <p className="mb-5 text-sm leading-6 text-[var(--color-muted)]">{copy.filterCopy}</p>
 
         <div
           className="flex max-w-full flex-wrap items-center gap-2"
@@ -223,6 +234,7 @@ export function ProjectListClient({
             </label>
             </div>
           </div>
+        </div>
         </div>
       </div>
 

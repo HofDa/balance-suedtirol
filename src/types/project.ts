@@ -23,6 +23,7 @@ export type Project = {
   status: ProjectStatus;
   municipality: string;
   organization: string;
+  organizationAddress?: string;
   location: { lat: number; lng: number };
   image: string;
   /**

@@ -301,7 +301,10 @@ export function ProjectDetail({ project, otherProjects, locale }: ProjectDetailP
                 <h2>{copy.transparency}</h2>
               </div>
               <p className="mt-4 text-base leading-7 text-[var(--color-ink)]">
-                <strong>{project.organization}</strong> · {project.municipality}
+                <strong>{project.organization}</strong>
+                {project.organizationAddress ? (
+                  <span className="mt-1 block text-sm text-[var(--color-muted)]">{project.organizationAddress}</span>
+                ) : <> · {project.municipality}</>}
               </p>
               <p className="mt-3 max-w-[58ch] text-sm leading-6 text-[var(--color-muted)]">{copy.transparencyCopy}</p>
             </Surface>

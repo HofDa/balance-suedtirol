@@ -1,5 +1,5 @@
-import type { Locale } from "@/config/site";
-import type { NewsItem, NewsTranslation } from "@/types/news";
+import type { Locale } from "../config/site";
+import type { NewsItem, NewsTranslation } from "../types/news";
 
 /**
  * Neuigkeiten und Veranstaltungen der Plattform. Die Liste ist bewusst kurz:

@@ -1,5 +1,5 @@
-import type { Locale } from "@/config/site";
-import { projects } from "@/data/projects";
+import type { Locale } from "../config/site";
+import { projects } from "./projects";
 
 /**
  * Die Kennzahlen werden aus den Projektdaten gerechnet, nicht gepflegt.

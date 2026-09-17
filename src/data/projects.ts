@@ -18,7 +18,7 @@ export const projects: Project[] = [
     image: "/projects/millander-au-parzelle-mai-2026.webp",
     beforeAfter: {
       before: "/projects/millander-au-heute.webp",
-      after: "/projects/millander-au-vision-v8.webp",
+      after: "/projects/millander-au-vision-v9.webp",
       afterScaleY: 1.108,
       afterAlignment: [
         { source: 0.022222, target: 0.000000 },
@@ -153,7 +153,7 @@ const projectTranslations: Record<Exclude<Locale, "de">, Record<string, Partial<
       organizationAddress: "Casa Walther, Via Sciliar 1, 39100 Bolzano, Alto Adige",
       beforeAfter: {
         before: "/projects/millander-au-heute.webp",
-        after: "/projects/millander-au-vision-v8.webp",
+        after: "/projects/millander-au-vision-v9.webp",
       afterScaleY: 1.108,
       afterAlignment: [
         { source: 0.022222, target: 0.000000 },
@@ -253,7 +253,7 @@ const projectTranslations: Record<Exclude<Locale, "de">, Record<string, Partial<
       organizationAddress: "Waltherhaus, Schlernstraße 1, 39100 Bolzano / Bozen, South Tyrol",
       beforeAfter: {
         before: "/projects/millander-au-heute.webp",
-        after: "/projects/millander-au-vision-v8.webp",
+        after: "/projects/millander-au-vision-v9.webp",
       afterScaleY: 1.108,
       afterAlignment: [
         { source: 0.022222, target: 0.000000 },

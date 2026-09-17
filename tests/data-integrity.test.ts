@@ -5,6 +5,8 @@ import test from "node:test";
 import { projectCategoryIds } from "../src/config/project-categories";
 import { locales, siteConfig } from "../src/config/site";
 import { getTranslations } from "../src/config/translations";
+import { completedProjects } from "../src/data/achievements";
+import { getNewsItems, newsItems } from "../src/data/news";
 import { getProjects, projects } from "../src/data/projects";
 
 const PUBLIC_DIR = path.resolve(process.cwd(), "public");
@@ -125,5 +127,62 @@ test("Hauptnavigation und Übersetzungen sind in allen Sprachen synchron", () =>
         `Locale '${locale}': Navigationseintrag [${index}] darf nicht leer sein`
       );
     }
+  }
+});
+
+// --- Ergänzungen: Sponsorenlogos, Slugs, Neuigkeiten, Übersetzungsschlüssel, Seiten ---
+
+const otherLocales = locales.filter((locale) => locale !== "de");
+
+test("Sponsorenlogos existieren in public/", () => {
+  for (const project of projects) {
+    const logos = [project.mainSponsor?.logo, ...(project.otherSponsors ?? []).map((sponsor) => sponsor.logo)];
+    for (const logo of logos) {
+      if (!logo) continue;
+      assert.ok(fs.existsSync(path.join(PUBLIC_DIR, logo)), `Projekt ${project.slug}: Logo '${logo}' existiert nicht in public/`);
+    }
+  }
+});
+
+test("Projekt-Slugs sind eindeutig und kollidieren nicht mit abgeschlossenen Beispielprojekten", () => {
+  const slugs = projects.map((project) => project.slug);
+  assert.equal(new Set(slugs).size, slugs.length, "doppelter Projekt-Slug");
+  for (const completed of completedProjects) {
+    assert.ok(!slugs.includes(completed.slug), `${completed.slug}: Slug ist zugleich ein laufendes Projekt`);
+  }
+});
+
+test("jede Neuigkeit ist in it und en übersetzt", () => {
+  for (const locale of otherLocales) {
+    const translated = getNewsItems(locale);
+    for (const [index, item] of translated.entries()) {
+      assert.notEqual(item.title, newsItems[index].title, `${item.slug}: Titel auf ${locale} noch deutsch`);
+    }
+  }
+});
+
+test("jedes Navigationsziel hat eine Seite unter src/app/[locale]", () => {
+  for (const item of siteConfig.navigation) {
+    const page = path.join(process.cwd(), "src", "app", "[locale]", item.href.replace(/^\//, ""), "page.tsx");
+    assert.ok(fs.existsSync(page), `${item.href}: keine page.tsx gefunden`);
+  }
+});
+
+test("Übersetzungen haben in allen Sprachen dieselben Schlüssel", () => {
+  // Ein Schlüssel, der nur auf Deutsch existiert, fällt im Typecheck nicht auf,
+  // weil `getTranslations` den Typ der deutschen Fassung zurückgibt.
+  const shape = (value: unknown, prefix = ""): string[] => {
+    if (Array.isArray(value)) return [`${prefix}[]`];
+    if (value && typeof value === "object") {
+      return Object.entries(value).flatMap(([key, child]) => shape(child, prefix ? `${prefix}.${key}` : key));
+    }
+    return [prefix];
+  };
+  const reference = shape(getTranslations("de")).sort();
+  for (const locale of otherLocales) {
+    const keys = shape(getTranslations(locale)).sort();
+    const missing = reference.filter((key) => !keys.includes(key));
+    const extra = keys.filter((key) => !reference.includes(key));
+    assert.deepEqual({ missing, extra }, { missing: [], extra: [] }, `${locale}: Schlüssel weichen von de ab`);
   }
 });

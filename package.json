@@ -11,9 +11,10 @@
     "build:pages": "next build && node scripts/create-pages-redirect.mjs",
     "start": "next start",
     "lint": "eslint .",
+    "test": "node scripts/run-all-tests.mjs",
     "test:calculator": "node scripts/run-house-calculator-tests.mjs",
     "typecheck": "tsc --noEmit",
-    "check": "npm run test:calculator && npm run typecheck && npm run lint && npm run build"
+    "check": "npm test && npm run typecheck && npm run lint && npm run build"
   },
   "dependencies": {
     "class-variance-authority": "0.7.1",

@@ -1,4 +1,4 @@
-import type { ProjectCategoryId } from "@/config/project-categories";
+import type { ProjectCategoryId } from "../config/project-categories";
 
 export type Sponsor = {
   name: string;

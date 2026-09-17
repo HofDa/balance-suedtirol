@@ -1,5 +1,5 @@
-import type { Project, ProjectCardData, ProjectListItem } from "@/types/project";
-import type { Locale } from "@/config/site";
+import type { Project, ProjectCardData, ProjectListItem } from "../types/project";
+import type { Locale } from "../config/site";
 
 export const projects: Project[] = [
   {
@@ -17,7 +17,7 @@ export const projects: Project[] = [
     image: "/projects/millander-au-parzelle-mai-2026.webp",
     beforeAfter: {
       before: "/projects/millander-au-heute.webp",
-      after: "/projects/millander-au-vision-v7.webp",
+      after: "/projects/millander-au-vision-v8.webp",
       beforeLabel: "Heute",
       afterLabel: "Vision",
       caption:
@@ -265,7 +265,7 @@ const projectTranslations: Record<Exclude<Locale, "de">, Record<string, Partial<
       organization: "Stiftung Landschaft",
       beforeAfter: {
         before: "/projects/millander-au-heute.webp",
-        after: "/projects/millander-au-vision-v7.webp",
+        after: "/projects/millander-au-vision-v8.webp",
         beforeLabel: "Oggi",
         afterLabel: "Visione",
         caption: "La Millander Au oggi dall’alto e come visualizzazione dopo l’ampliamento previsto: stagni, prati umidi e siepi sull’ex frutteto."
@@ -407,7 +407,7 @@ const projectTranslations: Record<Exclude<Locale, "de">, Record<string, Partial<
       organization: "Stiftung Landschaft",
       beforeAfter: {
         before: "/projects/millander-au-heute.webp",
-        after: "/projects/millander-au-vision-v7.webp",
+        after: "/projects/millander-au-vision-v8.webp",
         beforeLabel: "Today",
         afterLabel: "Vision",
         caption: "The Millander Au today from the air and as a visualisation after the planned expansion: ponds, wet meadows and hedges on the former apple orchard."

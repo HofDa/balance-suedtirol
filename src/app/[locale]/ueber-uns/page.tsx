@@ -28,9 +28,9 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 }
 
 /**
- * Die Seite zur Frage „Wer steht dahinter?“. Das Team, die beiden Initiativen
- * und die Arbeitsregeln. Namen, Fotos und Schwerpunkte sind noch Platzhalter
- * und als solche sichtbar markiert – wie die Musterzitate im Hero.
+ * Die Seite zur Frage „Wer steht dahinter?“. Das Team als Gruppe, die beiden
+ * Initiativen und die Arbeitsregeln. Einzelne Personen werden bewusst nicht
+ * genannt.
  */
 export default async function AboutPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
@@ -55,8 +55,7 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
             </p>
           </div>
 
-          {/* ② Das Team – gemeinsamer Text, darunter die Personen. Namen, Fotos
-              und Schwerpunkte sind Platzhalter und als solche markiert. */}
+          {/* ② Das Team – als Gruppe beschrieben, ohne einzelne Personen. */}
           <Surface as="section" level="sheet" className="mt-12 sm:p-8">
             <div className="grid gap-8 lg:grid-cols-[0.8fr_1.2fr] lg:gap-12">
               <div>
@@ -73,22 +72,6 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
                 ))}
               </div>
             </div>
-            <ul className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-              {[0, 1, 2, 3].map((index) => (
-                <li key={index} className="flex items-center gap-4 rounded-[var(--radius-lg)] border border-[var(--color-line)] bg-[var(--color-paper)] p-4">
-                  <div className="flex size-14 shrink-0 items-center justify-center rounded-full bg-[var(--color-sage)] text-[var(--color-forest)]" aria-hidden>
-                    <Leaf className="size-5" />
-                  </div>
-                  <div className="min-w-0">
-                    <p className="truncate font-bold text-[var(--color-ink)]">{t.teamMemberName}</p>
-                    <p className="text-sm text-[var(--color-muted)]">{t.teamMemberRole}</p>
-                  </div>
-                </li>
-              ))}
-            </ul>
-            <p className="mt-4 inline-block rounded-[var(--radius-sm)] bg-[var(--color-ink)]/6 px-2 py-1 text-[11px] font-bold uppercase tracking-[0.12em] text-[var(--color-muted)]">
-              {t.teamPlaceholder}
-            </p>
           </Surface>
         </Container>
       </section>

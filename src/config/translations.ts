@@ -185,22 +185,19 @@ const translations = {
     about: {
       eyebrow: "Wer dahinter steht",
       title: "Artenvielfalt dort erhalten, wo wir leben.",
-      lead: "b*alance ist aus der Arbeit vieler Südtiroler Biolog:innen entstanden, die seit Jahren an einer Frage arbeiten: Wie lässt sich die Artenvielfalt in der eigenen Gemeinde bewahren und fördern, auf der Wiese hinterm Hof und am Bach im Ort?",
+      lead: "b*alance ist aus der Naturschutzarbeit in Südtirol entstanden – aus einer Frage, die sich dort seit Jahren stellt: Wie lässt sich die Artenvielfalt in der eigenen Gemeinde bewahren und fördern, auf der Wiese hinterm Hof und am Bach im Ort?",
       teamEyebrow: "Das Team",
-      teamTitle: "Biolog:innen aus Südtirol, die in der Fläche arbeiten.",
+      teamTitle: "Ein Team aus Ökologie und Naturschutz in Südtirol.",
       teamBio: [
-        "Alle haben Biologie studiert, mit Schwerpunkt Ökologie und Naturschutz, und arbeiten seit Jahren in Südtirol. Sie kartieren Trockenrasen, Feuchtgebiete, Hecken und Streuobstwiesen, planen und begleiten Pflegemaßnahmen und arbeiten dabei mit Gemeinden, Bäuerinnen und Bauern, Schulen und Naturschutzgruppen zusammen.",
-        "Was sie verbindet: Biodiversität lässt sich nur dort erhalten, wo sie vorkommt. Deshalb geht es auf dieser Plattform um konkrete Flächen in Südtirol."
+        "b*alance wird von einem Team mit Hintergrund in Ökologie und Naturschutz getragen, das in Südtirol draußen unterwegs ist: Es kartiert Trockenrasen, Feuchtgebiete, Hecken und Streuobstwiesen, plant Pflegemaßnahmen und setzt sie gemeinsam mit Gemeinden, Bäuerinnen und Bauern, Schulen und Naturschutzgruppen um.",
+        "Gemeinsamer Ausgangspunkt: Biodiversität lässt sich nur dort erhalten, wo sie vorkommt. Deshalb geht es auf dieser Plattform um konkrete Flächen in Südtirol – mit Adresse, Trägerorganisation und Monitoring."
       ],
-      teamMemberName: "Name Platzhalter",
-      teamMemberRole: "Biolog:in",
-      teamPlaceholder: "Platzhalter. Namen, Fotos und Schwerpunkte folgen.",
       orgsEyebrow: "Zwei Initiativen, ein Ziel",
       orgsTitle: "b*nature und b*coop",
       orgs: [
         {
           name: "b*nature",
-          role: "Naturschutz in der Fläche",
+          role: "Naturschutz vor Ort",
           copy: "b*nature plant und führt Biodiversitätsprojekte in Südtirol durch: Biotoppflege mit Schaf- und Ziegenherden, Erhebungen zu gefährdeten Arten, Bildungsarbeit mit Gemeinden und Schulen. Auf dieser Plattform ist b*nature Trägerin der Projekte „Meine Gemeinde, meine Natur“ und „Vorfahrt für den Igel“.",
           cta: "Projekte von b*nature"
         },
@@ -583,16 +580,13 @@ const translations = {
     about: {
       eyebrow: "Chi c’è dietro",
       title: "Conservare la biodiversità là dove viviamo.",
-      lead: "b*alance nasce dal lavoro di molte biologhe e biologi altoatesini che da anni lavorano a una domanda: come conservare e favorire la varietà delle specie nel proprio comune, sul prato dietro il maso e lungo il torrente in paese?",
+      lead: "b*alance nasce dal lavoro di tutela della natura in Alto Adige – da una domanda che lì si pone da anni: come conservare e favorire la varietà delle specie nel proprio comune, sul prato dietro il maso e lungo il torrente in paese?",
       teamEyebrow: "Il team",
-      teamTitle: "Biologhe e biologi dell’Alto Adige che lavorano sul campo.",
+      teamTitle: "Un team di ecologia e tutela della natura in Alto Adige.",
       teamBio: [
-        "Tutte e tutti hanno studiato biologia, con focus su ecologia e conservazione della natura, e lavorano da anni in Alto Adige. Mappano prati aridi, zone umide, siepi e frutteti tradizionali, pianificano e seguono interventi di cura e collaborano con comuni, contadine e contadini, scuole e gruppi naturalistici.",
-        "Ciò che li unisce: la biodiversità si conserva solo dove si trova. Per questo su questa piattaforma si parla di superfici concrete in Alto Adige."
+        "b*alance è portata avanti da un team con background in ecologia e tutela della natura che lavora sul territorio altoatesino: mappa prati aridi, zone umide, siepi e frutteti tradizionali, pianifica interventi di cura e li realizza insieme a comuni, contadine e contadini, scuole e gruppi di tutela della natura.",
+        "Punto di partenza comune: la biodiversità si conserva solo dove si trova. Per questo su questa piattaforma si parla di aree concrete in Alto Adige – con indirizzo, ente promotore e monitoraggio."
       ],
-      teamMemberName: "Nome segnaposto",
-      teamMemberRole: "Biologa/biologo",
-      teamPlaceholder: "Segnaposto. Nomi, foto e specializzazioni seguiranno.",
       orgsEyebrow: "Due iniziative, un obiettivo",
       orgsTitle: "b*nature e b*coop",
       orgs: [
@@ -981,16 +975,13 @@ const translations = {
     about: {
       eyebrow: "Who is behind it",
       title: "Preserving biodiversity where we live.",
-      lead: "b*alance grew out of the work of many South Tyrolean biologists who have spent years on one question: how can the variety of species be preserved and enhanced in their own municipality, on the meadow behind the farm and along the stream in the village?",
+      lead: "b*alance grew out of nature conservation work in South Tyrol – out of a question that has been asked there for years: how can the variety of species be preserved and enhanced in their own municipality, on the meadow behind the farm and along the stream in the village?",
       teamEyebrow: "The team",
-      teamTitle: "Biologists from South Tyrol who work in the field.",
+      teamTitle: "A team in ecology and nature conservation in South Tyrol.",
       teamBio: [
-        "All of them studied biology with a focus on ecology and nature conservation and have worked in South Tyrol for years. They map dry grasslands, wetlands, hedgerows and traditional orchards, plan and accompany management measures, and work with municipalities, farmers, schools and conservation groups.",
-        "What they share: biodiversity can only be preserved where it occurs. That is why this platform is about concrete sites in South Tyrol."
+        "b*alance is run by a team with a background in ecology and nature conservation that works outdoors across South Tyrol: it maps dry grasslands, wetlands, hedges and traditional orchards, plans management measures and carries them out together with municipalities, farmers, schools and conservation groups.",
+        "Shared starting point: biodiversity can only be preserved where it occurs. That is why this platform is about specific sites in South Tyrol – with an address, a project organisation and monitoring."
       ],
-      teamMemberName: "Name placeholder",
-      teamMemberRole: "Biologist",
-      teamPlaceholder: "Placeholder. Names, photos and specialisms to follow.",
       orgsEyebrow: "Two initiatives, one goal",
       orgsTitle: "b*nature and b*coop",
       orgs: [

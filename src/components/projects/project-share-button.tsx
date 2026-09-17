@@ -104,6 +104,7 @@ export function ProjectShareButton({ copy, title, description, image }: { copy: 
   ];
 
   return (
+    <div>
     <details ref={detailsRef} className="relative mt-3">
       <summary onClick={share} className={`flex min-h-11 cursor-pointer list-none items-center justify-center gap-2 rounded-[var(--radius-md)] border border-[var(--color-forest)]/30 bg-white px-4 py-3 text-sm font-bold text-[var(--color-forest)] transition hover:bg-[var(--color-sage)] [&::-webkit-details-marker]:hidden ${focusRing}`}>
         <Share2 className="size-4" aria-hidden />
@@ -135,5 +136,9 @@ export function ProjectShareButton({ copy, title, description, image }: { copy: 
         {status === "failed" && <input ref={inputRef} readOnly value={manualText} aria-label={copy.copyLink} className={`mt-2 w-full rounded border border-[var(--color-line)] p-2 text-xs ${focusRing}`} />}
       </div>
     </details>
+    <button type="button" onClick={() => { setInstagramOpen(true); setStatus(null); if (detailsRef.current) detailsRef.current.open = true; }} aria-label={copy.downloadStory} className={`mt-2 inline-flex min-h-11 items-center text-xs font-semibold text-[var(--color-forest)] underline underline-offset-4 hover:text-[var(--color-ink)] ${focusRing}`}>
+      Instagram Story
+    </button>
+    </div>
   );
 }

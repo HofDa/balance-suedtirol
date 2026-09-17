@@ -1,4 +1,8 @@
 import type { MetadataRoute } from "next";
+import { withBasePath } from "@/lib/public-path";
+
+// Statischer Export (`output: "export"` für GitHub Pages) verlangt das ausdrücklich.
+export const dynamic = "force-static";
 
 export default function robots(): MetadataRoute.Robots {
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://balance-suedtirol.it";
@@ -9,6 +13,6 @@ export default function robots(): MetadataRoute.Robots {
       allow: "/",
       disallow: ["/api/"]
     },
-    sitemap: `${baseUrl}/sitemap.xml`
+    sitemap: `${baseUrl}${withBasePath("/sitemap.xml")}`
   };
 }

@@ -21,13 +21,13 @@ export function Header({ locale }: { locale: Locale }) {
           className={`inline-flex min-h-11 shrink-0 items-center font-semibold tracking-[-0.03em] transition-transform duration-200 ease-out hover:scale-[1.02] ${focusRing}`}
         >
           <Image
-            src={withBasePath("/balance-logo-transparent.png")}
+            src={withBasePath("/balance-logo-harmonized.svg")}
             alt="b*alance"
-            width={1448}
-            height={1086}
+            width={1280}
+            height={610}
             priority
             sizes="112px"
-            className="h-16 w-28 object-cover"
+            className="h-16 w-28 object-contain"
           />
         </Link>
 

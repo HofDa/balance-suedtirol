@@ -17,7 +17,12 @@ const DWELL_MS = 7000;
  * tun hat (Zeiger darüber, Tastaturfokus darin, Tab im Hintergrund), und bei
  * `prefers-reduced-motion: reduce` bleibt er ganz aus: Ein Text, der sich unter
  * dem Lesen austauscht, ist dort keine Zierde, sondern ein Hindernis.
+ *
+ * Unter `lg` gibt es die Ebene nicht: Dort stünde sie nicht über dem Foto,
+ * sondern unter den Knöpfen im Textfluss und machte den Hero höher als seine
+ * Überschrift. Die Zitate bleiben dem Desktop vorbehalten.
  */
+const ROTATE_QUERY = "(min-width: 1024px)";
 export function HeroQuotes({ locale }: { locale: Locale }) {
   const t = getTranslations(locale).hero;
   const [index, setIndex] = useState(0);
@@ -27,6 +32,7 @@ export function HeroQuotes({ locale }: { locale: Locale }) {
   useEffect(() => {
     if (paused) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (!window.matchMedia(ROTATE_QUERY).matches) return;
 
     const timer = window.setTimeout(() => {
       setIndex((current) => (current + 1) % heroQuotes.length);
@@ -54,29 +60,30 @@ export function HeroQuotes({ locale }: { locale: Locale }) {
       onBlur={(event) => {
         if (!containerRef.current?.contains(event.relatedTarget as Node | null)) setPaused(false);
       }}
-      className="hero-reveal hero-reveal-quote mt-8 w-full max-w-[26rem] sm:mt-10 lg:absolute lg:bottom-16 lg:right-0 lg:mt-0"
+      className="hero-reveal hero-reveal-quote hidden w-full max-w-[26rem] lg:absolute lg:bottom-16 lg:right-0 lg:block"
     >
       <figure className="relative overflow-hidden rounded-[var(--radius-lg)] border border-white/15 bg-[rgba(18,44,35,0.42)] p-4 shadow-[var(--shadow-on-photo)] backdrop-blur-md sm:p-6">
         {/* Das Anführungszeichen ist Textur, keine Information. */}
         <span
           aria-hidden
-          className="pointer-events-none absolute -right-1 -top-6 font-display text-[7rem] leading-none text-white/8"
+          className="pointer-events-none absolute -right-1 -top-6 hidden font-display text-[7rem] leading-none text-white/8 lg:block"
         >
           &rdquo;
         </span>
 
         <blockquote key={quote.id} className="hero-quote-body relative">
-          <p className="font-display text-balance text-[length:var(--text-body)] leading-[1.45] text-white sm:text-[length:var(--text-body-lg)]">
+          <p className="font-display text-balance text-[15px] leading-[1.45] text-white sm:text-[length:var(--text-body-lg)]">
             {quote.text[locale]}
           </p>
-          <figcaption className="mt-4 text-xs leading-5">
+          <figcaption className="mt-3 text-xs leading-5 lg:mt-4">
             <span className="font-bold text-[var(--color-moss)]">{quote.author}</span>
-            <span className="block text-white/70">{quote.role[locale]}</span>
+            <span className="text-white/70"> · {quote.role[locale]}</span>
           </figcaption>
         </blockquote>
 
-        <div className="mt-5 flex items-center justify-between gap-4">
-          <div className="flex items-center gap-2">
+        {/* Wahlleiste nur dort, wo der Wechsel läuft; die Mockup-Marke bleibt überall. */}
+        <div className={`mt-4 flex items-center justify-between gap-4 lg:mt-5 ${heroQuotesAreMockup ? "" : "hidden lg:flex"}`}>
+          <div className="hidden items-center gap-2 lg:flex">
             {heroQuotes.map((item, position) => (
               <button
                 key={item.id}

@@ -30,7 +30,10 @@ export function Hero({ locale }: { locale: Locale }) {
             id="hero-title"
             className="font-display hero-reveal hero-reveal-headline mt-4 text-balance text-[length:var(--text-display)] leading-[var(--leading-display)] text-white"
           >
-            {t.title} <span className="block text-[var(--color-moss)]">{t.accent}</span>
+            {/* Mobil läuft die Akzentzeile im Satz mit: Als eigener Block bricht
+                sie bei 390 px in „Grundlage / unseres Lebens.“ um, und die
+                Überschrift wird vierzeilig. */}
+            {t.title} <span className="text-[var(--color-moss)] sm:block">{t.accent}</span>
           </h1>
 
           {/* Heller Text auf dunklem Grund: eine Spur mehr Durchschuss und

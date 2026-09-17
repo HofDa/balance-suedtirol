@@ -1,4 +1,5 @@
 import Link from "next/link";
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import {
   ArrowRight,
@@ -9,10 +10,11 @@ import {
   Lightbulb
 } from "lucide-react";
 import { Container } from "@/components/ui/container";
-import { isLocale, type Locale } from "@/config/site";
+import { isLocale, locales, type Locale } from "@/config/site";
 import { Label } from "@/components/ui/label";
 import { Surface } from "@/components/ui/surface";
 import { focusRing } from "@/components/ui/focus";
+import { withBasePath } from "@/lib/public-path";
 
 const stepIcons = [Lightbulb, Leaf, ClipboardList, ChartNoAxesCombined, FileCheck2];
 
@@ -135,6 +137,22 @@ const pageCopy: Record<
     note: "B*alance provides the framework; technical responsibility remains with project owners and their partners."
   }
 };
+
+const route = "/projekt-einreichen";
+
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+  const { locale } = await params;
+  if (!isLocale(locale)) return {};
+  const copy = pageCopy[locale];
+  return {
+    title: copy.eyebrow,
+    description: copy.copy,
+    alternates: {
+      canonical: withBasePath(`/${locale}${route}`),
+      languages: Object.fromEntries(locales.map((language) => [language, withBasePath(`/${language}${route}`)]))
+    }
+  };
+}
 
 export default async function SubmitProjectPage({
   params

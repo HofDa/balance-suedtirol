@@ -1,12 +1,30 @@
 import type { Metadata } from "next";
 import { Container } from "@/components/ui/container";
-import type { Locale } from "@/config/site";
+import { isLocale, locales, type Locale } from "@/config/site";
 import { Surface } from "@/components/ui/surface";
+import { withBasePath } from "@/lib/public-path";
 
-export const metadata: Metadata = {
-  title: "Impressum | b*alance Südtirol",
-  description: "Rechtliche Informationen und Impressum der Plattform b*alance Südtirol."
+const route = "/impressum";
+
+const impressumMeta: Record<Locale, { title: string; description: string }> = {
+  de: { title: "Impressum", description: "Rechtliche Informationen und Impressum der Plattform b*alance Südtirol." },
+  it: { title: "Note legali", description: "Informazioni legali e colophon della piattaforma b*alance Alto Adige." },
+  en: { title: "Legal Notice", description: "Legal information and colophon of the b*alance South Tyrol platform." }
 };
+
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+  const { locale } = await params;
+  if (!isLocale(locale)) return {};
+  const meta = impressumMeta[locale];
+  return {
+    title: meta.title,
+    description: meta.description,
+    alternates: {
+      canonical: withBasePath(`/${locale}${route}`),
+      languages: Object.fromEntries(locales.map((language) => [language, withBasePath(`/${language}${route}`)]))
+    }
+  };
+}
 
 export default async function ImpressumPage({
   params
@@ -16,7 +34,7 @@ export default async function ImpressumPage({
   await params;
 
   return (
-    <main className="py-16 sm:py-24">
+    <div className="py-16 sm:py-24">
       <Container className="max-w-3xl">
         <h1 className="font-display text-[length:var(--text-display)] leading-[var(--leading-display)] text-[var(--color-ink)]">
           Impressum
@@ -29,8 +47,9 @@ export default async function ImpressumPage({
           <section>
             <h2 className="mb-2 text-[length:var(--text-title)] font-semibold leading-[var(--leading-title)] text-[var(--color-ink)]">Herausgeber & Plattformbetreiber</h2>
             <p className="font-medium">b*alance Südtirol – Initiativgruppe Biodiversität</p>
-            <p>Dr.-Julius-Perathoner-Straße 12</p>
-            <p>39100 Bozen (BZ), Südtirol – Italien</p>
+            <p>Rechtssitz von b*nature: derzeit bei b*coop</p>
+            <p>Vintlerstraße 34</p>
+            <p>39042 Brixen (BZ), Südtirol – Italien</p>
           </section>
 
           <section>
@@ -54,6 +73,6 @@ export default async function ImpressumPage({
           </section>
         </Surface>
       </Container>
-    </main>
+    </div>
   );
 }

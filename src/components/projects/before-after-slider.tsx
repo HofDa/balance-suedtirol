@@ -18,11 +18,17 @@ interface BeforeAfterSliderProps {
 
 const REST_POSITION = 50;
 
+const labelClass =
+  "whitespace-nowrap rounded-full bg-[var(--color-ink)]/75 px-3 py-1 text-xs font-bold uppercase tracking-wide text-white backdrop-blur-sm";
+
 /**
- * Zwei Fotos vom selben Standpunkt übereinander; das Nachher-Bild wird an der
- * Griffposition abgeschnitten. Beim ersten Erscheinen fährt der Griff einmal
- * von links in die Mitte, damit klar ist, dass sich hier etwas bewegen lässt.
- * Danach gehört er dem Besucher: Ziehen mit Maus/Finger oder Pfeiltasten.
+ * Zwei Fotos vom selben Standpunkt übereinander; links vom Griff liegt das
+ * Vorher-Bild, rechts das Nachher-Bild. Die senkrechte Trennlinie folgt dem Griff,
+ * die Labels bleiben bei ihrer Bildhälfte und werden mit ihr abgeschnitten.
+ * Beim ersten Erscheinen zeigt der Rahmen das Vorher-Bild, dann fährt der Griff
+ * von rechts in die Mitte und deckt das Nachher-Bild auf – so ist klar, dass
+ * sich hier etwas bewegen lässt. Danach gehört er dem Besucher: Ziehen mit
+ * Maus/Finger oder Pfeiltasten.
  */
 export function BeforeAfterSlider({
   before,
@@ -34,7 +40,7 @@ export function BeforeAfterSlider({
   priority = false
 }: BeforeAfterSliderProps) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [position, setPosition] = useState(0);
+  const [position, setPosition] = useState(100);
   // Ref statt State: Der Effekt darf nicht neu laufen, sobald die Einführung
   // beginnt – sonst stoppt sein Cleanup die eigene Animation nach dem ersten Frame.
   const hasIntroduced = useRef(false);
@@ -49,8 +55,9 @@ export function BeforeAfterSlider({
       setPosition(REST_POSITION);
       return;
     }
-    const controls = animate(0, REST_POSITION, {
+    const controls = animate(100, REST_POSITION, {
       duration: 1.4,
+      delay: 0.3,
       ease: [0.22, 1, 0.36, 1],
       onUpdate: (value) => setPosition(value)
     });
@@ -86,35 +93,44 @@ export function BeforeAfterSlider({
     >
       <div className={`relative ${aspectClassName}`}>
         <Image
-          src={withBasePath(before)}
-          alt=""
+          src={withBasePath(after)}
+          alt={alt}
           fill
           priority={priority}
           sizes="(min-width: 1280px) 1180px, 100vw"
           className="object-cover"
           draggable={false}
         />
+        {/* Das Nachher-Label sitzt in einer Ebene, die links am Griff endet –
+            so verschwindet es, sobald der Griff darüberfährt, statt über dem
+            falschen Bild zu stehen. */}
+        <div
+          className="pointer-events-none absolute inset-0"
+          style={{ clipPath: `inset(0 0 0 ${position}%)` }}
+          aria-hidden
+        >
+          <span className={`absolute right-4 top-4 ${labelClass}`}>{labels.after}</span>
+        </div>
+
         <div
           className="absolute inset-0"
-          style={{ clipPath: `inset(0 ${100 - position}% 0 0)` }}
+          style={{
+            clipPath: `inset(0 ${100 - position}% 0 0)`
+          }}
         >
           <Image
-            src={withBasePath(after)}
-            alt={alt}
+            src={withBasePath(before)}
+            alt=""
             fill
             priority={priority}
             sizes="(min-width: 1280px) 1180px, 100vw"
             className="object-cover"
             draggable={false}
           />
+          <span className={`pointer-events-none absolute left-4 top-4 ${labelClass}`} aria-hidden>
+            {labels.before}
+          </span>
         </div>
-
-        <span className="pointer-events-none absolute left-4 top-4 rounded-full bg-[var(--color-ink)]/75 px-3 py-1 text-xs font-bold uppercase tracking-wide text-white backdrop-blur-sm">
-          {labels.after}
-        </span>
-        <span className="pointer-events-none absolute right-4 top-4 rounded-full bg-[var(--color-ink)]/75 px-3 py-1 text-xs font-bold uppercase tracking-wide text-white backdrop-blur-sm">
-          {labels.before}
-        </span>
 
         {/* Trennlinie mit Griff; die Position ist der eigentliche Zustand. */}
         <div
@@ -143,7 +159,7 @@ export function BeforeAfterSlider({
             setPosition(Number(event.target.value));
           }}
           aria-label={labels.slider}
-          aria-valuetext={`${Math.round(position)} % ${labels.after}`}
+          aria-valuetext={`${Math.round(position)} % ${labels.before}`}
           className="absolute inset-x-0 bottom-0 h-11 w-full cursor-ew-resize opacity-0 focus-visible:opacity-100 focus-visible:accent-[var(--color-forest)]"
         />
       </div>

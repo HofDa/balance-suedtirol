@@ -32,3 +32,7 @@ pnpm-debug.log*
 # referenziert sie — sie liegen nur bei, bis geklärt ist, ob sie noch gebraucht
 # werden. Siehe assets-source/README.md.
 /assets-source/house/processed
+
+# Generator-Ausgaben & temporäre Prompts
+/output
+

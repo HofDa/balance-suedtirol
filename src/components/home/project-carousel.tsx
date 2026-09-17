@@ -17,7 +17,15 @@ import { cn } from "@/lib/utils";
  * Bei drei Projekten heißt das: mobil und auf Tablets blättert man, auf dem
  * Desktop stehen alle drei nebeneinander und es gibt keine Bedienung, die
  * nichts tut. Kommt ein viertes Projekt dazu, schaltet sie sich von selbst zu.
+ *
+ * Solange geblättert werden kann, rückt die Spur alle paar Sekunden von selbst
+ * eine Karte weiter und springt am Ende an den Anfang zurück. Sie hält an,
+ * sobald jemand mit ihr zu tun hat (Zeiger darüber, Finger darauf, Fokus darin),
+ * wenn sie nicht im Bild ist oder der Tab im Hintergrund liegt – und bleibt bei
+ * `prefers-reduced-motion` ganz stehen.
  */
+
+const AUTO_ADVANCE_MS = 6000;
 
 /** Kartenbreite der Spur — eine Karte mobil, zwei ab `sm`, drei ab `lg`. */
 export const carouselItemClass =
@@ -34,6 +42,8 @@ export function ProjectCarousel({
   const [canScroll, setCanScroll] = useState(false);
   const [atStart, setAtStart] = useState(true);
   const [atEnd, setAtEnd] = useState(false);
+  const [paused, setPaused] = useState(false);
+  const [inView, setInView] = useState(false);
 
   const sync = useCallback(() => {
     const track = trackRef.current;
@@ -55,7 +65,7 @@ export function ProjectCarousel({
     return () => observer.disconnect();
   }, [sync]);
 
-  const scrollByCard = (direction: 1 | -1) => {
+  const scrollByCard = useCallback((direction: 1 | -1) => {
     const track = trackRef.current;
     if (!track) return;
     const items = track.children;
@@ -66,7 +76,34 @@ export function ProjectCarousel({
         ? (items[1] as HTMLElement).offsetLeft - (items[0] as HTMLElement).offsetLeft
         : track.clientWidth;
     track.scrollBy({ left: direction * step, behavior: "smooth" });
-  };
+  }, []);
+
+  useEffect(() => {
+    const track = trackRef.current;
+    if (!track) return;
+    const observer = new IntersectionObserver(([entry]) => setInView(entry.isIntersecting), { threshold: 0.5 });
+    observer.observe(track);
+    const onVisibility = () => setPaused(document.hidden);
+    document.addEventListener("visibilitychange", onVisibility);
+    return () => {
+      observer.disconnect();
+      document.removeEventListener("visibilitychange", onVisibility);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!canScroll || paused || !inView) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const timer = window.setTimeout(() => {
+      const track = trackRef.current;
+      if (!track) return;
+      if (atEnd) track.scrollTo({ left: 0, behavior: "smooth" });
+      else scrollByCard(1);
+    }, AUTO_ADVANCE_MS);
+    return () => window.clearTimeout(timer);
+    // `atStart` gehört dazu: Nach dem Rücksprung ändert sich sonst kein Wert
+    // und die Uhr würde nicht neu gestellt.
+  }, [canScroll, paused, inView, atEnd, atStart, scrollByCard]);
 
   return (
     /* `overflow-x` klemmt auch die Senkrechte ab. Die Spur braucht deshalb
@@ -74,7 +111,17 @@ export function ProjectCarousel({
        2 px Versatz) und den oberen Rand des Hover-Schattens. Außen holt das
        negative Maß den Abstand wieder herein, damit der Abschnittsrhythmus
        derselbe bleibt wie zuvor im Raster. */
-    <div className="-mt-3">
+    <div
+      className="-mt-3"
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+      onTouchStart={() => setPaused(true)}
+      onTouchEnd={() => setPaused(false)}
+      onFocus={() => setPaused(true)}
+      onBlur={(event) => {
+        if (!event.currentTarget.contains(event.relatedTarget as Node | null)) setPaused(false);
+      }}
+    >
       <ul
         ref={trackRef}
         role="list"

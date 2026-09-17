@@ -178,7 +178,7 @@ export function TourAppShell({ locale }: { locale: Locale }) {
       </div>
 
       {/* Mobil obere Hälfte, auf dem Desktop linke Spalte: die Szene */}
-      <main className="relative flex h-full min-h-0 min-w-0 items-center justify-center overflow-hidden border-b border-[var(--color-line)] md:col-start-1 md:row-span-2 md:row-start-1 md:border-b-0 md:border-r">
+      <div className="relative flex h-full min-h-0 min-w-0 items-center justify-center overflow-hidden border-b border-[var(--color-line)] md:col-start-1 md:row-span-2 md:row-start-1 md:border-b-0 md:border-r">
         <AnimatePresence mode="wait" initial={false}>
           {state.view === "house" ? (
             <motion.div
@@ -214,7 +214,7 @@ export function TourAppShell({ locale }: { locale: Locale }) {
             </motion.div>
           ) : null}
         </AnimatePresence>
-      </main>
+      </div>
 
       {/* Mobil untere Hälfte, auf dem Desktop rechte Spalte: Frage, Werte und Aktion */}
       <aside

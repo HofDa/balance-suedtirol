@@ -34,12 +34,13 @@ export function HeroActions({ locale }: { locale: Locale }) {
         </Link>
       </div>
 
-      <p className="mt-5 flex max-w-2xl flex-col gap-1 border-l border-white/30 pl-3 text-xs leading-5 text-white/80 max-[359px]:mt-3 max-[359px]:text-[0.7rem] max-[359px]:leading-4 sm:flex-row sm:items-center sm:gap-2">
-        <span>{t.trust}</span>
-        <span className="hidden sm:inline" aria-hidden>·</span>
+      {/* Eine Zeile, die umbrechen darf – kein Block mit Kante, der mobil
+          als drittes Element unter den Knöpfen konkurriert. */}
+      <p className="mt-5 max-w-2xl text-xs leading-6 text-white/80 max-[359px]:mt-3 max-[359px]:text-[0.7rem]">
+        <span>{t.trust}</span>{" "}
         <Link
           href={`/${locale}/methodik`}
-          className={`inline-flex min-h-11 shrink-0 items-center font-semibold text-[var(--color-moss)] underline decoration-white/30 underline-offset-4 hover:text-white ${focusRingOnDark} sm:min-h-0`}
+          className={`inline-flex min-h-11 items-center font-semibold text-[var(--color-moss)] underline decoration-white/30 underline-offset-4 hover:text-white ${focusRingOnDark} sm:ml-2 sm:min-h-0`}
         >
           {t.methodology}
         </Link>

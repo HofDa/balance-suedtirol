@@ -6,15 +6,26 @@ import { Container } from "@/components/ui/container";
 import { Label } from "@/components/ui/label";
 import { Surface } from "@/components/ui/surface";
 import { SectionHeading } from "@/components/ui/section-heading";
-import { isLocale } from "@/config/site";
+import { isLocale, locales } from "@/config/site";
 import { getTranslations } from "@/config/translations";
 import { focusRing, focusRingOnDark } from "@/components/ui/focus";
+import { withBasePath } from "@/lib/public-path";
 
-export const metadata: Metadata = {
-  title: "Über uns | b*alance Südtirol",
-  description:
-    "Wer hinter b*alance steht: Südtiroler Biolog:innen, b*nature und b*coop – und wie wir arbeiten."
-};
+const route = "/ueber-uns";
+
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+  const { locale } = await params;
+  if (!isLocale(locale)) return {};
+  const t = getTranslations(locale).about;
+  return {
+    title: t.eyebrow,
+    description: t.lead,
+    alternates: {
+      canonical: withBasePath(`/${locale}${route}`),
+      languages: Object.fromEntries(locales.map((language) => [language, withBasePath(`/${language}${route}`)]))
+    }
+  };
+}
 
 /**
  * Die Seite zur Frage „Wer steht dahinter?“. Das Team, die beiden Initiativen

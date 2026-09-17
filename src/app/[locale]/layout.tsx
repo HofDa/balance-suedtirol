@@ -27,11 +27,14 @@ const metadataByLocale: Record<Locale, { title: string; description: string }> =
   }
 };
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://balance-suedtirol.it";
+
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params;
   const meta = metadataByLocale[isLocale(locale) ? locale : "de"];
 
   return {
+    metadataBase: new URL(siteUrl),
     title: { default: meta.title, template: "%s | b*alance" },
     description: meta.description,
     alternates: {

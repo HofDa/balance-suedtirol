@@ -32,8 +32,14 @@ export type Project = {
   beforeAfter?: {
     before: string;
     after: string;
+    /** Beschriftung der Bildhälften, z. B. Aufnahmedaten; Fallback ist „Vorher“/„Nachher“. */
+    beforeLabel?: string;
+    afterLabel?: string;
     caption?: string;
-    /** Kennzeichnet ein bearbeitetes Platzhalterpaar statt echter Vorher-Fotos. */
+    /**
+     * Kennzeichnet ein bearbeitetes Platzhalterpaar statt echter Vorher-Fotos.
+     * Solche Paare zeigt die Projektseite nicht; sie behält das Einzelbild als Hero.
+     */
     isPlaceholder?: boolean;
   };
   /** Weitere Aufnahmen aus dem Projektgebiet; `credit` nur, wo eine Namensnennung gewünscht ist. */

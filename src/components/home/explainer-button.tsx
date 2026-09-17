@@ -15,6 +15,10 @@ export type ExplainerSection = {
 
 export type ExplainerCopy = {
   button: string;
+  /** Ein Satz unter der Frage, nur in der Kartenform. */
+  teaser?: string;
+  /** Linktext der Karte, z. B. „Kurz erklärt“. */
+  open?: string;
   close: string;
   eyebrow: string;
   title: string;
@@ -28,20 +32,20 @@ export type ExplainerCopy = {
 type Shape = "leaf" | "cloud";
 
 /**
- * Zwei stille Pillen, gleich gebaut, in einem Detail verschieden: Das Blatt hat
- * zwei spitze Gegenecken und eine feine Kontur, die Wolke ist rundum weich und
- * liegt auf Weiß. Mehr Form braucht es nicht, das Icon sagt den Rest.
+ * Zwei stille Pillen, gleich gebaut und rundum weich auf Weiß; nur Icon und
+ * Textfarbe unterscheiden sie. Mehr Form braucht es nicht.
  */
+const pillClass =
+  "rounded-full bg-white shadow-[0_1px_2px_rgba(32,55,44,0.08),0_8px_24px_rgba(32,55,44,0.08)] hover:shadow-[0_1px_2px_rgba(32,55,44,0.1),0_12px_28px_rgba(32,55,44,0.12)]";
+
 const shapes = {
   leaf: {
     Icon: Leaf,
-    className:
-      "rounded-[999px_6px_999px_6px] border border-[var(--color-forest)]/30 bg-white/60 text-[var(--color-forest)] hover:border-[var(--color-forest)]/60 hover:bg-white"
+    className: `${pillClass} text-[var(--color-forest)]`
   },
   cloud: {
     Icon: Cloud,
-    className:
-      "rounded-full bg-white text-[var(--color-ink)] shadow-[0_1px_2px_rgba(32,55,44,0.08),0_8px_24px_rgba(32,55,44,0.08)] hover:shadow-[0_1px_2px_rgba(32,55,44,0.1),0_12px_28px_rgba(32,55,44,0.12)]"
+    className: `${pillClass} text-[var(--color-ink)]`
   }
 } as const;
 
@@ -50,7 +54,17 @@ function splitKeyword(item: string): [string, string] | null {
   return index > 0 ? [item.slice(0, index), item.slice(index + 2)] : null;
 }
 
-export function ExplainerButton({ copy, shape, className = "" }: { copy: ExplainerCopy; shape: Shape; className?: string }) {
+export function ExplainerButton({
+  copy,
+  shape,
+  variant = "pill",
+  className = ""
+}: {
+  copy: ExplainerCopy;
+  shape: Shape;
+  variant?: "pill" | "card";
+  className?: string;
+}) {
   const [isOpen, setIsOpen] = useState(false);
   const titleId = `explainer-${shape}-title`;
 
@@ -159,16 +173,42 @@ export function ExplainerButton({ copy, shape, className = "" }: { copy: Explain
     </div>
   );
 
-  return (
-    <>
+  const trigger =
+    variant === "card" ? (
       <button
         type="button"
         onClick={() => setIsOpen(true)}
-        className={`group inline-flex h-10 items-center gap-2 whitespace-nowrap pl-3.5 pr-4 text-[13px] font-semibold tracking-[-0.01em] transition-all duration-300 hover:-translate-y-px ${shapeClass} ${focusRing} ${className}`}
+        className={`group flex w-full items-start gap-5 rounded-[var(--radius-xl)] border border-[var(--color-line)] bg-white p-6 text-left transition-all duration-300 hover:-translate-y-0.5 hover:border-[var(--color-forest)]/40 hover:shadow-[var(--shadow-panel)] sm:p-7 ${focusRing} ${className}`}
+      >
+        {/* Beide Karten gleich gebaut, nur das Icon unterscheidet sie. */}
+        <span className="flex size-12 shrink-0 items-center justify-center rounded-full bg-[var(--color-sage)] text-[var(--color-forest)]">
+          <Icon className="size-6 transition-transform duration-300 group-hover:-rotate-6" strokeWidth={1.75} aria-hidden />
+        </span>
+        <span className="min-w-0">
+          <span className="block font-display text-[length:var(--text-title)] leading-[var(--leading-title)] tracking-[-0.02em] text-[var(--color-ink)]">
+            {copy.button}
+          </span>
+          {copy.teaser && <span className="mt-2 block max-w-[46ch] text-sm leading-6 text-[var(--color-muted)]">{copy.teaser}</span>}
+          <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-bold text-[var(--color-forest)]">
+            {copy.open ?? copy.button}
+            <ArrowRight className="size-4 transition-transform duration-300 group-hover:translate-x-1" aria-hidden />
+          </span>
+        </span>
+      </button>
+    ) : (
+      <button
+        type="button"
+        onClick={() => setIsOpen(true)}
+        className={`group inline-flex min-h-11 items-center gap-2 whitespace-nowrap pl-4 pr-5 text-sm font-semibold tracking-[-0.01em] transition-all duration-300 hover:-translate-y-px ${shapeClass} ${focusRing} ${className}`}
       >
         <Icon className="size-4 transition-transform duration-300 group-hover:-rotate-6" strokeWidth={2} aria-hidden />
         {copy.button}
       </button>
+    );
+
+  return (
+    <>
+      {trigger}
       {/* Portal: die Sektion darüber ist animiert (transform), ein `fixed`
           darin läge sonst unter dem Header. */}
       {dialog && createPortal(dialog, document.body)}

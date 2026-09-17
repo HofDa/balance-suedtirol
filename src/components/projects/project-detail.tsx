@@ -28,6 +28,7 @@ import { getTranslations } from "@/config/translations";
 import { SouthTyrolMap } from "./south-tyrol-map";
 import { ProjectShareButton } from "./project-share-button";
 import { BeforeAfterSlider } from "./before-after-slider";
+import { ProjectGallery } from "./project-gallery";
 import {
   ProjectSupportDialog,
   ProjectSupportTrigger,
@@ -63,8 +64,40 @@ export function ProjectDetail({ project, otherProjects, locale }: ProjectDetailP
     confirm: copy.confirm
   };
 
+  const beforeAfter = project.beforeAfter?.isPlaceholder ? undefined : project.beforeAfter;
+
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Project",
+    name: project.title,
+    description: project.summary,
+    image: withBasePath(project.image),
+    location: {
+      "@type": "Place",
+      name: project.municipality,
+      address: {
+        "@type": "PostalAddress",
+        addressRegion: "Südtirol / Alto Adige",
+        addressCountry: "IT"
+      },
+      geo: {
+        "@type": "GeoCoordinates",
+        latitude: project.location.lat,
+        longitude: project.location.lng
+      }
+    },
+    funder: {
+      "@type": "Organization",
+      name: project.organization
+    }
+  };
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <section className="pb-24 pt-8 sm:pt-12">
         <Container>
           <Link
@@ -74,30 +107,28 @@ export function ProjectDetail({ project, otherProjects, locale }: ProjectDetailP
             <ArrowLeft className="size-4" /> {copy.back}
           </Link>
 
-          {/* Gibt es ein Vorher/Nachher-Paar, ist es das Hero: Es erzählt die
-              Maßnahme besser als jedes Einzelbild. */}
-          {project.beforeAfter ? (
+          {/* Gibt es ein echtes Vorher/Nachher-Paar, ist es das Hero: Es erzählt die
+              Maßnahme besser als jedes Einzelbild. Bearbeitete Platzhalterpaare
+              bleiben außen vor, bis echte Vorher-Fotos vorliegen. */}
+          {beforeAfter ? (
             <figure className="mt-7">
               <BeforeAfterSlider
-                before={project.beforeAfter.before}
-                after={project.beforeAfter.after}
+                before={beforeAfter.before}
+                after={beforeAfter.after}
                 alt={`${project.title}, ${project.municipality}`}
-                labels={{ before: copy.before, after: copy.after, slider: copy.beforeAfterSliderLabel }}
-                aspectClassName="aspect-[8/5] sm:aspect-[2/1]"
+                labels={{
+                  before: beforeAfter.beforeLabel ?? copy.before,
+                  after: beforeAfter.afterLabel ?? copy.after,
+                  slider: copy.beforeAfterSliderLabel
+                }}
+                aspectClassName={project.slug === "millander-au-erweiterung" ? "aspect-[1491/1055]" : "aspect-[4/3] sm:aspect-[1491/1055]"}
                 priority
                 className="rounded-[var(--radius-xl)]"
               />
-              <figcaption className="mt-3 flex flex-col gap-1 text-xs leading-5 text-[var(--color-muted)] sm:flex-row sm:items-start sm:justify-between sm:gap-6">
-                <span className="max-w-[72ch]">
-                  {project.beforeAfter.caption}
-                  {project.beforeAfter.isPlaceholder && (
-                    <>
-                      {project.beforeAfter.caption ? " " : ""}
-                      <em>{copy.beforeAfterPlaceholderNote}</em>
-                    </>
-                  )}
-                </span>
-                <span className="shrink-0 font-semibold text-[var(--color-forest)]">{copy.beforeAfterCopy}</span>
+              <figcaption className="mt-3 w-full text-xs leading-5 text-[var(--color-muted)]">
+                {beforeAfter.caption}
+                {beforeAfter.caption ? " " : ""}
+                <span className="text-[var(--color-forest)]">{copy.beforeAfterCopy}</span>
               </figcaption>
             </figure>
           ) : (
@@ -176,7 +207,7 @@ export function ProjectDetail({ project, otherProjects, locale }: ProjectDetailP
               </a>
             </div>
             <SouthTyrolMap
-              projects={[project, ...otherProjects]}
+              projects={[project]}
               activeSlug={project.slug}
               label={copy.mapLabel}
               attribution={copy.mapAttribution}
@@ -228,30 +259,10 @@ export function ProjectDetail({ project, otherProjects, locale }: ProjectDetailP
                 </h2>
                 <p className="mt-3 text-sm leading-6 text-[var(--color-muted)]">{copy.galleryCopy}</p>
               </div>
-              {/* Das erste Bild läuft über die volle Breite, die übrigen zu zweit. */}
-              <ul className="mt-8 grid gap-4 sm:grid-cols-2">
-                {project.gallery.map((item, index) => (
-                  <li key={item.src} className={index === 0 ? "sm:col-span-2" : ""}>
-                    <figure>
-                      <div className={`relative overflow-hidden rounded-[var(--radius-lg)] bg-[var(--color-sage)] ${index === 0 ? "aspect-[3/2] sm:aspect-[2/1]" : "aspect-[3/2]"}`}>
-                        <Image
-                          src={withBasePath(item.src)}
-                          alt={item.alt}
-                          fill
-                          sizes={index === 0 ? "(min-width: 1280px) 1180px, 100vw" : "(min-width: 1280px) 580px, (min-width: 640px) 50vw, 100vw"}
-                          className="object-cover"
-                        />
-                      </div>
-                      {(item.caption || item.credit) && (
-                        <figcaption className="mt-2 text-xs leading-5 text-[var(--color-muted)]">
-                          {item.caption}
-                          {item.credit && <span className="whitespace-nowrap"> · {copy.photo}: {item.credit}</span>}
-                        </figcaption>
-                      )}
-                    </figure>
-                  </li>
-                ))}
-              </ul>
+              <ProjectGallery
+                images={project.gallery}
+                labels={{ previous: copy.galleryPrevious, next: copy.galleryNext, image: copy.galleryImage, of: getTranslations(locale).card.of, photo: copy.photo }}
+              />
             </section>
           )}
 
@@ -281,10 +292,8 @@ export function ProjectDetail({ project, otherProjects, locale }: ProjectDetailP
                 label={copy.support}
                 className="mt-6 w-full bg-[var(--color-forest)] font-bold hover:bg-[var(--color-ink)]"
               />
-              <div className="mt-2 flex items-center justify-between text-xs text-[var(--color-muted)]">
-                <span>{copy.tax}</span>
-                <ProjectShareButton label={copy.share} title={project.title} />
-              </div>
+              <ProjectShareButton copy={copy} title={project.title} description={project.summary} />
+              <p className="mt-3 text-xs text-[var(--color-muted)]">{copy.tax}</p>
             </aside>
             <Surface level="sheet" tone="paper" framed={false} className="h-fit sm:p-8">
               <div className="flex items-center gap-2 font-bold text-[var(--color-forest)]">

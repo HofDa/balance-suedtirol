@@ -1,4 +1,6 @@
 import Link from "next/link";
+import Image from "next/image";
+import { withBasePath } from "@/lib/public-path";
 import { Menu } from "lucide-react";
 import { siteConfig, type Locale } from "@/config/site";
 import { Container } from "@/components/ui/container";
@@ -18,12 +20,20 @@ export function Header({ locale }: { locale: Locale }) {
           href={`/${locale}`}
           className={`inline-flex min-h-11 shrink-0 items-center font-semibold tracking-[-0.03em] transition-transform duration-200 ease-out hover:scale-[1.02] ${focusRing}`}
         >
-          <span className="text-2xl font-bold tracking-tight text-[var(--color-ink)]">b*alance</span>
+          <Image
+            src={withBasePath("/balance-logo-transparent.png")}
+            alt="b*alance"
+            width={1448}
+            height={1086}
+            priority
+            sizes="112px"
+            className="h-16 w-28 object-cover"
+          />
         </Link>
 
         {/* Right: Aligned Navigation Group (Projects · DE · IT · EN · CTA) */}
-        <div className="hidden items-center lg:flex">
-          <nav className="flex items-center" aria-label={t.navLabel}>
+        <div className="hidden items-center xl:flex">
+          <nav className="flex items-center gap-7" aria-label={t.navLabel}>
             {siteConfig.navigation.map((item, index) => (
               <NavLink key={item.href} href={`/${locale}${item.href}`}>
                 {t.nav[index]}
@@ -44,7 +54,7 @@ export function Header({ locale }: { locale: Locale }) {
         </div>
 
         {/* Tablet / Mobile Menu Header Trigger */}
-        <div className="flex items-center gap-3 lg:hidden">
+        <div className="flex items-center gap-3 xl:hidden">
           <div className="hidden sm:block">
             <LanguageSwitcher locale={locale} />
           </div>
@@ -78,12 +88,6 @@ export function Header({ locale }: { locale: Locale }) {
                     {t.nav[index]}
                   </Link>
                 ))}
-                <Link
-                  href={`/${locale}/methodik`}
-                  className={`flex min-h-11 items-center rounded-[var(--radius-lg)] px-4 text-sm font-semibold text-[var(--color-muted)] hover:bg-[var(--color-paper)] hover:text-[var(--color-ink)] ${focusRing}`}
-                >
-                  {t.footer.methodology}
-                </Link>
               </div>
 
               <div className="mt-3 border-t border-[var(--color-line)] pt-3">

@@ -32,6 +32,8 @@ taken from the same viewpoint.
 
 | Local asset | Content | Credit |
 | --- | --- | --- |
+| `millander-au-heute.webp` | Aerial view of Millander Au before planned expansion (today) | AuRaum (drone) |
+| `millander-au-vision-v7.webp` | Visualisation of planned expansion area (ponds, wet meadow, hedges) | b*alance |
 | `millander-au-erweiterung-before.webp` | Enlarging an existing pond, January 2025 (drone) | none (explicitly not wished) |
 | `millander-au-erweiterung-after.webp` | The same pond, May 2025 (drone) | none |
 | `millander-au-parzelle-mai-2026.webp` | AuRaum plot after restoration, May 2026 (drone) – also the card image | none |

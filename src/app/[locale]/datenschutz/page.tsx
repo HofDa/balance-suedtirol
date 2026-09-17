@@ -1,12 +1,30 @@
 import type { Metadata } from "next";
 import { Container } from "@/components/ui/container";
-import type { Locale } from "@/config/site";
+import { isLocale, locales, type Locale } from "@/config/site";
 import { Surface } from "@/components/ui/surface";
+import { withBasePath } from "@/lib/public-path";
 
-export const metadata: Metadata = {
-  title: "Datenschutzerklärung | b*alance Südtirol",
-  description: "Informationen zur Verarbeitung personenbezogener Daten auf b*alance Südtirol."
+const route = "/datenschutz";
+
+const datenschutzMeta: Record<Locale, { title: string; description: string }> = {
+  de: { title: "Datenschutzerklärung", description: "Informationen zur Verarbeitung personenbezogener Daten auf b*alance Südtirol." },
+  it: { title: "Informativa sulla privacy", description: "Informazioni sul trattamento dei dati personali su b*alance Alto Adige." },
+  en: { title: "Privacy Policy", description: "Information about the processing of personal data on b*alance South Tyrol." }
 };
+
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+  const { locale } = await params;
+  if (!isLocale(locale)) return {};
+  const meta = datenschutzMeta[locale];
+  return {
+    title: meta.title,
+    description: meta.description,
+    alternates: {
+      canonical: withBasePath(`/${locale}${route}`),
+      languages: Object.fromEntries(locales.map((language) => [language, withBasePath(`/${language}${route}`)]))
+    }
+  };
+}
 
 export default async function DatenschutzPage({
   params
@@ -16,7 +34,7 @@ export default async function DatenschutzPage({
   await params;
 
   return (
-    <main className="py-16 sm:py-24">
+    <div className="py-16 sm:py-24">
       <Container className="max-w-3xl">
         <h1 className="font-display text-[length:var(--text-display)] leading-[var(--leading-display)] text-[var(--color-ink)]">
           Datenschutzerklärung
@@ -51,6 +69,6 @@ export default async function DatenschutzPage({
           </section>
         </Surface>
       </Container>
-    </main>
+    </div>
   );
 }

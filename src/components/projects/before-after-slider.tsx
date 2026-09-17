@@ -14,6 +14,8 @@ interface BeforeAfterSliderProps {
   /** Seitenverhältnis des Rahmens; Standard 8:5 wie die Projektfotos. */
   aspectClassName?: string;
   priority?: boolean;
+  /** Vertical registration of a rendered image against the original photo. */
+  afterScaleY?: number;
 }
 
 const REST_POSITION = 50;
@@ -37,7 +39,8 @@ export function BeforeAfterSlider({
   labels,
   className = "",
   aspectClassName = "aspect-[8/5]",
-  priority = false
+  priority = false,
+  afterScaleY = 1
 }: BeforeAfterSliderProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [position, setPosition] = useState(100);
@@ -99,6 +102,7 @@ export function BeforeAfterSlider({
           priority={priority}
           sizes="(min-width: 1280px) 1180px, 100vw"
           className="object-cover"
+          style={afterScaleY !== 1 ? { objectFit: "fill", transform: `scaleY(${afterScaleY})`, transformOrigin: "top center" } : undefined}
           draggable={false}
         />
         {/* Das Nachher-Label sitzt in einer Ebene, die links am Griff endet –

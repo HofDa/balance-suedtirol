@@ -115,6 +115,7 @@ export function ProjectDetail({ project, otherProjects, locale }: ProjectDetailP
               <BeforeAfterSlider
                 before={beforeAfter.before}
                 after={beforeAfter.after}
+                afterScaleY={beforeAfter.afterScaleY}
                 alt={`${project.title}, ${project.municipality}`}
                 labels={{
                   before: beforeAfter.beforeLabel ?? copy.before,
@@ -250,6 +251,24 @@ export function ProjectDetail({ project, otherProjects, locale }: ProjectDetailP
               ))}
             </div>
           </section>
+
+          {project.sketch && (
+            <section className="mt-20" aria-labelledby="project-sketch">
+              <h2 id="project-sketch" className="font-display text-[length:var(--text-headline)] leading-[var(--leading-headline)]">
+                {copy.sketchTitle}
+              </h2>
+              <figure className="mt-6 overflow-hidden rounded-[var(--radius-lg)] border border-[var(--color-line)] bg-[var(--color-paper)]">
+                <Image
+                  src={withBasePath(project.sketch.src)}
+                  alt={project.sketch.alt}
+                  width={670}
+                  height={945}
+                  sizes="(max-width: 768px) 100vw, 670px"
+                  className="mx-auto h-auto w-full max-w-[670px]"
+                />
+              </figure>
+            </section>
+          )}
 
           {project.gallery && project.gallery.length > 0 && (
             <section className="mt-20" aria-labelledby="project-gallery">

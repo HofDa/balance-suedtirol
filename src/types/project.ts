@@ -33,6 +33,8 @@ export type Project = {
   beforeAfter?: {
     before: string;
     after: string;
+    /** Vertical scale used to align a rendering with the original aerial photo. */
+    afterScaleY?: number;
     /** Beschriftung der Bildhälften, z. B. Aufnahmedaten; Fallback ist „Vorher“/„Nachher“. */
     beforeLabel?: string;
     afterLabel?: string;
@@ -44,6 +46,7 @@ export type Project = {
     isPlaceholder?: boolean;
   };
   /** Weitere Aufnahmen aus dem Projektgebiet; `credit` nur, wo eine Namensnennung gewünscht ist. */
+  sketch?: { src: string; alt: string };
   gallery?: Array<{ src: string; alt: string; caption?: string; credit?: string }>;
   /** Fehlt, solange das Finanzierungsziel nicht entschieden ist. */
   goal?: number;

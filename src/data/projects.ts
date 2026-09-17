@@ -19,12 +19,14 @@ export const projects: Project[] = [
     beforeAfter: {
       before: "/projects/millander-au-heute.webp",
       after: "/projects/millander-au-vision-v8.webp",
+      afterScaleY: 1.108,
       beforeLabel: "Heute",
       afterLabel: "Vision",
       caption:
         "Die Millander Au heute aus der Luft und als Visualisierung nach der geplanten Erweiterung: Teiche, Feuchtwiesen und Hecken auf der ehemaligen Apfelanlage."
     },
-    gallery: [
+    sketch: { src: "/projects/millander-au-skizze.webp", alt: "Planungsskizze zur Erweiterung der Millander Au mit Teichen, Feuchtwiese, Hecken und Beobachtungsplätzen" },
+      gallery: [
       { src: "/projects/millander-au-erweiterung-before.webp", alt: "Teich während der Erweiterungsarbeiten mit Bagger", caption: "Erweiterung des bestehenden Teichs mit der Forststation Brixen im Jänner 2025." },
       { src: "/projects/millander-au-erweiterung-after.webp", alt: "Erweiterter Teich mit begrünten Ufern", caption: "Dieselbe Fläche im Mai 2025, wenige Monate nach den Arbeiten." },
       { src: "/projects/millander-au-parzelle-mai-2026.webp", alt: "Mäandrierender Wasserlauf auf der renaturierten Parzelle", caption: "Die im März 2026 renaturierte Parzelle mit neuem Wasserlauf, zwei Monate später." },
@@ -139,10 +141,12 @@ const projectTranslations: Record<Exclude<Locale, "de">, Record<string, Partial<
       beforeAfter: {
         before: "/projects/millander-au-heute.webp",
         after: "/projects/millander-au-vision-v8.webp",
+      afterScaleY: 1.108,
         beforeLabel: "Oggi",
         afterLabel: "Visione",
         caption: "La Millander Au oggi dall’alto e come visualizzazione dopo l’ampliamento previsto: stagni, prati umidi e siepi sull’ex frutteto."
       },
+      sketch: { src: "/projects/millander-au-skizze.webp", alt: "Schema dell’ampliamento della Millander Au con stagni, prato umido, siepi e punti di osservazione" },
       gallery: [
         { src: "/projects/millander-au-erweiterung-before.webp", alt: "Stagno durante i lavori di ampliamento con escavatore", caption: "Ampliamento dello stagno esistente con la Stazione forestale di Bressanone nel gennaio 2025." },
         { src: "/projects/millander-au-erweiterung-after.webp", alt: "Stagno ampliato con vegetazione sulle sponde", caption: "La stessa area nel maggio 2025, pochi mesi dopo i lavori." },
@@ -224,10 +228,12 @@ const projectTranslations: Record<Exclude<Locale, "de">, Record<string, Partial<
       beforeAfter: {
         before: "/projects/millander-au-heute.webp",
         after: "/projects/millander-au-vision-v8.webp",
+      afterScaleY: 1.108,
         beforeLabel: "Today",
         afterLabel: "Vision",
         caption: "The Millander Au today from the air and as a visualisation after the planned expansion: ponds, wet meadows and hedges on the former apple orchard."
       },
+      sketch: { src: "/projects/millander-au-skizze.webp", alt: "Planning sketch for the Millander Au expansion with ponds, wet meadow, hedges and observation points" },
       gallery: [
         { src: "/projects/millander-au-erweiterung-before.webp", alt: "Pond during expansion works with an excavator", caption: "Expansion of the existing pond with the Brixen forestry station in January 2025." },
         { src: "/projects/millander-au-erweiterung-after.webp", alt: "Expanded pond with vegetated banks", caption: "The same area in May 2025, a few months after the works." },

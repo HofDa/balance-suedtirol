@@ -16,6 +16,7 @@ interface BeforeAfterSliderProps {
   priority?: boolean;
   /** Vertical registration of a rendered image against the original photo. */
   afterScaleY?: number;
+  afterAlignment?: Array<{ source: number; target: number }>;
 }
 
 const REST_POSITION = 50;
@@ -40,7 +41,8 @@ export function BeforeAfterSlider({
   className = "",
   aspectClassName = "aspect-[8/5]",
   priority = false,
-  afterScaleY = 1
+  afterScaleY = 1,
+  afterAlignment
 }: BeforeAfterSliderProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [position, setPosition] = useState(100);
@@ -95,6 +97,22 @@ export function BeforeAfterSlider({
       style={{ cursor: "ew-resize" }}
     >
       <div className={`relative ${aspectClassName}`}>
+        {afterAlignment ? (
+          <svg viewBox="0 0 1000 1000" preserveAspectRatio="none" role="img" aria-label={alt} className="absolute inset-0 size-full overflow-hidden">
+            {afterAlignment.slice(0, -1).map((point, index) => {
+              const next = afterAlignment[index + 1];
+              const targetWidth = (next.target - point.target) * 1000;
+              const sourceWidth = (next.source - point.source) * 1000;
+              // Overlap by one SVG unit to avoid antialiased seams between sections.
+              const overlap = 1;
+              return (
+                <svg key={index} x={point.target * 1000} y={0} width={targetWidth + overlap} height={afterScaleY * 1000} viewBox={`${point.source * 1000} 0 ${sourceWidth * (1 + overlap / targetWidth)} 1000`} preserveAspectRatio="none" overflow="hidden">
+                  <image href={withBasePath(after)} width={1000} height={1000} preserveAspectRatio="none" />
+                </svg>
+              );
+            })}
+          </svg>
+        ) : (
         <Image
           src={withBasePath(after)}
           alt={alt}
@@ -105,6 +123,7 @@ export function BeforeAfterSlider({
           style={afterScaleY !== 1 ? { objectFit: "fill", transform: `scaleY(${afterScaleY})`, transformOrigin: "top center" } : undefined}
           draggable={false}
         />
+        )}
         {/* Das Nachher-Label sitzt in einer Ebene, die links am Griff endet –
             so verschwindet es, sobald der Griff darüberfährt, statt über dem
             falschen Bild zu stehen. */}

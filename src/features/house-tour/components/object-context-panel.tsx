@@ -3,206 +3,33 @@
 import { useEffect, useMemo, useState } from "react";
 import {
   Check,
-  CheckCircle2,
   ChevronLeft,
   ChevronRight,
-  Home,
-  Info,
   Leaf,
-  Lightbulb,
   MousePointer2,
   SkipForward,
-  TrendingDown,
-  TrendingUp
+  TrendingDown
 } from "lucide-react";
-import Link from "next/link";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import type { Locale } from "@/config/site";
 import { focusRingTool } from "@/components/ui/focus";
 import { Label } from "@/components/ui/label";
 import {
-  bestCaseSaving,
   bestCaseSavingFromValues,
-  formatMetric,
   hasValues,
   isAdjusted,
-  metrics,
   optionValues,
   quantityFor,
-  questionBasis,
   summarizeValues
 } from "../model/calculator";
-import { AdjustControl, InputImpactFeedback, MetricBars, ValueRow } from "./metric-readout";
+import { AdjustControl, InputImpactFeedback, ValueRow } from "./metric-readout";
+import { ProgressSummary } from "./panel-progress";
+import { QuestionDetails } from "./question-details";
+import { RoomCompleteView } from "./room-complete-view";
 import { RoomNavigation } from "./room-navigation";
 import type { AnnualValues, RoomId, TourQuestion, TourRoom } from "../model/types";
 import { getRoomProgress } from "../model/scoring";
-
-const completionCopy: Partial<Record<TourRoom["id"], string>> = {
-  bath: "Du hast erkundet, wie Wasserverbrauch und Alltagsprodukte mit Gewässern und natürlichen Ressourcen zusammenhängen.",
-  bedroom: "Du hast erkundet, wie Wärme, Textilien und Elektronik Ressourcen und Lebensräume beeinflussen.",
-  living: "Du hast erkundet, wie Energie, Geräte und Materialien mit der Biodiversität verbunden sind.",
-  kitchen: "Du hast erkundet, wie Ernährung, Herkunft und Abfälle Flächen und Lebensräume beeinflussen.",
-  mobility: "Du hast erkundet, wie unsere Wege Energie, Flächen und die Qualität lokaler Lebensräume prägen.",
-  garden: "Du hast erkundet, wie Boden, Pflanzen und Strukturen direkt neue Lebensräume schaffen."
-};
-
-function ProgressBar({ value, total }: { value: number; total: number }) {
-  const width = total ? Math.min(100, (value / total) * 100) : 0;
-  return (
-    <div className="h-1.5 overflow-hidden rounded-full bg-[var(--color-ink)]/8" aria-hidden>
-      <motion.div
-        className="h-full rounded-full bg-[var(--color-forest)]"
-        animate={{ width: `${width}%` }}
-        transition={{ duration: 0.35, ease: "easeOut" }}
-      />
-    </div>
-  );
-}
-
-/**
- * Kopfzeile mit Raumfortschritt und laufender Jahresbilanz. Der Hausfortschritt
- * steht in der Werkzeugleiste und die Raumzustände in der Raumleiste; hier
- * bliebe beides eine Dopplung.
- *
- * Die Bilanz steht bewusst hier und nicht erst am Ende, damit jede Antwort
- * sofort sichtbar etwas bewegt — aber erst, sobald sie eine Zahl trägt. Drei
- * Striche vor der ersten Antwort sind Rauschen, kein Zwischenstand.
- */
-function ProgressSummary({
-  room,
-  roomHandled,
-  totals
-}: {
-  room: TourRoom;
-  roomHandled: number;
-  totals: AnnualValues;
-}) {
-  const hasRunningTotals = hasValues(totals);
-
-  return (
-    <div className="border-b border-[var(--color-line)] bg-[var(--color-paper)]/65">
-      <div className="px-3 pt-2.5 md:px-6 md:pt-3">
-        <div className="mb-1.5 flex items-center justify-between gap-2 text-[11px] md:text-xs">
-          <span className="truncate font-semibold">{room.title}</span>
-          <span className="tabular-nums text-[var(--color-muted)]">
-            {roomHandled} / {room.questions.length}
-            <span className="hidden md:inline"> Objekte</span>
-          </span>
-        </div>
-        <ProgressBar value={roomHandled} total={room.questions.length} />
-      </div>
-
-      {hasRunningTotals && (
-        <dl className="mt-2 grid grid-cols-3 gap-2 border-t border-[var(--color-line)] px-3 py-2 md:gap-3 md:px-6 md:py-2.5">
-          {metrics.map((metric) => {
-            const raw = totals[metric.key];
-            const formatted = formatMetric(metric.id, raw);
-            return (
-              <div key={metric.id} className="min-w-0">
-                <dt className="truncate text-[11px] font-medium text-[var(--color-muted)]">
-                  {metric.short}
-                </dt>
-                <dd className="flex items-baseline gap-1 truncate">
-                  {raw > 0 ? (
-                    <>
-                      <span className="text-sm font-semibold tabular-nums">{formatted.value}</span>
-                      <span className="text-[11px] text-[var(--color-muted)]">{formatted.unit}</span>
-                    </>
-                  ) : (
-                    // „0 L“ neben echten Zahlen liest sich wie ein Fehler, nicht wie ein Zwischenstand.
-                    <span className="text-sm font-semibold text-[var(--color-muted)]" title="noch nicht erfasst">
-                      –<span className="sr-only">noch nicht erfasst</span>
-                    </span>
-                  )}
-                </dd>
-              </div>
-            );
-          })}
-        </dl>
-      )}
-    </div>
-  );
-}
-
-/** Erklärt eine fehlende Zahl, statt sie kommentarlos als Null zu zeigen. */
-function ScopeNote({ note }: { note: string }) {
-  return (
-    <p className="flex gap-2 text-[11px] leading-4 text-[var(--color-muted)]">
-      <Info className="mt-px size-3.5 shrink-0 text-[var(--color-forest)]" aria-hidden />
-      <span>{note}</span>
-    </p>
-  );
-}
-
-/**
- * Hintergrund zur Frage: Erklärtext, Bilanzgrenze und Rechenweg. Eingeklappt,
- * weil die Entscheidung oben stehen muss — aber vorhanden, weil eine Zahl ohne
- * nachlesbaren Rechenweg in diesem Produkt nichts verloren hat.
- */
-function QuestionDetails({
-  question,
-  locale
-}: {
-  question: TourQuestion;
-  locale: Locale;
-}) {
-  const basis = questionBasis[question.id];
-
-  return (
-    <details className="group mt-3 rounded-[var(--radius-md)] border border-[var(--color-line)] md:mt-4">
-      <summary
-        className={cn(
-          "flex min-h-11 cursor-pointer list-none items-center gap-2 px-3 text-[11px] font-semibold text-[var(--color-forest)] md:px-4 md:text-xs",
-          focusRingTool
-        )}
-      >
-        <ChevronRight
-          className="size-3.5 shrink-0 transition-transform group-open:rotate-90 motion-reduce:transition-none"
-          aria-hidden
-        />
-        Hintergrund und Rechenweg
-      </summary>
-
-      <div className="grid gap-2.5 border-t border-[var(--color-line)] px-3 py-3 md:px-4">
-        <p className="text-[11px] leading-4 text-[var(--color-muted)] md:text-xs md:leading-5">
-          {question.description}
-        </p>
-
-        {question.scopeNote && <ScopeNote note={question.scopeNote} />}
-
-        {basis && (
-          <div className="grid gap-1 border-t border-[var(--color-line)] pt-2.5">
-            <Label size="dense">So wird gerechnet</Label>
-            <p className="text-[11px] leading-4 text-[var(--color-ink)]">{basis.factor}</p>
-            {basis.assumption && (
-              <p className="text-[11px] leading-4 text-[var(--color-muted)]">{basis.assumption}</p>
-            )}
-          </div>
-        )}
-
-        <div className="flex gap-2 border-t border-[var(--color-line)] pt-2.5">
-          <Lightbulb className="mt-0.5 size-3.5 shrink-0 text-[var(--color-forest)]" aria-hidden />
-          <p className="text-[11px] leading-4 text-[var(--color-muted)]">
-            <span className="font-semibold text-[var(--color-ink)]">Praktischer Tipp: </span>
-            {question.tip}
-          </p>
-        </div>
-
-        <Link
-          href={`/${locale}/methodik`}
-          className={cn(
-            "inline-flex w-fit items-center gap-1 text-[11px] font-semibold text-[var(--color-forest)] underline underline-offset-2",
-            focusRingTool
-          )}
-        >
-          Alle Faktoren und Annahmen
-          <ChevronRight className="size-3" aria-hidden />
-        </Link>
-      </div>
-    </details>
-  );
-}
 
 export function ObjectContextPanel({
   room,
@@ -264,34 +91,6 @@ export function ObjectContextPanel({
   );
   const selected = answers[question.id];
   const selectedOption = question.options.find((option) => option.id === selected);
-
-  /**
-   * Der Befund des Raums: der schwerste beantwortete Posten und der größte
-   * ungenutzte Hebel. Beides rechnet der Rechner ohnehin schon — es stand nur
-   * nirgends.
-   */
-  const roomInsight = useMemo(() => {
-    let driver: { label: string; values: AnnualValues; share: number } | null = null;
-    let lever: { label: string; values: AnnualValues } | null = null;
-
-    for (const item of room.questions) {
-      const answer = answers[item.id];
-      if (!answer) continue;
-
-      const values = optionValues(item.id, answer, answers, adjustments);
-      if (values.co2Kg > 0 && (!driver || values.co2Kg > driver.values.co2Kg)) {
-        driver = { label: item.sceneLabel, values, share: 0 };
-      }
-
-      const potential = bestCaseSaving(item.id, answers, adjustments);
-      if (potential.co2Kg > 0 && (!lever || potential.co2Kg > lever.values.co2Kg)) {
-        lever = { label: item.sceneLabel, values: potential };
-      }
-    }
-
-    if (driver && totals.co2Kg > 0) driver.share = driver.values.co2Kg / totals.co2Kg;
-    return { driver, lever };
-  }, [room, answers, adjustments, totals.co2Kg]);
 
   /**
    * Der schnelle Weg für alle, die 21 Objekte hintereinander durchgehen:
@@ -366,102 +165,19 @@ export function ObjectContextPanel({
       <div className="min-h-0 flex-1 overflow-y-auto px-3 py-3 md:px-6 md:py-6">
         <AnimatePresence mode="wait" initial={false}>
           {roomDone && !objectOpen ? (
-            <motion.div
+            <RoomCompleteView
               key={`${room.id}-complete`}
-              initial={reduceMotion ? false : { opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="mx-auto flex h-full max-w-lg flex-col justify-center"
-            >
-              <span className="grid size-11 place-items-center rounded-full bg-[var(--color-sage)] text-[var(--color-forest)]">
-                <CheckCircle2 className="size-5" aria-hidden />
-              </span>
-              <Label size="dense" className="mt-5">Raum abgeschlossen</Label>
-              <h2 className="mt-2 text-2xl font-semibold tracking-[-0.025em]">
-                {room.title} erkundet
-              </h2>
-              <p className="mt-3 text-sm leading-6 text-[var(--color-muted)]">
-                {completionCopy[room.id] ?? room.description}
-              </p>
-
-              {/* Ein Raumabschluss, der nur lobt, sagt nichts. Diese beiden
-                  Sätze sind das Ergebnis des Raums: was hier wiegt und wo noch
-                  etwas zu holen wäre. */}
-              {(roomInsight.driver || roomInsight.lever) && (
-                <dl className="mt-6 grid gap-2">
-                  {roomInsight.driver && (
-                    <div className="flex items-start gap-2.5 rounded-[var(--radius-md)] border border-[var(--color-line)] px-3 py-2.5">
-                      <TrendingUp className="mt-0.5 size-4 shrink-0 text-[var(--color-clay-ink)]" aria-hidden />
-                      <div className="min-w-0">
-                        <dt className="text-xs font-semibold">Größter Posten in diesem Raum</dt>
-                        <dd className="mt-0.5 text-xs leading-5 text-[var(--color-muted)]">
-                          {roomInsight.driver.label} —{" "}
-                          <span className="tabular-nums text-[var(--color-ink)]">
-                            {summarizeValues(roomInsight.driver.values)}
-                          </span>
-                          {roomInsight.driver.share >= 0.01 && (
-                            <>
-                              {" "}im Jahr, rund{" "}
-                              <span className="tabular-nums text-[var(--color-ink)]">
-                                {Math.round(roomInsight.driver.share * 100)} %
-                              </span>{" "}
-                              deiner bisherigen CO₂-Bilanz.
-                            </>
-                          )}
-                        </dd>
-                      </div>
-                    </div>
-                  )}
-
-                  {roomInsight.lever && (
-                    <div className="flex items-start gap-2.5 rounded-[var(--radius-md)] border border-[var(--color-line)] px-3 py-2.5">
-                      <TrendingDown className="mt-0.5 size-4 shrink-0 text-[var(--color-forest)]" aria-hidden />
-                      <div className="min-w-0">
-                        <dt className="text-xs font-semibold">Größter verbleibender Hebel</dt>
-                        <dd className="mt-0.5 text-xs leading-5 text-[var(--color-muted)]">
-                          {roomInsight.lever.label} — bis zu{" "}
-                          <span className="tabular-nums text-[var(--color-ink)]">
-                            {summarizeValues(roomInsight.lever.values)}
-                          </span>{" "}
-                          weniger im Jahr mit der sparsamsten Antwort.
-                        </dd>
-                      </div>
-                    </div>
-                  )}
-                </dl>
-              )}
-
-              <div className="mt-4 rounded-[var(--radius-lg)] border border-[var(--color-line)] p-4">
-                <Label size="dense">Deine Jahresbilanz bisher</Label>
-                <div className="mt-3">
-                  <MetricBars values={totals} compact />
-                </div>
-              </div>
-
-              <div className="mt-6 flex flex-wrap gap-3">
-                <button
-                  type="button"
-                  onClick={allComplete ? onResults : onNextRoom}
-                  className={cn(
-                    "inline-flex min-h-11 items-center gap-2 rounded-[var(--radius-md)] bg-[var(--color-forest)] px-5 text-sm font-semibold text-white",
-                    focusRingTool
-                  )}
-                >
-                  {allComplete ? "Ergebnis ansehen" : `Weiter zu ${nextRoom?.title ?? "nächsten Raum"}`}
-                  <ChevronRight className="size-4" aria-hidden />
-                </button>
-                <button
-                  type="button"
-                  onClick={onHouse}
-                  className={cn(
-                    "inline-flex min-h-11 items-center gap-2 rounded-[var(--radius-md)] px-4 text-sm font-semibold text-[var(--color-forest)]",
-                    focusRingTool
-                  )}
-                >
-                  <Home className="size-4" aria-hidden />
-                  Haus ansehen
-                </button>
-              </div>
-            </motion.div>
+              room={room}
+              answers={answers}
+              adjustments={adjustments}
+              totals={totals}
+              nextRoom={nextRoom}
+              allComplete={allComplete}
+              reduceMotion={reduceMotion}
+              onResults={onResults}
+              onNextRoom={onNextRoom}
+              onHouse={onHouse}
+            />
           ) : !objectOpen ? (
             <motion.div
               key={`${question.id}-discover`}

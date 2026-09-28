@@ -1,5 +1,5 @@
-import type { Locale } from "@/config/site";
-import type { Localized } from "@/lib/i18n";
+import type { Locale } from "../../../config/site";
+import type { Localized } from "../../../lib/i18n";
 
 /**
  * Texte der Formularhülle — alles, was nicht Feldbeschriftung ist.

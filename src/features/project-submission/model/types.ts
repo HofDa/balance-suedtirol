@@ -1,4 +1,4 @@
-import type { Localized } from "@/lib/i18n";
+import type { Localized } from "../../../lib/i18n";
 
 /**
  * Beschriftungen liegen am Feld, nicht an der Sprache.

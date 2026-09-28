@@ -1,6 +1,6 @@
-import { getProjectCategories } from "@/config/project-categories";
-import type { Locale } from "@/config/site";
-import { localeTags } from "@/lib/i18n";
+import { getProjectCategories } from "../../../config/project-categories";
+import type { Locale } from "../../../config/site";
+import { localeTags } from "../../../lib/i18n";
 import type { SubmissionCopy } from "../config/copy";
 import { submissionRecipient } from "../config/copy";
 import { allFields, formSteps } from "../config/form-schema";

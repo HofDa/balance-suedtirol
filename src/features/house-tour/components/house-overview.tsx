@@ -2,10 +2,10 @@
 
 import { memo } from "react";
 import type { RoomId } from "../model/types";
-import { HouseVisual } from "./house-visual";
+import { IllustratedHouse } from "./illustrated-house";
 
 interface HouseOverviewProps {
-  onRoom: (id: RoomId) => void;
+  onRoom: (id: RoomId, questionIndex?: number) => void;
   answers?: Record<string, string>;
   skippedQuestions?: Record<string, boolean>;
   activeRoom?: RoomId | null;
@@ -14,16 +14,14 @@ interface HouseOverviewProps {
 export const HouseOverview = memo(function HouseOverview({
   onRoom,
   answers = {},
-  skippedQuestions = {},
-  activeRoom = null
+  skippedQuestions = {}
 }: HouseOverviewProps) {
   return (
     <div className="relative h-full w-full overflow-hidden">
-      <HouseVisual
-        activeRoom={activeRoom}
+      <IllustratedHouse
         answers={answers}
         skippedQuestions={skippedQuestions}
-        onSelectRoom={onRoom}
+        onRoom={onRoom}
       />
     </div>
   );

@@ -1,0 +1,262 @@
+{
+  "size": [
+    1254,
+    1254
+  ],
+  "rooms": {
+    "bedroom": [
+      628,
+      254,
+      289,
+      278
+    ],
+    "bath": [
+      334,
+      254,
+      283,
+      278
+    ],
+    "living": [
+      335,
+      550,
+      282,
+      304
+    ],
+    "kitchen": [
+      628,
+      551,
+      288,
+      304
+    ],
+    "mobility": [
+      25,
+      481,
+      291,
+      404
+    ],
+    "garden": [
+      921,
+      311,
+      333,
+      552
+    ]
+  },
+  "objects": [
+    {
+      "id": "bedroom-heating",
+      "room": "bedroom",
+      "question": 0,
+      "box": [
+        676,
+        425,
+        181,
+        99
+      ],
+      "subject": "the complete wooden double bed with pillows, green duvet and its legs"
+    },
+    {
+      "id": "bedroom-textiles",
+      "room": "bedroom",
+      "question": 1,
+      "box": [
+        851,
+        336,
+        59,
+        183
+      ],
+      "subject": "the tall wooden wardrobe, excluding the trailing plant and wall"
+    },
+    {
+      "id": "bedroom-standby",
+      "room": "bedroom",
+      "question": 2,
+      "box": [
+        640,
+        404,
+        41,
+        111
+      ],
+      "subject": "the bedside table with its table lamp, including thin legs"
+    },
+    {
+      "id": "bath-shower",
+      "room": "bath",
+      "question": 0,
+      "box": [
+        337,
+        309,
+        112,
+        222
+      ],
+      "subject": "the bathtub and shower assembly as one object, including shower head, hose, metal fixtures and glass partition, excluding the green wall"
+    },
+    {
+      "id": "bath-water-heating",
+      "room": "bath",
+      "question": 1,
+      "box": [
+        503,
+        420,
+        92,
+        60
+      ],
+      "subject": "the white wall-mounted vanity, basin and taps, excluding the mirror, plant and green wall"
+    },
+    {
+      "id": "bath-toilet",
+      "room": "bath",
+      "question": 2,
+      "box": [
+        455,
+        460,
+        40,
+        60
+      ],
+      "subject": "the white ceramic toilet, excluding floor and wall"
+    },
+    {
+      "id": "living-tv-streaming",
+      "room": "living",
+      "question": 0,
+      "box": [
+        576,
+        681,
+        38,
+        135
+      ],
+      "subject": "the side-facing black television and its small wooden TV stand, as one object, excluding floor and wall"
+    },
+    {
+      "id": "living-lighting",
+      "room": "living",
+      "question": 1,
+      "box": [
+        374,
+        647,
+        40,
+        98
+      ],
+      "subject": "the standing floor lamp with cream lampshade and narrow stand, only its visible pixels, excluding sofa and wall"
+    },
+    {
+      "id": "living-plants",
+      "room": "living",
+      "question": 2,
+      "box": [
+        343,
+        719,
+        110,
+        125
+      ],
+      "subject": "the complete green sofa with cushions and wooden legs, excluding floor, rug, wall and standing lamp"
+    },
+    {
+      "id": "kitchen-diet",
+      "room": "kitchen",
+      "question": 0,
+      "box": [
+        630,
+        614,
+        58,
+        178
+      ],
+      "subject": "the tall silver refrigerator, retaining only its visible pixels, excluding cabinets, wall, foreground chair and table"
+    },
+    {
+      "id": "kitchen-origin",
+      "room": "kitchen",
+      "question": 1,
+      "box": [
+        770,
+        580,
+        98,
+        81
+      ],
+      "subject": "the two wall shelves with their herbs, plant pots, bowls and jars as one object, excluding green wall and surrounding cupboards"
+    },
+    {
+      "id": "kitchen-waste",
+      "room": "kitchen",
+      "question": 2,
+      "box": [
+        673,
+        740,
+        187,
+        104
+      ],
+      "subject": "the wooden dining table and its four green chairs, retaining only these furniture pixels, excluding kitchen background, floor and the flower vase above the tabletop"
+    },
+    {
+      "id": "mobility-short",
+      "room": "mobility",
+      "question": 0,
+      "box": [
+        200,
+        636,
+        55,
+        100
+      ],
+      "subject": "the bicycle leaning at the right of the car, including wheels and thin frame tubes, excluding car, stacked wood and garage floor"
+    },
+    {
+      "id": "mobility-km",
+      "room": "mobility",
+      "question": 1,
+      "box": [
+        86,
+        586,
+        164,
+        126
+      ],
+      "subject": "the silver compact car, retaining only visible car pixels, excluding the foreground bicycle, garage wall and floor"
+    },
+    {
+      "id": "mobility-long",
+      "room": "mobility",
+      "question": 2,
+      "box": [
+        37,
+        735,
+        274,
+        145
+      ],
+      "subject": "the gravel driveway leading away from the garage, exclude foreground shrubs, stone wall, garage wood posts and stepping stones; preserve the exact visible ground shape"
+    },
+    {
+      "id": "garden-ground",
+      "room": "garden",
+      "question": 0,
+      "box": [
+        1028,
+        722,
+        87,
+        101
+      ],
+      "subject": "the wooden raised garden bed and plants growing inside it, excluding the surrounding plants, path and fence"
+    },
+    {
+      "id": "garden-plants",
+      "room": "garden",
+      "question": 1,
+      "box": [
+        963,
+        315,
+        286,
+        398
+      ],
+      "subject": "the fruit tree including leafy canopy, branches and visible trunk, excluding sky, mountains, fence, insect hotel and other plants"
+    },
+    {
+      "id": "garden-structures",
+      "room": "garden",
+      "question": 2,
+      "box": [
+        1117,
+        584,
+        63,
+        173
+      ],
+      "subject": "the wooden insect hotel and its supporting wooden post, excluding leaves, flowers, tree and fence"
+    }
+  ]
+}

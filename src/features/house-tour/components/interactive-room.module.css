@@ -1,0 +1,15 @@
+/* The resting picture is the exact original. Cutouts only add a silhouette
+   outline; hover and focus never translate or scale the furniture. */
+.sprite {
+  opacity: 0;
+  transition: opacity 140ms ease, filter 140ms ease;
+}
+.object[data-active="true"] .sprite,
+.object:hover .sprite,
+.object:focus-visible .sprite {
+  opacity: 1;
+  filter: drop-shadow(1px 0 0 #fff) drop-shadow(-1px 0 0 #fff) drop-shadow(0 1px 0 #fff) drop-shadow(0 -1px 0 #fff) drop-shadow(2px 0 0 #285744) drop-shadow(-2px 0 0 #285744) drop-shadow(0 2px 0 #285744) drop-shadow(0 -2px 0 #285744);
+}
+@media (prefers-reduced-motion: reduce) {
+  .sprite { transition: none; }
+}

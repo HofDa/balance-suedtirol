@@ -479,8 +479,8 @@ export function ObjectContextPanel({
                 Entdecke: {question.sceneLabel}
               </h2>
               <p className="mt-3 max-w-md text-sm leading-6 text-[var(--color-muted)]">
-                Der Rest des Raums tritt zurück, das nächste Objekt steht im Licht. Öffne es hier
-                oder klicke es direkt in der Szene an.
+                Jeder Gegenstand führt zu einer kurzen Frage über deinen Alltag. Öffne das markierte
+                Objekt hier oder tippe direkt auf den Gegenstand im Raum.
               </p>
 
               {/* Der Szenenklick bleibt möglich, ist aber kein Nadelöhr mehr:
@@ -499,7 +499,7 @@ export function ObjectContextPanel({
                 </button>
                 <span className="inline-flex items-center gap-2 text-xs font-semibold text-[var(--color-forest)]">
                   <span className="size-2 animate-pulse rounded-full bg-[var(--color-forest)]" aria-hidden />
-                  Im Haus hervorgehoben
+                  Im Raum hervorgehoben
                 </span>
               </div>
             </motion.div>

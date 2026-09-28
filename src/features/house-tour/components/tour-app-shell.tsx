@@ -43,6 +43,7 @@ export function TourAppShell({ locale }: { locale: Locale }) {
     const target = getRoom(roomId);
     if (questionIndex !== undefined) {
       dispatch({ type: "OPEN_ROOM", roomId, questionIndex });
+      dispatch({ type: "OPEN_OBJECT", questionIndex });
     } else {
       const firstOpen =
         target?.questions.findIndex(
@@ -183,14 +184,14 @@ export function TourAppShell({ locale }: { locale: Locale }) {
           {state.view === "house" ? (
             <motion.div
               key="house"
-              className="h-full"
+              className="h-full w-full"
               initial={reduce ? false : { opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={reduce ? undefined : { opacity: 0.35, scale: 1.04 }}
               transition={{ duration: reduce ? 0 : 0.32 }}
             >
               <HouseOverview
-                onRoom={(id) => openRoom(id)}
+                onRoom={openRoom}
                 answers={state.answers}
                 skippedQuestions={state.skippedQuestions}
                 activeRoom={state.activeRoom}
@@ -199,7 +200,7 @@ export function TourAppShell({ locale }: { locale: Locale }) {
           ) : room ? (
             <motion.div
               key={room.id}
-              className="h-full"
+              className="h-full w-full"
               initial={reduce ? false : { opacity: 0, scale: 0.96 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={reduce ? undefined : { opacity: 0 }}
@@ -207,6 +208,7 @@ export function TourAppShell({ locale }: { locale: Locale }) {
             >
               <RoomScene
                 roomId={room.id}
+                questionIndex={state.activeQuestionIndex}
                 answers={state.answers}
                 skippedQuestions={state.skippedQuestions}
                 onSelectObject={selectObject}

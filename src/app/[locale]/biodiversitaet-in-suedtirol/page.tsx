@@ -9,6 +9,9 @@ import { focusRing } from "@/components/ui/focus";
 import { isLocale, locales } from "@/config/site";
 import { getTranslations } from "@/config/translations";
 import { withBasePath } from "@/lib/public-path";
+import { textDisplay, textLead, textTitleTight } from "@/components/ui/typography";
+import { cn } from "@/lib/utils";
+import { ArrowIcon } from "@/components/ui/arrow-icon";
 
 const route = "/biodiversitaet-in-suedtirol";
 
@@ -55,16 +58,16 @@ export default async function BiodiversityPage({ params }: { params: Promise<{ l
           <div className="grid gap-10 lg:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)] lg:gap-16">
             <div>
               <Label size="section">{t.eyebrow}</Label>
-              <h1 className="mt-4 font-display text-balance text-[length:var(--text-display)] leading-[var(--leading-display)]">
+              <h1 className={cn(textDisplay, "mt-4")}>
                 {t.title}
               </h1>
-              <p className="mt-6 max-w-[58ch] text-[length:var(--text-body-lg)] leading-[var(--leading-body)] text-[var(--color-muted)]">
+              <p className={cn(textLead, "mt-6")}>
                 {t.lead}
               </p>
             </div>
             <aside className="self-end border-t border-[var(--color-line)] pt-6 lg:pl-10 lg:border-l lg:border-t-0 lg:pt-0">
               <p className="font-display text-5xl tracking-[-0.03em] tabular-nums text-[var(--color-forest)] sm:text-6xl">{figureValue}</p>
-              <p className="mt-3 max-w-[28ch] text-[length:var(--text-title)] font-semibold leading-[var(--leading-title)] tracking-[-0.02em] text-[var(--color-ink)]">
+              <p className={cn(textTitleTight, "mt-3 max-w-[28ch] text-[var(--color-ink)]")}>
                 {figureLabel}
               </p>
               <p className="mt-3 text-xs leading-5 text-[var(--color-muted)]">{t.keyFigureSource}</p>
@@ -79,7 +82,7 @@ export default async function BiodiversityPage({ params }: { params: Promise<{ l
                 const [keyword, explanation] = splitKeyword(service);
                 return (
                   <div key={keyword} className="border-t border-[var(--color-line)] py-5">
-                    <dt className="text-[length:var(--text-title)] font-semibold leading-[var(--leading-title)] tracking-[-0.02em] text-[var(--color-ink)]">
+                    <dt className={cn(textTitleTight, "text-[var(--color-ink)]")}>
                       {keyword}
                     </dt>
                     <dd className="mt-2 max-w-[48ch] leading-7 text-[var(--color-muted)]">{explanation}</dd>
@@ -125,7 +128,7 @@ export default async function BiodiversityPage({ params }: { params: Promise<{ l
                   className={`group inline-flex min-h-11 items-center gap-2 rounded-[var(--radius-md)] bg-[var(--color-ink)] px-5 text-sm font-bold text-white transition-colors hover:bg-[var(--color-forest)] ${focusRing}`}
                 >
                   {translations.nav[0]}
-                  <ArrowRight className="size-4 transition-transform duration-300 group-hover:translate-x-1" aria-hidden />
+                  <ArrowIcon />
                 </Link>
                 <Link
                   href={`/${locale}/haus-tour`}

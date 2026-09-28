@@ -1,9 +1,9 @@
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
 import { Container } from "@/components/ui/container";
 import type { Locale } from "@/config/site";
 import { getHomeStory } from "@/config/home-story";
 import { focusRingOnDark } from "@/components/ui/focus";
+import { ArrowIcon } from "@/components/ui/arrow-icon";
 
 /**
  * Der Abschluss nimmt die Leitzeile des Heros wieder auf. Eine Aktion mit
@@ -31,7 +31,7 @@ export function ImpactBridge({ locale }: { locale: Locale }) {
               className={`group inline-flex min-h-12 items-center justify-center gap-2 rounded-[var(--radius-md)] bg-[var(--color-accent)] px-6 text-sm font-bold text-[var(--color-ink)] transition-colors hover:bg-[var(--color-accent-hover)] ${focusRingOnDark}`}
             >
               {t.cta}
-              <ArrowRight className="size-4 transition-transform duration-200 group-hover:translate-x-1" aria-hidden />
+              <ArrowIcon className="duration-200" />
             </Link>
             <Link
               href={`/${locale}/projekt-einreichen`}

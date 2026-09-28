@@ -4,6 +4,8 @@ import { Label } from "@/components/ui/label";
 import type { Locale } from "@/config/site";
 import { getHomeStory } from "@/config/home-story";
 import { ServiceIllustration } from "./service-illustrations";
+import { textDisplay, textTitleTight } from "@/components/ui/typography";
+import { cn } from "@/lib/utils";
 
 /**
  * Sechs Leistungen als offene Komposition: Überschrift links stehend, rechts
@@ -21,7 +23,7 @@ export function EcosystemServices({ locale }: { locale: Locale }) {
             <Label size="section">{t.eyebrow}</Label>
             <h2
               id="services-title"
-              className="mt-4 font-display text-balance text-[length:var(--text-display)] leading-[var(--leading-display)] text-[var(--color-ink)]"
+              className={cn(textDisplay, "mt-4 text-[var(--color-ink)]")}
             >
               {t.title}
             </h2>
@@ -39,7 +41,7 @@ export function EcosystemServices({ locale }: { locale: Locale }) {
                   className="border-t border-[var(--color-forest)]/25 pt-6"
                 >
                   <ServiceIllustration id={item.id} className="size-24 text-[var(--color-forest)]" />
-                  <h3 className="mt-5 text-[length:var(--text-title)] font-semibold leading-[var(--leading-title)] tracking-[-0.02em] text-[var(--color-ink)]">
+                  <h3 className={cn(textTitleTight, "mt-5 text-[var(--color-ink)]")}>
                     {item.title}
                   </h3>
                   <p className="mt-2 max-w-[38ch] leading-7 text-[var(--color-muted)]">{item.copy}</p>

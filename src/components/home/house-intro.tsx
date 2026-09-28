@@ -1,10 +1,10 @@
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
 import { Container } from "@/components/ui/container";
 import { SectionHeading } from "@/components/ui/section-heading";
 import type { Locale } from "@/config/site";
 import { getTranslations } from "@/config/translations";
 import { focusRing } from "@/components/ui/focus";
+import { ArrowIcon } from "@/components/ui/arrow-icon";
 
 /**
  * Der Lebensraum-Check auf der Startseite: eine Einladung, kein Knopf im Hero.
@@ -25,7 +25,7 @@ export function HouseIntro({ locale }: { locale: Locale }) {
               className={`group mt-8 inline-flex min-h-11 items-center gap-2 rounded-[var(--radius-md)] bg-[var(--color-ink)] px-5 text-sm font-bold text-white transition-colors hover:bg-[var(--color-forest)] ${focusRing}`}
             >
               {t.open}
-              <ArrowRight className="size-4 transition-transform duration-300 group-hover:translate-x-1" aria-hidden />
+              <ArrowIcon />
             </Link>
           </div>
 

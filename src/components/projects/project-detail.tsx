@@ -14,7 +14,7 @@ import {
 } from "lucide-react";
 import { Container } from "@/components/ui/container";
 import { ProjectCard } from "@/components/projects/project-card";
-import { formatCurrency } from "@/lib/utils";
+import { cn, formatCurrency } from "@/lib/utils";
 import type { Project } from "@/types/project";
 import type { Locale } from "@/config/site";
 import { Label } from "@/components/ui/label";
@@ -35,6 +35,7 @@ import {
   type ProjectSupportCopy
 } from "./project-support";
 import { withBasePath } from "@/lib/public-path";
+import { textDisplay, textHeadline } from "@/components/ui/typography";
 
 interface ProjectDetailProps {
   project: Project;
@@ -163,7 +164,7 @@ export function ProjectDetail({ project, otherProjects, locale }: ProjectDetailP
                 {copy.verified}
               </span>
             </div>
-            <h1 className="mt-4 font-display text-balance text-[length:var(--text-display)] leading-[var(--leading-display)]">
+            <h1 className={cn(textDisplay, "mt-4")}>
               {project.title}
             </h1>
             <p className="mt-5 max-w-[66ch] text-[length:var(--text-body-lg)] leading-[var(--leading-body)] text-[var(--color-muted)]">
@@ -218,13 +219,13 @@ export function ProjectDetail({ project, otherProjects, locale }: ProjectDetailP
 
           <section className="mt-20 grid gap-12 lg:grid-cols-2 lg:gap-16">
             <div>
-              <h2 className="font-display text-balance text-[length:var(--text-headline)] leading-[var(--leading-headline)]">
+              <h2 className={textHeadline}>
                 {copy.whyMatters}
               </h2>
               <p className="mt-5 text-base leading-7 text-[var(--color-muted)]">{project.whyItMatters}</p>
             </div>
             <div className="border-t border-[var(--color-line)] pt-8 lg:border-l lg:border-t-0 lg:pl-12 lg:pt-0">
-              <h2 className="font-display text-balance text-[length:var(--text-headline)] leading-[var(--leading-headline)]">
+              <h2 className={textHeadline}>
                 {copy.whatItDoes}
               </h2>
               <p className="mt-5 text-base leading-7 text-[var(--color-muted)]">{project.description}</p>
@@ -348,7 +349,7 @@ export function ProjectDetail({ project, otherProjects, locale }: ProjectDetailP
 
           <section className="mt-20 rounded-[var(--radius-xl)] bg-[var(--color-ink)] p-6 text-white sm:p-10" aria-labelledby="project-final-cta">
             <div className="max-w-2xl">
-              <h2 id="project-final-cta" className="font-display text-balance text-[length:var(--text-headline)] leading-[var(--leading-headline)]">{copy.finalTitle}</h2>
+              <h2 id="project-final-cta" className={textHeadline}>{copy.finalTitle}</h2>
               <p className="mt-3 text-sm leading-6 text-white/70 sm:text-base">{copy.finalCopy}</p>
             </div>
             <div className="mt-7 flex flex-col gap-3 sm:flex-row">

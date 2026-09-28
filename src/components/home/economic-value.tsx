@@ -3,6 +3,8 @@ import { Label } from "@/components/ui/label";
 import type { Locale } from "@/config/site";
 import { getHomeStory } from "@/config/home-story";
 import { getTranslations } from "@/config/translations";
+import { textHeadline, textLead, textTitleTight } from "@/components/ui/typography";
+import { cn } from "@/lib/utils";
 
 /**
  * Die Brücke von Ökologie zu Wirtschaft – bewusst nüchtern: vier Abhängigkeiten
@@ -23,11 +25,11 @@ export function EconomicValue({ locale }: { locale: Locale }) {
           <Label size="section">{t.eyebrow}</Label>
           <h2
             id="economy-title"
-            className="mt-4 font-display text-balance text-[length:var(--text-headline)] leading-[var(--leading-headline)] text-[var(--color-ink)]"
+            className={cn(textHeadline, "mt-4 text-[var(--color-ink)]")}
           >
             {t.title}
           </h2>
-          <p className="mt-5 max-w-[58ch] text-[length:var(--text-body-lg)] leading-[var(--leading-body)] text-[var(--color-muted)]">
+          <p className={cn(textLead, "mt-5")}>
             {t.lead}
           </p>
         </div>
@@ -36,7 +38,7 @@ export function EconomicValue({ locale }: { locale: Locale }) {
           <dl data-home-reveal="rise" className="grid gap-x-10 sm:grid-cols-2">
             {t.points.map(([term, description]) => (
               <div key={term} className="border-t border-[var(--color-line)] py-6">
-                <dt className="text-[length:var(--text-title)] font-semibold leading-[var(--leading-title)] tracking-[-0.02em] text-[var(--color-ink)]">
+                <dt className={cn(textTitleTight, "text-[var(--color-ink)]")}>
                   {term}
                 </dt>
                 <dd className="mt-2 max-w-[44ch] leading-7 text-[var(--color-muted)]">{description}</dd>

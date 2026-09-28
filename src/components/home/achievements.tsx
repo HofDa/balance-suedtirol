@@ -7,7 +7,8 @@ import type { Locale } from "@/config/site";
 import { localeTags } from "@/lib/i18n";
 import { getTranslations } from "@/config/translations";
 import { getAchievementStats, getCompletedProjects, type CompletedProject } from "@/data/achievements";
-import { formatCurrency } from "@/lib/utils";
+import { cn, formatCurrency } from "@/lib/utils";
+import { textTitle } from "@/components/ui/typography";
 
 /**
  * Zwei Ebenen, eine Aussage: oben die Bilanz über alle Projekte, darunter die
@@ -98,7 +99,7 @@ function CompletedCard({ project }: { project: CompletedProject }) {
       className="group flex h-full flex-col transition-[transform,box-shadow] duration-300 ease-out hover:-translate-y-1 hover:shadow-[var(--shadow-hover)]"
     >
       <div className="flex items-baseline justify-between gap-3">
-        <h4 className="text-[length:var(--text-title)] font-semibold leading-[var(--leading-title)] tracking-[-0.01em] text-[var(--color-ink)]">
+        <h4 className={cn(textTitle, "tracking-[-0.01em] text-[var(--color-ink)]")}>
           {project.title}
         </h4>
         <span className="shrink-0 text-[length:var(--text-meta)] font-semibold text-[var(--color-muted)]">

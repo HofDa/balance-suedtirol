@@ -7,6 +7,8 @@ import type { Locale } from "@/config/site";
 import { getHomeStory, richnessImage } from "@/config/home-story";
 import { getTranslations } from "@/config/translations";
 import { withBasePath } from "@/lib/public-path";
+import { textDisplay, textHeadline, textLead } from "@/components/ui/typography";
+import { cn } from "@/lib/utils";
 
 /**
  * Höhenstufen im Foto, von oben nach unten. Die Punkte sitzen auf dem Motiv
@@ -40,7 +42,7 @@ export function BiodiversityRichness({ locale }: { locale: Locale }) {
             <Label size="section">{t.eyebrow}</Label>
             <h2
               id="vielfalt-title"
-              className="mt-4 font-display text-balance text-[length:var(--text-display)] leading-[var(--leading-display)] text-[var(--color-ink)]"
+              className={cn(textDisplay, "mt-4 text-[var(--color-ink)]")}
             >
               {t.title}
             </h2>
@@ -107,10 +109,10 @@ export function BiodiversityRichness({ locale }: { locale: Locale }) {
 
         {/* Die Zahlenebene: groß gesetzt, durch Haarlinien getrennt, ohne Rahmen. */}
         <div data-home-reveal="rise" className="mt-24 sm:mt-32">
-          <h3 className="max-w-[24ch] font-display text-balance text-[length:var(--text-headline)] leading-[var(--leading-headline)] text-[var(--color-ink)]">
+          <h3 className={cn(textHeadline, "max-w-[24ch] text-[var(--color-ink)]")}>
             {figures.title}
           </h3>
-          <p className="mt-4 max-w-[58ch] text-pretty text-[length:var(--text-body-lg)] leading-[var(--leading-body)] text-[var(--color-muted)]">
+          <p className={cn(textLead, "mt-4 text-pretty")}>
             {figures.copy}
           </p>
           {/* Jede Zahl einzeilig, Zusätze wie „ca.“ oder „von 36“ klein daneben:

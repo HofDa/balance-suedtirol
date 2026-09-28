@@ -8,6 +8,8 @@ import { SectionHeading } from "@/components/ui/section-heading";
 import { Surface } from "@/components/ui/surface";
 import { withBasePath } from "@/lib/public-path";
 import type { Localized } from "@/lib/i18n";
+import { textDisplay, textHeadline, textTitleTight } from "@/components/ui/typography";
+import { cn } from "@/lib/utils";
 
 const route = "/methodik";
 
@@ -237,7 +239,7 @@ export default async function MethodologyPage({ params }: { params: Promise<{ lo
         <Container>
           <div className="max-w-3xl">
             <Label size="section">Methodik · Modell 0.2</Label>
-            <h1 className="mt-4 font-display text-balance text-[length:var(--text-display)] leading-[var(--leading-display)]">So entstehen die Werte im Lebensraum-Check.</h1>
+            <h1 className={cn(textDisplay, "mt-4")}>So entstehen die Werte im Lebensraum-Check.</h1>
             <p className="mt-6 max-w-[62ch] text-[length:var(--text-body-lg)] leading-[var(--leading-body)] text-[var(--color-muted)]">Jede angezeigte Zahl folgt aus deiner Eingabe, einem offen gelegten Faktor und einer klaren Bilanzgrenze. Diese Seite zeigt, welche Werte amtlich oder wissenschaftlich verankert sind — und wo der Rechner bewusst mit einer vereinfachten Annahme arbeitet.</p>
             <p className="mt-4 text-sm font-semibold text-[var(--color-forest)]">Quellenstand: August 2026 · Ergebnisse gerundet · keine geprüfte Individualbilanz</p>
           </div>
@@ -245,7 +247,7 @@ export default async function MethodologyPage({ params }: { params: Promise<{ lo
             {principles.map(([title, copy], index) => (
               <Surface key={title} as="article" level="sheet">
                 <p className="text-sm font-bold tabular-nums text-[var(--color-forest)]">0{index + 1}</p>
-                <h2 className="mt-5 text-[length:var(--text-title)] font-semibold leading-[var(--leading-title)] tracking-[-0.02em]">{title}</h2>
+                <h2 className={cn(textTitleTight, "mt-5")}>{title}</h2>
                 <p className="mt-3 max-w-[58ch] leading-7 text-[var(--color-muted)]">{copy}</p>
               </Surface>
             ))}
@@ -279,7 +281,7 @@ export default async function MethodologyPage({ params }: { params: Promise<{ lo
             {evidence.map((group, groupIndex) => (
               <section key={group.title} aria-labelledby={`evidence-${groupIndex}`}>
                 <div className="max-w-3xl">
-                  <h2 id={`evidence-${groupIndex}`} className="text-[length:var(--text-title)] font-semibold leading-[var(--leading-title)] tracking-[-0.02em]">{group.title}</h2>
+                  <h2 id={`evidence-${groupIndex}`} className={textTitleTight}>{group.title}</h2>
                   <p className="mt-2 leading-7 text-[var(--color-muted)]">{group.intro}</p>
                 </div>
                 <div className="mt-6 overflow-hidden rounded-[var(--radius-xl)] border border-[var(--color-line)] bg-white">
@@ -309,7 +311,7 @@ export default async function MethodologyPage({ params }: { params: Promise<{ lo
           <div className="mb-16 grid gap-10 border-b border-white/10 pb-16 lg:grid-cols-[0.85fr_1.15fr] lg:items-start">
             <div>
               <Label size="section" tone="moss">Vergleichswerte</Label>
-              <h2 className="mt-4 font-display text-balance text-[length:var(--text-headline)] leading-[var(--leading-headline)]">Ein Vergleichswert ist kein Naturgesetz.</h2>
+              <h2 className={cn(textHeadline, "mt-4")}>Ein Vergleichswert ist kein Naturgesetz.</h2>
             </div>
             <div className="space-y-5 text-white/65">
               <p className="leading-7">Die internen Vergleichswerte von 4.000 kg CO₂e, 53.000 Litern und 9.500 kWh sind auf den abgefragten Ausschnitt kalibrierte Modellwerte. Sie entsprechen einer fest definierten mittleren Antwortkombination im Check — nicht einem amtlichen Durchschnittshaushalt.</p>
@@ -323,7 +325,7 @@ export default async function MethodologyPage({ params }: { params: Promise<{ lo
           <div className="grid gap-12 lg:grid-cols-[0.85fr_1.15fr] lg:items-start">
             <div>
               <Label size="section" tone="moss">Standards</Label>
-              <h2 className="mt-4 font-display text-balance text-[length:var(--text-headline)] leading-[var(--leading-headline)]">Der methodische Rahmen hinter der vereinfachten Rechnung.</h2>
+              <h2 className={cn(textHeadline, "mt-4")}>Der methodische Rahmen hinter der vereinfachten Rechnung.</h2>
               <p className="mt-5 max-w-[52ch] leading-7 text-white/65">Der Lebensraum-Check orientiert sich an diesen Standards, ist aber nicht nach ihnen zertifiziert. Eine normkonforme Ökobilanz würde Primärdaten, Sensitivitätsanalysen und eine fachliche Prüfung verlangen.</p>
             </div>
             <ol className="grid gap-3 sm:grid-cols-2">

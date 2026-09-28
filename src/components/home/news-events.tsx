@@ -9,6 +9,8 @@ import { localeTags } from "@/lib/i18n";
 import { getTranslations } from "@/config/translations";
 import { getNewsItems } from "@/data/news";
 import type { NewsItem } from "@/types/news";
+import { textTitle } from "@/components/ui/typography";
+import { cn } from "@/lib/utils";
 
 /**
  * Termine und Neuigkeiten stehen in einem Raster, nicht in zwei Spalten:
@@ -84,7 +86,7 @@ function NewsCard({
         </time>
       </div>
 
-      <h3 className="mt-4 text-[length:var(--text-title)] font-semibold leading-[var(--leading-title)] tracking-[-0.01em] text-[var(--color-ink)]">
+      <h3 className={cn(textTitle, "mt-4 tracking-[-0.01em] text-[var(--color-ink)]")}>
         {item.title}
       </h3>
       <p className="mt-2 text-[length:var(--text-meta)] leading-[var(--leading-body)] text-[var(--color-muted)]">

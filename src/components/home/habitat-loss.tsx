@@ -1,10 +1,12 @@
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
 import { Container } from "@/components/ui/container";
 import { Label } from "@/components/ui/label";
 import { focusRingOnDark } from "@/components/ui/focus";
 import type { Locale } from "@/config/site";
 import { getHomeStory } from "@/config/home-story";
+import { textDisplay, textTitleTight } from "@/components/ui/typography";
+import { cn } from "@/lib/utils";
+import { ArrowIcon } from "@/components/ui/arrow-icon";
 
 /**
  * Hier kippt die Erzählung. Der Wechsel auf Tannentinte markiert ihn, ohne
@@ -24,7 +26,7 @@ export function HabitatLoss({ locale }: { locale: Locale }) {
             </Label>
             <h2
               id="loss-title"
-              className="mt-4 font-display text-balance text-[length:var(--text-display)] leading-[var(--leading-display)]"
+              className={cn(textDisplay, "mt-4")}
             >
               {t.title}
             </h2>
@@ -55,7 +57,7 @@ export function HabitatLoss({ locale }: { locale: Locale }) {
                   {String(index + 1).padStart(2, "0")}
                 </span>
                 <div>
-                  <h3 className="text-[length:var(--text-title)] font-semibold leading-[var(--leading-title)] tracking-[-0.02em]">
+                  <h3 className={textTitleTight}>
                     {title}
                   </h3>
                   <p className="mt-2 max-w-[54ch] leading-7 text-white/70">{copy}</p>
@@ -77,7 +79,7 @@ export function HabitatLoss({ locale }: { locale: Locale }) {
             className={`group inline-flex min-h-12 shrink-0 items-center justify-center gap-2 rounded-[var(--radius-md)] bg-[var(--color-accent)] px-6 text-sm font-bold text-[var(--color-ink)] transition-colors hover:bg-[var(--color-accent-hover)] ${focusRingOnDark}`}
           >
             {t.cta}
-            <ArrowRight className="size-4 transition-transform duration-200 group-hover:translate-x-1" aria-hidden />
+            <ArrowIcon className="duration-200" />
           </Link>
         </div>
       </Container>

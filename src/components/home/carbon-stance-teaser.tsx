@@ -1,10 +1,12 @@
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
 import { Container } from "@/components/ui/container";
 import { Label } from "@/components/ui/label";
 import { focusRing } from "@/components/ui/focus";
 import type { Locale } from "@/config/site";
 import { getTranslations } from "@/config/translations";
+import { textHeadline } from "@/components/ui/typography";
+import { cn } from "@/lib/utils";
+import { ArrowIcon } from "@/components/ui/arrow-icon";
 
 /**
  * Kurzfassung der CO₂-Haltung: These, die drei Gründe als Überschriften und
@@ -22,7 +24,7 @@ export function CarbonStanceTeaser({ locale }: { locale: Locale }) {
             <Label size="section">{t.eyebrow}</Label>
             <h2
               id="carbon-title"
-              className="mt-4 font-display text-balance text-[length:var(--text-headline)] leading-[var(--leading-headline)] text-[var(--color-ink)]"
+              className={cn(textHeadline, "mt-4 text-[var(--color-ink)]")}
             >
               {t.title}
             </h2>
@@ -34,7 +36,7 @@ export function CarbonStanceTeaser({ locale }: { locale: Locale }) {
               className={`group mt-8 inline-flex min-h-11 items-center gap-2 text-sm font-bold text-[var(--color-forest)] ${focusRing}`}
             >
               {translations.featured.stanceReadMore}
-              <ArrowRight className="size-4 transition-transform duration-300 group-hover:translate-x-1" aria-hidden />
+              <ArrowIcon />
             </Link>
           </div>
 

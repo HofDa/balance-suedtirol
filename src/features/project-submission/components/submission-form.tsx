@@ -35,6 +35,7 @@ import {
 import type { FieldErrors, FieldValue, FormValues } from "../model/types";
 import { FormField } from "./form-field";
 import { SubmissionSummary } from "./submission-summary";
+import { textDisplay, textLead } from "@/components/ui/typography";
 
 /** Versionsnummer im Schlüssel: Ändert sich das Feldschema, verfällt der Entwurf. */
 const STORAGE_KEY = "balance:projekteinreichung:v1";
@@ -274,10 +275,10 @@ export function SubmissionForm({ locale }: { locale: Locale }) {
         <Label size="section" className="mt-6">
           {copy.eyebrow}
         </Label>
-        <h1 className="mt-4 font-display text-balance text-[length:var(--text-display)] leading-[var(--leading-display)]">
+        <h1 className={cn(textDisplay, "mt-4")}>
           {copy.title}
         </h1>
-        <p className="mt-5 max-w-[58ch] text-[length:var(--text-body-lg)] leading-[var(--leading-body)] text-[var(--color-muted)]">
+        <p className={cn(textLead, "mt-5")}>
           {copy.lead}
         </p>
       </div>

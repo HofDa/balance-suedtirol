@@ -7,6 +7,8 @@ import { HeroBackdrop } from "./hero-backdrop";
 import { HeroQuotes } from "./hero-quotes";
 import { Label } from "@/components/ui/label";
 import { focusRingOnDark } from "@/components/ui/focus";
+import { textDisplay } from "@/components/ui/typography";
+import { cn } from "@/lib/utils";
 
 /**
  * Der Hero trägt eine Leitzeile und einen Satz dazu, was b*alance tut. Kein
@@ -28,7 +30,7 @@ export function Hero({ locale }: { locale: Locale }) {
 
           <h1
             id="hero-title"
-            className="font-display hero-reveal hero-reveal-headline mt-4 text-balance text-[length:var(--text-display)] leading-[var(--leading-display)] text-white"
+            className={cn(textDisplay, "hero-reveal hero-reveal-headline mt-4 text-white")}
           >
             {/* Mobil läuft die Akzentzeile im Satz mit: Als eigener Block bricht
                 sie bei 390 px in „Grundlage / unseres Lebens.“ um, und die

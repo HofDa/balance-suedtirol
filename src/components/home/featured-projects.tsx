@@ -7,7 +7,8 @@ import type { Locale } from "@/config/site";
 import { getTranslations } from "@/config/translations";
 import { focusRing } from "@/components/ui/focus";
 import { ProjectCarousel, carouselItemClass } from "./project-carousel";
-import { ArrowRight } from "lucide-react";
+import { ArrowIcon } from "@/components/ui/arrow-icon";
+
 
 export function FeaturedProjects({ locale }: { locale: Locale }) {
   const t = getTranslations(locale).featured;
@@ -26,7 +27,7 @@ export function FeaturedProjects({ locale }: { locale: Locale }) {
           />
           <Link href={`/${locale}/projekte`} className={`group inline-flex min-h-11 shrink-0 items-center gap-2 text-sm font-bold text-[var(--color-forest)] ${focusRing}`}>
             {t.all}
-            <ArrowRight className="size-4 transition-transform duration-300 group-hover:translate-x-1" />
+            <ArrowIcon />
           </Link>
         </div>
 

@@ -233,24 +233,14 @@
       "id": "garden-plants",
       "room": "garden",
       "question": 1,
-      "box": [
-        963,
-        315,
-        286,
-        398
-      ],
+      "box": [963, 315, 291, 398],
       "subject": "the fruit tree including leafy canopy, branches and visible trunk, excluding sky, mountains, fence, insect hotel and other plants"
     },
     {
       "id": "garden-structures",
       "room": "garden",
       "question": 2,
-      "box": [
-        1117,
-        584,
-        63,
-        173
-      ],
+      "box": [1115, 582, 82, 184],
       "subject": "the wooden insect hotel and its supporting wooden post, excluding leaves, flowers, tree and fence"
     }
   ]

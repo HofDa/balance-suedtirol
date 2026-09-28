@@ -51,9 +51,14 @@ contour drawn in):
 - **Alignment**, every object: the build script slides each mask up to 2 source
   px so its edge meets the picture's edges; the registration windows were
   measured by hand in whole pixels.
-- **Drawn outline** (`outlines` in the build script): the raised bed. Its mask
-  covered path and plants and stopped short of the bed's right half, so the
-  layout box was widened and the alpha is a polygon instead.
+- **Drawn outline** (`outlines` in the build script): the raised bed and the
+  insect hotel. Their masks covered path and plants or sat to one side and
+  missed half the object, so the layout boxes were widened and the alpha is a
+  polygon instead.
+- **Smoothed silhouette** (`SMOOTH`, `scripts/refine-house-masks.py`): the fruit
+  tree. Its mask was lace with a hole between every leaf; it is closed into one
+  soft canopy, open sky is removed by colour, the insect hotel in front is cut
+  out (`OCCLUDERS`) and the mask runs to the picture edge (`EXTEND_RIGHT`).
 - **Hand clip** (`CLIP` in `scripts/refine-house-masks.py`): the bed, whose mask
   included wall right of the headboard.
 - **GrabCut** (`GRABCUT`, same script): the kitchen shelves and the driveway.

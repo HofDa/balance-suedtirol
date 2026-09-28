@@ -32,14 +32,19 @@ const registration = {
  'living-tv-streaming':[2,3,36,131], 'living-lighting':[2,3,35,89], 'living-plants':[2,2,107,118],
  'kitchen-diet':[1,4,52,170], 'kitchen-origin':[0,1,96,75], 'kitchen-waste':[1,0,185,103],
  'mobility-short':[1,2,53,96], 'mobility-km':[1,1,163,122], 'mobility-long':[0,0,274,145],
- 'garden-plants':[0,0,286,398], 'garden-structures':[1,1,61,171]
+ 'garden-plants':[0,0,286,398]
 };
 
 // Objects whose generated mask is unusable get a drawn outline instead, in
 // absolute source pixels. The raised bed's mask covered path and plants and
 // stopped short of its right half, which runs on behind the insect-hotel post.
+// The insect hotel's mask sat to the left and missed the side wall and half the post.
 const outlines = {
- 'garden-ground': [[1061,727],[1160,739],[1160,790],[1090,810],[1063,790]]
+ 'garden-ground': [[1061,727],[1160,739],[1160,790],[1090,810],[1063,790]],
+ 'garden-structures': [
+  [1147,584],[1177,583],[1195,611],[1191,618],[1191,678],[1174,683],[1171,683],[1171,765],
+  [1160,765],[1160,683],[1126,682],[1126,620],[1117,618]
+ ]
 };
 
 async function outlineAlpha(points, [left, top], width, height) {

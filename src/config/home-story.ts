@@ -1,4 +1,5 @@
 import type { Locale } from "./site";
+import type { Localized } from "../lib/i18n";
 
 /**
  * Texte der Startseiten-Erzählung: Vielfalt → Leistungen → Verlust → Projekte →
@@ -89,7 +90,7 @@ function services(items: [string, string][]) {
   return items.map(([title, copy], index) => ({ id: serviceIds[index], title, copy }));
 }
 
-const homeStory: Record<Locale, HomeStoryCopy> = {
+const homeStory: Localized<HomeStoryCopy> = {
   de: {
     richness: {
       eyebrow: "Biodiversität in Südtirol",

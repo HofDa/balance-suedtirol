@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { TourAppShell } from "@/features/house-tour/components/tour-app-shell";
-import { isLocale, locales, type Locale } from "@/config/site";
+import { isLocale, locales } from "@/config/site";
 import { withBasePath } from "@/lib/public-path";
+import type { Localized } from "@/lib/i18n";
 
 const route = "/haus-tour";
 
-const pageLabels: Record<Locale, { title: string; description: string; ariaLabel: string }> = {
+const pageLabels: Localized<{ title: string; description: string; ariaLabel: string }> = {
   de: {
     title: "Lebensraum-Check",
     description: "Raum für Raum: Was dein Alltag mit Biodiversität zu tun hat. Interaktiver Selbstcheck für Südtirol.",

@@ -1,11 +1,10 @@
 import { getProjectCategories } from "@/config/project-categories";
 import type { Locale } from "@/config/site";
+import { localeTags } from "@/lib/i18n";
 import type { SubmissionCopy } from "../config/copy";
 import { submissionRecipient } from "../config/copy";
 import { allFields, formSteps } from "../config/form-schema";
 import type { Field, FieldErrors, FormValues } from "./types";
-
-const localeTags: Record<Locale, string> = { de: "de-IT", it: "it-IT", en: "en-GB" };
 
 /**
  * Die vorausgefüllte E-Mail ist eine URL, und URLs sind endlich. Der

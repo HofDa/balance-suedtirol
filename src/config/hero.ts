@@ -1,4 +1,4 @@
-import type { Locale } from "./site";
+import type { Localized } from "../lib/i18n";
 
 export type HeroImage = {
   src: string;
@@ -62,10 +62,10 @@ export const heroQuote: HeroQuote = {
 export type HeroQuoteMock = {
   id: string;
   /** Zitattext je Sprache — frei übersetzbar, weil es sich um Musterinhalte handelt. */
-  text: Record<Locale, string>;
+  text: Localized<string>;
   /** Platzhaltername. Echte Personen erst nennen, wenn Zitat und Nennung freigegeben sind. */
   author: string;
-  role: Record<Locale, string>;
+  role: Localized<string>;
 };
 
 /**

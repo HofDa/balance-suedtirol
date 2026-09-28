@@ -2,15 +2,16 @@ import type { Metadata } from "next";
 import { ArrowUpRight } from "lucide-react";
 import { notFound } from "next/navigation";
 import { Container } from "@/components/ui/container";
-import { isLocale, locales, type Locale } from "@/config/site";
+import { isLocale, locales } from "@/config/site";
 import { Label } from "@/components/ui/label";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { Surface } from "@/components/ui/surface";
 import { withBasePath } from "@/lib/public-path";
+import type { Localized } from "@/lib/i18n";
 
 const route = "/methodik";
 
-const methodMeta: Record<Locale, { title: string; description: string }> = {
+const methodMeta: Localized<{ title: string; description: string }> = {
   de: {
     title: "Methodik & Quellen",
     description: "Bilanzgrenzen, Rechenweg, Datenquellen und Unsicherheiten des Lebensraum-Checks für CO₂, Wasser, Energie und Biodiversität."

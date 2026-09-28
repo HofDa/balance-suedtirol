@@ -1,4 +1,5 @@
 import type { Locale } from "@/config/site";
+import type { Localized } from "@/lib/i18n";
 
 /**
  * Texte der Formularhülle — alles, was nicht Feldbeschriftung ist.
@@ -49,7 +50,7 @@ export type SubmissionCopy = {
   mailIntro: string;
 };
 
-const copy: Record<Locale, SubmissionCopy> = {
+const copy: Localized<SubmissionCopy> = {
   de: {
     eyebrow: "Projekteinreichung",
     title: "Ihr Projekt beschreiben.",

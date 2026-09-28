@@ -3,10 +3,11 @@ import { Container } from "@/components/ui/container";
 import { isLocale, locales, type Locale } from "@/config/site";
 import { Surface } from "@/components/ui/surface";
 import { withBasePath } from "@/lib/public-path";
+import type { Localized } from "@/lib/i18n";
 
 const route = "/impressum";
 
-const impressumMeta: Record<Locale, { title: string; description: string }> = {
+const impressumMeta: Localized<{ title: string; description: string }> = {
   de: { title: "Impressum", description: "Rechtliche Informationen und Impressum der Plattform b*alance Südtirol." },
   it: { title: "Note legali", description: "Informazioni legali e colophon della piattaforma b*alance Alto Adige." },
   en: { title: "Legal Notice", description: "Legal information and colophon of the b*alance South Tyrol platform." }

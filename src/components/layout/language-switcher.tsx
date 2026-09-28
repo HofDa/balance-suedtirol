@@ -5,8 +5,9 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { locales, type Locale } from "@/config/site";
 import { focusRing } from "@/components/ui/focus";
+import type { Localized } from "@/lib/i18n";
 
-const languageNames: Record<Locale, string> = {
+const languageNames: Localized<string> = {
   de: "Deutsch",
   it: "Italiano",
   en: "English"

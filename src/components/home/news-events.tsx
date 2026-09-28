@@ -5,11 +5,10 @@ import { SectionHeading } from "@/components/ui/section-heading";
 import { Surface } from "@/components/ui/surface";
 import { Label } from "@/components/ui/label";
 import type { Locale } from "@/config/site";
+import { localeTags } from "@/lib/i18n";
 import { getTranslations } from "@/config/translations";
 import { getNewsItems } from "@/data/news";
 import type { NewsItem } from "@/types/news";
-
-const localeTags: Record<Locale, string> = { de: "de-IT", it: "it-IT", en: "en-GB" };
 
 /**
  * Termine und Neuigkeiten stehen in einem Raster, nicht in zwei Spalten:

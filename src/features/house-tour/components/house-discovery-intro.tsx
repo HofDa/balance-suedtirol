@@ -9,8 +9,9 @@ import type { Locale } from "@/config/site";
 import { availableRooms } from "../config/rooms";
 import { getRoomProgress } from "../model/scoring";
 import type { RoomId } from "../model/types";
+import type { Localized } from "@/lib/i18n";
 
-const headlineByLocale: Record<Locale, string> = {
+const headlineByLocale: Localized<string> = {
   de: "Hinter jedem Gegenstand steckt eine Verbindung zur Natur.",
   it: "Ogni oggetto racchiude un legame con la natura.",
   en: "Every object has a connection to nature."

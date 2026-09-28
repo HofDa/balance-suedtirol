@@ -1,3 +1,4 @@
+import type { Widen } from "../lib/i18n";
 import type { Locale } from "./site";
 
 const translations = {
@@ -1146,6 +1147,11 @@ const translations = {
   }
 } as const;
 
-export function getTranslations(locale: Locale) {
-  return translations[locale];
+/** Struktur der deutschen Texte; Italienisch und Englisch müssen sie exakt abbilden. */
+export type Translations = Widen<(typeof translations)["de"]>;
+
+const checkedTranslations: Record<Locale, Translations> = translations;
+
+export function getTranslations(locale: Locale): Translations {
+  return checkedTranslations[locale];
 }

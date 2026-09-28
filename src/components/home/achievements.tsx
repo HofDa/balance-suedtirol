@@ -4,11 +4,10 @@ import { SectionHeading } from "@/components/ui/section-heading";
 import { Surface } from "@/components/ui/surface";
 import { Label } from "@/components/ui/label";
 import type { Locale } from "@/config/site";
+import { localeTags } from "@/lib/i18n";
 import { getTranslations } from "@/config/translations";
 import { getAchievementStats, getCompletedProjects, type CompletedProject } from "@/data/achievements";
 import { formatCurrency } from "@/lib/utils";
-
-const localeTags: Record<Locale, string> = { de: "de-IT", it: "it-IT", en: "en-GB" };
 
 /**
  * Zwei Ebenen, eine Aussage: oben die Bilanz über alle Projekte, darunter die

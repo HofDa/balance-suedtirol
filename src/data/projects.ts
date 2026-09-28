@@ -49,6 +49,10 @@ export const projects: Project[] = [
       { src: "/projects/millander-au-bekassine.webp", alt: "Bekassine am Ufer", caption: "Bekassine auf Nahrungssuche am Ufer, einer der Zugvögel, die hier rasten.", credit: "Sepp Gamper" }
     ],
     supporters: 0,
+    mainSponsor: {
+      name: "Amt für Natur – Autonome Provinz Bozen",
+      contribution: "Hauptförderer der Erweiterung der Millander Au."
+    },
     whyItMatters:
       "Die Millander Au ist der Rest einer Auenlandschaft, die einst die gesamte Flusslandschaft von Brixen bis Albeins einnahm. 1988 wurde sie in letzter Sekunde vor der Nutzung als Bauschuttdeponie bewahrt und unter Schutz gestellt. Bei Schlechtwetterfronten über dem Alpenhauptkamm ist sie für Zugvögel eine überlebenswichtige Raststätte: Rund 130 Vogelarten werden hier jährlich nachgewiesen, 30 bis 35 davon brüten im Biotop. Die 2026 renaturierte Nachbarparzelle zeigt, wie schnell neue Lebensräume angenommen werden.",
     impact: [
@@ -188,6 +192,10 @@ const projectTranslations: Record<Exclude<Locale, "de">, Record<string, Partial<
         { value: "ca. 130", label: "specie di uccelli all’anno" },
         { value: "30–35", label: "specie nidificanti" }
       ],
+      mainSponsor: {
+        name: "Ufficio Natura – Provincia autonoma di Bolzano",
+        contribution: "Principale finanziatore dell’ampliamento della Millander Au."
+      },
       monitoring: {
         species: "Uccelli migratori e nidificanti; ne beneficiano anche anfibi, libellule e altri insetti",
         surveys: "Osservazione ornitologica continua di AuRaum, hyla e AVK Südtirol",
@@ -288,6 +296,10 @@ const projectTranslations: Record<Exclude<Locale, "de">, Record<string, Partial<
         { value: "approx. 130", label: "bird species per year" },
         { value: "30–35", label: "breeding species" }
       ],
+      mainSponsor: {
+        name: "Nature Office – Autonomous Province of Bolzano",
+        contribution: "Lead sponsor of the Millander Au expansion."
+      },
       monitoring: {
         species: "Migrating and breeding birds; amphibians, dragonflies and other insects also benefit",
         surveys: "Ongoing bird monitoring by AuRaum, hyla and AVK Südtirol",

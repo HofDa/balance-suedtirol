@@ -34,14 +34,11 @@ const translations = {
       copyright: "© 2026 b*alance"
     },
     hero: {
-      eyebrow: "Lebensraum-Check für Südtirol",
-      title: "Biodiversität ist die",
-      accent: "Grundlage unseres Lebens.",
-      copy: "Mit kurzen Fragen erfährst du, wie dein Alltag mit der Natur in Südtirol zusammenhängt und welche Projekte zu ihrem Schutz beitragen.",
-      tour: "Check starten · 3–5 Minuten",
-      projects: "Geprüfte Projekte ansehen",
-      trust: "Die Ergebnisse dienen der Orientierung.",
-      methodology: "Methodik & Quellen",
+      eyebrow: "Biodiversität erhalten. Zukunft sichern.",
+      title: "Investiere in",
+      accent: "unsere Zukunft.",
+      copy: "b*alance verbindet Unternehmen, Menschen und lokale Naturschutzprojekte – für messbare Investitionen in Biodiversität und funktionierende Ökosysteme in Südtirol.",
+      next: "Warum Südtirol so artenreich ist",
       photo: "Foto",
       quotesLabel: "Stimmen aus Südtirol",
       quoteItem: "Zitat",
@@ -108,17 +105,6 @@ const translations = {
       eyebrow: "Fachliche Begleitung",
       title: "Wer die Methodik mitprüft.",
       copy: "Lebensraumtypologie, Monitoringprotokolle und Kennzahlen werden fachlich begleitet. Die Begleitung prüft die Methodik. Die Verantwortung für die Inhalte bleibt bei der Plattform."
-    },
-    impact: {
-      eyebrow: "Mitmachen",
-      title: "Ein Projekt unterstützen – oder eines einreichen.",
-      copy: "Wer ein Projekt unterstützt, kann es besuchen und über Jahre verfolgen. Wer selbst eine Fläche betreut, kann ein Projekt einreichen; ein Fachgremium prüft es vor der Veröffentlichung.",
-      cta: "Projekte ansehen",
-      features: [
-        ["Vor Ort", "Jedes Projekt liegt in Südtirol und hat eine Adresse."],
-        ["Geprüft", "Ein Fachgremium prüft Ziele, Laufzeit und Budget vor der Aufnahme."],
-        ["Dokumentiert", "Maßnahmen, Monitoring und Finanzierungsstand stehen auf der Projektseite."]
-      ]
     },
     biodiversityExplainer: {
       button: "Biodiversität in Südtirol",
@@ -230,13 +216,12 @@ const translations = {
       scopeEyebrow: "Bilanzgrenze",
       scopeTitle: "Was der Check rechnet – und was nicht.",
       scopeCopy: "Der CO₂e-Wert ist ein transparenter Ausschnitt: die abgefragten Aktivitäten pro Person und Jahr. Konsum, Gebäude und öffentliche Leistungen fehlen, Vorketten sind nur enthalten, wo der Faktor sie abbildet. Aus einer so vereinfachten Zahl einen Euro-Betrag abzuleiten, würde ihr eine Genauigkeit unterstellen, die sie nicht hat.",
-      reasonsEyebrow: "Vier Gründe",
+      reasonsEyebrow: "Drei Gründe",
       reasonsTitle: "Warum sich Ausstoß nicht sauber gegenrechnen lässt.",
       reasons: [
         ["Eine Tonne ist überall gleich. Ein Lebensraum nicht.", "Kompensation setzt voraus, dass eine Tonne hier gegen eine Tonne anderswo tauschbar ist. Ein Moor im Pustertal hat diesen Tauschwert nicht: Was dort verloren geht, entsteht anderswo nicht noch einmal – nicht mit denselben Arten, nicht im selben Wasserhaushalt."],
         ["Die Emission wirkt sofort, die Speicherung braucht Jahrzehnte.", "Kohlenstoff, der heute frei wird, wirkt heute. Eine Hecke oder ein wiedervernässtes Moor bindet ihn über Jahrzehnte – und nur so lange, wie die Fläche bleibt, was sie ist. Dürre, Brand oder eine neue Nutzung setzen ihn wieder frei."],
-        ["Bezahlt ist nicht vermieden.", "Ein Rechner, der mit einem Betrag endet, verschiebt die Frage von „Was ändere ich?“ zu „Was kostet es?“. Der Check ist für die erste Frage gebaut: Er zeigt, wo deine Zahlen groß sind – denn dort ist auch dein Spielraum am größten."],
-        ["Wir könnten das Versprechen nicht belegen.", "Ein Ausgleich müsste nachweisen, dass eine Fläche ohne die Zahlung nicht entstanden wäre und dauerhaft bleibt. Diesen Nachweis kann die Plattform heute nicht führen – und eine Aussage ohne Beleg streichen wir."]
+        ["Bezahlt ist nicht vermieden.", "Ein Rechner, der mit einem Betrag endet, verschiebt die Frage von „Was ändere ich?“ zu „Was kostet es?“. Der Check ist für die erste Frage gebaut: Er zeigt, wo deine Zahlen groß sind – denn dort ist auch dein Spielraum am größten."]
       ],
       localEyebrow: "Und warum nicht hier?",
       localTitle: "In Südtirol ist Fläche knapp.",
@@ -430,14 +415,11 @@ const translations = {
       copyright: "© 2026 b*alance"
     },
     hero: {
-      eyebrow: "Check degli habitat per l’Alto Adige",
-      title: "La biodiversità è la",
-      accent: "base della nostra vita.",
-      copy: "Con brevi domande scoprirai come le tue scelte quotidiane influenzano la natura in Alto Adige e quali progetti contribuiscono alla sua tutela.",
-      tour: "Avvia il check · 3–5 minuti",
-      projects: "Vedi i progetti verificati",
-      trust: "I risultati servono da orientamento.",
-      methodology: "Metodo & fonti",
+      eyebrow: "Conservare la biodiversità. Assicurare il futuro.",
+      title: "Investi nel",
+      accent: "nostro futuro.",
+      copy: "b*alance mette in contatto imprese, persone e progetti locali di tutela della natura – per investimenti misurabili nella biodiversità e in ecosistemi funzionanti in Alto Adige.",
+      next: "Perché l’Alto Adige è così ricco di specie",
       photo: "Foto",
       quotesLabel: "Voci dall’Alto Adige",
       quoteItem: "Citazione",
@@ -504,17 +486,6 @@ const translations = {
       eyebrow: "Accompagnamento tecnico-scientifico",
       title: "Chi verifica la metodologia.",
       copy: "La tipologia degli habitat, i protocolli di monitoraggio e gli indicatori sono accompagnati sul piano scientifico. L’accompagnamento verifica il metodo. La responsabilità dei contenuti resta della piattaforma."
-    },
-    impact: {
-      eyebrow: "Partecipare",
-      title: "Sostenere un progetto – o proporne uno.",
-      copy: "Chi sostiene un progetto può visitarlo e seguirlo negli anni. Chi cura un’area può proporre un progetto; una commissione tecnica lo valuta prima della pubblicazione.",
-      cta: "Vedi i progetti",
-      features: [
-        ["Sul posto", "Ogni progetto si trova in Alto Adige e ha un indirizzo."],
-        ["Valutato", "Una commissione tecnica verifica obiettivi, durata e budget prima dell’ammissione."],
-        ["Documentato", "Interventi, monitoraggio e stato del finanziamento sono sulla pagina del progetto."]
-      ]
     },
     biodiversityExplainer: {
       button: "Biodiversità in Alto Adige",
@@ -626,13 +597,12 @@ const translations = {
       scopeEyebrow: "Confine di bilancio",
       scopeTitle: "Che cosa calcola il check – e che cosa no.",
       scopeCopy: "Il valore di CO₂e è uno spaccato trasparente: le attività rilevate per persona e anno. Mancano consumi, edifici e servizi pubblici; le filiere a monte sono incluse solo dove il fattore le rappresenta. Ricavare un importo in euro da un numero così semplificato gli attribuirebbe una precisione che non ha.",
-      reasonsEyebrow: "Quattro ragioni",
+      reasonsEyebrow: "Tre ragioni",
       reasonsTitle: "Perché le emissioni non si compensano in modo pulito.",
       reasons: [
         ["Una tonnellata è uguale ovunque. Un habitat no.", "La compensazione presuppone che una tonnellata qui sia scambiabile con una tonnellata altrove. Una torbiera in Val Pusteria non ha questo valore di scambio: ciò che va perso lì non rinasce altrove – non con le stesse specie, non con lo stesso regime idrico."],
         ["L’emissione agisce subito, lo stoccaggio richiede decenni.", "Il carbonio liberato oggi agisce oggi. Una siepe o una torbiera riallagata lo lega nell’arco di decenni – e solo finché la superficie resta ciò che è. Siccità, incendi o un nuovo uso lo liberano di nuovo."],
-        ["Pagato non significa evitato.", "Un calcolatore che finisce con un importo sposta la domanda da «Che cosa cambio?» a «Quanto costa?». Il check è fatto per la prima domanda: mostra dove i tuoi numeri sono grandi – perché lì è anche più ampio il tuo margine d’azione."],
-        ["Non potremmo dimostrare la promessa.", "Una compensazione dovrebbe dimostrare che una superficie non sarebbe nata senza il pagamento e che resterà nel tempo. Oggi la piattaforma non può fornire questa prova – e un’affermazione senza prova la cancelliamo."]
+        ["Pagato non significa evitato.", "Un calcolatore che finisce con un importo sposta la domanda da «Che cosa cambio?» a «Quanto costa?». Il check è fatto per la prima domanda: mostra dove i tuoi numeri sono grandi – perché lì è anche più ampio il tuo margine d’azione."]
       ],
       localEyebrow: "E perché non qui?",
       localTitle: "In Alto Adige lo spazio è poco.",
@@ -826,14 +796,11 @@ const translations = {
       copyright: "© 2026 b*alance"
     },
     hero: {
-      eyebrow: "Habitat Check for South Tyrol",
-      title: "Biodiversity is the",
-      accent: "foundation of our lives.",
-      copy: "With short questions, find out how your daily life connects to nature in South Tyrol and which projects contribute to its protection.",
-      tour: "Start check · 3–5 minutes",
-      projects: "View verified projects",
-      trust: "Results serve as general guidance.",
-      methodology: "Methodology & sources",
+      eyebrow: "Protect biodiversity. Secure the future.",
+      title: "Invest in",
+      accent: "our future.",
+      copy: "b*alance connects companies, people and local conservation projects – for measurable investment in biodiversity and functioning ecosystems in South Tyrol.",
+      next: "Why South Tyrol is so rich in species",
       photo: "Photo",
       quotesLabel: "Voices from South Tyrol",
       quoteItem: "Quote",
@@ -900,17 +867,6 @@ const translations = {
       eyebrow: "Scientific guidance",
       title: "Who reviews the methodology.",
       copy: "Habitat typology, monitoring protocols and key figures are reviewed by specialists. That guidance checks the method. Responsibility for the content stays with the platform."
-    },
-    impact: {
-      eyebrow: "Get involved",
-      title: "Support a project – or submit one.",
-      copy: "If you support a project, you can visit it and follow it over the years. If you look after a site yourself, you can submit a project; an expert panel reviews it before publication.",
-      cta: "View projects",
-      features: [
-        ["On site", "Every project is in South Tyrol and has an address."],
-        ["Reviewed", "An expert panel checks goals, duration and budget before admission."],
-        ["Documented", "Measures, monitoring and funding status are on the project page."]
-      ]
     },
     biodiversityExplainer: {
       button: "Biodiversity in South Tyrol",
@@ -1022,13 +978,12 @@ const translations = {
       scopeEyebrow: "Accounting boundary",
       scopeTitle: "What the check calculates – and what it does not.",
       scopeCopy: "The CO₂e value is a transparent excerpt: the activities surveyed, per person and year. Consumption, buildings and public services are missing; upstream chains are included only where the factor covers them. Deriving a euro amount from such a simplified figure would lend it a precision it does not have.",
-      reasonsEyebrow: "Four reasons",
+      reasonsEyebrow: "Three reasons",
       reasonsTitle: "Why emissions cannot be cleanly cancelled out.",
       reasons: [
         ["A tonne is the same everywhere. A habitat is not.", "Offsetting assumes that a tonne here can be traded for a tonne elsewhere. A bog in the Puster Valley has no such exchange value: what is lost there does not reappear elsewhere – not with the same species, not with the same water balance."],
         ["Emissions act now, storage takes decades.", "Carbon released today acts today. A hedge or a rewetted bog binds it over decades – and only as long as the land stays what it is. Drought, fire or a change of use release it again."],
-        ["Paid is not avoided.", "A calculator that ends with an amount shifts the question from “What do I change?” to “What does it cost?”. The check is built for the first question: it shows where your numbers are large – because that is where your room to act is largest."],
-        ["We could not back up the promise.", "An offset would have to prove that a site would not have come into being without the payment and that it will last. The platform cannot provide that proof today – and a claim without evidence gets cut."]
+        ["Paid is not avoided.", "A calculator that ends with an amount shifts the question from “What do I change?” to “What does it cost?”. The check is built for the first question: it shows where your numbers are large – because that is where your room to act is largest."]
       ],
       localEyebrow: "And why not here?",
       localTitle: "Land is scarce in South Tyrol.",

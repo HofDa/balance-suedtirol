@@ -9,9 +9,9 @@ import { Label } from "@/components/ui/label";
 import { focusRingOnDark } from "@/components/ui/focus";
 
 /**
- * Der Hero beantwortet nur vier Fragen: Worum geht es, was muss ich tun,
- * was erhalte ich und wie belastbar ist das Ergebnis? Wissenschaftliches Zitat,
- * Prozessgrafik und Kennzahlen stehen bewusst nicht in dieser ersten Ebene.
+ * Der Hero trägt eine Leitzeile und einen Satz dazu, was b*alance tut. Kein
+ * Check-Knopf, keine Kennzahlen: Die Seite erzählt darunter der Reihe nach –
+ * Vielfalt, Leistungen, Verlust, Projekte – und erklärt das Modell erst danach.
  */
 export function Hero({ locale }: { locale: Locale }) {
   const t = getTranslations(locale).hero;

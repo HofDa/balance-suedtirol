@@ -150,10 +150,6 @@ button {
   transform: scale(1.14);
 }
 
-.hero-cta::after {
-  transform: translateX(420%) skewX(-12deg);
-}
-
 /* Die Ankunft bewegt nur, sie blendet nicht.
  *
  * Eine Deckkraft von 0 im Startbild macht den Inhalt überall dort dauerhaft
@@ -230,10 +226,6 @@ button {
     --hero-reveal-delay: 420ms;
     --hero-reveal-opacity: 0.7;
     --hero-reveal-blur: 2px;
-  }
-
-  .hero-cta::after {
-    animation: hero-cta-sheen 1800ms cubic-bezier(0.22, 1, 0.36, 1) 900ms both;
   }
 
   /* Zitatwechsel und Fortschrittsbalken.
@@ -376,16 +368,6 @@ button {
 
   to {
     transform: translate3d(0, 0, 0) scale(1.14);
-  }
-}
-
-@keyframes hero-cta-sheen {
-  from {
-    transform: translateX(-180%) skewX(-12deg);
-  }
-
-  to {
-    transform: translateX(420%) skewX(-12deg);
   }
 }
 

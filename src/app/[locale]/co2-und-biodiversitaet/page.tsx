@@ -31,9 +31,8 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
  * Die Haltungsseite zur naheliegendsten Rückfrage an den Check: „Ihr rechnet
  * mein CO₂ aus — wo kann ich es ausgleichen?"
  *
- * Die vier Gründe argumentieren ohne Zahlen aus dem eigenen Haus: Bilanzgrenze
- * des Rechners (`docs/BILANZ-FAKTOREN.md`) und die Methodikregel, dass eine
- * Aussage ohne Beleg gestrichen wird. Der Südtirol-Abschnitt („Und warum nicht
+ * Die drei Gründe argumentieren ohne Zahlen aus dem eigenen Haus, gestützt auf
+ * die Bilanzgrenze des Rechners (`docs/BILANZ-FAKTOREN.md`). Der Südtirol-Abschnitt („Und warum nicht
  * hier?“) führt drei Kennzahlen – jede mit Quelle unter dem Block.
  */
 export default async function CarbonStancePage({
@@ -73,12 +72,12 @@ export default async function CarbonStancePage({
         </Container>
       </section>
 
-      {/* ③ Die vier Gründe — nummeriert wie auf der Methodikseite, damit beide
+      {/* ③ Die drei Gründe — nummeriert wie auf der Methodikseite, damit beide
           Argumentationsflächen als dasselbe Format erkennbar sind. */}
       <section className="bg-[var(--color-sage)]/35 py-14 sm:py-20">
         <Container>
           <SectionHeading eyebrow={t.reasonsEyebrow} title={t.reasonsTitle} />
-          <div className="mt-10 grid gap-4 md:grid-cols-2">
+          <div className="mt-10 grid gap-4 lg:grid-cols-3">
             {t.reasons.map(([title, copy], index) => (
               <Surface key={title} as="article" level="sheet">
                 <p className="text-sm font-bold tabular-nums text-[var(--color-forest)]">

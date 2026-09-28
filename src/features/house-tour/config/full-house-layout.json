@@ -226,12 +226,7 @@
       "id": "garden-ground",
       "room": "garden",
       "question": 0,
-      "box": [
-        1028,
-        722,
-        87,
-        101
-      ],
+      "box": [1056, 720, 108, 94],
       "subject": "the wooden raised garden bed and plants growing inside it, excluding the surrounding plants, path and fence"
     },
     {

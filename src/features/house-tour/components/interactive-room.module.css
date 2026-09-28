@@ -1,15 +1,39 @@
-/* The resting picture is the exact original. Cutouts only add a silhouette
-   outline; hover and focus never translate or scale the furniture. */
+/* Spotlight highlight. The resting picture is the exact original; while an
+   object is active, hovered or focused, the scene dims and the object's cutout
+   (same pixels, soft alpha edge) shows through at full brightness. A soft edge
+   forgives a pixel of mask drift; a hard outline traced every step of it.
+   Hover and focus never translate or scale the furniture. */
+.dim {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: rgb(24 50 41 / 0.38);
+  opacity: 0;
+  transition: opacity 180ms ease;
+}
 .sprite {
   opacity: 0;
-  transition: opacity 140ms ease, filter 140ms ease;
+  transition: opacity 180ms ease;
+  filter: drop-shadow(0 0 1px rgb(255 255 255 / 0.75)) drop-shadow(0 0 4px rgb(255 255 255 / 0.25));
+}
+
+.scene:has(.object:hover, .object:focus-visible, .object[data-active="true"]) .dim {
+  opacity: 1;
 }
 .object[data-active="true"] .sprite,
 .object:hover .sprite,
 .object:focus-visible .sprite {
   opacity: 1;
-  filter: drop-shadow(1px 0 0 #fff) drop-shadow(-1px 0 0 #fff) drop-shadow(0 1px 0 #fff) drop-shadow(0 -1px 0 #fff) drop-shadow(2px 0 0 #285744) drop-shadow(-2px 0 0 #285744) drop-shadow(0 2px 0 #285744) drop-shadow(0 -2px 0 #285744);
 }
+/* Pointing at another object moves the spotlight there. */
+.scene:has(.object:hover) .object[data-active="true"]:not(:hover) .sprite,
+.scene:has(.object:focus-visible) .object[data-active="true"]:not(:focus-visible) .sprite {
+  opacity: 0;
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .sprite { transition: none; }
+  .dim,
+  .sprite {
+    transition: none;
+  }
 }

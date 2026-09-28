@@ -33,21 +33,21 @@ export function RegisteredHouseScene({ roomId, questionIndex, answers, skippedQu
     left: `${(x - left) / width * 100}%`, top: `${(y - top) / height * 100}%`,
     width: `${w / width * 100}%`, height: `${h / height * 100}%`
   });
-  const sourceImagePlacement: CSSProperties = {
-    left: `${-left / width * 100}%`,
-    top: `${-top / height * 100}%`,
-    width: `${layout.size[0] / width * 100}%`,
-    height: `${layout.size[1] / height * 100}%`
-  };
+  // A room loads its own crop, cut from the 4× master: the full house scaled up
+  // to room size would be blurry. The overview keeps the whole picture.
+  const isRoomCrop = Boolean(roomId && roomId in layout.rooms);
+  const sourceImage = isRoomCrop ? `/images/house-tour/full-house/rooms/${roomId}.webp` : "/images/house-tour/full-house/house.webp";
   return (
     <div className="flex h-full min-h-0 w-full items-center justify-center [container-type:size]">
-      <div className="relative isolate overflow-hidden" data-house-scene={roomId ?? "house"}
+      <div className={cn(styles.scene, "relative isolate overflow-hidden")} data-house-scene={roomId ?? "house"}
         data-source-crop={crop.join(",")}
         style={{ aspectRatio: `${width} / ${height}`, width: `min(100cqw, ${width / height * 100}cqh)` }}>
-        {/* Lossless source and cutouts share pixels. No object gets moved to fit a room. */}
+        {/* Room image and cutouts share pixels. No object gets moved to fit a room. */}
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={withBasePath("/images/house-tour/full-house/house.webp")} alt="" draggable={false}
-          className="pointer-events-none absolute max-w-none select-none" style={sourceImagePlacement} />
+        <img src={withBasePath(sourceImage)} alt="" draggable={false}
+          className="pointer-events-none absolute inset-0 h-full w-full max-w-none select-none" />
+        {/* Spotlight: dims the scene while an object is highlighted; the cutout above stays bright. */}
+        <span className={styles.dim} aria-hidden />
         {items.map((item) => {
           const room = getRoom(item.room as RoomId);
           const question = room?.questions[item.question];

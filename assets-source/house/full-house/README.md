@@ -1,8 +1,14 @@
 # Full-house registered cutouts
 
 Source: the user-supplied `ChatGPT Image 21. Sept. 2026, 14_45_54.png`,
-1254 × 1254 pixels. Its lossless web copy is
-`public/images/house-tour/full-house/house.webp`.
+1254 × 1254 pixels, kept here as `house-original.png`.
+
+`house-x4.webp` is its 4× upscale (5016 × 5016), made with
+`scripts/upscale-house.py` (Real-ESRGAN x4plus plus a quarter Lanczos for
+texture). The original is too small for the room view: a room spans about
+290 source pixels but fills roughly 630 CSS pixels, 1260 device pixels on a
+retina screen. Every web asset in `public/images/house-tour/full-house/` is cut
+from the master.
 
 The authoritative room crops and object rectangles are in
 `src/features/house-tour/config/full-house-layout.json`. Coordinates are original
@@ -29,15 +35,36 @@ size and position from the layout manifest:
 > registration is critical.
 
 The tool sometimes changes padding and output resolution. The export script
-registers its alpha to measured source foreground bounds and uses the original
-house RGB, rather than generated RGB. Hidden furniture is not introduced into the
-scene. The full original remains the resting image; cutouts provide selectable
-silhouette outlines at fixed positions.
+registers its alpha to measured source foreground bounds and uses the master
+RGB, rather than generated RGB. The masks are much larger than their objects;
+the script scales them down smoothly and keeps their soft edge instead of
+thresholding, so the silhouette does not step at room zoom. Hidden furniture is
+not introduced into the scene. The picture itself remains the resting image;
+cutouts drive the spotlight (the scene dims, the object stays bright).
 
-Rebuild all 18 lossless WebP cutouts:
+## Corrections
+
+A few generated masks needed help. Each fix is limited to the objects listed in
+its script and was checked against a contact sheet (master crop with the mask
+contour drawn in):
+
+- **Alignment**, every object: the build script slides each mask up to 2 source
+  px so its edge meets the picture's edges; the registration windows were
+  measured by hand in whole pixels.
+- **Drawn outline** (`outlines` in the build script): the raised bed. Its mask
+  covered path and plants and stopped short of the bed's right half, so the
+  layout box was widened and the alpha is a polygon instead.
+- **Hand clip** (`CLIP` in `scripts/refine-house-masks.py`): the bed, whose mask
+  included wall right of the headboard.
+- **GrabCut** (`GRABCUT`, same script): the kitchen shelves and the driveway.
+  On other objects it ate thin parts such as bed legs, so it stays opt-in.
+
+Rebuild the overview, the room crops and all 18 cutouts, then apply the
+corrections (needs `pip install opencv-python-headless`):
 
 ```sh
 node scripts/build-full-house-objects.mjs
+python3 scripts/refine-house-masks.py
 ```
 
 Final assets: `public/images/house-tour/full-house/objects/`.

@@ -110,20 +110,29 @@ export function BiodiversityRichness({ locale }: { locale: Locale }) {
           <h3 className="max-w-[24ch] font-display text-balance text-[length:var(--text-headline)] leading-[var(--leading-headline)] text-[var(--color-ink)]">
             {figures.title}
           </h3>
-          <p className="mt-4 max-w-[58ch] text-[length:var(--text-body-lg)] leading-[var(--leading-body)] text-[var(--color-muted)]">
+          <p className="mt-4 max-w-[58ch] text-pretty text-[length:var(--text-body-lg)] leading-[var(--leading-body)] text-[var(--color-muted)]">
             {figures.copy}
           </p>
-          <dl className="mt-10 grid grid-cols-2 gap-x-6 gap-y-10 lg:grid-cols-4 lg:gap-x-0">
-            {figures.items.map(([value, label], index) => (
+          {/* Jede Zahl einzeilig, Zusätze wie „ca.“ oder „von 36“ klein daneben:
+              So stehen alle vier auf einer Grundlinie, und die Beschriftungen
+              darunter beginnen auf gleicher Höhe. */}
+          <dl className="mt-12 grid grid-cols-2 gap-x-6 gap-y-10 border-t border-[var(--color-line)] pt-8 lg:grid-cols-4 lg:gap-x-0 lg:pt-10">
+            {figures.items.map((item, index) => (
               <div
-                key={label}
-                className={`flex flex-col-reverse border-t border-[var(--color-line)] pt-5 lg:border-t-0 lg:pt-0 ${
-                  index > 0 ? "lg:border-l lg:pl-8" : ""
-                } ${index < figures.items.length - 1 ? "lg:pr-8" : ""}`}
+                key={item.label}
+                className={`flex flex-col-reverse justify-end ${index > 0 ? "lg:border-l lg:border-[var(--color-line)] lg:pl-10" : ""} ${
+                  index < figures.items.length - 1 ? "lg:pr-10" : ""
+                }`}
               >
-                <dt className="mt-3 max-w-[22ch] text-sm leading-6 text-[var(--color-muted)]">{label}</dt>
-                <dd className="font-display text-[length:var(--text-display)] leading-none tracking-[-0.035em] tabular-nums text-[var(--color-forest)]">
-                  {value}
+                <dt className="mt-4 max-w-[24ch] text-sm leading-6 text-[var(--color-muted)]">{item.label}</dt>
+                <dd className="whitespace-nowrap font-display text-[clamp(2.25rem,4vw,3.75rem)] leading-none tracking-[-0.035em] tabular-nums text-[var(--color-forest)]">
+                  {item.prefix ? (
+                    <span className="mr-[0.25em] text-[0.42em] tracking-[-0.01em] text-[var(--color-forest)]/75">{item.prefix}</span>
+                  ) : null}
+                  {item.value}
+                  {item.suffix ? (
+                    <span className="ml-[0.3em] text-[0.42em] tracking-[-0.01em] text-[var(--color-forest)]/75">{item.suffix}</span>
+                  ) : null}
                 </dd>
               </div>
             ))}

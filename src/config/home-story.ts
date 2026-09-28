@@ -28,7 +28,8 @@ export type HomeStoryCopy = {
   figures: {
     title: string;
     copy: string;
-    items: [string, string][];
+    /** Zahl, dazu optional ein kleiner Zusatz davor oder danach („ca.“, „von 36“). */
+    items: { value: string; prefix?: string; suffix?: string; label: string }[];
     source: string;
   };
   monitoring: { title: string; subtitle: string; href: string };
@@ -108,10 +109,10 @@ const homeStory: Record<Locale, HomeStoryCopy> = {
       title: "Klein im Umriss, groß in der Vielfalt.",
       copy: "Südtirol umfasst rund 7.400 km², weniger als 2,5 % der Fläche Italiens. Und doch leben hier:",
       items: [
-        ["2.500+", "Gefäßpflanzenarten"],
-        ["153", "Brutvogelarten"],
-        ["ca. 185", "Tagfalterarten"],
-        ["25 von 36", "in Italien vorkommenden Fledermausarten"]
+        { value: "2.500+", label: "Gefäßpflanzenarten" },
+        { value: "153", label: "Brutvogelarten" },
+        { prefix: "ca.", value: "185", label: "Tagfalterarten" },
+        { value: "25", suffix: "von 36", label: "in Italien vorkommenden Fledermausarten" }
       ],
       source: "Artenzahlen: Biodiversitätsmonitoring Südtirol (Eurac Research), Artengruppen Gefäßpflanzen, Vögel, Tagfalter und Fledermäuse. Fläche: Forstdienst der Autonomen Provinz Bozen; ISTAT."
     },
@@ -204,10 +205,10 @@ const homeStory: Record<Locale, HomeStoryCopy> = {
       title: "Piccolo sulla carta, grande nella varietà.",
       copy: "L’Alto Adige misura circa 7.400 km², meno del 2,5 % della superficie italiana. Eppure qui vivono:",
       items: [
-        ["2.500+", "specie di piante vascolari"],
-        ["153", "specie di uccelli nidificanti"],
-        ["ca. 185", "specie di farfalle diurne"],
-        ["25 su 36", "specie di pipistrelli presenti in Italia"]
+        { value: "2.500+", label: "specie di piante vascolari" },
+        { value: "153", label: "specie di uccelli nidificanti" },
+        { prefix: "ca.", value: "185", label: "specie di farfalle diurne" },
+        { value: "25", suffix: "su 36", label: "specie di pipistrelli presenti in Italia" }
       ],
       source: "Numero di specie: Monitoraggio della biodiversità Alto Adige (Eurac Research), gruppi piante vascolari, uccelli, farfalle diurne e pipistrelli. Superficie: Servizio forestale della Provincia autonoma di Bolzano; ISTAT."
     },
@@ -300,10 +301,10 @@ const homeStory: Record<Locale, HomeStoryCopy> = {
       title: "Small on the map, rich in diversity.",
       copy: "South Tyrol covers around 7,400 km², less than 2.5 % of Italy. And yet it is home to:",
       items: [
-        ["2,500+", "vascular plant species"],
-        ["153", "breeding bird species"],
-        ["c. 185", "butterfly species"],
-        ["25 of 36", "bat species found in Italy"]
+        { value: "2,500+", label: "vascular plant species" },
+        { value: "153", label: "breeding bird species" },
+        { prefix: "c.", value: "185", label: "butterfly species" },
+        { value: "25", suffix: "of 36", label: "bat species found in Italy" }
       ],
       source: "Species counts: Biodiversity Monitoring South Tyrol (Eurac Research), groups vascular plants, birds, butterflies and bats. Area: Forest Service of the Autonomous Province of Bolzano; ISTAT."
     },

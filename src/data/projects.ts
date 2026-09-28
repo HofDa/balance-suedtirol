@@ -141,10 +141,6 @@ export const projects: Project[] = [
   }
 ];
 
-export function getProject(slug: string) {
-  return projects.find((project) => project.slug === slug);
-}
-
 const projectTranslations: Record<Exclude<Locale, "de">, Record<string, Partial<Project>>> = {
   it: {
     "millander-au-erweiterung": {

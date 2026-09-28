@@ -20,10 +20,3 @@ export const focusRing = `${base} focus-visible:ring-[var(--color-forest)] focus
 export const focusRingTool = `${base} focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-white`;
 
 export const focusRingOnDark = `${base} focus-visible:ring-white focus-visible:ring-offset-[var(--color-ink)]`;
-
-/**
- * Für Elemente, die ihren Ring bündig am eigenen Rand tragen müssen — etwa
- * Karten, deren Ring sonst in die Nachbarkarte ragt.
- */
-export const focusRingFlush =
-  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-forest)]";

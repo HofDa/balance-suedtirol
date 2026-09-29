@@ -28,35 +28,86 @@ function Bee({ path, delay }: { path: string; delay: number }) {
   );
 }
 
-const effects: Record<string, () => ReactNode> = {
-  // Nachttischlampe: geht an, der Schirm leuchtet warm.
-  "bedroom-standby": () => (
-    <>
-      <span className={styles.lampGlow} style={at(48, 13, { width: "150%" })} />
-      <span className={styles.shadeLight} style={at(48, 12, { width: "52%", height: "18%" })} />
-    </>
-  ),
-  // Stehlampe: dasselbe Licht, größerer Schirm.
-  "living-lighting": () => (
-    <>
-      <span className={styles.lampGlow} style={at(40, 14, { width: "260%" })} />
-      <span className={styles.shadeLight} style={at(40, 14, { width: "82%", height: "20%" })} />
-    </>
-  ),
-  // Fernseher: bläuliches Bildschirmlicht flackert auf der Wand.
-  "living-tv-streaming": () => <span className={styles.tvGlow} style={at(30, 24, { width: "480%" })} />,
-  // Dusche: Tropfen aus dem Kopf, etwas Dampf.
-  "bath-shower": () => (
-    <>
-      <span className={styles.rain} style={at(38, 11, { width: "22%", height: "74%" })}>
-        {[6, 22, 38, 54, 70, 86, 14, 46, 78, 30, 62].map((left, index) => (
-          <span key={index} className={styles.drop} style={{ left: `${left}%`, animationDelay: `${(index * 0.083).toFixed(3)}s` }} />
+/** Lichtfarbe je Leuchtmittel: Halogen warm-orange, LED kühlweiß. */
+const lampColors: Record<string, { glow: string; shade: string; strength: number }> = {
+  "light-old": { glow: "255 165 70", shade: "255 205 130", strength: 1 },
+  "light-mixed": { glow: "255 222 168", shade: "255 240 210", strength: 0.9 },
+  "light-led": { glow: "190 218 255", shade: "228 240 255", strength: 0.85 },
+  "light-average": { glow: "255 214 160", shade: "255 236 200", strength: 0.9 },
+  default: { glow: "255 221 160", shade: "255 246 222", strength: 1 }
+};
+
+function Lamp({ x, y, glow, shade, answer }: { x: number; y: number; glow: string; shade: [string, string]; answer?: string }) {
+  const color = lampColors[answer ?? "default"] ?? lampColors.default;
+  const vars = { "--glow": color.glow, "--shade": color.shade, opacity: color.strength } as CSSProperties;
+  return (
+    // Der Schlüssel startet das Einschalten neu, sobald die Antwort die Farbe ändert.
+    <span key={answer ?? "default"} className={styles.lamp} style={vars}>
+      <span className={styles.lampGlow} style={at(x, y + 1, { width: glow })} />
+      <span className={styles.shadeLight} style={at(x, y, { width: shade[0], height: shade[1] })} />
+    </span>
+  );
+}
+
+/** Stromverbrauch: je höher, desto heller und unruhiger das Bildschirmlicht. */
+const tvStates: Record<string, { strength: number; seconds: number }> = {
+  "electricity-high": { strength: 1, seconds: 1.8 },
+  "electricity-medium": { strength: 0.75, seconds: 3.2 },
+  "electricity-low": { strength: 0.45, seconds: 5.5 }
+};
+
+/** Duschart: Tropfenzahl, Tempo und Dampf. Die Sparbrause spritzt fein und dampft nicht. */
+const showerStates: Record<string, { drops: number; seconds: number; steam: number; thin?: boolean }> = {
+  "bath-long": { drops: 15, seconds: 0.8, steam: 3 },
+  "bath-normal": { drops: 10, seconds: 0.9, steam: 1 },
+  "bath-eco": { drops: 6, seconds: 1.05, steam: 0, thin: true }
+};
+
+/** Wildbienen je Lebensraum-Ausstattung. */
+const beeCounts: Record<string, number> = { none: 0, hotel: 2, diverse: 5 };
+const beeFlights: [string, number][] = [["beeA", 0], ["beeB", -2.4], ["beeC", -4.1], ["beeA", -3.3], ["beeB", -5.6]];
+
+const effects: Record<string, (answer?: string) => ReactNode> = {
+  // Nachttischlampe; kleine rote Standby-Lichter je nach Antwort (3 / 1 / 0).
+  "bedroom-standby": (answer) => {
+    const lights = answer === "standby-all" ? 3 : answer === "standby-partial" ? 1 : 0;
+    return (
+      <>
+        <Lamp x={48} y={12} glow="150%" shade={["52%", "18%"]} />
+        {Array.from({ length: lights }, (_, index) => (
+          <span key={index} className={styles.standbyLight} style={at(64 + index * 6, 47, { animationDelay: `${index * 0.7}s` })} />
         ))}
+      </>
+    );
+  },
+  // Stehlampe: Lichtfarbe nach Leuchtmittel.
+  "living-lighting": (answer) => <Lamp x={40} y={14} glow="260%" shade={["82%", "20%"]} answer={answer} />,
+  // Fernseher: bläuliches Bildschirmlicht auf der Wand.
+  "living-tv-streaming": (answer) => {
+    const state = tvStates[answer ?? ""] ?? tvStates["electricity-medium"];
+    return (
+      <span className={styles.lamp} style={{ opacity: state.strength }}>
+        <span className={styles.tvGlow} style={at(30, 24, { width: "480%", animationDuration: `${state.seconds}s` })} />
       </span>
-      <span className={styles.steam} style={at(50, 30, { width: "60%" })} />
-      <span className={styles.steam} style={at(62, 22, { width: "45%", animationDelay: "1.6s" })} />
-    </>
-  ),
+    );
+  },
+  // Dusche: Tropfen aus dem Kopf, bei langen Duschen mehr Dampf.
+  "bath-shower": (answer) => {
+    const state = showerStates[answer ?? ""] ?? showerStates["bath-normal"];
+    return (
+      <>
+        <span className={styles.rain} style={at(38, 11, { width: "22%", height: "74%" })}>
+          {Array.from({ length: state.drops }, (_, index) => (
+            <span key={index} className={state.thin ? `${styles.drop} ${styles.dropThin}` : styles.drop}
+              style={{ left: `${(index * 61) % 100}%`, animationDuration: `${state.seconds}s`, animationDelay: `${(index * state.seconds / state.drops).toFixed(3)}s` }} />
+          ))}
+        </span>
+        {[[50, 30, "60%", 0], [62, 22, "45%", 1.6], [40, 18, "50%", 0.8]].slice(0, state.steam).map(([left, top, width, delay]) => (
+          <span key={`${left}`} className={styles.steam} style={at(left as number, top as number, { width: width as string, animationDelay: `${delay}s` })} />
+        ))}
+      </>
+    );
+  },
   // Waschbecken: ein Tropfen löst sich vom Hahn und trifft das Becken.
   "bath-water-heating": () => (
     <>
@@ -64,24 +115,30 @@ const effects: Record<string, () => ReactNode> = {
       <span className={styles.ripple} style={at(54.5, 27, { width: "9%" })} />
     </>
   ),
-  // Auto: die Ladeanzeige der Wallbox pulsiert grün.
-  "mobility-km": () => <span className={styles.chargeLight} style={at(-5, 13)} />,
-  // Insektenhotel: Wildbienen fliegen ein und aus.
-  "garden-structures": () => (
-    <>
-      <Bee path="beeA" delay={0} />
-      <Bee path="beeB" delay={-2.4} />
-      <Bee path="beeC" delay={-4.1} />
-    </>
-  )
+  // Auto: lädt als Elektroauto an der Wallbox, stößt als Verbrenner Abgas aus.
+  "mobility-km": (answer) => {
+    if (answer === "car-electric") return <span className={styles.chargeLight} style={at(-5, 13)} />;
+    if (answer === "car-combustion" || answer === "car-efficient") {
+      const puffs = answer === "car-combustion" ? [0, 0.9, 1.8] : [0, 1.4];
+      return puffs.map((delay) => (
+        <span key={delay} className={styles.exhaust} style={at(49, 81, { width: answer === "car-combustion" ? "14%" : "10%", animationDelay: `${delay}s` })} />
+      ));
+    }
+    return null;
+  },
+  // Insektenhotel: keine, zwei oder fünf Wildbienen.
+  "garden-structures": (answer) =>
+    beeFlights.slice(0, beeCounts[answer ?? ""] ?? 2).map(([path, delay], index) => (
+      <Bee key={index} path={path} delay={delay} />
+    ))
 };
 
-export function ObjectEffect({ id }: { id: string }) {
+export function ObjectEffect({ id, answer }: { id: string; answer?: string }) {
   const render = effects[id];
   if (!render) return null;
   return (
     <span aria-hidden className={styles.layer}>
-      {render()}
+      {render(answer)}
     </span>
   );
 }

@@ -75,7 +75,7 @@ export function RoomCompleteView({
     <motion.div
       initial={reduceMotion ? false : { opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
-      className="mx-auto flex h-full max-w-lg flex-col justify-center"
+      className="mx-auto flex min-h-full max-w-lg flex-col justify-center pb-4"
     >
       <span className="grid size-11 place-items-center rounded-full bg-[var(--color-sage)] text-[var(--color-forest)]">
         <CheckCircle2 className="size-5" aria-hidden />

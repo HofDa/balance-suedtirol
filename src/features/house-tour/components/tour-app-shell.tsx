@@ -163,7 +163,7 @@ export function TourAppShell({ locale }: { locale: Locale }) {
         // Nur noch eine Steuerungsebene über dem Inhalt statt Kopfzeile plus Raumleiste.
         "grid h-full min-h-0 min-w-0 grid-cols-[minmax(0,1fr)] overflow-hidden bg-[var(--color-paper)] md:grid-cols-[minmax(0,1.3fr)_minmax(23rem,1fr)] md:grid-rows-[3.5rem_minmax(0,1fr)]",
         state.view === "room"
-          ? "grid-rows-[3.5rem_minmax(0,0.9fr)_minmax(0,1.1fr)]"
+          ? "grid-rows-[3.5rem_minmax(7rem,min(34dvh,calc(100dvh_-_30rem)))_minmax(0,1fr)]"
           : "grid-rows-[3.5rem_minmax(10rem,42dvh)_minmax(0,1fr)]"
       )}
     >

@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { cn } from "@/lib/utils";
 import { formatMetric, hasValues, metrics } from "../model/calculator";
 import type { AnnualValues, TourRoom } from "../model/types";
 
@@ -38,8 +39,9 @@ export function ProgressSummary({
   const hasRunningTotals = hasValues(totals);
 
   return (
-    <div className="border-b border-[var(--color-line)] bg-[var(--color-paper)]/65">
-      <div className="px-3 pt-2.5 md:px-6 md:pt-3">
+    <div className={cn("border-b border-[var(--color-line)] bg-[var(--color-paper)]/65", !hasRunningTotals && "max-md:hidden")}>
+      {/* Mobil steht der Raum samt Zähler schon über der Frage. */}
+      <div className="hidden px-6 pt-3 md:block">
         <div className="mb-1.5 flex items-center justify-between gap-2 text-[11px] md:text-xs">
           <span className="truncate font-semibold">{room.title}</span>
           <span className="tabular-nums text-[var(--color-muted)]">
@@ -51,7 +53,7 @@ export function ProgressSummary({
       </div>
 
       {hasRunningTotals && (
-        <dl className="mt-2 grid grid-cols-3 gap-2 border-t border-[var(--color-line)] px-3 py-2 md:gap-3 md:px-6 md:py-2.5">
+        <dl className="grid grid-cols-3 gap-2 px-3 py-2 md:mt-2 md:gap-3 md:border-t md:border-[var(--color-line)] md:px-6 md:py-2.5">
           {metrics.map((metric) => {
             const raw = totals[metric.key];
             const formatted = formatMetric(metric.id, raw);

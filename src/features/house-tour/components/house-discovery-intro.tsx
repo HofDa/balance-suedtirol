@@ -48,8 +48,8 @@ export function HouseDiscoveryIntro({
       : 0;
 
     return (
-      <section className="flex h-full min-h-0 flex-col justify-center overflow-y-auto bg-white px-4 py-6 sm:px-6 sm:py-8">
-        <div className="mx-auto w-full max-w-lg">
+      <section className="flex h-full min-h-0 flex-col overflow-y-auto bg-white px-4 py-6 sm:px-6 sm:py-8">
+        <div className="m-auto w-full max-w-lg">
           <Label size="dense">Dein Lebensraum-Check</Label>
           <h1 className="mt-2 text-2xl font-semibold leading-tight tracking-[-0.03em] sm:text-3xl">
             {resumeRoom ? "Weiter, wo du aufgehört hast." : "Alle Objekte erfasst."}
@@ -110,8 +110,8 @@ export function HouseDiscoveryIntro({
   }
 
   return (
-    <section className="flex h-full min-h-0 flex-col justify-center overflow-y-auto bg-white px-4 py-6 sm:px-6 sm:py-8">
-      <div className="mx-auto w-full max-w-lg">
+    <section className="flex h-full min-h-0 flex-col overflow-y-auto bg-white px-4 py-6 sm:px-6 sm:py-8">
+      <div className="m-auto w-full max-w-lg">
         <Label size="dense">Interaktiver Lebensraum-Check</Label>
         <h1 className="mt-2 text-2xl font-semibold leading-tight tracking-[-0.03em] sm:text-3xl">
           {headlineByLocale[locale]}

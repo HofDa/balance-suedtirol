@@ -37,3 +37,23 @@
     transition: none;
   }
 }
+
+/* Mobile camera: the room fills the width and slides vertically so the active
+   object sits in the middle, clamped to the picture's edges. A room shorter
+   than the frame stays centred and does not move. */
+@media (max-width: 767.98px) {
+  .panFrame {
+    align-items: safe center;
+  }
+  .pan {
+    width: 100cqw !important;
+    flex-shrink: 0;
+    transform: translateY(min(0px, max(calc(100cqh - var(--scene-h)), calc(50cqh - var(--focus-y) * var(--scene-h)))));
+    transition: transform 320ms ease;
+  }
+}
+@media (max-width: 767.98px) and (prefers-reduced-motion: reduce) {
+  .pan {
+    transition: none;
+  }
+}

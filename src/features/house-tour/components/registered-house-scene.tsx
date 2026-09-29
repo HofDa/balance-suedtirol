@@ -37,11 +37,18 @@ export function RegisteredHouseScene({ roomId, questionIndex, answers, skippedQu
   // to room size would be blurry. The overview keeps the whole picture.
   const isRoomCrop = Boolean(roomId && roomId in layout.rooms);
   const sourceImage = isRoomCrop ? `/images/house-tour/full-house/rooms/${roomId}.webp` : "/images/house-tour/full-house/house.webp";
+  // Mobil füllt ein Raum die Breite und die Kamera fährt zum aktiven Objekt;
+  // eingepasst schrumpfte der hohe Garten auf einen Streifen von 150 px.
+  const focus = isRoomCrop ? items.find((item) => item.question === questionIndex) : undefined;
+  const focusY = focus ? (focus.box[1] + focus.box[3] / 2 - top) / height : 0.5;
   return (
-    <div className="flex h-full min-h-0 w-full items-center justify-center [container-type:size]">
-      <div className={cn(styles.scene, "relative isolate overflow-hidden")} data-house-scene={roomId ?? "house"}
+    <div className={cn("flex h-full min-h-0 w-full items-center justify-center [container-type:size]", isRoomCrop && styles.panFrame)}>
+      <div className={cn(styles.scene, "relative isolate overflow-hidden", isRoomCrop && styles.pan)} data-house-scene={roomId ?? "house"}
         data-source-crop={crop.join(",")}
-        style={{ aspectRatio: `${width} / ${height}`, width: `min(100cqw, ${width / height * 100}cqh)` }}>
+        style={{
+          aspectRatio: `${width} / ${height}`, width: `min(100cqw, ${width / height * 100}cqh)`,
+          ["--scene-h" as string]: `${height / width * 100}cqw`, ["--focus-y" as string]: focusY
+        }}>
         {/* Room image and cutouts share pixels. No object gets moved to fit a room. */}
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src={withBasePath(sourceImage)} alt="" draggable={false}

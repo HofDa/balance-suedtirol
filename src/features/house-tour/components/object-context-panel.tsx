@@ -153,16 +153,20 @@ export function ObjectContextPanel({
 
   return (
     <section className="flex h-full min-h-0 flex-col overflow-hidden bg-white">
-      <RoomNavigation
-        activeRoom={room.id}
-        answers={answers}
-        skippedQuestions={skippedQuestions}
-        onSelectRoom={onSelectRoom}
-        onHouse={onHouse}
-      />
+      {/* Mitten in einer Frage braucht mobil niemand den Raumwechsel; die
+          Leiste kostet dort eine Zeile, die den Antworten fehlt. */}
+      <div className={cn(objectOpen && !roomDone && "max-md:hidden")}>
+        <RoomNavigation
+          activeRoom={room.id}
+          answers={answers}
+          skippedQuestions={skippedQuestions}
+          onSelectRoom={onSelectRoom}
+          onHouse={onHouse}
+        />
+      </div>
       <ProgressSummary room={room} roomHandled={roomHandled} totals={totals} />
 
-      <div className="min-h-0 flex-1 overflow-y-auto px-3 py-3 md:px-6 md:py-6">
+      <div className="min-h-0 flex-1 overflow-y-auto px-4 pt-4 md:px-6 md:py-6">
         <AnimatePresence mode="wait" initial={false}>
           {roomDone && !objectOpen ? (
             <RoomCompleteView
@@ -183,25 +187,25 @@ export function ObjectContextPanel({
               key={`${question.id}-discover`}
               initial={reduceMotion ? false : { opacity: 0, y: 6 }}
               animate={{ opacity: 1, y: 0 }}
-              className="mx-auto flex h-full max-w-lg flex-col justify-center"
+              className="mx-auto flex min-h-full max-w-lg flex-col justify-center pb-4"
             >
-              <span className="grid size-11 place-items-center rounded-full bg-[var(--color-sage)] text-[var(--color-forest)]">
+              <span className="hidden size-11 place-items-center rounded-full bg-[var(--color-sage)] text-[var(--color-forest)] md:grid">
                 <MousePointer2 className="size-5" aria-hidden />
               </span>
-              <Label size="dense" className="mt-5">
+              <Label size="dense" className="md:mt-5">
                 {room.title} · Objekt {questionIndex + 1} von {room.questions.length}
               </Label>
               <h2 className="mt-2 text-2xl font-semibold leading-tight tracking-[-0.025em]">
                 Entdecke: {question.sceneLabel}
               </h2>
-              <p className="mt-3 max-w-md text-sm leading-6 text-[var(--color-muted)]">
+              <p className="mt-3 hidden max-w-md text-sm leading-6 text-[var(--color-muted)] md:block">
                 Jeder Gegenstand führt zu einer kurzen Frage über deinen Alltag. Öffne das markierte
                 Objekt hier oder tippe direkt auf den Gegenstand im Raum.
               </p>
 
               {/* Der Szenenklick bleibt möglich, ist aber kein Nadelöhr mehr:
                   ohne diesen Knopf endet der Weiter-Weg in einer Sackgasse. */}
-              <div className="mt-6 flex flex-wrap items-center gap-3">
+              <div className="mt-4 flex flex-wrap items-center gap-3 md:mt-6">
                 <button
                   type="button"
                   onClick={onOpenObject}
@@ -271,7 +275,7 @@ export function ObjectContextPanel({
                       aria-checked={active}
                       onClick={() => onAnswer(question.id, option.id)}
                       className={cn(
-                        "flex min-h-10 items-center gap-2.5 rounded-[var(--radius-md)] border px-3 py-2 text-left text-xs font-semibold leading-4 transition md:min-h-14 md:gap-3 md:rounded-[var(--radius-lg)] md:px-4 md:py-3 md:text-sm md:leading-5",
+                        "flex min-h-12 items-center gap-2.5 rounded-[var(--radius-md)] border px-3 py-2.5 text-left text-sm font-semibold leading-5 transition md:min-h-14 md:gap-3 md:rounded-[var(--radius-lg)] md:px-4 md:py-3 md:text-sm md:leading-5",
                         focusRingTool,
                         active
                           ? "border-[var(--color-forest)] bg-[var(--color-sage)]/45"
@@ -288,18 +292,22 @@ export function ObjectContextPanel({
                       >
                         {active && <Check className="size-3" aria-hidden />}
                       </span>
-                      <span className="min-w-0 flex-1">{option.label}</span>
-                      {hasValues(values) ? (
-                        <ValueRow
-                          values={values}
-                          scale={scale}
-                          className="shrink-0 justify-end text-right text-[11px] font-normal md:text-xs"
-                        />
-                      ) : question.scopeNote ? null : (
-                        <span className="shrink-0 text-[11px] font-normal text-[var(--color-muted)]">
-                          keine direkten Emissionen
-                        </span>
-                      )}
+                      {/* Mobil stehen die Werte unter der Antwort: nebeneinander
+                          blieb für den Antworttext kaum ein Drittel der Breite. */}
+                      <span className="flex min-w-0 flex-1 flex-col gap-0.5 md:flex-row md:items-center md:gap-3">
+                        <span className="min-w-0 md:flex-1">{option.label}</span>
+                        {hasValues(values) ? (
+                          <ValueRow
+                            values={values}
+                            scale={scale}
+                            className="text-[11px] font-normal md:shrink-0 md:justify-end md:text-right md:text-xs"
+                          />
+                        ) : question.scopeNote ? null : (
+                          <span className="text-[11px] font-normal text-[var(--color-muted)] md:shrink-0">
+                            keine direkten Emissionen
+                          </span>
+                        )}
+                      </span>
                     </button>
                   );
                 })}
@@ -349,7 +357,7 @@ export function ObjectContextPanel({
 
               {/* Vorwärts, zurück und überspringen an einem Ort: der Weg durch
                   den Raum darf nicht davon abhängen, ob man die Szene trifft. */}
-              <div className="mt-3 flex flex-wrap items-center gap-2 md:mt-4">
+              <div className="sticky bottom-0 -mx-4 mt-3 flex items-center gap-2 border-t border-[var(--color-line)] bg-white px-4 py-2 md:static md:mx-0 md:mt-4 md:flex-wrap md:border-0 md:p-0">
                 {questionIndex > 0 && (
                   <button
                     type="button"
@@ -369,7 +377,7 @@ export function ObjectContextPanel({
                     type="button"
                     onClick={onContinue}
                     className={cn(
-                      "inline-flex min-h-11 items-center gap-2 rounded-[var(--radius-md)] bg-[var(--color-forest)] px-5 text-sm font-semibold text-white",
+                      "ml-auto inline-flex min-h-12 items-center gap-2 rounded-[var(--radius-md)] bg-[var(--color-forest)] px-6 text-sm font-semibold text-white md:ml-0 md:min-h-11 md:px-5",
                       focusRingTool
                     )}
                   >
@@ -381,7 +389,7 @@ export function ObjectContextPanel({
                     type="button"
                     onClick={onSkip}
                     className={cn(
-                      "inline-flex min-h-11 items-center gap-2 rounded-[var(--radius-md)] px-3 text-xs font-semibold text-[var(--color-muted)] transition-colors hover:bg-[var(--color-ink)]/5 hover:text-[var(--color-ink)]",
+                      "ml-auto inline-flex min-h-12 items-center gap-2 rounded-[var(--radius-md)] px-3 text-xs font-semibold text-[var(--color-muted)] transition-colors hover:bg-[var(--color-ink)]/5 hover:text-[var(--color-ink)] md:ml-0 md:min-h-11",
                       focusRingTool
                     )}
                   >

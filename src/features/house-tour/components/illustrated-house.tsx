@@ -44,12 +44,14 @@ export function IllustratedRoom({ roomId, questionIndex, answers, skippedQuestio
   if (!room) return null;
   return (
     <section className="flex h-full w-full min-w-0 flex-col bg-[#f5f1e7]" aria-label={`${room.title}: Objekte entdecken`}>
-      <div className="flex shrink-0 items-center justify-between gap-2 px-4 py-2 md:px-6 md:py-4">
+      {/* Mobil zählt jeder Pixel für das Bild: Raumname und Objektwahl stehen dort
+          schon im Fragenbereich, die Nummern sitzen direkt auf den Gegenständen. */}
+      <div className="hidden shrink-0 items-center justify-between gap-2 px-6 py-4 md:flex">
         <p className="text-xs font-semibold text-[var(--color-forest)]">{room.title}</p>
         <p className="text-[10px] text-[var(--color-muted)] md:text-xs">Wähle einen Gegenstand</p>
       </div>
       <InteractiveRoom room={room} questionIndex={questionIndex} answers={answers} skippedQuestions={skippedQuestions} onSelectObject={onSelectObject} />
-      <nav aria-label="Gegenstände im Raum" className="grid shrink-0 grid-cols-3 gap-2 border-t border-[var(--color-line)] bg-white/70 p-2 md:gap-3 md:p-4">
+      <nav aria-label="Gegenstände im Raum" className="hidden shrink-0 grid-cols-3 gap-3 border-t border-[var(--color-line)] bg-white/70 p-4 md:grid">
         {room.questions.map((item, index) => {
           const active = index === questionIndex;
           const answered = Boolean(answers[item.id]);

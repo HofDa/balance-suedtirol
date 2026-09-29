@@ -46,7 +46,73 @@
   }
 }
 
+/* House overview: the rooms come alive with progress. The layer sits over the
+   room's pixels and filters what lies behind it; it never takes clicks. */
+.roomLight {
+  position: absolute;
+  pointer-events: none;
+  transition:
+    backdrop-filter 900ms ease 450ms,
+    -webkit-backdrop-filter 900ms ease 450ms,
+    box-shadow 900ms ease 450ms;
+}
+.roomLight[data-room-state="open"] {
+  -webkit-backdrop-filter: saturate(0.45) brightness(0.96);
+  backdrop-filter: saturate(0.45) brightness(0.96);
+}
+.roomLight[data-room-state="started"] {
+  -webkit-backdrop-filter: saturate(0.8);
+  backdrop-filter: saturate(0.8);
+}
+.roomLight[data-room-state="complete"] {
+  box-shadow: inset 0 0 28px 4px rgb(255 206 128 / 0.42);
+}
+/* Once, when a finished room is seen for the first time: the lights go on. */
+.roomLightUp {
+  animation: room-light-up 1400ms ease-out 500ms both;
+}
+@keyframes room-light-up {
+  0% {
+    -webkit-backdrop-filter: saturate(0.8) brightness(1);
+    backdrop-filter: saturate(0.8) brightness(1);
+    box-shadow: inset 0 0 28px 4px rgb(255 206 128 / 0);
+  }
+  45% {
+    -webkit-backdrop-filter: saturate(1.15) brightness(1.12);
+    backdrop-filter: saturate(1.15) brightness(1.12);
+    box-shadow: inset 0 0 60px 14px rgb(255 206 128 / 0.7);
+  }
+  100% {
+    -webkit-backdrop-filter: saturate(1) brightness(1);
+    backdrop-filter: saturate(1) brightness(1);
+    box-shadow: inset 0 0 28px 4px rgb(255 206 128 / 0.42);
+  }
+}
+
+/* Before the first answer the room labels breathe, so it is clear they are
+   tappable. A ring instead of scaling: the labels are centred by transform. */
+.invite {
+  animation: label-invite 2.8s ease-in-out infinite;
+}
+@keyframes label-invite {
+  0%,
+  60%,
+  100% {
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 0 0 0 rgb(40 87 68 / 0);
+  }
+  20% {
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 0 0 7px rgb(40 87 68 / 0.28);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
+  .roomLight {
+    transition: none;
+  }
+  .roomLightUp,
+  .invite {
+    animation: none;
+  }
   .dim,
   .sprite {
     transition: none;

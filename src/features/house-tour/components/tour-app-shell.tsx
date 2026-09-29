@@ -16,6 +16,9 @@ import type { Locale } from "@/config/site";
 import { getTourProgress } from "../model/scoring";
 import { CAMERA_SECONDS, type CameraTarget } from "../model/house-camera";
 
+/** Hinausfahren, Aufleuchten des fertigen Raums bis zum Höhepunkt, dann weiter. */
+const NEXT_ROOM_PAUSE_MS = 1700;
+
 /** Der Rahmen um das Hausbild: bleibt sichtbar, bis das Raumbild übergeblendet hat. */
 const houseFrameVariants = {
   fromRoom: { opacity: 1 },
@@ -60,7 +63,16 @@ export function TourAppShell({ locale }: { locale: Locale }) {
     [state.answers]
   );
 
+  // Eine geplante Fahrt zum nächsten Raum; jede eigene Navigation hebt sie auf.
+  const pendingFlight = useRef<number | null>(null);
+  const cancelFlight = () => {
+    if (pendingFlight.current !== null) window.clearTimeout(pendingFlight.current);
+    pendingFlight.current = null;
+  };
+  useEffect(() => cancelFlight, []);
+
   const openRoom = useCallback((roomId: RoomId, questionIndex?: number) => {
+    cancelFlight();
     const target = getRoom(roomId);
     if (questionIndex !== undefined) {
       dispatch({ type: "OPEN_ROOM", roomId, questionIndex, open: true });
@@ -138,15 +150,36 @@ export function TourAppShell({ locale }: { locale: Locale }) {
   const clearAdjustment = useCallback((questionId: string) => {
     dispatch({ type: "CLEAR_ADJUSTMENT", questionId });
   }, [dispatch]);
-  const openHouse = useCallback(() => dispatch({ type: "OPEN_HOUSE" }), [dispatch]);
-  const showResults = useCallback(() => dispatch({ type: "SHOW_RESULTS" }), [dispatch]);
+  const openHouse = useCallback(() => {
+    cancelFlight();
+    dispatch({ type: "OPEN_HOUSE" });
+  }, [dispatch]);
+  const showResults = useCallback(() => {
+    cancelFlight();
+    dispatch({ type: "SHOW_RESULTS" });
+  }, [dispatch]);
   const openCurrentObject = useCallback(
     () => dispatch({ type: "OPEN_OBJECT", questionIndex: state.activeQuestionIndex }),
     [dispatch, state.activeQuestionIndex]
   );
+  /**
+   * Der Weg zum nächsten Raum führt durchs Haus: hinausfahren, den fertigen
+   * Raum aufleuchten lassen, in den nächsten hineinfahren. So sieht man, was
+   * der abgeschlossene Raum am Haus verändert hat, und wo es weitergeht.
+   */
   const openNextRoom = useCallback(() => {
-    if (nextRoom) openRoom(nextRoom.id);
-  }, [nextRoom, openRoom]);
+    if (!nextRoom) return;
+    if (reduce) {
+      openRoom(nextRoom.id);
+      return;
+    }
+    dispatch({ type: "OPEN_HOUSE" });
+    const target = nextRoom.id;
+    pendingFlight.current = window.setTimeout(() => {
+      pendingFlight.current = null;
+      openRoom(target);
+    }, NEXT_ROOM_PAUSE_MS);
+  }, [dispatch, nextRoom, openRoom, reduce]);
 
   // Die Bilanz ist eine Lesefläche, keine Werkzeugansicht: sie verlässt das
   // Zweispaltenraster, statt mobil in einem 42dvh hohen Fenster zu scrollen.
@@ -283,6 +316,7 @@ export function TourAppShell({ locale }: { locale: Locale }) {
             onContinue={continueToNextObject}
             onSkip={skipCurrentObject}
             onBack={goToPreviousObject}
+            onGoTo={selectObject}
             onOpenObject={openCurrentObject}
             onHouse={openHouse}
             onSelectRoom={(id) => openRoom(id)}

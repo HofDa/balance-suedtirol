@@ -51,6 +51,7 @@ export function ObjectContextPanel({
   onContinue,
   onSkip,
   onBack,
+  onGoTo,
   onOpenObject,
   onHouse,
   onSelectRoom,
@@ -74,6 +75,7 @@ export function ObjectContextPanel({
   onContinue: () => void;
   onSkip: () => void;
   onBack: () => void;
+  onGoTo: (questionIndex: number) => void;
   onOpenObject: () => void;
   onHouse: () => void;
   onSelectRoom: (id: RoomId) => void;
@@ -88,6 +90,29 @@ export function ObjectContextPanel({
   useEffect(() => {
     previousIndex.current = questionIndex;
   }, [questionIndex]);
+  // Wischen zwischen den Objekten eines Raums, wie durch Karten blättern.
+  // Nur deutlich waagrechte Gesten zählen, damit senkrechtes Scrollen und der
+  // Mengenregler unberührt bleiben.
+  const touchStart = useRef<{ x: number; y: number } | null>(null);
+  const onTouchStart = (event: React.TouchEvent) => {
+    const target = event.target as HTMLElement;
+    touchStart.current = target.closest('input[type="range"]')
+      ? null
+      : { x: event.touches[0].clientX, y: event.touches[0].clientY };
+  };
+  const onTouchEnd = (event: React.TouchEvent) => {
+    const start = touchStart.current;
+    touchStart.current = null;
+    if (!start || !objectOpen) return;
+    const dx = event.changedTouches[0].clientX - start.x;
+    const dy = event.changedTouches[0].clientY - start.y;
+    if (Math.abs(dx) < 60 || Math.abs(dx) < Math.abs(dy) * 1.5) return;
+    const next = questionIndex + (dx < 0 ? 1 : -1);
+    if (next >= 0 && next < room.questions.length) {
+      setAdvancingFor(null);
+      onGoTo(next);
+    }
+  };
   const slide = reduceMotion
     ? undefined
     : {
@@ -202,7 +227,11 @@ export function ObjectContextPanel({
       </div>
       <ProgressSummary room={room} roomHandled={roomHandled} totals={totals} />
 
-      <div className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden px-4 pt-4 md:px-6 md:py-6">
+      <div
+        className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden px-4 pt-4 md:px-6 md:py-6"
+        onTouchStart={onTouchStart}
+        onTouchEnd={onTouchEnd}
+      >
         <AnimatePresence mode="wait" initial={false} custom={direction}>
           {roomDone && !objectOpen ? (
             <RoomCompleteView
@@ -293,7 +322,9 @@ export function ObjectContextPanel({
                   <kbd className="font-semibold tabular-nums">{question.options.length}</kbd> wählen,{" "}
                   <kbd className="font-semibold">Enter</kbd> weiter
                 </span>
-                {hasValues(scale) && <span className="ml-auto">Werte pro Jahr</span>}
+                {hasValues(scale) && (
+                  <span className="ml-auto">{selected ? "Werte pro Jahr" : "Zahlen nach deiner Antwort"}</span>
+                )}
               </p>
 
               <div
@@ -354,16 +385,28 @@ export function ObjectContextPanel({
                             </span>
                           )}
                         </span>
-                        {hasValues(values) ? (
-                          <ValueRow
-                            values={values}
-                            scale={scale}
-                            className="text-[11px] font-normal md:shrink-0 md:justify-end md:text-right md:text-xs"
-                          />
-                        ) : question.scopeNote ? null : (
-                          <span className="text-[11px] font-normal text-[var(--color-muted)] md:shrink-0">
-                            keine direkten Emissionen
-                          </span>
+                        {/* Die Zahlen erst nach der Antwort: wer sie vorher sieht,
+                            wählt leicht die „gute“ statt der zutreffenden Option.
+                            Danach stehen alle zum Vergleich da. */}
+                        {selected && (
+                          <motion.span
+                            className="md:shrink-0"
+                            initial={reduceMotion ? false : { opacity: 0, y: -2 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.3, ease: "easeOut" }}
+                          >
+                            {hasValues(values) ? (
+                              <ValueRow
+                                values={values}
+                                scale={scale}
+                                className="text-[11px] font-normal md:justify-end md:text-right md:text-xs"
+                              />
+                            ) : question.scopeNote ? null : (
+                              <span className="text-[11px] font-normal text-[var(--color-muted)]">
+                                keine direkten Emissionen
+                              </span>
+                            )}
+                          </motion.span>
                         )}
                       </span>
                     </motion.button>

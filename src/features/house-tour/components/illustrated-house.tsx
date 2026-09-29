@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { Check, SkipForward } from "lucide-react";
 import { motion } from "framer-motion";
 import { overviewLabelVariants } from "../model/house-camera";
@@ -11,23 +12,58 @@ import { availableRooms, getRoom } from "../config/rooms";
 import { roomEntrances } from "../config/illustrations";
 import { getRoomProgress } from "../model/scoring";
 import type { RoomId } from "../model/types";
+import layout from "../config/full-house-layout.json";
+import styles from "./interactive-room.module.css";
+
+/**
+ * Räume, deren Abschluss schon gefeiert wurde. Bewusst nur für diese Sitzung:
+ * die Hausansicht wird bei jeder Rückkehr neu aufgebaut, das Aufleuchten soll
+ * aber nur beim ersten Mal nach dem Abschluss kommen.
+ */
+const celebratedRooms = new Set<RoomId>();
 
 export function IllustratedHouse({ answers, skippedQuestions, onRoom }: {
   answers: Record<string, string>; skippedQuestions: Record<string, boolean>; onRoom: (id: RoomId, questionIndex?: number) => void;
 }) {
+  const progressByRoom = availableRooms.map((room) => ({ room, progress: getRoomProgress(room, answers, skippedQuestions) }));
+  // Einmal beim Aufbau festgelegt: ein erneutes Rendern mitten im Aufleuchten
+  // darf die Animation nicht abschneiden.
+  const [freshlyComplete] = useState(() => progressByRoom
+    .filter(({ room, progress }) => progress.isComplete && !celebratedRooms.has(room.id))
+    .map(({ room }) => room.id));
+  useEffect(() => {
+    freshlyComplete.forEach((id) => celebratedRooms.add(id));
+  }, [freshlyComplete]);
+  // Solange noch nichts beantwortet ist, laden die Schilder zum Antippen ein.
+  const untouched = progressByRoom.every(({ progress }) => progress.handled === 0);
+  const [size] = layout.size;
+
   return (
     <div className="flex h-full w-full items-center justify-center bg-[#e8ecdf] [container-type:size]">
       <RegisteredHouseScene answers={answers} skippedQuestions={skippedQuestions} onSelectObject={onRoom}>
+        {/* Das Haus wird mit dem Fortschritt lebendig: offene Räume leicht
+            entsättigt, begonnene fast farbig, fertige in voller Farbe mit
+            warmem Licht. Die Ebenen liegen im Kamerabild und fahren mit. */}
+        {progressByRoom.map(({ room, progress }) => {
+          const crop = layout.rooms[room.id as keyof typeof layout.rooms];
+          if (!crop) return null;
+          const [left, top, width, height] = crop;
+          const state = progress.isComplete ? "complete" : progress.isStarted ? "started" : "open";
+          return (
+            <span key={room.id} aria-hidden data-room-state={state}
+              className={cn(styles.roomLight, freshlyComplete.includes(room.id) && styles.roomLightUp)}
+              style={{ left: `${left / size * 100}%`, top: `${top / size * 100}%`, width: `${width / size * 100}%`, height: `${height / size * 100}%` }} />
+          );
+        })}
         <motion.nav aria-label="Räume im Haus" className="pointer-events-none absolute inset-0" variants={overviewLabelVariants}>
-          {availableRooms.map((room) => {
+          {progressByRoom.map(({ room, progress }, index) => {
             const position = roomEntrances[room.id];
             if (!position) return null;
-            const progress = getRoomProgress(room, answers, skippedQuestions);
             return (
               <button key={room.id} type="button" onClick={() => onRoom(room.id)}
-                style={{ left: `${position[0]}%`, top: `${position[1]}%` }}
+                style={{ left: `${position[0]}%`, top: `${position[1]}%`, animationDelay: `${index * 0.35}s` }}
                 aria-label={`${room.title} besuchen, ${progress.handled} von ${progress.total} Objekten bearbeitet`}
-                className={cn("pointer-events-auto absolute flex min-h-11 -translate-x-1/2 -translate-y-1/2 flex-col items-center justify-center rounded-xl border border-white/90 bg-white/95 px-2 py-1.5 text-[10px] font-semibold text-[var(--color-forest)] shadow-md transition-colors hover:bg-[var(--color-sage)] sm:px-3 sm:text-xs", focusRingTool)}>
+                className={cn("pointer-events-auto absolute flex min-h-11 -translate-x-1/2 -translate-y-1/2 flex-col items-center justify-center rounded-xl border border-white/90 bg-white/95 px-2 py-1.5 text-[10px] font-semibold text-[var(--color-forest)] shadow-md transition-colors hover:bg-[var(--color-sage)] sm:px-3 sm:text-xs", untouched && styles.invite, focusRingTool)}>
                 <span className="flex items-center gap-1">{progress.isComplete && <Check className="size-3" aria-hidden />}{room.shortTitle}</span>
                 <span className="text-[9px] font-normal tabular-nums sm:text-[10px]">{progress.handled}/{progress.total} erkundet</span>
               </button>

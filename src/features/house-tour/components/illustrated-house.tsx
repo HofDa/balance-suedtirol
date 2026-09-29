@@ -1,6 +1,8 @@
 "use client";
 
 import { Check, SkipForward } from "lucide-react";
+import { motion } from "framer-motion";
+import { overviewLabelVariants } from "../model/house-camera";
 import { RegisteredHouseScene } from "./registered-house-scene";
 import { InteractiveRoom } from "./interactive-room";
 import { cn } from "@/lib/utils";
@@ -16,7 +18,7 @@ export function IllustratedHouse({ answers, skippedQuestions, onRoom }: {
   return (
     <div className="flex h-full w-full items-center justify-center bg-[#e8ecdf] [container-type:size]">
       <RegisteredHouseScene answers={answers} skippedQuestions={skippedQuestions} onSelectObject={onRoom}>
-        <nav aria-label="Räume im Haus" className="pointer-events-none absolute inset-0">
+        <motion.nav aria-label="Räume im Haus" className="pointer-events-none absolute inset-0" variants={overviewLabelVariants}>
           {availableRooms.map((room) => {
             const position = roomEntrances[room.id];
             if (!position) return null;
@@ -31,7 +33,7 @@ export function IllustratedHouse({ answers, skippedQuestions, onRoom }: {
               </button>
             );
           })}
-        </nav>
+        </motion.nav>
       </RegisteredHouseScene>
     </div>
   );
@@ -43,7 +45,7 @@ export function IllustratedRoom({ roomId, questionIndex, answers, skippedQuestio
   const room = getRoom(roomId);
   if (!room) return null;
   return (
-    <section className="flex h-full w-full min-w-0 flex-col bg-[#f5f1e7]" aria-label={`${room.title}: Objekte entdecken`}>
+    <section className="relative flex h-full w-full min-w-0 flex-col bg-[#f5f1e7]" aria-label={`${room.title}: Objekte entdecken`}>
       {/* Mobil zählt jeder Pixel für das Bild: Raumname und Objektwahl stehen dort
           schon im Fragenbereich, die Nummern sitzen direkt auf den Gegenständen. */}
       <div className="hidden shrink-0 items-center justify-between gap-2 px-6 py-4 md:flex">
@@ -51,6 +53,28 @@ export function IllustratedRoom({ roomId, questionIndex, answers, skippedQuestio
         <p className="text-[10px] text-[var(--color-muted)] md:text-xs">Wähle einen Gegenstand</p>
       </div>
       <InteractiveRoom room={room} questionIndex={questionIndex} answers={answers} skippedQuestions={skippedQuestions} onSelectObject={onSelectObject} />
+      {/* Mobil folgt das Bild dem aktiven Objekt, die anderen liegen dann
+          außerhalb. Diese Leiste hält alle drei erreichbar, ohne Höhe zu kosten. */}
+      <nav aria-label="Gegenstände im Raum" className="pointer-events-none absolute inset-x-2 bottom-2 z-10 flex justify-center gap-1.5 md:hidden">
+        {room.questions.map((item, index) => {
+          const active = index === questionIndex;
+          const answered = Boolean(answers[item.id]);
+          const skipped = Boolean(skippedQuestions[item.id]);
+          return (
+            <button key={item.id} type="button" onClick={() => onSelectObject(index)} aria-current={active ? "step" : undefined}
+              aria-label={`${item.sceneLabel}, ${answered ? "beantwortet" : skipped ? "übersprungen" : "offen"}`}
+              // Nur das aktive Objekt trägt seinen Namen; gekürzte Namen auf drei
+              // Pillen waren unlesbar und deckten den kleinen Bildausschnitt zu.
+              className={cn("pointer-events-auto flex min-h-10 min-w-10 items-center justify-center gap-1.5 rounded-full text-xs font-semibold shadow-md backdrop-blur transition-colors",
+                active ? "min-w-0 bg-[var(--color-forest)] py-1 pl-1 pr-3.5 text-white" : "bg-white/90 text-[var(--color-forest)]", focusRingTool)}>
+              <span className={cn("grid size-7 shrink-0 place-items-center rounded-full text-[11px]", active && "bg-white/20")}>
+                {answered ? <Check className="size-3.5" aria-hidden /> : skipped ? <SkipForward className="size-3.5" aria-hidden /> : index + 1}
+              </span>
+              {active && <span className="truncate">{item.sceneLabel}</span>}
+            </button>
+          );
+        })}
+      </nav>
       <nav aria-label="Gegenstände im Raum" className="hidden shrink-0 grid-cols-3 gap-3 border-t border-[var(--color-line)] bg-white/70 p-4 md:grid">
         {room.questions.map((item, index) => {
           const active = index === questionIndex;

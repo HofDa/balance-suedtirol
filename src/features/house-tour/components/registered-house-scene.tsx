@@ -2,6 +2,8 @@
 
 import type { CSSProperties, ReactNode } from "react";
 import { Check, SkipForward } from "lucide-react";
+import { motion } from "framer-motion";
+import { cameraVariants } from "../model/house-camera";
 import { withBasePath } from "@/lib/public-path";
 import { cn } from "@/lib/utils";
 import { focusRingTool } from "@/components/ui/focus";
@@ -43,12 +45,17 @@ export function RegisteredHouseScene({ roomId, questionIndex, answers, skippedQu
   const focusY = focus ? (focus.box[1] + focus.box[3] / 2 - top) / height : 0.5;
   return (
     <div className={cn("flex h-full min-h-0 w-full items-center justify-center [container-type:size]", isRoomCrop && styles.panFrame)}>
-      <div className={cn(styles.scene, "relative isolate overflow-hidden", isRoomCrop && styles.pan)} data-house-scene={roomId ?? "house"}
+      {/* Nur ein Raum wird auf seine Fläche beschnitten; die Hausansicht darf beim
+          Hineinfahren über ihr Quadrat hinaus bis an den Rand der Spalte wachsen. */}
+      <div className={cn(styles.scene, "relative isolate", isRoomCrop && cn("overflow-hidden", styles.pan))} data-house-scene={roomId ?? "house"}
         data-source-crop={crop.join(",")}
         style={{
           aspectRatio: `${width} / ${height}`, width: `min(100cqw, ${width / height * 100}cqh)`,
           ["--scene-h" as string]: `${height / width * 100}cqw`, ["--focus-y" as string]: focusY
         }}>
+        {/* Die Gesamtansicht ist die Kamera: sie fährt beim Raumwechsel in den
+            Ausschnitt hinein (Varianten aus der umgebenden AnimatePresence). */}
+        <motion.div className="absolute inset-0" variants={isRoomCrop ? undefined : cameraVariants}>
         {/* Room image and cutouts share pixels. No object gets moved to fit a room. */}
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src={withBasePath(sourceImage)} alt="" draggable={false}
@@ -81,6 +88,7 @@ export function RegisteredHouseScene({ roomId, questionIndex, answers, skippedQu
           );
         })}
         {children}
+        </motion.div>
       </div>
     </div>
   );

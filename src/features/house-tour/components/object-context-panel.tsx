@@ -273,10 +273,7 @@ export function ObjectContextPanel({
                 <Label size="dense" className="shrink-0">
                   {room.title} · {questionIndex + 1}/{room.questions.length}
                 </Label>
-                <p className="flex min-w-0 items-center gap-1.5 truncate text-[11px] font-semibold text-[var(--color-forest)] md:hidden">
-                  <Leaf className="size-3.5 shrink-0" aria-hidden />
-                  <span className="truncate">{question.sceneLabel}</span>
-                </p>
+                {/* Mobil nennt die Objektleiste über dem Bild den Gegenstand schon. */}
               </div>
               <div className="mt-2 hidden items-center gap-3 md:flex">
                 <span className="grid size-9 shrink-0 place-items-center rounded-full bg-[var(--color-paper)] text-[var(--color-forest)]">

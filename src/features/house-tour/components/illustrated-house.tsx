@@ -14,6 +14,45 @@ import { getRoomProgress } from "../model/scoring";
 import type { RoomId } from "../model/types";
 import layout from "../config/full-house-layout.json";
 import styles from "./interactive-room.module.css";
+import { withBasePath } from "@/lib/public-path";
+
+const skyMask = `url(${withBasePath("/images/house-tour/full-house/sky-mask.png")})`;
+
+/**
+ * Leben im Bild, bewusst leise: Dunst zieht hinter Dach, Bäumen und Bergen
+ * durch den Himmel (maskiert auf den offenen Himmel des Gemäldes), und ein
+ * Kohlweißling flattert über die Blumenwiese. Rein dekorativ, ohne Klicks.
+ */
+function AmbientLife() {
+  return (
+    <span aria-hidden className="pointer-events-none absolute inset-0">
+      <span className={styles.sky} style={{ maskImage: skyMask, WebkitMaskImage: skyMask }}>
+        <span className={cn(styles.cloudTrack, styles.cloudSlow)} style={{ top: "3%" }}><span className={styles.cloud} style={{ width: "26%" }} /></span>
+        <span className={cn(styles.cloudTrack, styles.cloudMid)} style={{ top: "11%" }}><span className={styles.cloud} style={{ width: "18%" }} /></span>
+        <span className={cn(styles.cloudTrack, styles.cloudFast)} style={{ top: "19%" }}><span className={styles.cloud} style={{ width: "22%" }} /></span>
+      </span>
+      <span className={styles.butterflyPath}>
+        <span className={styles.butterflyBob}>
+          <svg viewBox="0 0 20 16" className={styles.butterfly}>
+            <g className={styles.wingLeft}>
+              <path d="M10 8 C 7 1, 1 0, 1.5 5 C 2 8, 6 9, 10 8 Z" fill="#f6f4ea" />
+              <path d="M10 8 C 6 9, 2.5 13, 5 15 C 7.5 16, 9.5 12, 10 8 Z" fill="#ecead9" />
+              <path d="M4.2 1.4 C 2.5 1.3, 1.3 2.6, 1.6 4.4 C 3 3.4, 4 2.6, 4.2 1.4 Z" fill="#3b3f3a" />
+              <circle cx="5.6" cy="5.2" r="0.8" fill="#3b3f3a" />
+            </g>
+            <g className={styles.wingRight}>
+              <path d="M10 8 C 13 1, 19 0, 18.5 5 C 18 8, 14 9, 10 8 Z" fill="#f6f4ea" />
+              <path d="M10 8 C 14 9, 17.5 13, 15 15 C 12.5 16, 10.5 12, 10 8 Z" fill="#ecead9" />
+              <path d="M15.8 1.4 C 17.5 1.3, 18.7 2.6, 18.4 4.4 C 17 3.4, 16 2.6, 15.8 1.4 Z" fill="#3b3f3a" />
+              <circle cx="14.4" cy="5.2" r="0.8" fill="#3b3f3a" />
+            </g>
+            <rect x="9.4" y="4.5" width="1.2" height="8" rx="0.6" fill="#2f332e" />
+          </svg>
+        </span>
+      </span>
+    </span>
+  );
+}
 
 /**
  * Räume, deren Abschluss schon gefeiert wurde. Bewusst nur für diese Sitzung:
@@ -55,6 +94,7 @@ export function IllustratedHouse({ answers, skippedQuestions, onRoom }: {
               style={{ left: `${left / size * 100}%`, top: `${top / size * 100}%`, width: `${width / size * 100}%`, height: `${height / size * 100}%` }} />
           );
         })}
+        <AmbientLife />
         <motion.nav aria-label="Räume im Haus" className="pointer-events-none absolute inset-0" variants={overviewLabelVariants}>
           {progressByRoom.map(({ room, progress }, index) => {
             const position = roomEntrances[room.id];

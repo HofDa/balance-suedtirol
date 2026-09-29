@@ -105,7 +105,132 @@
   }
 }
 
+/* Ambient life on the house overview. Percent translations on full-size
+   tracks keep every path proportional to the scene at any screen size. */
+.sky {
+  position: absolute;
+  inset: 0;
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+}
+.cloudTrack {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 9%;
+  will-change: transform;
+  animation: cloud-drift linear infinite;
+}
+.cloudSlow {
+  animation-duration: 140s;
+  animation-delay: -35s;
+}
+.cloudMid {
+  animation-duration: 110s;
+  animation-delay: -80s;
+}
+.cloudFast {
+  animation-duration: 90s;
+  animation-delay: -15s;
+}
+.cloud {
+  position: absolute;
+  inset: 0 auto 0 0;
+  opacity: 0.8;
+  background:
+    radial-gradient(closest-side at 28% 62%, rgb(255 255 255 / 0.9), rgb(255 255 255 / 0)),
+    radial-gradient(closest-side at 52% 44%, rgb(255 255 255 / 0.95), rgb(255 255 255 / 0)),
+    radial-gradient(closest-side at 74% 60%, rgb(255 255 255 / 0.85), rgb(255 255 255 / 0));
+}
+@keyframes cloud-drift {
+  from {
+    transform: translateX(-30%);
+  }
+  to {
+    transform: translateX(105%);
+  }
+}
+
+.butterflyPath {
+  position: absolute;
+  inset: 0;
+  will-change: transform;
+  animation: butterfly-path 34s ease-in-out infinite;
+}
+.butterflyBob {
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: block;
+  width: 3.4%;
+  animation: butterfly-bob 1.3s ease-in-out infinite alternate;
+}
+.butterfly {
+  display: block;
+  width: 100%;
+  overflow: visible;
+  filter: drop-shadow(0 1px 1px rgb(0 0 0 / 0.25));
+}
+.wingLeft,
+.wingRight {
+  transform-box: view-box;
+  transform-origin: 10px 8px;
+  animation: wing-flap 0.18s ease-in-out infinite alternate;
+}
+@keyframes wing-flap {
+  from {
+    transform: scaleX(1);
+  }
+  to {
+    transform: scaleX(0.25);
+  }
+}
+@keyframes butterfly-bob {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-40%);
+  }
+}
+/* Over the lawn and the flower beds in front of the house, where a white
+   wing reads against green; with a rest on the flowers. */
+@keyframes butterfly-path {
+  0% {
+    transform: translate(-5%, 86%);
+  }
+  12% {
+    transform: translate(9%, 81%);
+  }
+  24% {
+    transform: translate(21%, 87%);
+  }
+  32%,
+  42% {
+    transform: translate(28%, 84%);
+  }
+  54% {
+    transform: translate(39%, 74%);
+  }
+  64% {
+    transform: translate(51%, 70%);
+  }
+  74% {
+    transform: translate(60%, 79%);
+  }
+  86% {
+    transform: translate(44%, 89%);
+  }
+  100% {
+    transform: translate(-5%, 86%);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
+  .sky,
+  .butterflyPath {
+    display: none;
+  }
   .roomLight {
     transition: none;
   }

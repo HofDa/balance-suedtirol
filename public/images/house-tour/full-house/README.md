@@ -9,6 +9,10 @@ All files here are generated from the 4× master
 - `objects/`: 18 cutouts with master RGB and a soft alpha edge taken from the
   high-resolution extraction masks. They drive the spotlight highlight.
 
+- `sky-mask.png`: open sky of `house.webp` (alpha), so the drifting clouds on
+  the overview pass behind roof, trees and mountains. Rebuild:
+  `python3 scripts/build-sky-mask.py`.
+
 Source boxes: `src/features/house-tour/config/full-house-layout.json` (pixels of
 the 1254 px original). Rebuild: `node scripts/build-full-house-objects.mjs`,
 then `python3 scripts/refine-house-masks.py`.

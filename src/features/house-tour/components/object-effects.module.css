@@ -1,0 +1,356 @@
+/* Effects around the active object. Everything is positioned in percent of the
+   object box; sizes of tiny things (drops, bees) use the scene's container
+   width so they stay visible on a phone. */
+/* No z-index: a stacking context here would blend the light against a
+   transparent layer instead of the painting. DOM order keeps it on top. */
+.layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+/* --- Lamps ------------------------------------------------------------- */
+.lampGlow {
+  position: absolute;
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: radial-gradient(
+    closest-side,
+    rgb(255 221 160 / 0.55),
+    rgb(255 205 130 / 0.22) 45%,
+    rgb(255 200 120 / 0) 100%
+  );
+  mix-blend-mode: screen;
+  animation:
+    lamp-on 900ms ease-out both,
+    lamp-breathe 4s ease-in-out 900ms infinite alternate;
+}
+.shadeLight {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  border-radius: 40%;
+  background: radial-gradient(closest-side, rgb(255 246 222 / 0.75), rgb(255 238 200 / 0));
+  mix-blend-mode: screen;
+  animation: lamp-on 900ms ease-out both;
+}
+@keyframes lamp-on {
+  0% {
+    opacity: 0;
+  }
+  30% {
+    opacity: 0.4;
+  }
+  40% {
+    opacity: 0.1;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@keyframes lamp-breathe {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0.82;
+  }
+}
+
+/* --- Television ---------------------------------------------------------- */
+.tvGlow {
+  position: absolute;
+  aspect-ratio: 1.3;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgb(150 195 255 / 0.75), rgb(120 165 255 / 0.28) 50%, rgb(120 160 255 / 0));
+  mix-blend-mode: screen;
+  animation: tv-flicker 3.2s steps(1, end) infinite;
+}
+@keyframes tv-flicker {
+  0% {
+    opacity: 0.9;
+    filter: hue-rotate(0deg);
+  }
+  12% {
+    opacity: 0.55;
+  }
+  20% {
+    opacity: 1;
+    filter: hue-rotate(-25deg);
+  }
+  38% {
+    opacity: 0.7;
+  }
+  47% {
+    opacity: 0.95;
+    filter: hue-rotate(20deg);
+  }
+  63% {
+    opacity: 0.6;
+  }
+  71% {
+    opacity: 1;
+    filter: hue-rotate(0deg);
+  }
+  88% {
+    opacity: 0.75;
+  }
+}
+
+/* --- Shower -------------------------------------------------------------- */
+.rain {
+  position: absolute;
+}
+.drop {
+  position: absolute;
+  top: 0;
+  width: max(2px, 0.35cqw);
+  height: max(7px, 1.8cqw);
+  border-radius: 999px;
+  /* Hell mit dunklem Saum: weiße Tropfen allein verschwanden vor den hellen Fliesen. */
+  background: linear-gradient(rgb(240 248 255 / 0), rgb(240 248 255 / 0.95));
+  box-shadow: 0 0 0 0.5px rgb(60 90 110 / 0.35);
+  animation: drop-fall 0.9s linear infinite;
+}
+@keyframes drop-fall {
+  from {
+    top: 0;
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+  }
+  to {
+    top: 100%;
+    opacity: 0.2;
+  }
+}
+.steam {
+  position: absolute;
+  aspect-ratio: 1.4;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgb(255 255 255 / 0.45), rgb(255 255 255 / 0));
+  animation: steam-rise 3.2s ease-out infinite;
+}
+@keyframes steam-rise {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -20%) scale(0.6);
+  }
+  35% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -110%) scale(1.3);
+  }
+}
+
+/* --- Tap ---------------------------------------------------------------- */
+.drip {
+  position: absolute;
+  width: max(2.5px, 0.45cqw);
+  aspect-ratio: 0.75;
+  transform: translate(-50%, 0);
+  border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+  background: radial-gradient(circle at 35% 35%, rgb(255 255 255 / 0.95), rgb(190 220 245 / 0.85));
+  box-shadow: 0 0 1px rgb(80 110 140 / 0.5);
+  animation: drip 2.6s ease-in infinite;
+}
+@keyframes drip {
+  0% {
+    top: 15%;
+    transform: translate(-50%, 0) scale(0.2);
+    opacity: 0;
+  }
+  45% {
+    top: 15%;
+    transform: translate(-50%, 0) scale(1);
+    opacity: 1;
+  }
+  62% {
+    top: 26%;
+    transform: translate(-50%, 0) scale(1, 1.2);
+    opacity: 1;
+  }
+  64%,
+  100% {
+    top: 26%;
+    opacity: 0;
+  }
+}
+.ripple {
+  position: absolute;
+  aspect-ratio: 3;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  border: 1px solid rgb(255 255 255 / 0.8);
+  animation: ripple 2.6s ease-out infinite;
+}
+@keyframes ripple {
+  0%,
+  62% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.2);
+  }
+  66% {
+    opacity: 0.9;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(1.4);
+  }
+}
+
+/* --- Wallbox ------------------------------------------------------------- */
+.chargeLight {
+  position: absolute;
+  width: max(3px, 0.55cqw);
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: #7dffa8;
+  box-shadow:
+    0 0 4px 1px rgb(90 255 150 / 0.9),
+    0 0 12px 4px rgb(90 255 150 / 0.45);
+  animation: charge 1.8s ease-in-out infinite;
+}
+@keyframes charge {
+  0%,
+  100% {
+    opacity: 0.35;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* --- Wild bees ----------------------------------------------------------- */
+.beeTrack {
+  position: absolute;
+  inset: 0;
+  animation: 6.5s ease-in-out infinite;
+}
+.bee {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: max(10px, 1.8cqw);
+  overflow: visible;
+  animation: bee-bob 0.35s ease-in-out infinite alternate;
+}
+.beeWing {
+  fill: rgb(255 255 255 / 0.75);
+  animation: bee-wing 0.06s linear infinite alternate;
+}
+@keyframes bee-wing {
+  from {
+    opacity: 0.9;
+  }
+  to {
+    opacity: 0.3;
+  }
+}
+@keyframes bee-bob {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-25%);
+  }
+}
+/* Each bee comes in from the garden, lands at an opening and flies off again. */
+.beeA {
+  animation-name: bee-a;
+}
+.beeB {
+  animation-name: bee-b;
+}
+.beeC {
+  animation-name: bee-c;
+}
+@keyframes bee-a {
+  0% {
+    transform: translate(115%, 5%);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  40%,
+  55% {
+    transform: translate(46%, 26%);
+  }
+  90% {
+    transform: translate(-20%, 12%);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-30%, 10%);
+    opacity: 0;
+  }
+}
+@keyframes bee-b {
+  0% {
+    transform: translate(-25%, 40%);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  45%,
+  60% {
+    transform: translate(34%, 38%);
+  }
+  90% {
+    transform: translate(105%, 30%);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(115%, 25%);
+    opacity: 0;
+  }
+}
+@keyframes bee-c {
+  0% {
+    transform: translate(70%, -15%);
+    opacity: 0;
+  }
+  12% {
+    opacity: 1;
+  }
+  38% {
+    transform: translate(90%, 10%);
+  }
+  50%,
+  62% {
+    transform: translate(64%, 18%);
+  }
+  92% {
+    transform: translate(20%, -12%);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(10%, -18%);
+    opacity: 0;
+  }
+}
+
+/* Reduced motion: the light states stay as a still picture, movement goes. */
+@media (prefers-reduced-motion: reduce) {
+  .lampGlow,
+  .shadeLight,
+  .tvGlow,
+  .chargeLight {
+    animation: none;
+  }
+  .rain,
+  .steam,
+  .drip,
+  .ripple,
+  .beeTrack {
+    display: none;
+  }
+}

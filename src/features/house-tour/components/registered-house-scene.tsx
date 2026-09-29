@@ -4,6 +4,7 @@ import type { CSSProperties, ReactNode } from "react";
 import { Check, SkipForward } from "lucide-react";
 import { motion } from "framer-motion";
 import { cameraVariants } from "../model/house-camera";
+import { ObjectEffect } from "./object-effects";
 import { withBasePath } from "@/lib/public-path";
 import { cn } from "@/lib/utils";
 import { focusRingTool } from "@/components/ui/focus";
@@ -80,6 +81,8 @@ export function RegisteredHouseScene({ roomId, questionIndex, answers, skippedQu
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={withBasePath(`/images/house-tour/full-house/objects/${item.id}.webp`)} alt="" draggable={false}
                 className={cn(styles.sprite, "pointer-events-none block h-full w-full max-w-none select-none")} />
+              {/* Nur am gefragten Gegenstand: die Bewegung zeigt, worum es geht. */}
+              {roomId && active && <ObjectEffect id={item.id} />}
               {/* Neu gemountet bei jedem Zustandswechsel, damit das Abzeichen aufspringt. */}
               {roomId && <span key={answered ? "answered" : skipped ? "skipped" : "open"} className={cn(styles.badge, "pointer-events-none absolute right-0 top-0 grid size-5 place-items-center rounded-full border border-white text-[10px] font-bold shadow-sm md:size-6", active ? "bg-[var(--color-forest)] text-white" : "bg-white text-[var(--color-forest)]")} aria-hidden>
                 {answered ? <Check className="size-3" /> : skipped ? <SkipForward className="size-3" /> : item.question + 1}

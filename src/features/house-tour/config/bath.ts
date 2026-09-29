@@ -85,6 +85,18 @@ export const bathRoom: TourRoom = {
           label: "Solarthermie oder emissionsarme Fernwärme",
           params: { co2PerKwh: 0.08, efficiency: 1 },
           impact: { carbon: 7, resources: 4 },
+        },
+        {
+          id: "hot-water-average",
+          label: "Weiß ich nicht",
+          // Gewichtet über Wirkungsgrad und Faktor der Optionen oben; Biomasse
+          // 0,10 kg/kWh bei 85 %, Flüssiggas 0,23 kg/kWh bei 90 %.
+          params: { co2PerKwh: 0.199, efficiency: 0.89 },
+          regionalAverage: {
+            source: "ASTAT, Energieverbrauch der Südtiroler Haushalte 2021 (astat info 61/2022)",
+            basis: "Energieträger der Warmwasserbereitung in Südtirol: 44 % Methan, 26 % Biomasse, 10 % Heizöl, 5 % Flüssiggas, 10 % Strom, 5 % Solarenergie."
+          },
+          impact: { carbon: 0, resources: 0 },
         }
       ]
     },

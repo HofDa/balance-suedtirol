@@ -58,8 +58,14 @@ export const bedroomRoom: TourRoom = {
         },
         {
           id: "heat-unknown",
-          label: "Anderes oder nicht bekannt",
-          params: { co2PerKwh: 0.19 },
+          label: "Weiß ich nicht oder anderes",
+          // 47 % Methan, 33 % Biomasse, 10 % Heizöl, 5 % Flüssiggas, 4 % Strom,
+          // gewichtet mit den Faktoren oben; Flüssiggas 0,23 kg/kWh.
+          params: { co2PerKwh: 0.2 },
+          regionalAverage: {
+            source: "ASTAT, Energieverbrauch der Südtiroler Haushalte 2021 (astat info 61/2022)",
+            basis: "Energieträger der Hauptheizung in Südtirol: 47 % Methan, 33 % Biomasse, 10 % Heizöl, 5 % Flüssiggas, 4 % Strom. Die Menge bleibt die Vorgabe des Rechners."
+          },
           impact: { carbon: 0, resources: 0 },
         }
       ]

@@ -60,7 +60,7 @@ export const livingRoom: TourRoom = {
         min: 0,
         max: 40,
         step: 1,
-        defaults: { "light-old": 10, "light-mixed": 10, "light-led": 10 }
+        defaults: { "light-old": 10, "light-mixed": 10, "light-led": 10, "light-average": 10 }
       },
       options: [
         {
@@ -80,6 +80,17 @@ export const livingRoom: TourRoom = {
           label: "Durchgehend LED",
           params: { wattsPerLamp: 8 },
           impact: { carbon: 6, resources: 5 },
+        },
+        {
+          id: "light-average",
+          label: "Weiß ich nicht",
+          // 28 % herkömmliche Glühbirnen zu 45 W, 72 % Sparlampen zu 8 W.
+          params: { wattsPerLamp: 18.4 },
+          regionalAverage: {
+            source: "ASTAT, Energieverbrauch der Südtiroler Haushalte 2021 (astat info 61/2022)",
+            basis: "In Südtiroler Haushalten sind 28 % der Lampen noch herkömmliche Glühbirnen und 72 % Energiesparlampen."
+          },
+          impact: { carbon: 0, resources: 0 },
         }
       ]
     },

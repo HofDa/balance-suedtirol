@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   Check,
   ChevronLeft,
@@ -30,6 +30,8 @@ import { RoomCompleteView } from "./room-complete-view";
 import { RoomNavigation } from "./room-navigation";
 import type { AnnualValues, RoomId, TourQuestion, TourRoom } from "../model/types";
 import { getRoomProgress } from "../model/scoring";
+
+const AUTO_ADVANCE_MS = 1400;
 
 export function ObjectContextPanel({
   room,
@@ -79,7 +81,39 @@ export function ObjectContextPanel({
   onResults: () => void;
 }) {
   const reduceMotion = useReducedMotion();
-  const [adjustOpen, setAdjustOpen] = useState(false);
+  // Weiter schiebt die nächste Frage von rechts herein, Zurück von links:
+  // die Bewegung sagt, in welche Richtung man durch den Raum geht.
+  const previousIndex = useRef(questionIndex);
+  const direction = questionIndex < previousIndex.current ? -1 : 1;
+  useEffect(() => {
+    previousIndex.current = questionIndex;
+  }, [questionIndex]);
+  const slide = reduceMotion
+    ? undefined
+    : {
+        enter: (dir: number) => ({ opacity: 0, x: dir * 28 }),
+        center: { opacity: 1, x: 0, transition: { duration: 0.24, ease: "easeOut" as const } },
+        exit: (dir: number) => ({ opacity: 0, x: dir * -28, transition: { duration: 0.16, ease: "easeIn" as const } })
+      };
+  // Fragen ohne Regler gehen nach der Wahl von selbst weiter: kurz genug, um
+  // flüssig zu wirken, lang genug, um die Wirkung der Antwort zu sehen.
+  // Mit Regler bleibt der Weiter-Knopf, denn die Menge folgt erst noch.
+  const [advancingFor, setAdvancingFor] = useState<string | null>(null);
+  const advancing = advancingFor === question.id;
+  const continueRef = useRef(onContinue);
+  continueRef.current = onContinue;
+  useEffect(() => {
+    if (!advancing) return;
+    const timer = window.setTimeout(() => {
+      setAdvancingFor(null);
+      continueRef.current();
+    }, AUTO_ADVANCE_MS);
+    return () => window.clearTimeout(timer);
+  }, [advancing]);
+  const choose = (optionId: string) => {
+    onAnswer(question.id, optionId);
+    setAdvancingFor(question.adjust ? null : question.id);
+  };
   const roomProgress = getRoomProgress(room, answers, skippedQuestions);
   const roomHandled = roomProgress.handled;
   const roomDone = roomProgress.isComplete;
@@ -112,7 +146,7 @@ export function ObjectContextPanel({
       const choice = Number(event.key);
       if (Number.isInteger(choice) && choice >= 1 && choice <= question.options.length) {
         event.preventDefault();
-        onAnswer(question.id, question.options[choice - 1].id);
+        choose(question.options[choice - 1].id);
         return;
       }
 
@@ -126,6 +160,8 @@ export function ObjectContextPanel({
 
     window.addEventListener("keydown", handleKey);
     return () => window.removeEventListener("keydown", handleKey);
+    // `choose` ist bei jedem Rendern neu, hängt aber nur an `question` und `onAnswer`.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [objectOpen, roomDone, question, selected, onAnswer, onContinue]);
 
   // Einheiten über alle Optionen einer Frage angleichen, sonst steht „16,4 m³“
@@ -166,8 +202,8 @@ export function ObjectContextPanel({
       </div>
       <ProgressSummary room={room} roomHandled={roomHandled} totals={totals} />
 
-      <div className="min-h-0 flex-1 overflow-y-auto px-4 pt-4 md:px-6 md:py-6">
-        <AnimatePresence mode="wait" initial={false}>
+      <div className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden px-4 pt-4 md:px-6 md:py-6">
+        <AnimatePresence mode="wait" initial={false} custom={direction}>
           {roomDone && !objectOpen ? (
             <RoomCompleteView
               key={`${room.id}-complete`}
@@ -226,8 +262,11 @@ export function ObjectContextPanel({
           ) : (
             <motion.div
               key={`${question.id}-question`}
-              initial={reduceMotion ? false : { opacity: 0, y: 6 }}
-              animate={{ opacity: 1, y: 0 }}
+              custom={direction}
+              variants={slide}
+              initial={reduceMotion ? false : "enter"}
+              animate="center"
+              exit={reduceMotion ? undefined : "exit"}
               className="mx-auto max-w-xl"
             >
               <div className="flex min-w-0 items-center justify-between gap-3">
@@ -268,18 +307,24 @@ export function ObjectContextPanel({
                 {optionResults.map(({ option, values }) => {
                   const active = selected === option.id;
                   return (
-                    <button
+                    <div
                       key={option.id}
-                      type="button"
-                      role="radio"
-                      aria-checked={active}
-                      onClick={() => onAnswer(question.id, option.id)}
                       className={cn(
-                        "flex min-h-12 items-center gap-2.5 rounded-[var(--radius-md)] border px-3 py-2.5 text-left text-sm font-semibold leading-5 transition md:min-h-14 md:gap-3 md:rounded-[var(--radius-lg)] md:px-4 md:py-3 md:text-sm md:leading-5",
-                        focusRingTool,
+                        "overflow-hidden rounded-[var(--radius-md)] border transition md:rounded-[var(--radius-lg)]",
                         active
                           ? "border-[var(--color-forest)] bg-[var(--color-sage)]/45"
                           : "border-[var(--color-line)] hover:border-[var(--color-forest)]/40 hover:bg-[var(--color-paper)]"
+                      )}
+                    >
+                    <motion.button
+                      type="button"
+                      role="radio"
+                      aria-checked={active}
+                      whileTap={reduceMotion ? undefined : { scale: 0.985 }}
+                      onClick={() => choose(option.id)}
+                      className={cn(
+                        "flex min-h-12 w-full items-center gap-2.5 px-3 py-2.5 text-left text-sm font-semibold leading-5 md:min-h-14 md:gap-3 md:px-4 md:py-3",
+                        focusRingTool
                       )}
                     >
                       <span
@@ -290,12 +335,28 @@ export function ObjectContextPanel({
                             : "border-[var(--color-line)]"
                         )}
                       >
-                        {active && <Check className="size-3" aria-hidden />}
+                        {active && (
+                          <motion.span
+                            className="grid place-items-center"
+                            initial={reduceMotion ? false : { scale: 0.3, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            transition={{ type: "spring", stiffness: 520, damping: 22 }}
+                          >
+                            <Check className="size-3" aria-hidden />
+                          </motion.span>
+                        )}
                       </span>
                       {/* Mobil stehen die Werte unter der Antwort: nebeneinander
                           blieb für den Antworttext kaum ein Drittel der Breite. */}
                       <span className="flex min-w-0 flex-1 flex-col gap-0.5 md:flex-row md:items-center md:gap-3">
-                        <span className="min-w-0 md:flex-1">{option.label}</span>
+                        <span className="min-w-0 md:flex-1">
+                          {option.label}
+                          {option.regionalAverage && (
+                            <span className="ml-2 inline-flex translate-y-[-1px] items-center rounded-full bg-[var(--color-sage)] px-2 py-0.5 align-middle text-[10px] font-semibold text-[var(--color-forest)]">
+                              Südtirol-Schnitt
+                            </span>
+                          )}
+                        </span>
                         {hasValues(values) ? (
                           <ValueRow
                             values={values}
@@ -308,23 +369,28 @@ export function ObjectContextPanel({
                           </span>
                         )}
                       </span>
-                    </button>
+                    </motion.button>
+                    {/* Wer den Durchschnitt wählt, soll sehen, woher er kommt. */}
+                    {active && option.regionalAverage && (
+                      <p className="px-3 pb-2.5 text-[11px] font-normal leading-4 text-[var(--color-muted)] md:px-4">
+                        {option.regionalAverage.basis}{" "}
+                        Quelle: {option.regionalAverage.source}.
+                      </p>
+                    )}
+                    {active && question.adjust && (
+                      <AdjustControl
+                        adjust={question.adjust}
+                        questionId={question.id}
+                        quantity={quantityFor(question, option.id, adjustments)}
+                        isCustom={isAdjusted(question.id, adjustments)}
+                        onChange={(quantity) => onAdjust(question.id, quantity)}
+                        onReset={() => onClearAdjust(question.id)}
+                      />
+                    )}
+                    </div>
                   );
                 })}
               </div>
-
-              {question.adjust && selected && (
-                <AdjustControl
-                  adjust={question.adjust}
-                  questionId={question.id}
-                  quantity={quantityFor(question, selected, adjustments)}
-                  isCustom={isAdjusted(question.id, adjustments)}
-                  open={adjustOpen}
-                  onToggle={() => setAdjustOpen((prev) => !prev)}
-                  onChange={(quantity) => onAdjust(question.id, quantity)}
-                  onReset={() => onClearAdjust(question.id)}
-                />
-              )}
 
               {selectedOption && selectedValues && (
                 <>
@@ -361,7 +427,10 @@ export function ObjectContextPanel({
                 {questionIndex > 0 && (
                   <button
                     type="button"
-                    onClick={onBack}
+                    onClick={() => {
+                      setAdvancingFor(null);
+                      onBack();
+                    }}
                     className={cn(
                       "inline-flex min-h-11 items-center gap-1.5 rounded-[var(--radius-md)] px-3 text-xs font-semibold text-[var(--color-muted)] transition-colors hover:bg-[var(--color-ink)]/5 hover:text-[var(--color-ink)]",
                       focusRingTool
@@ -375,12 +444,25 @@ export function ObjectContextPanel({
                 {selected ? (
                   <button
                     type="button"
-                    onClick={onContinue}
+                    onClick={() => {
+                      setAdvancingFor(null);
+                      onContinue();
+                    }}
                     className={cn(
-                      "ml-auto inline-flex min-h-12 items-center gap-2 rounded-[var(--radius-md)] bg-[var(--color-forest)] px-6 text-sm font-semibold text-white md:ml-0 md:min-h-11 md:px-5",
+                      "relative isolate ml-auto inline-flex min-h-12 overflow-hidden items-center gap-2 rounded-[var(--radius-md)] bg-[var(--color-forest)] px-6 text-sm font-semibold text-white md:ml-0 md:min-h-11 md:px-5",
                       focusRingTool
                     )}
                   >
+                    {/* Die Füllung zeigt, dass es gleich von selbst weitergeht. */}
+                    {advancing && (
+                      <motion.span
+                        aria-hidden
+                        className="absolute inset-y-0 left-0 -z-10 bg-white/20"
+                        initial={{ width: "0%" }}
+                        animate={{ width: "100%" }}
+                        transition={{ duration: AUTO_ADVANCE_MS / 1000, ease: "linear" }}
+                      />
+                    )}
                     {moreObjectsOpen ? "Weiter" : "Raum abschließen"}
                     <ChevronRight className="size-4" aria-hidden />
                   </button>

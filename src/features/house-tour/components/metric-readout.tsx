@@ -1,6 +1,6 @@
 "use client";
 
-import { RotateCcw, SlidersHorizontal } from "lucide-react";
+import { Minus, Plus, RotateCcw } from "lucide-react";
 import { motion, useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { focusRingTool } from "@/components/ui/focus";
@@ -260,16 +260,16 @@ export function InputImpactFeedback({
 }
 
 /**
- * Feinjustierung. Standardmäßig eingeklappt: die Tour soll durchklickbar
- * bleiben, wer es genauer will, macht einen Schritt mehr.
+ * Feinjustierung, direkt in der gewählten Antwort. Eingeklappt hinter
+ * „Genauer angeben“ blieb sie bei 14 von 18 Fragen meist unberührt, obwohl
+ * genau hier die eigene Zahl steht. Die Vorgabe der Option ist schon gesetzt:
+ * wer nichts ändert, verliert nichts.
  */
 export function AdjustControl({
   adjust,
   questionId,
   quantity,
   isCustom,
-  open,
-  onToggle,
   onChange,
   onReset
 }: {
@@ -277,8 +277,6 @@ export function AdjustControl({
   questionId: string;
   quantity: number;
   isCustom: boolean;
-  open: boolean;
-  onToggle: () => void;
   onChange: (quantity: number) => void;
   onReset: () => void;
 }) {
@@ -288,81 +286,74 @@ export function AdjustControl({
     minimumFractionDigits: 0,
     maximumFractionDigits: decimals
   });
+  // Auf dem Telefon trifft der Daumen am Regler selten den genauen Wert;
+  // die Schrittknöpfe liefern ihn.
+  const nudge = (direction: 1 | -1) => {
+    const next = Math.round((quantity + direction * adjust.step) / adjust.step) * adjust.step;
+    onChange(Math.min(adjust.max, Math.max(adjust.min, Number(next.toFixed(decimals)))));
+  };
+  const stepButton = cn(
+    "grid size-10 shrink-0 place-items-center rounded-full border border-[var(--color-line)] bg-white text-[var(--color-forest)] transition-colors hover:border-[var(--color-forest)] disabled:opacity-35 md:size-9",
+    focusRingTool
+  );
 
   return (
-    <div className="mt-2.5 md:mt-4">
-      <button
-        type="button"
-        onClick={onToggle}
-        aria-expanded={open}
-        aria-controls={`${sliderId}-panel`}
-        className={cn(
-          "inline-flex min-h-8 items-center gap-2 rounded-[var(--radius-md)] text-[11px] font-semibold text-[var(--color-forest)] md:min-h-10 md:text-xs",
-          focusRingTool
-        )}
-      >
-        <SlidersHorizontal className="size-3.5 shrink-0" aria-hidden />
-        {open ? "Feinjustierung schließen" : "Genauer angeben"}
-        {isCustom && !open && (
-          <span className="rounded-full bg-[var(--color-sage)] px-2 py-0.5 tabular-nums text-[var(--color-ink)]">
-            {display} {adjust.unit}
-          </span>
-        )}
-      </button>
-
-      {open && (
-        <div
-          id={`${sliderId}-panel`}
-          className="mt-2 rounded-[var(--radius-md)] border border-[var(--color-line)] bg-[var(--color-paper)] px-3 py-2.5 md:px-4 md:py-3"
-        >
-          <div className="flex items-baseline justify-between gap-3">
-            <label htmlFor={sliderId} className="text-[11px] font-semibold md:text-xs">
-              {adjust.label}
-            </label>
-            <span className="shrink-0 text-sm font-semibold tabular-nums">
-              {display}{" "}
-              <span className="text-[11px] font-medium text-[var(--color-muted)]">{adjust.unit}</span>
-            </span>
-          </div>
-
-          <input
-            id={sliderId}
-            type="range"
-            min={adjust.min}
-            max={adjust.max}
-            step={adjust.step}
-            value={quantity}
-            onChange={(event) => onChange(Number(event.target.value))}
+    <div className="px-3 pb-3 pt-1 md:px-4">
+      <div className="flex items-baseline justify-between gap-3">
+        <label htmlFor={sliderId} className="text-[11px] font-semibold text-[var(--color-muted)] md:text-xs">
+          {adjust.label}
+        </label>
+        {isCustom && (
+          <button
+            type="button"
+            onClick={onReset}
             className={cn(
-              "mt-2 h-6 w-full cursor-pointer appearance-none bg-transparent",
-              // Spur und Griff explizit, sonst erbt jeder Browser sein eigenes Blau.
-              "[&::-webkit-slider-runnable-track]:h-1.5 [&::-webkit-slider-runnable-track]:rounded-full [&::-webkit-slider-runnable-track]:bg-[var(--color-ink)]/12",
-              "[&::-webkit-slider-thumb]:mt-[-7px] [&::-webkit-slider-thumb]:size-5 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-white [&::-webkit-slider-thumb]:bg-[var(--color-forest)] [&::-webkit-slider-thumb]:shadow-md",
-              "[&::-moz-range-track]:h-1.5 [&::-moz-range-track]:rounded-full [&::-moz-range-track]:bg-[var(--color-ink)]/12",
-              "[&::-moz-range-thumb]:size-5 [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-white [&::-moz-range-thumb]:bg-[var(--color-forest)]",
+              "inline-flex shrink-0 items-center gap-1 text-[11px] font-semibold text-[var(--color-muted)] hover:text-[var(--color-ink)]",
               focusRingTool
             )}
-          />
+          >
+            <RotateCcw className="size-3" aria-hidden />
+            Vorgabe
+          </button>
+        )}
+      </div>
 
-          <div className="mt-1 flex items-start justify-between gap-3">
-            <p className="text-[11px] leading-4 text-[var(--color-muted)]">
-              {adjust.hint ?? `Von ${adjust.min} bis ${adjust.max} ${adjust.unit}.`}
-            </p>
-            {isCustom && (
-              <button
-                type="button"
-                onClick={onReset}
-                className={cn(
-                  "inline-flex shrink-0 items-center gap-1 text-[11px] font-semibold text-[var(--color-muted)] hover:text-[var(--color-ink)]",
-                  focusRingTool
-                )}
-              >
-                <RotateCcw className="size-3" aria-hidden />
-                Vorgabe
-              </button>
-            )}
-          </div>
-        </div>
+      <div className="mt-1.5 flex items-center gap-2.5">
+        <button type="button" onClick={() => nudge(-1)} disabled={quantity <= adjust.min}
+          aria-label={`${adjust.label}: weniger`} className={stepButton}>
+          <Minus className="size-4" aria-hidden />
+        </button>
+        <input
+          id={sliderId}
+          type="range"
+          min={adjust.min}
+          max={adjust.max}
+          step={adjust.step}
+          value={quantity}
+          aria-valuetext={`${display} ${adjust.unit}`}
+          onChange={(event) => onChange(Number(event.target.value))}
+          className={cn(
+            "h-10 min-w-0 flex-1 cursor-pointer appearance-none bg-transparent",
+            // Spur und Griff explizit, sonst erbt jeder Browser sein eigenes Blau.
+            "[&::-webkit-slider-runnable-track]:h-1.5 [&::-webkit-slider-runnable-track]:rounded-full [&::-webkit-slider-runnable-track]:bg-[var(--color-ink)]/12",
+            "[&::-webkit-slider-thumb]:mt-[-9px] [&::-webkit-slider-thumb]:size-6 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-white [&::-webkit-slider-thumb]:bg-[var(--color-forest)] [&::-webkit-slider-thumb]:shadow-md",
+            "[&::-moz-range-track]:h-1.5 [&::-moz-range-track]:rounded-full [&::-moz-range-track]:bg-[var(--color-ink)]/12",
+            "[&::-moz-range-thumb]:size-6 [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-white [&::-moz-range-thumb]:bg-[var(--color-forest)]",
+            focusRingTool
+          )}
+        />
+        <button type="button" onClick={() => nudge(1)} disabled={quantity >= adjust.max}
+          aria-label={`${adjust.label}: mehr`} className={stepButton}>
+          <Plus className="size-4" aria-hidden />
+        </button>
+        <output htmlFor={sliderId} className="min-w-[4.5rem] shrink-0 text-right text-base font-semibold tabular-nums">
+          {display}{" "}
+          <span className="text-[11px] font-medium text-[var(--color-muted)]">{adjust.unit}</span>
+        </output>
+      </div>
+
+      {adjust.hint && (
+        <p className="mt-1 text-[11px] leading-4 text-[var(--color-muted)]">{adjust.hint}</p>
       )}
     </div>
   );

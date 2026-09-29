@@ -65,7 +65,9 @@ export function tourReducer(state: TourState, action: TourAction): TourState {
         view: "room",
         activeRoom: action.roomId,
         activeQuestionIndex: action.questionIndex ?? 0,
-        objectOpen: false
+        // Der Gegenstand ist in der Szene schon hervorgehoben; ein eigener
+        // Entdecken-Schritt davor kostete je Objekt einen Tipp ohne Inhalt.
+        objectOpen: action.open ?? false
       };
     case "OPEN_OBJECT":
       return { ...state, activeQuestionIndex: action.questionIndex, objectOpen: true };
@@ -138,7 +140,8 @@ export function tourReducer(state: TourState, action: TourAction): TourState {
           typeof questionIndex === "number" && Number.isFinite(questionIndex)
             ? Math.max(0, Math.floor(questionIndex))
             : 0,
-        objectOpen: false,
+        // Wer mitten in einem Raum neu lädt, landet wieder in der Frage.
+        objectOpen: roomStillExists && view === "room",
         answers,
         skippedQuestions: sanitizeSkipped(action.state.skippedQuestions, answers),
         adjustments: sanitizeAdjustments(action.state.adjustments)

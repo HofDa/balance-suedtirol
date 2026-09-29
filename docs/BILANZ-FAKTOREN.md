@@ -49,6 +49,31 @@ ein Fehler.
 | Textilien ⚠ | 15 / 9 / 3 kg CO₂e je Stück | Neuware / gemischt / Secondhand, gemittelt über Kleidungsarten |
 | Rasenbewässerung ⚠ | 150 L/m²/a | Trockener Südtiroler Sommer; naturnahes Beet 30 L/m²/a |
 
+## Südtirol-Durchschnitte („Weiß ich nicht“)
+
+Vier Fragen bieten statt einer Lücke den Südtiroler Durchschnitt an. Amtliche
+Quellen liefern dafür nur die **Verteilung** (welcher Energieträger, welches
+Verkehrsmittel), keine Mengen: Kilowattstunden und Kilometer bleiben die
+Vorgaben des Rechners. Die Herleitung rechnet `tests/house-calculator.test.ts`
+aus den Anteilen nach.
+
+| Frage | Wert | Grundlage |
+|---|---|---|
+| Heizung | 0,20 kg CO₂e/kWh | 47 % Methan, 33 % Biomasse, 10 % Heizöl, 5 % Flüssiggas, 4 % Strom — ASTAT, Energieverbrauch der Südtiroler Haushalte 2021 (astat info 61/2022) |
+| Warmwasser | 0,199 kg CO₂e/kWh bei 89 % Wirkungsgrad | 44 % Methan, 26 % Biomasse, 10 % Heizöl, 5 % Flüssiggas, 10 % Strom, 5 % Solar — ebd. |
+| Beleuchtung | 18,4 W je Leuchtstelle | 28 % herkömmliche Glühbirnen (45 W), 72 % Sparlampen (8 W) — ebd.; wirkt nur qualitativ |
+| Kurze Wege | 0,105 kg CO₂e/km · 0,33 kWh/km | Bis 2 km: 21 % Auto/Motorrad, 8 % öffentlich, 71 % zu Fuß/Rad; 2–10 km: 60 % / 17 % / 23 % — ASTAT, Lokale Mobilität: Wege 2024 (astat info 51/2024) |
+
+Annahmen ⚠: Flüssiggas 0,23 kg CO₂e/kWh bei 90 %, Biomasse fürs Warmwasser
+0,10 kg CO₂e/kWh bei 85 %, öffentlicher Verkehr 0,05 kg CO₂e und 0,18 kWh je
+Personenkilometer. Bei den kurzen Wegen gilt die Verteilung für 2–10 km auch
+für 2–5 km, und Wegeanteile stehen für Kilometeranteile. Alle Durchschnitte
+tragen den Wirkungsindex 0, denn der Index misst die Abweichung vom Mittel.
+
+Keinen Durchschnitt haben Fragen ohne amtliche Südtiroler Verteilung: Mengen
+wie Heizverbrauch, Duschminuten oder Autokilometer, sowie Kleidung, Standby,
+Ernährung, Fernreisen und Garten. Dort bleibt „Überspringen“.
+
 ## Gekoppelte Größen
 
 Zwei Fragen wirken nicht additiv, sondern multiplikativ. Der Rechner löst das,

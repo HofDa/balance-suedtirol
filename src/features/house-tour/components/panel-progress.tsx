@@ -1,9 +1,10 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
+import { animate, motion, useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { formatMetric, hasValues, metrics } from "../model/calculator";
-import type { AnnualValues, TourRoom } from "../model/types";
+import type { AnnualValues, MetricId, TourRoom } from "../model/types";
 
 function ProgressBar({ value, total }: { value: number; total: number }) {
   const width = total ? Math.min(100, (value / total) * 100) : 0;
@@ -15,6 +16,41 @@ function ProgressBar({ value, total }: { value: number; total: number }) {
         transition={{ duration: 0.35, ease: "easeOut" }}
       />
     </div>
+  );
+}
+
+/**
+ * Zählt vom alten zum neuen Wert, damit eine Antwort sichtbar etwas bewegt.
+ * Die Einheit richtet sich nach dem Zielwert: sie springt nicht mitten im
+ * Zählen von kWh auf MWh.
+ */
+function CountingMetric({ metric, value }: { metric: MetricId; value: number }) {
+  const reduceMotion = useReducedMotion();
+  // Beim ersten Erscheinen von null an: die erste Antwort füllt die Bilanz.
+  const [shown, setShown] = useState(reduceMotion ? value : 0);
+  const shownRef = useRef(reduceMotion ? value : 0);
+  useEffect(() => {
+    if (reduceMotion) {
+      shownRef.current = value;
+      setShown(value);
+      return;
+    }
+    const controls = animate(shownRef.current, value, {
+      duration: 0.6,
+      ease: "easeOut",
+      onUpdate: (latest) => {
+        shownRef.current = latest;
+        setShown(latest);
+      }
+    });
+    return () => controls.stop();
+  }, [value, reduceMotion]);
+  const formatted = formatMetric(metric, shown, value);
+  return (
+    <>
+      <span className="text-sm font-semibold tabular-nums">{formatted.value}</span>
+      <span className="text-[11px] text-[var(--color-muted)]">{formatted.unit}</span>
+    </>
   );
 }
 
@@ -56,7 +92,6 @@ export function ProgressSummary({
         <dl className="grid grid-cols-3 gap-2 px-3 py-2 md:mt-2 md:gap-3 md:border-t md:border-[var(--color-line)] md:px-6 md:py-2.5">
           {metrics.map((metric) => {
             const raw = totals[metric.key];
-            const formatted = formatMetric(metric.id, raw);
             return (
               <div key={metric.id} className="min-w-0">
                 <dt className="truncate text-[11px] font-medium text-[var(--color-muted)]">
@@ -64,10 +99,7 @@ export function ProgressSummary({
                 </dt>
                 <dd className="flex items-baseline gap-1 truncate">
                   {raw > 0 ? (
-                    <>
-                      <span className="text-sm font-semibold tabular-nums">{formatted.value}</span>
-                      <span className="text-[11px] text-[var(--color-muted)]">{formatted.unit}</span>
-                    </>
+                    <CountingMetric metric={metric.id} value={raw} />
                   ) : (
                     // „0 L“ neben echten Zahlen liest sich wie ein Fehler, nicht wie ein Zwischenstand.
                     <span className="text-sm font-semibold text-[var(--color-muted)]" title="noch nicht erfasst">

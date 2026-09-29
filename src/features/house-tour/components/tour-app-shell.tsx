@@ -42,14 +42,15 @@ export function TourAppShell({ locale }: { locale: Locale }) {
   const openRoom = useCallback((roomId: RoomId, questionIndex?: number) => {
     const target = getRoom(roomId);
     if (questionIndex !== undefined) {
-      dispatch({ type: "OPEN_ROOM", roomId, questionIndex });
-      dispatch({ type: "OPEN_OBJECT", questionIndex });
+      dispatch({ type: "OPEN_ROOM", roomId, questionIndex, open: true });
     } else {
       const firstOpen =
         target?.questions.findIndex(
           (item) => !state.answers[item.id] && !state.skippedQuestions[item.id]
-        ) ?? 0;
-      dispatch({ type: "OPEN_ROOM", roomId, questionIndex: Math.max(0, firstOpen) });
+        ) ?? -1;
+      // Ein fertiger Raum öffnet mit seinem Abschluss, jeder andere direkt in
+      // der ersten offenen Frage.
+      dispatch({ type: "OPEN_ROOM", roomId, questionIndex: Math.max(0, firstOpen), open: firstOpen >= 0 });
     }
   }, [dispatch, state.answers, state.skippedQuestions]);
 

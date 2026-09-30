@@ -8,6 +8,8 @@ import { textDisplay, textTitleTight } from "@/components/ui/typography";
 import { cn } from "@/lib/utils";
 import { ArrowIcon } from "@/components/ui/arrow-icon";
 import { MobileDisclosureList } from "./mobile-disclosure-list";
+import { MobileCollapseSection, MobileCollapseToggle } from "./mobile-collapse";
+import { hiddenWhenCollapsed } from "./mobile-collapse-classes";
 
 /**
  * Hier kippt die Erzählung. Der Wechsel auf Tannentinte markiert ihn, ohne
@@ -18,19 +20,23 @@ export function HabitatLoss({ locale }: { locale: Locale }) {
   const t = getHomeStory(locale).loss;
 
   return (
-    <section aria-labelledby="loss-title" className="bg-[var(--color-ink)] py-16 text-white sm:py-32">
+    <MobileCollapseSection aria-labelledby="loss-title" className="bg-[var(--color-ink)] py-16 text-white sm:py-32">
       <Container>
         <div className="grid gap-10 sm:gap-14 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:gap-20">
           <div data-home-reveal="rise" className="lg:sticky lg:top-28 lg:self-start">
-            <Label size="section" tone="moss">
-              {t.eyebrow}
-            </Label>
-            <h2
-              id="loss-title"
-              className={cn(textDisplay, "mt-4")}
-            >
-              {t.title}
-            </h2>
+            <div className="relative">
+              <Label size="section" tone="moss">
+                {t.eyebrow}
+              </Label>
+              <h2
+                id="loss-title"
+                className={cn(textDisplay, "mt-4 max-sm:pr-14")}
+              >
+                {t.title}
+              </h2>
+              <MobileCollapseToggle labelledBy="loss-title" tone="dark" />
+            </div>
+            <div className={hiddenWhenCollapsed}>
             <p className="mt-6 max-w-[52ch] text-[length:var(--text-body-lg)] leading-[var(--leading-body)] text-white/80">
               {t.lead}
             </p>
@@ -46,10 +52,12 @@ export function HabitatLoss({ locale }: { locale: Locale }) {
               ))}
             </dl>
             <p className="mt-6 text-xs leading-5 text-white/60">{t.factsSource}</p>
+            </div>
           </div>
 
           <MobileDisclosureList
             tone="dark"
+            className={hiddenWhenCollapsed}
             items={t.pressures.map(([title, copy], index) => ({
               key: title,
               summary: (
@@ -85,7 +93,7 @@ export function HabitatLoss({ locale }: { locale: Locale }) {
 
         <div
           data-home-reveal="rise"
-          className="mt-12 flex flex-col gap-6 border-t border-white/15 pt-8 sm:mt-24 sm:gap-8 sm:pt-10 lg:flex-row lg:items-end lg:justify-between"
+          className={cn(hiddenWhenCollapsed, "mt-12 flex flex-col gap-6 border-t border-white/15 pt-8 sm:mt-24 sm:gap-8 sm:pt-10 lg:flex-row lg:items-end lg:justify-between")}
         >
           <p className="max-w-[40ch] font-display text-balance text-[1.625rem] leading-[1.25] tracking-[-0.02em] sm:text-[2rem]">
             {t.closing}
@@ -99,6 +107,6 @@ export function HabitatLoss({ locale }: { locale: Locale }) {
           </Link>
         </div>
       </Container>
-    </section>
+    </MobileCollapseSection>
   );
 }

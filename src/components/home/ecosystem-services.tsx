@@ -6,6 +6,8 @@ import { getHomeStory } from "@/config/home-story";
 import { ServiceIllustration } from "./service-illustrations";
 import { textDisplay, textTitleTight } from "@/components/ui/typography";
 import { cn } from "@/lib/utils";
+import { MobileCollapseSection, MobileCollapseToggle } from "./mobile-collapse";
+import { hiddenWhenCollapsed } from "./mobile-collapse-classes";
 
 /**
  * Sechs Leistungen als offene Komposition: Überschrift links stehend, rechts
@@ -16,23 +18,26 @@ export function EcosystemServices({ locale }: { locale: Locale }) {
   const t = getHomeStory(locale).services;
 
   return (
-    <section aria-labelledby="services-title" className="bg-[var(--color-sage)]/35 py-16 sm:py-32">
+    <MobileCollapseSection aria-labelledby="services-title" className="bg-[var(--color-sage)]/35 py-16 sm:py-32">
       <Container>
         <div className="grid gap-10 sm:gap-14 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:gap-20">
           <div data-home-reveal="rise" className="lg:sticky lg:top-28 lg:self-start">
-            <Label size="section">{t.eyebrow}</Label>
-            <h2
-              id="services-title"
-              className={cn(textDisplay, "mt-4 text-[var(--color-ink)]")}
-            >
-              {t.title}
-            </h2>
-            <p className="mt-6 max-w-[46ch] text-[length:var(--text-body-lg)] leading-[var(--leading-body)] text-[var(--color-muted)]">
+            <div className="relative">
+              <Label size="section">{t.eyebrow}</Label>
+              <h2
+                id="services-title"
+                className={cn(textDisplay, "mt-4 text-[var(--color-ink)] max-sm:pr-14")}
+              >
+                {t.title}
+              </h2>
+              <MobileCollapseToggle labelledBy="services-title" />
+            </div>
+            <p className={cn(hiddenWhenCollapsed, "mt-6 max-w-[46ch] text-[length:var(--text-body-lg)] leading-[var(--leading-body)] text-[var(--color-muted)]")}>
               {t.lead}
             </p>
           </div>
 
-          <ul className="grid gap-x-12 gap-y-6 sm:grid-cols-2 sm:gap-y-14 sm:pb-20">
+          <ul className={cn(hiddenWhenCollapsed, "grid gap-x-12 gap-y-6 sm:grid-cols-2 sm:gap-y-14 sm:pb-20")}>
             {t.items.map((item, index) => (
               <li key={item.id} className="sm:even:translate-y-20">
                 <div
@@ -51,6 +56,6 @@ export function EcosystemServices({ locale }: { locale: Locale }) {
           </ul>
         </div>
       </Container>
-    </section>
+    </MobileCollapseSection>
   );
 }

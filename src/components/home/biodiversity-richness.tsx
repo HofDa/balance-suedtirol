@@ -8,6 +8,8 @@ import { getHomeStory, richnessImage } from "@/config/home-story";
 import { getTranslations } from "@/config/translations";
 import { withBasePath } from "@/lib/public-path";
 import { MobileDisclosureList } from "./mobile-disclosure-list";
+import { MobileCollapseSection, MobileCollapseToggle } from "./mobile-collapse";
+import { hiddenWhenCollapsed } from "./mobile-collapse-classes";
 import { textDisplay, textHeadline, textLead } from "@/components/ui/typography";
 import { cn } from "@/lib/utils";
 
@@ -36,17 +38,21 @@ export function BiodiversityRichness({ locale }: { locale: Locale }) {
   const photo = getTranslations(locale).hero.photo;
 
   return (
-    <section id="vielfalt" aria-labelledby="vielfalt-title" className="scroll-mt-20 py-16 sm:py-32">
+    <MobileCollapseSection id="vielfalt" aria-labelledby="vielfalt-title" className="scroll-mt-20 py-16 sm:py-32">
       <Container>
         <div className="grid gap-8 sm:gap-12 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] lg:gap-16">
           <div data-home-reveal="rise">
-            <Label size="section">{t.eyebrow}</Label>
-            <h2
-              id="vielfalt-title"
-              className={cn(textDisplay, "mt-4 text-[var(--color-ink)]")}
-            >
-              {t.title}
-            </h2>
+            <div className="relative">
+              <Label size="section">{t.eyebrow}</Label>
+              <h2
+                id="vielfalt-title"
+                className={cn(textDisplay, "mt-4 text-[var(--color-ink)] max-sm:pr-14")}
+              >
+                {t.title}
+              </h2>
+              <MobileCollapseToggle labelledBy="vielfalt-title" />
+            </div>
+            <div className={hiddenWhenCollapsed}>
             <p className="mt-6 max-w-[52ch] text-[length:var(--text-body-lg)] leading-[var(--leading-body)] text-[var(--color-muted)]">
               {t.lead}
             </p>
@@ -66,9 +72,10 @@ export function BiodiversityRichness({ locale }: { locale: Locale }) {
                 </div>
               ))}
             </dl>
+            </div>
           </div>
 
-          <figure data-home-reveal="scale" className="lg:sticky lg:top-24 lg:self-start">
+          <figure data-home-reveal="scale" className={cn(hiddenWhenCollapsed, "lg:sticky lg:top-24 lg:self-start")}>
             <div className="relative overflow-hidden rounded-[var(--radius-lg)] bg-[var(--color-stone)]">
               <Image
                 src={withBasePath(richnessImage.src)}
@@ -113,7 +120,7 @@ export function BiodiversityRichness({ locale }: { locale: Locale }) {
         </div>
 
         {/* Die Zahlenebene: groß gesetzt, durch Haarlinien getrennt, ohne Rahmen. */}
-        <div data-home-reveal="rise" className="mt-16 sm:mt-32">
+        <div data-home-reveal="rise" className={cn(hiddenWhenCollapsed, "mt-16 sm:mt-32")}>
           <h3 className={cn(textHeadline, "max-w-[24ch] text-[var(--color-ink)]")}>
             {figures.title}
           </h3>
@@ -153,7 +160,7 @@ export function BiodiversityRichness({ locale }: { locale: Locale }) {
           target="_blank"
           rel="noreferrer"
           data-home-reveal="rise"
-          className={`group mt-10 flex sm:mt-14 items-center justify-between gap-6 border-y border-[var(--color-line)] py-7 sm:py-9 ${focusRing}`}
+          className={`${hiddenWhenCollapsed} group mt-10 flex sm:mt-14 items-center justify-between gap-6 border-y border-[var(--color-line)] py-7 sm:py-9 ${focusRing}`}
         >
           <span className="min-w-0">
             <span className="block font-display text-balance text-[1.5rem] leading-[1.2] tracking-[-0.02em] text-[var(--color-ink)] transition-colors group-hover:text-[var(--color-forest)] sm:text-[2rem]">
@@ -168,6 +175,6 @@ export function BiodiversityRichness({ locale }: { locale: Locale }) {
           />
         </a>
       </Container>
-    </section>
+    </MobileCollapseSection>
   );
 }

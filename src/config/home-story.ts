@@ -107,7 +107,7 @@ const homeStory: Localized<HomeStoryCopy> = {
       annotations: { peaks: "Hochgebirge", pastures: "Almen", forest: "Bergwald", valley: "Talboden & Kulturland" }
     },
     figures: {
-      title: "Klein im Umriss, groß in der Vielfalt.",
+      title: "Kleine Fläche, große Vielfalt.",
       copy: "Südtirol umfasst rund 7.400 km², weniger als 2,5 % der Fläche Italiens. Und doch leben hier:",
       items: [
         { value: "2.500+", label: "Gefäßpflanzenarten" },
@@ -203,7 +203,7 @@ const homeStory: Localized<HomeStoryCopy> = {
       annotations: { peaks: "Alta montagna", pastures: "Alpeggi", forest: "Bosco montano", valley: "Fondovalle e colture" }
     },
     figures: {
-      title: "Piccolo sulla carta, grande nella varietà.",
+      title: "Piccola superficie, grande varietà.",
       copy: "L’Alto Adige misura circa 7.400 km², meno del 2,5 % della superficie italiana. Eppure qui vivono:",
       items: [
         { value: "2.500+", label: "specie di piante vascolari" },
@@ -299,7 +299,7 @@ const homeStory: Localized<HomeStoryCopy> = {
       annotations: { peaks: "High mountains", pastures: "Alpine pastures", forest: "Mountain forest", valley: "Valley floor & farmland" }
     },
     figures: {
-      title: "Small on the map, rich in diversity.",
+      title: "Small in area, big in diversity.",
       copy: "South Tyrol covers around 7,400 km², less than 2.5 % of Italy. And yet it is home to:",
       items: [
         { value: "2,500+", label: "vascular plant species" },

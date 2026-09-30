@@ -195,10 +195,26 @@ export function ProjectDetail({ project, otherProjects, locale }: ProjectDetailP
                 <Label as="span" size="section">{copy.location}</Label>
               </h2>
               <dl className="mt-6 space-y-5">
-                <div>
-                  <dt className="text-xs font-semibold text-[var(--color-muted)]">{copy.municipality}</dt>
-                  <dd className="mt-1 text-lg font-bold text-[var(--color-ink)]">{project.municipality}</dd>
-                </div>
+                {project.sites && project.sites.length > 0 ? (
+                  <div>
+                    <dt className="text-xs font-semibold text-[var(--color-muted)]">{copy.sites}</dt>
+                    <dd className="mt-1">
+                      <ul className="space-y-2">
+                        {project.sites.map((site) => (
+                          <li key={site.name}>
+                            <span className="block text-lg font-bold leading-snug text-[var(--color-ink)]">{site.name}</span>
+                            <span className="block text-sm text-[var(--color-muted)]">{copy.municipality} {site.municipality}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </dd>
+                  </div>
+                ) : (
+                  <div>
+                    <dt className="text-xs font-semibold text-[var(--color-muted)]">{copy.municipality}</dt>
+                    <dd className="mt-1 text-lg font-bold text-[var(--color-ink)]">{project.municipality}</dd>
+                  </div>
+                )}
                 <div>
                   <dt className="text-xs font-semibold text-[var(--color-muted)]">{copy.organization}</dt>
                   <dd className="mt-1 text-sm font-semibold text-[var(--color-ink)]">{project.organization}</dd>

@@ -25,6 +25,12 @@ export type Project = {
   organization: string;
   organizationAddress?: string;
   location: { lat: number; lng: number };
+  /**
+   * Einzelne Flächen, wenn ein Projekt an mehreren Orten arbeitet. Die
+   * Projektseite listet sie statt der einen Gemeinde; `municipality` bleibt
+   * die Kurzfassung für Karte, Kachel und Suche.
+   */
+  sites?: Array<{ name: string; municipality: string }>;
   image: string;
   /**
    * Fotopaar vom selben Standpunkt, vor und nach der Maßnahme. Fehlt es,

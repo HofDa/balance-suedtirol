@@ -7,6 +7,7 @@ import type { Locale } from "@/config/site";
 import { getHomeStory, richnessImage } from "@/config/home-story";
 import { getTranslations } from "@/config/translations";
 import { withBasePath } from "@/lib/public-path";
+import { MobileDisclosureList } from "./mobile-disclosure-list";
 import { textDisplay, textHeadline, textLead } from "@/components/ui/typography";
 import { cn } from "@/lib/utils";
 
@@ -35,9 +36,9 @@ export function BiodiversityRichness({ locale }: { locale: Locale }) {
   const photo = getTranslations(locale).hero.photo;
 
   return (
-    <section id="vielfalt" aria-labelledby="vielfalt-title" className="scroll-mt-20 py-24 sm:py-32">
+    <section id="vielfalt" aria-labelledby="vielfalt-title" className="scroll-mt-20 py-16 sm:py-32">
       <Container>
-        <div className="grid gap-12 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] lg:gap-16">
+        <div className="grid gap-8 sm:gap-12 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] lg:gap-16">
           <div data-home-reveal="rise">
             <Label size="section">{t.eyebrow}</Label>
             <h2
@@ -50,7 +51,11 @@ export function BiodiversityRichness({ locale }: { locale: Locale }) {
               {t.lead}
             </p>
 
-            <dl className="mt-10">
+            <MobileDisclosureList
+              className="mt-8"
+              items={t.factors.map(([term, description]) => ({ key: term, summary: term, body: description }))}
+            />
+            <dl className="mt-10 hidden sm:block">
               {t.factors.map(([term, description]) => (
                 <div
                   key={term}
@@ -108,7 +113,7 @@ export function BiodiversityRichness({ locale }: { locale: Locale }) {
         </div>
 
         {/* Die Zahlenebene: groß gesetzt, durch Haarlinien getrennt, ohne Rahmen. */}
-        <div data-home-reveal="rise" className="mt-24 sm:mt-32">
+        <div data-home-reveal="rise" className="mt-16 sm:mt-32">
           <h3 className={cn(textHeadline, "max-w-[24ch] text-[var(--color-ink)]")}>
             {figures.title}
           </h3>
@@ -118,7 +123,7 @@ export function BiodiversityRichness({ locale }: { locale: Locale }) {
           {/* Jede Zahl einzeilig, Zusätze wie „ca.“ oder „von 36“ klein daneben:
               So stehen alle vier auf einer Grundlinie, und die Beschriftungen
               darunter beginnen auf gleicher Höhe. */}
-          <dl className="mt-12 grid grid-cols-2 gap-x-6 gap-y-10 border-t border-[var(--color-line)] pt-8 lg:grid-cols-4 lg:gap-x-0 lg:pt-10">
+          <dl className="mt-8 grid grid-cols-2 gap-x-6 gap-y-8 border-t border-[var(--color-line)] pt-8 sm:mt-12 sm:gap-y-10 lg:grid-cols-4 lg:gap-x-0 lg:pt-10">
             {figures.items.map((item, index) => (
               <div
                 key={item.label}
@@ -148,7 +153,7 @@ export function BiodiversityRichness({ locale }: { locale: Locale }) {
           target="_blank"
           rel="noreferrer"
           data-home-reveal="rise"
-          className={`group mt-14 flex items-center justify-between gap-6 border-y border-[var(--color-line)] py-7 sm:py-9 ${focusRing}`}
+          className={`group mt-10 flex sm:mt-14 items-center justify-between gap-6 border-y border-[var(--color-line)] py-7 sm:py-9 ${focusRing}`}
         >
           <span className="min-w-0">
             <span className="block font-display text-balance text-[1.5rem] leading-[1.2] tracking-[-0.02em] text-[var(--color-ink)] transition-colors group-hover:text-[var(--color-forest)] sm:text-[2rem]">

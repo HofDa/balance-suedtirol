@@ -15,7 +15,7 @@ export function HouseIntro({ locale }: { locale: Locale }) {
   const t = getTranslations(locale).house;
 
   return (
-    <section aria-label={t.eyebrow} className="py-24 sm:py-32">
+    <section aria-label={t.eyebrow} className="py-16 sm:py-32">
       <Container>
         <div className="grid gap-12 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:items-end lg:gap-20">
           <div data-home-reveal="rise">

@@ -19,7 +19,7 @@ export function EconomicValue({ locale }: { locale: Locale }) {
   const figures = getTranslations(locale).biodiversityExplainer.economyFigures.slice(2);
 
   return (
-    <section aria-labelledby="economy-title" className="py-24 sm:py-32">
+    <section aria-labelledby="economy-title" className="py-16 sm:py-32">
       <Container>
         <div data-home-reveal="rise" className="max-w-[62ch]">
           <Label size="section">{t.eyebrow}</Label>

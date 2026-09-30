@@ -17,7 +17,7 @@ export function BalanceModel({ locale }: { locale: Locale }) {
   const t = getHomeStory(locale).model;
 
   return (
-    <section aria-labelledby="model-title" className="bg-[var(--color-sage)]/35 py-24 sm:py-32">
+    <section aria-labelledby="model-title" className="bg-[var(--color-sage)]/35 py-16 sm:py-32">
       <Container>
         <div data-home-reveal="rise" className="flex flex-col justify-between gap-8 lg:flex-row lg:items-end">
           <div className="max-w-[62ch]">

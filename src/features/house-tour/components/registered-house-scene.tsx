@@ -84,7 +84,11 @@ export function RegisteredHouseScene({ roomId, questionIndex, answers, skippedQu
               {/* Nur am gefragten Gegenstand: die Bewegung zeigt, worum es geht. */}
               {roomId && active && <ObjectEffect id={item.id} answer={answers[question.id]} />}
               {/* Neu gemountet bei jedem Zustandswechsel, damit das Abzeichen aufspringt. */}
-              {roomId && <span key={answered ? "answered" : skipped ? "skipped" : "open"} className={cn(styles.badge, "pointer-events-none absolute right-0 top-0 grid size-5 place-items-center rounded-full border border-white text-[10px] font-bold shadow-sm md:size-6", active ? "bg-[var(--color-forest)] text-white" : "bg-white text-[var(--color-forest)]")} aria-hidden>
+              {roomId && <span key={answered ? "answered" : skipped ? "skipped" : "open"}
+                // Ragt ein Objekt über den Raumausschnitt hinaus (die Baumkrone),
+                // bleibt das Abzeichen an dessen oberem Rand sichtbar.
+                style={{ top: `${Math.max(0, top - item.box[1]) / item.box[3] * 100}%` }}
+                className={cn(styles.badge, "pointer-events-none absolute right-0 grid size-5 place-items-center rounded-full border border-white text-[10px] font-bold shadow-sm md:size-6", active ? "bg-[var(--color-forest)] text-white" : "bg-white text-[var(--color-forest)]")} aria-hidden>
                 {answered ? <Check className="size-3" /> : skipped ? <SkipForward className="size-3" /> : item.question + 1}
               </span>}
             </button>

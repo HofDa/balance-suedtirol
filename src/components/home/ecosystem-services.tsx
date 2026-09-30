@@ -16,9 +16,9 @@ export function EcosystemServices({ locale }: { locale: Locale }) {
   const t = getHomeStory(locale).services;
 
   return (
-    <section aria-labelledby="services-title" className="bg-[var(--color-sage)]/35 py-24 sm:py-32">
+    <section aria-labelledby="services-title" className="bg-[var(--color-sage)]/35 py-16 sm:py-32">
       <Container>
-        <div className="grid gap-14 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:gap-20">
+        <div className="grid gap-10 sm:gap-14 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:gap-20">
           <div data-home-reveal="rise" className="lg:sticky lg:top-28 lg:self-start">
             <Label size="section">{t.eyebrow}</Label>
             <h2
@@ -32,19 +32,19 @@ export function EcosystemServices({ locale }: { locale: Locale }) {
             </p>
           </div>
 
-          <ul className="grid gap-x-12 gap-y-14 sm:grid-cols-2 sm:pb-20">
+          <ul className="grid gap-x-12 gap-y-6 sm:grid-cols-2 sm:gap-y-14 sm:pb-20">
             {t.items.map((item, index) => (
               <li key={item.id} className="sm:even:translate-y-20">
                 <div
                   data-home-reveal="rise"
                   style={{ "--home-reveal-delay": `${(index % 2) * 90}ms` } as CSSProperties}
-                  className="border-t border-[var(--color-forest)]/25 pt-6"
+                  className="grid grid-cols-[3.5rem_minmax(0,1fr)] gap-x-4 border-t border-[var(--color-forest)]/25 pt-5 sm:block sm:pt-6"
                 >
-                  <ServiceIllustration id={item.id} className="size-24 text-[var(--color-forest)]" />
-                  <h3 className={cn(textTitleTight, "mt-5 text-[var(--color-ink)]")}>
+                  <ServiceIllustration id={item.id} className="row-span-2 size-14 text-[var(--color-forest)] sm:size-24" />
+                  <h3 className={cn(textTitleTight, "text-[var(--color-ink)] max-sm:text-lg sm:mt-5")}>
                     {item.title}
                   </h3>
-                  <p className="mt-2 max-w-[38ch] leading-7 text-[var(--color-muted)]">{item.copy}</p>
+                  <p className="mt-1 max-w-[38ch] leading-7 sm:mt-2 text-[var(--color-muted)]">{item.copy}</p>
                 </div>
               </li>
             ))}

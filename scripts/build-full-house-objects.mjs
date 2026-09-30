@@ -31,9 +31,12 @@ const registration = {
  'bath-shower':[1,7,110,214], 'bath-water-heating':[4,3,86,55], 'bath-toilet':[2,1,35,58],
  'living-tv-streaming':[2,3,36,131], 'living-lighting':[2,3,35,89], 'living-plants':[2,2,107,118],
  'kitchen-diet':[1,4,52,170], 'kitchen-origin':[0,1,96,75], 'kitchen-waste':[1,0,185,103],
- 'mobility-short':[1,2,53,96], 'mobility-km':[1,1,163,122], 'mobility-long':[0,0,274,145],
- 'garden-plants':[0,0,286,398]
+ 'mobility-short':[1,2,53,96], 'mobility-km':[1,1,163,122], 'mobility-long':[0,0,274,145]
 };
+
+// Built from colour by scripts/build-tree-cutout.py: the generated tree mask
+// stopped at the top of its box and cut the canopy off.
+const builtElsewhere = new Set(['garden-plants']);
 
 // Objects whose generated mask is unusable get a drawn outline instead, in
 // absolute source pixels. The raised bed's mask covered path and plants and
@@ -82,6 +85,7 @@ function bestOffset(maskEdges, imageEdges, width, height) {
 
 let count = 0;
 for (const item of layout.objects) {
+ if (builtElsewhere.has(item.id)) continue;
  if (outlines[item.id]) {
   const [left, top, width, height] = scaled(item.box);
   const alpha = await outlineAlpha(outlines[item.id], item.box, width, height);

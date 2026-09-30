@@ -24,7 +24,7 @@ export function PlatformPartners({ locale }: { locale: Locale }) {
   const partners = getPlatformPartners(locale);
 
   return (
-    <section className="py-24 sm:py-32">
+    <section className="py-16 sm:py-32">
       <Container>
         <div
           data-home-reveal="rise"
@@ -75,7 +75,7 @@ export function SciencePartners({ locale }: { locale: Locale }) {
   const partners = getSciencePartners(locale);
 
   return (
-    <section className="bg-[var(--color-sage)]/35 py-24 sm:py-32">
+    <section className="bg-[var(--color-sage)]/35 py-16 sm:py-32">
       <Container>
         <div data-home-reveal="rise">
           <SectionHeading eyebrow={t.eyebrow} title={t.title} copy={t.copy} />

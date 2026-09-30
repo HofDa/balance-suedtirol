@@ -17,7 +17,7 @@ export function CarbonStanceTeaser({ locale }: { locale: Locale }) {
   const t = translations.carbonStance;
 
   return (
-    <section aria-labelledby="carbon-title" className="bg-[var(--color-sage)]/35 py-24 sm:py-32">
+    <section aria-labelledby="carbon-title" className="bg-[var(--color-sage)]/35 py-16 sm:py-32">
       <Container>
         <div className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:gap-20">
           <div data-home-reveal="rise">

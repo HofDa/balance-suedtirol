@@ -52,18 +52,8 @@ CLIP = {
     "bedroom-heating": [(0.0, 0.0), (0.835, 0.0), (0.835, 0.33), (1.0, 0.33), (1.0, 1.0), (0.0, 1.0)],
 }
 
-# Foliage masks come out as lace: every gap between leaves is a hole, and the
-# spotlight flickers across the canopy. Close them into one soft silhouette.
-# Values are the closing radius and the edge feather, in master pixels.
-SMOOTH = {
-    "garden-plants": (28, 3.0),
-}
-
-# The tree box runs to the picture edge, the generated mask stopped 5 px short.
-# Carry the mask's last column across that strip (source px).
-EXTEND_RIGHT = {
-    "garden-plants": 5,
-}
+# The fruit tree is built by scripts/build-tree-cutout.py, which reuses
+# remove_open_sky() and remove_occluders() from here.
 
 # Objects standing in front of another one are cut out of its mask, so the
 # spotlight on the tree does not light up the insect hotel before it.
@@ -96,18 +86,6 @@ def remove_occluders(alpha: np.ndarray, box, occluders, layout) -> np.ndarray:
             patch = other_alpha[y0 - oy:y1 - oy, x0 - ox:x1 - ox]
             result[y0:y1, x0:x1] *= 1 - patch / 255
     return result.round().clip(0, 255).astype(np.uint8)
-
-
-def smooth(alpha: np.ndarray, radius: int, feather: float) -> np.ndarray:
-    binary = (alpha > 96).astype(np.uint8)
-    kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (2 * radius + 1, 2 * radius + 1))
-    closed = cv2.morphologyEx(binary, cv2.MORPH_CLOSE, kernel)
-    # Fill what closing left enclosed, then keep only the largest shape.
-    contours, _ = cv2.findContours(closed, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
-    filled = np.zeros_like(closed)
-    cv2.drawContours(filled, [max(contours, key=cv2.contourArea)], -1, 1, thickness=cv2.FILLED)
-    opened = cv2.morphologyEx(filled, cv2.MORPH_OPEN, cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (9, 9)))
-    return (cv2.GaussianBlur(opened.astype(np.float32), (0, 0), feather) * 255).round().clip(0, 255).astype(np.uint8)
 
 
 def refine(master: np.ndarray, box, alpha: np.ndarray) -> tuple[np.ndarray, float]:
@@ -146,6 +124,8 @@ def main():
     master = np.asarray(Image.open(MASTER).convert("RGB"))
     master = cv2.cvtColor(master, cv2.COLOR_RGB2BGR)
     for item in layout["objects"]:
+        if item["id"] == "garden-plants":
+            continue  # built by scripts/build-tree-cutout.py
         path = os.path.join(OBJECTS, f"{item['id']}.webp")
         cutout = Image.open(path).convert("RGBA")
         alpha = np.asarray(cutout.getchannel("A"))
@@ -156,19 +136,6 @@ def main():
             cv2.fillPoly(outline, [points], 255)
             outline = cv2.GaussianBlur(outline, (0, 0), 1.2)
             alpha = (alpha.astype(np.float32) * outline / 255).round().astype(np.uint8)
-        if item["id"] in SMOOTH:
-            x, y, w, h = [v * SCALE for v in item["box"]]
-            strip = EXTEND_RIGHT.get(item["id"], 0) * SCALE
-            if strip:
-                alpha = alpha.copy()
-                alpha[:, -strip:] = alpha[:, -strip - 1:-strip]
-            alpha = smooth(alpha, *SMOOTH[item["id"]])
-            alpha = remove_open_sky(alpha, master[y:y + h, x:x + w])
-            alpha = remove_occluders(alpha, item["box"], OCCLUDERS.get(item["id"], []), layout)
-            cutout.putalpha(Image.fromarray(alpha))
-            cutout.save(path, "WEBP", quality=88, alpha_quality=100)
-            print(f"{item['id']}: smoothed into one silhouette")
-            continue
         if item["id"] not in GRABCUT:
             if item["id"] in CLIP:
                 cutout.putalpha(Image.fromarray(alpha))

@@ -22,7 +22,7 @@ export function NewsEvents({ locale }: { locale: Locale }) {
   const items = getNewsItems(locale);
 
   return (
-    <section className="py-24 sm:py-32">
+    <section className="py-16 sm:py-32">
       <Container>
         <div data-home-reveal="rise">
           <SectionHeading eyebrow={t.eyebrow} title={t.title} copy={t.copy} />

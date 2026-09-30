@@ -7,6 +7,7 @@ import { getHomeStory } from "@/config/home-story";
 import { textDisplay, textTitleTight } from "@/components/ui/typography";
 import { cn } from "@/lib/utils";
 import { ArrowIcon } from "@/components/ui/arrow-icon";
+import { MobileDisclosureList } from "./mobile-disclosure-list";
 
 /**
  * Hier kippt die Erzählung. Der Wechsel auf Tannentinte markiert ihn, ohne
@@ -17,9 +18,9 @@ export function HabitatLoss({ locale }: { locale: Locale }) {
   const t = getHomeStory(locale).loss;
 
   return (
-    <section aria-labelledby="loss-title" className="bg-[var(--color-ink)] py-24 text-white sm:py-32">
+    <section aria-labelledby="loss-title" className="bg-[var(--color-ink)] py-16 text-white sm:py-32">
       <Container>
-        <div className="grid gap-14 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:gap-20">
+        <div className="grid gap-10 sm:gap-14 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:gap-20">
           <div data-home-reveal="rise" className="lg:sticky lg:top-28 lg:self-start">
             <Label size="section" tone="moss">
               {t.eyebrow}
@@ -34,9 +35,9 @@ export function HabitatLoss({ locale }: { locale: Locale }) {
               {t.lead}
             </p>
 
-            <dl className="mt-12 grid gap-8 sm:grid-cols-2">
+            <dl className="mt-10 grid grid-cols-2 gap-x-6 gap-y-8 sm:mt-12 sm:gap-x-8">
               {t.facts.map(([value, label]) => (
-                <div key={value} className="flex flex-col-reverse border-t border-white/15 pt-5">
+                <div key={value} className="flex flex-col-reverse justify-end border-t border-white/15 pt-5">
                   <dt className="mt-3 max-w-[30ch] text-sm leading-6 text-white/75">{label}</dt>
                   <dd className="font-display text-[length:var(--text-display)] leading-none tracking-[-0.035em] tabular-nums text-[var(--color-moss)]">
                     {value}
@@ -47,7 +48,22 @@ export function HabitatLoss({ locale }: { locale: Locale }) {
             <p className="mt-6 text-xs leading-5 text-white/60">{t.factsSource}</p>
           </div>
 
-          <ol data-home-reveal="rise">
+          <MobileDisclosureList
+            tone="dark"
+            items={t.pressures.map(([title, copy], index) => ({
+              key: title,
+              summary: (
+                <>
+                  <span className="mr-3 text-sm font-bold tabular-nums text-[var(--color-moss)]">
+                    {String(index + 1).padStart(2, "0")}
+                  </span>
+                  {title}
+                </>
+              ),
+              body: <p className="pl-8">{copy}</p>
+            }))}
+          />
+          <ol data-home-reveal="rise" className="hidden sm:block">
             {t.pressures.map(([title, copy], index) => (
               <li
                 key={title}
@@ -69,7 +85,7 @@ export function HabitatLoss({ locale }: { locale: Locale }) {
 
         <div
           data-home-reveal="rise"
-          className="mt-20 flex flex-col gap-8 border-t border-white/15 pt-10 sm:mt-24 lg:flex-row lg:items-end lg:justify-between"
+          className="mt-12 flex flex-col gap-6 border-t border-white/15 pt-8 sm:mt-24 sm:gap-8 sm:pt-10 lg:flex-row lg:items-end lg:justify-between"
         >
           <p className="max-w-[40ch] font-display text-balance text-[1.625rem] leading-[1.25] tracking-[-0.02em] sm:text-[2rem]">
             {t.closing}

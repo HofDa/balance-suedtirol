@@ -13,7 +13,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { route: "", priority: 1.0, changeFrequency: "weekly" as const },
     { route: "/was-ist-balance", priority: 0.9, changeFrequency: "monthly" as const },
     { route: "/projekte", priority: 0.9, changeFrequency: "weekly" as const },
-    { route: "/biodiversitaet-in-suedtirol", priority: 0.8, changeFrequency: "monthly" as const },
     { route: "/co2-und-biodiversitaet", priority: 0.8, changeFrequency: "monthly" as const },
     { route: "/haus-tour", priority: 0.8, changeFrequency: "monthly" as const },
     { route: "/ueber-uns", priority: 0.7, changeFrequency: "monthly" as const },

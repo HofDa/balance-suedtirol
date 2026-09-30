@@ -1,6 +1,6 @@
 export const commonCopy = {
   de: {
-    nav: ["Was ist b*alance", "Projekte", "Biodiversität in Südtirol", "CO₂-Kompensation?", "Über uns"],
+    nav: ["Was ist b*alance", "Projekte", "CO₂-Kompensation?", "Über uns"],
     navLabel: "Hauptnavigation",
     skipToContent: "Zum Hauptinhalt springen",
     mobileNavLabel: "Mobile Navigation",
@@ -10,7 +10,7 @@ export const commonCopy = {
     menu: "Menü öffnen"
   },
   it: {
-    nav: ["Che cos’è b*alance", "Progetti", "Biodiversità in Alto Adige", "Compensazione della CO₂?", "Chi siamo"],
+    nav: ["Che cos’è b*alance", "Progetti", "Compensazione della CO₂?", "Chi siamo"],
     navLabel: "Navigazione principale",
     skipToContent: "Vai al contenuto principale",
     mobileNavLabel: "Navigazione mobile",
@@ -20,7 +20,7 @@ export const commonCopy = {
     menu: "Apri il menu"
   },
   en: {
-    nav: ["What is b*alance", "Projects", "Biodiversity in South Tyrol", "CO₂ offsetting?", "About us"],
+    nav: ["What is b*alance", "Projects", "CO₂ offsetting?", "About us"],
     navLabel: "Main navigation",
     skipToContent: "Skip to main content",
     mobileNavLabel: "Mobile navigation",

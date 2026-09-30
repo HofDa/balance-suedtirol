@@ -1,9 +1,6 @@
-import type { CSSProperties } from "react";
 import Image from "next/image";
 import { ArrowUpRight } from "lucide-react";
 import { Container } from "@/components/ui/container";
-import { SectionHeading } from "@/components/ui/section-heading";
-import { Surface } from "@/components/ui/surface";
 import { Label } from "@/components/ui/label";
 import { focusRing } from "@/components/ui/focus";
 import type { Locale } from "@/config/site";
@@ -13,24 +10,32 @@ import { submissionRecipient } from "@/features/project-submission/config/copy";
 import { withBasePath } from "@/lib/public-path";
 
 /**
- * Partner werden als Wortmarke gezeigt, solange kein freigegebenes Logo
- * vorliegt. Ein Platzhalterlogo für vier verschiedene Häuser wäre eine
- * Attrappe — der Name mit der Marke „Platzhalter“ ist ehrlicher und liest sich
- * in der Reihe genauso ruhig.
+ * Partner als ruhige Leiste statt als zwei ganze Abschnitte: oben, wer die
+ * Plattform trägt, darunter, wer die Methodik fachlich begleitet. Partner
+ * stehen als Wortmarke, solange kein freigegebenes Logo vorliegt – ein
+ * Platzhalterlogo wäre eine Attrappe, der Name mit der Marke „Platzhalter“ ist
+ * ehrlicher.
  */
-export function PlatformPartners({ locale }: { locale: Locale }) {
-  const t = getTranslations(locale).partners;
-  const placeholderLabel = getTranslations(locale).card.placeholder;
-  const partners = getPlatformPartners(locale);
+export function Partners({ locale }: { locale: Locale }) {
+  const translations = getTranslations(locale);
+  const t = translations.partners;
+  const science = translations.sciencePartners;
+  const placeholderLabel = translations.card.placeholder;
+  const rows = [
+    { label: t.eyebrow, partners: getPlatformPartners(locale) as (Partner & { field?: string })[] },
+    { label: science.eyebrow, partners: getSciencePartners(locale) as (Partner & { field?: string })[] }
+  ];
 
   return (
-    <section className="py-16 sm:py-32">
+    <section aria-labelledby="partners-title" className="py-14 sm:py-20">
       <Container>
-        <div
-          data-home-reveal="rise"
-          className="flex flex-col justify-between gap-8 sm:flex-row sm:items-end"
-        >
-          <SectionHeading eyebrow={t.eyebrow} title={t.title} copy={t.copy} />
+        <div data-home-reveal="rise" className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
+          <h2
+            id="partners-title"
+            className="font-display text-balance text-[1.625rem] leading-[1.2] tracking-[-0.02em] text-[var(--color-ink)] sm:text-[2rem]"
+          >
+            {t.title}
+          </h2>
           <a
             href={`mailto:${submissionRecipient}?subject=${encodeURIComponent(t.become)}`}
             className={`group inline-flex min-h-11 shrink-0 items-center gap-2 text-sm font-bold text-[var(--color-forest)] ${focusRing}`}
@@ -40,69 +45,30 @@ export function PlatformPartners({ locale }: { locale: Locale }) {
           </a>
         </div>
 
-        <ul className="mt-12 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-          {partners.map((partner, index) => (
-            <li
-              key={partner.slug}
-              data-home-reveal="rise"
-              style={{ "--home-reveal-delay": `${index * 65}ms` } as CSSProperties}
+        <div data-home-reveal="rise" className="mt-8 border-y border-[var(--color-line)]">
+          {rows.map((row) => (
+            <div
+              key={row.label}
+              className="grid gap-3 border-t border-[var(--color-line)] py-6 first:border-t-0 lg:grid-cols-[12rem_minmax(0,1fr)] lg:items-center lg:gap-8"
             >
-              <Surface className="flex h-full flex-col transition-[transform,box-shadow] duration-300 ease-out hover:-translate-y-1 hover:shadow-[var(--shadow-hover)]">
-                <PartnerIdentity partner={partner} placeholderLabel={placeholderLabel} />
-                <p className="mt-4 text-[length:var(--text-meta)] leading-[var(--leading-body)] text-[var(--color-muted)]">
-                  {partner.role}
-                </p>
-              </Surface>
-            </li>
+              <Label size="block" tone="muted">{row.label}</Label>
+              <ul className="flex flex-wrap gap-x-8 gap-y-3">
+                {row.partners.map((partner) => (
+                  <li key={partner.slug} title={partner.role} className="flex flex-col">
+                    {partner.field ? (
+                      <span className="text-[11px] font-bold uppercase tracking-[0.14em] text-[var(--color-forest)]">{partner.field}</span>
+                    ) : null}
+                    <PartnerIdentity partner={partner} placeholderLabel={placeholderLabel} />
+                  </li>
+                ))}
+              </ul>
+            </div>
           ))}
-        </ul>
+        </div>
 
-        <p data-home-reveal="rise" className="mt-6 max-w-[62ch] text-[length:var(--text-meta)] leading-[var(--leading-meta)] text-[var(--color-muted)]">
+        <p data-home-reveal="rise" className="mt-4 max-w-[62ch] text-[length:var(--text-meta)] leading-[var(--leading-meta)] text-[var(--color-muted)]">
           {t.placeholderNote}
         </p>
-      </Container>
-    </section>
-  );
-}
-
-/**
- * Die fachliche Begleitung steht als Liste, nicht als Kachelreihe: Hier zählt
- * nicht die Marke, sondern welches Fachgebiet was prüft.
- */
-export function SciencePartners({ locale }: { locale: Locale }) {
-  const t = getTranslations(locale).sciencePartners;
-  const placeholderLabel = getTranslations(locale).card.placeholder;
-  const partners = getSciencePartners(locale);
-
-  return (
-    <section className="bg-[var(--color-sage)]/35 py-16 sm:py-32">
-      <Container>
-        <div data-home-reveal="rise">
-          <SectionHeading eyebrow={t.eyebrow} title={t.title} copy={t.copy} />
-        </div>
-
-        <div data-home-reveal="scale" className="mt-12">
-          <Surface level="sheet">
-            <ul className="divide-y divide-[var(--color-line)]">
-              {partners.map((partner) => (
-                <li
-                  key={partner.slug}
-                  className="grid gap-2 py-5 first:pt-0 last:pb-0 sm:grid-cols-[minmax(0,0.4fr)_minmax(0,0.6fr)] sm:gap-8"
-                >
-                  <div>
-                    <Label size="block" tone="forest" className="mb-2">
-                      {partner.field}
-                    </Label>
-                    <PartnerIdentity partner={partner} placeholderLabel={placeholderLabel} />
-                  </div>
-                  <p className="text-[length:var(--text-meta)] leading-[var(--leading-body)] text-[var(--color-muted)]">
-                    {partner.role}
-                  </p>
-                </li>
-              ))}
-            </ul>
-          </Surface>
-        </div>
       </Container>
     </section>
   );
@@ -124,7 +90,7 @@ function PartnerIdentity({
       className="h-auto max-h-11 w-auto max-w-40 object-contain"
     />
   ) : (
-    <span className="text-[length:var(--text-body-lg)] font-semibold tracking-[-0.02em] text-[var(--color-ink)]">
+    <span className="text-[length:var(--text-body)] font-semibold tracking-[-0.01em] text-[var(--color-ink)]">
       {partner.name}
     </span>
   );

@@ -51,12 +51,19 @@ export type HomeStoryCopy = {
     factsSource: string;
     closing: string;
   };
+  /** Steht als Begründung im Abschnitt „Was ist b*alance?“. */
   economy: {
     eyebrow: string;
     title: string;
-    lead: string;
-    points: [string, string][];
+    /** Zwei belegte Zahlen zur Abhängigkeit der Wirtschaft von Ökosystemleistungen. */
+    figures: [string, string][];
+    /** Kurzbeleg unter den Zahlen. */
     source: string;
+    /** Aufklappbare Erläuterung: was die Zahlen bedeuten und woher sie stammen. */
+    detailsLabel: string;
+    details: { title: string; copy: string }[];
+    sourcesLabel: string;
+    sources: { citation: string; href: string }[];
   };
   model: {
     eyebrow: string;
@@ -109,7 +116,7 @@ const homeStory: Localized<HomeStoryCopy> = {
     },
     figures: {
       title: "Kleine Fläche, große Vielfalt.",
-      copy: "Südtirol umfasst rund 7.400 km², weniger als 2,5 % der Fläche Italiens. Und doch leben hier:",
+      copy: "Südtirol umfasst rund 7.400 km², weniger als 2,5 % der Fläche Italiens. Und doch leben hier:",
       items: [
         { value: "2.500+", label: "Gefäßpflanzenarten" },
         { value: "153", label: "Brutvogelarten" },
@@ -151,7 +158,7 @@ const homeStory: Localized<HomeStoryCopy> = {
         ["Klimawandel", "Wärmere, trockenere Sommer verschieben Lebensräume bergauf. Arten der Hochlagen können nicht beliebig ausweichen."]
       ],
       facts: [
-        ["46 %", "der Tagfalterarten Südtirols gelten als regional gefährdet."],
+        ["46 %", "der Tagfalterarten Südtirols gelten als regional gefährdet."],
         ["6", "Heu- und Fangschreckenarten sind in Südtirol in den letzten 100 Jahren ausgestorben."]
       ],
       factsSource: "Quelle: Biodiversitätsmonitoring Südtirol (Eurac Research), Artengruppen Tagfalter und Heuschrecken.",
@@ -160,14 +167,27 @@ const homeStory: Localized<HomeStoryCopy> = {
     economy: {
       eyebrow: "Natur und Wirtschaft",
       title: "Warum Biodiversitätsverlust auch wirtschaftlich zählt",
-      lead: "Natur ist nicht erst dann wertvoll, wenn sie Geld einbringt. Aber ökologische Stabilität ist eine Grundlage wirtschaftlicher Stabilität – in Südtirol lässt sich das besonders gut sehen.",
-      points: [
-        ["Landwirtschaft", "Obst- und Weinbau, Grünland und Almwirtschaft sind auf Bestäuber, fruchtbare Böden und verlässliches Wasser angewiesen."],
-        ["Naturgefahren", "Schutzwald, Auen und bewachsene Hänge puffern Hochwasser, Muren und Erosion teilweise ab – ein Schutz, der sonst gebaut werden müsste."],
-        ["Tourismus", "Gäste kommen wegen der Landschaft. Blühende Almen, Wälder und klare Bäche sind das, was Südtirol ausmacht."],
-        ["Unternehmen", "Auch Betriebe ohne eigene Fläche hängen über Rohstoffe, Wasser, Lieferketten und Standortqualität von stabilen Ökosystemen ab."]
+      figures: [
+        ["75 %", "der Unternehmenskredite in der Eurozone hängen stark von Ökosystemleistungen ab"],
+        ["2/3", "der Wertschöpfung in der EU hängen stark oder mittel von der Natur ab"]
       ],
-      source: "Nach: Der Spiegel 37/2026, „Wenn die Umweltkrise zur Finanzkrise wird“, mit Bezug auf eine Studie in „Nature“ (September 2025) und die KfW."
+      source: "Quellen: Europäische Zentralbank (2023); Gemeinsame Forschungsstelle der EU-Kommission (2025).",
+      detailsLabel: "Mehr zu den Zahlen und Quellen",
+      details: [
+        {
+          title: "75 % der Unternehmenskredite",
+          copy: "Die Europäische Zentralbank hat ausgewertet, wie die Kredite der Banken im Euroraum an rund 4,2 Millionen Unternehmen von Ökosystemleistungen abhängen. Knapp 75 % – fast 3,24 Billionen Euro – gehen an Unternehmen, die stark von mindestens einer Ökosystemleistung abhängen. Ohne Lieferketten, also nur die direkte Abhängigkeit gerechnet, sind es rund 61 %. Etwa 72 % der Unternehmen im Euroraum, rund 3 Millionen, sind selbst stark abhängig."
+        },
+        {
+          title: "Zwei Drittel der Wertschöpfung",
+          copy: "Die Gemeinsame Forschungsstelle der EU-Kommission kommt für die EU auf 65 %: 36 % der Bruttowertschöpfung hängen stark, weitere 29 % mittel von der Natur ab, Lieferketten eingerechnet. Allein im eigenen Betrieb, ohne Zulieferer, sind 44 % stark abhängig. Weil jede Branche Vorleistungen aus naturabhängigen Sektoren braucht, ist die gesamte Wirtschaft betroffen."
+        }
+      ],
+      sourcesLabel: "Quellen",
+      sources: [
+        { citation: "Lelli, C., Parisi, L., Heemskerk, I., Boldrini, S., Ceglar, A. (2023): Living in a world of disappearing nature: physical risk and the implications for financial stability. ECB Occasional Paper Series No 333. doi:10.2866/670314", href: "https://www.ecb.europa.eu/pub/pdf/scpops/ecb.op333~1b97e436be.en.pdf" },
+        { citation: "Hirschbuehl, D., Petracco, M., Neuville, A., Sanchez Arjona, I., Vasilakopoulos, P. (2025): The EU economy’s dependency on nature. European Commission, Joint Research Centre, JRC140003.", href: "https://publications.jrc.ec.europa.eu/repository/handle/JRC140003" }
+      ]
     },
     model: {
       eyebrow: "Was ist b*alance?",
@@ -205,7 +225,7 @@ const homeStory: Localized<HomeStoryCopy> = {
     },
     figures: {
       title: "Piccola superficie, grande varietà.",
-      copy: "L’Alto Adige misura circa 7.400 km², meno del 2,5 % della superficie italiana. Eppure qui vivono:",
+      copy: "L’Alto Adige misura circa 7.400 km², meno del 2,5 % della superficie italiana. Eppure qui vivono:",
       items: [
         { value: "2.500+", label: "specie di piante vascolari" },
         { value: "153", label: "specie di uccelli nidificanti" },
@@ -247,7 +267,7 @@ const homeStory: Localized<HomeStoryCopy> = {
         ["Cambiamento climatico", "Estati più calde e secche spostano gli habitat verso l’alto. Le specie d’alta quota non possono spostarsi all’infinito."]
       ],
       facts: [
-        ["46 %", "delle specie di farfalle diurne dell’Alto Adige sono considerate minacciate a livello regionale."],
+        ["46 %", "delle specie di farfalle diurne dell’Alto Adige sono considerate minacciate a livello regionale."],
         ["6", "specie di ortotteri e mantidi si sono estinte in Alto Adige negli ultimi 100 anni."]
       ],
       factsSource: "Fonte: Monitoraggio della biodiversità Alto Adige (Eurac Research), gruppi farfalle diurne e ortotteri.",
@@ -256,14 +276,27 @@ const homeStory: Localized<HomeStoryCopy> = {
     economy: {
       eyebrow: "Natura ed economia",
       title: "Perché la perdita di biodiversità conta anche per l’economia",
-      lead: "La natura non ha valore solo quando rende denaro. Ma la stabilità ecologica è una base della stabilità economica – e in Alto Adige lo si vede particolarmente bene.",
-      points: [
-        ["Agricoltura", "Frutticoltura e viticoltura, prati e alpeggi dipendono da impollinatori, suoli fertili e acqua affidabile."],
-        ["Pericoli naturali", "Boschi di protezione, golene e versanti vegetati attenuano in parte piene, colate detritiche ed erosione – una protezione che altrimenti andrebbe costruita."],
-        ["Turismo", "Gli ospiti vengono per il paesaggio. Alpeggi fioriti, boschi e ruscelli limpidi sono ciò che rende unico l’Alto Adige."],
-        ["Imprese", "Anche le aziende senza superfici proprie dipendono da ecosistemi stabili attraverso materie prime, acqua, catene di fornitura e qualità del territorio."]
+      figures: [
+        ["75 %", "dei prestiti alle imprese nell’eurozona dipende fortemente da servizi ecosistemici"],
+        ["2/3", "del valore aggiunto dell’UE dipende in misura alta o media dalla natura"]
       ],
-      source: "Secondo: Der Spiegel 37/2026, «Wenn die Umweltkrise zur Finanzkrise wird», con riferimento a uno studio su «Nature» (settembre 2025) e alla KfW."
+      source: "Fonti: Banca centrale europea (2023); Centro comune di ricerca della Commissione europea (2025).",
+      detailsLabel: "Di più sui dati e sulle fonti",
+      details: [
+        {
+          title: "75 % dei prestiti alle imprese",
+          copy: "La Banca centrale europea ha analizzato quanto i prestiti delle banche dell’area dell’euro a circa 4,2 milioni di imprese dipendano dai servizi ecosistemici. Quasi il 75 % – circa 3.240 miliardi di euro – va a imprese fortemente dipendenti da almeno un servizio ecosistemico. Considerando solo la dipendenza diretta, senza catene di fornitura, la quota è di circa il 61 %. Circa il 72 % delle imprese dell’area dell’euro, circa 3 milioni, è a sua volta fortemente dipendente."
+        },
+        {
+          title: "Due terzi del valore aggiunto",
+          copy: "Il Centro comune di ricerca della Commissione europea stima per l’UE il 65 %: il 36 % del valore aggiunto lordo dipende fortemente dalla natura e un altro 29 % in misura media, catene di fornitura comprese. Considerando solo le attività dirette, senza fornitori, il 44 % è fortemente dipendente. Poiché ogni settore ha bisogno di input da settori che dipendono dalla natura, l’intera economia ne è esposta."
+        }
+      ],
+      sourcesLabel: "Fonti",
+      sources: [
+        { citation: "Lelli, C., Parisi, L., Heemskerk, I., Boldrini, S., Ceglar, A. (2023): Living in a world of disappearing nature: physical risk and the implications for financial stability. ECB Occasional Paper Series No 333. doi:10.2866/670314", href: "https://www.ecb.europa.eu/pub/pdf/scpops/ecb.op333~1b97e436be.en.pdf" },
+        { citation: "Hirschbuehl, D., Petracco, M., Neuville, A., Sanchez Arjona, I., Vasilakopoulos, P. (2025): The EU economy’s dependency on nature. European Commission, Joint Research Centre, JRC140003.", href: "https://publications.jrc.ec.europa.eu/repository/handle/JRC140003" }
+      ]
     },
     model: {
       eyebrow: "Cos’è b*alance?",
@@ -301,7 +334,7 @@ const homeStory: Localized<HomeStoryCopy> = {
     },
     figures: {
       title: "Small in area, big in diversity.",
-      copy: "South Tyrol covers around 7,400 km², less than 2.5 % of Italy. And yet it is home to:",
+      copy: "South Tyrol covers around 7,400 km², less than 2.5 % of Italy. And yet it is home to:",
       items: [
         { value: "2,500+", label: "vascular plant species" },
         { value: "153", label: "breeding bird species" },
@@ -343,7 +376,7 @@ const homeStory: Localized<HomeStoryCopy> = {
         ["Climate change", "Warmer, drier summers push habitats uphill. High-altitude species cannot keep moving up forever."]
       ],
       facts: [
-        ["46 %", "of South Tyrol’s butterfly species are considered regionally threatened."],
+        ["46 %", "of South Tyrol’s butterfly species are considered regionally threatened."],
         ["6", "grasshopper and mantis species have died out in South Tyrol over the past 100 years."]
       ],
       factsSource: "Source: Biodiversity Monitoring South Tyrol (Eurac Research), groups butterflies and grasshoppers.",
@@ -352,14 +385,27 @@ const homeStory: Localized<HomeStoryCopy> = {
     economy: {
       eyebrow: "Nature and the economy",
       title: "Why biodiversity loss also matters economically",
-      lead: "Nature is not only valuable when it makes money. But ecological stability is a foundation of economic stability – and South Tyrol shows this particularly clearly.",
-      points: [
-        ["Agriculture", "Fruit and wine growing, grassland and alpine farming depend on pollinators, fertile soils and reliable water."],
-        ["Natural hazards", "Protective forests, floodplains and vegetated slopes partly buffer floods, debris flows and erosion – protection that would otherwise have to be built."],
-        ["Tourism", "Visitors come for the landscape. Flowering alpine pastures, forests and clear streams are what makes South Tyrol."],
-        ["Businesses", "Even companies without land of their own depend on stable ecosystems through raw materials, water, supply chains and the quality of their location."]
+      figures: [
+        ["75 %", "of corporate loans in the eurozone depend heavily on ecosystem services"],
+        ["2/3", "of value added in the EU depends highly or moderately on nature"]
       ],
-      source: "After: Der Spiegel 37/2026, “Wenn die Umweltkrise zur Finanzkrise wird”, citing a study in Nature (September 2025) and KfW."
+      source: "Sources: European Central Bank (2023); European Commission Joint Research Centre (2025).",
+      detailsLabel: "More on the figures and sources",
+      details: [
+        {
+          title: "75 % of corporate loans",
+          copy: "The European Central Bank analysed how euro area banks’ loans to around 4.2 million companies depend on ecosystem services. Almost 75 % – nearly €3.24 trillion – goes to companies that are highly dependent on at least one ecosystem service. Counting only direct dependency, without supply chains, the share is about 61 %. Around 72 % of euro area companies, roughly 3 million, are themselves highly dependent."
+        },
+        {
+          title: "Two thirds of value added",
+          copy: "The European Commission’s Joint Research Centre puts the EU figure at 65 %: 36 % of gross value added depends highly on nature and a further 29 % moderately, supply chains included. Looking only at companies’ own operations, without suppliers, 44 % is highly dependent. Because every sector needs inputs from nature-dependent sectors, the whole economy is exposed."
+        }
+      ],
+      sourcesLabel: "Sources",
+      sources: [
+        { citation: "Lelli, C., Parisi, L., Heemskerk, I., Boldrini, S., Ceglar, A. (2023): Living in a world of disappearing nature: physical risk and the implications for financial stability. ECB Occasional Paper Series No 333. doi:10.2866/670314", href: "https://www.ecb.europa.eu/pub/pdf/scpops/ecb.op333~1b97e436be.en.pdf" },
+        { citation: "Hirschbuehl, D., Petracco, M., Neuville, A., Sanchez Arjona, I., Vasilakopoulos, P. (2025): The EU economy’s dependency on nature. European Commission, Joint Research Centre, JRC140003.", href: "https://publications.jrc.ec.europa.eu/repository/handle/JRC140003" }
+      ]
     },
     model: {
       eyebrow: "What is b*alance?",

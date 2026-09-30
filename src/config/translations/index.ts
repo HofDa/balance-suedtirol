@@ -8,7 +8,6 @@ import { featuredCopy } from "./featured";
 import { newsCopy } from "./news";
 import { achievementsCopy } from "./achievements";
 import { partnersCopy } from "./partners";
-import { biodiversityExplainerCopy } from "./biodiversity-explainer";
 import { whatIsCopy } from "./what-is";
 import { aboutCopy } from "./about";
 import { carbonStanceCopy } from "./carbon-stance";
@@ -24,7 +23,6 @@ function build<L extends Locale>(l: L) {
     news: newsCopy[l],
     achievements: achievementsCopy[l],
     ...partnersCopy[l],
-    biodiversityExplainer: biodiversityExplainerCopy[l],
     whatIs: whatIsCopy[l],
     about: aboutCopy[l],
     carbonStance: carbonStanceCopy[l],

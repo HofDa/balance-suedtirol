@@ -1,20 +1,17 @@
-import Link from "next/link";
 import { Container } from "@/components/ui/container";
 import { Label } from "@/components/ui/label";
-import { focusRingOnDark } from "@/components/ui/focus";
 import type { Locale } from "@/config/site";
 import { getHomeStory } from "@/config/home-story";
 import { textDisplay, textTitleTight } from "@/components/ui/typography";
 import { cn } from "@/lib/utils";
-import { ArrowIcon } from "@/components/ui/arrow-icon";
 import { MobileDisclosureList } from "./mobile-disclosure-list";
 import { MobileCollapseSection, MobileCollapseToggle } from "./mobile-collapse";
-import { hiddenWhenCollapsed } from "./mobile-collapse-classes";
+import { collapsibleHeading, hiddenWhenCollapsed } from "./mobile-collapse-classes";
 
 /**
  * Hier kippt die Erzählung. Der Wechsel auf Tannentinte markiert ihn, ohne
  * Warnfarbe und ohne Katastrophenbild: sieben sachliche Ursachen, zwei belegte
- * Zahlen, dann direkt der Weg zu den Projekten, die dagegen arbeiten.
+ * Zahlen, dann ein Schlusssatz, unter dem direkt die Projekte folgen.
  */
 export function HabitatLoss({ locale }: { locale: Locale }) {
   const t = getHomeStory(locale).loss;
@@ -30,7 +27,7 @@ export function HabitatLoss({ locale }: { locale: Locale }) {
               </Label>
               <h2
                 id="loss-title"
-                className={cn(textDisplay, "mt-4 max-sm:pr-14")}
+                className={cn(textDisplay, "mt-4", collapsibleHeading)}
               >
                 {t.title}
               </h2>
@@ -91,20 +88,15 @@ export function HabitatLoss({ locale }: { locale: Locale }) {
           </ol>
         </div>
 
+        {/* Der Schlusssatz ist die Brücke: Die Projekte folgen direkt darunter,
+            ein eigener Knopf dorthin wäre doppelt. */}
         <div
           data-home-reveal="rise"
-          className={cn(hiddenWhenCollapsed, "mt-12 flex flex-col gap-6 border-t border-white/15 pt-8 sm:mt-24 sm:gap-8 sm:pt-10 lg:flex-row lg:items-end lg:justify-between")}
+          className={cn(hiddenWhenCollapsed, "mt-12 border-t border-white/15 pt-8 sm:mt-24 sm:pt-10")}
         >
           <p className="max-w-[40ch] font-display text-balance text-[1.625rem] leading-[1.25] tracking-[-0.02em] sm:text-[2rem]">
             {t.closing}
           </p>
-          <Link
-            href={`/${locale}/projekte`}
-            className={`group inline-flex min-h-12 shrink-0 items-center justify-center gap-2 rounded-[var(--radius-md)] bg-[var(--color-accent)] px-6 text-sm font-bold text-[var(--color-ink)] transition-colors hover:bg-[var(--color-accent-hover)] ${focusRingOnDark}`}
-          >
-            {t.cta}
-            <ArrowIcon className="duration-200" />
-          </Link>
         </div>
       </Container>
     </MobileCollapseSection>

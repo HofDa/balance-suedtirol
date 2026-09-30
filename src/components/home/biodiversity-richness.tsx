@@ -9,7 +9,7 @@ import { getTranslations } from "@/config/translations";
 import { withBasePath } from "@/lib/public-path";
 import { MobileDisclosureList } from "./mobile-disclosure-list";
 import { MobileCollapseSection, MobileCollapseToggle } from "./mobile-collapse";
-import { hiddenWhenCollapsed } from "./mobile-collapse-classes";
+import { collapsibleHeading, hiddenWhenCollapsed } from "./mobile-collapse-classes";
 import { textDisplay, textHeadline, textLead } from "@/components/ui/typography";
 import { cn } from "@/lib/utils";
 
@@ -46,7 +46,7 @@ export function BiodiversityRichness({ locale }: { locale: Locale }) {
               <Label size="section">{t.eyebrow}</Label>
               <h2
                 id="vielfalt-title"
-                className={cn(textDisplay, "mt-4 text-[var(--color-ink)] max-sm:pr-14")}
+                className={cn(textDisplay, "mt-4 text-[var(--color-ink)]", collapsibleHeading)}
               >
                 {t.title}
               </h2>

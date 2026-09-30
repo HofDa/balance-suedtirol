@@ -9,6 +9,8 @@ import { getTranslations } from "@/config/translations";
 import { getAchievementStats, getCompletedProjects, type CompletedProject } from "@/data/achievements";
 import { cn, formatCurrency } from "@/lib/utils";
 import { textTitle } from "@/components/ui/typography";
+import { MobileCollapseSection, MobileCollapseToggle } from "./mobile-collapse";
+import { hiddenWhenCollapsed } from "./mobile-collapse-classes";
 
 /**
  * Zwei Ebenen, eine Aussage: oben die Bilanz über alle Projekte, darunter die
@@ -30,13 +32,20 @@ export function Achievements({ locale }: { locale: Locale }) {
   ];
 
   return (
-    <section className="bg-[var(--color-sage)]/35 py-16 sm:py-32">
+    <MobileCollapseSection aria-labelledby="achievements-title" className="bg-[var(--color-sage)]/35 py-16 sm:py-32">
       <Container>
         <div data-home-reveal="rise">
-          <SectionHeading eyebrow={t.eyebrow} title={t.title} copy={t.copy} />
+          <SectionHeading
+            id="achievements-title"
+            eyebrow={t.eyebrow}
+            title={t.title}
+            copy={t.copy}
+            copyClassName={hiddenWhenCollapsed}
+            toggle={<MobileCollapseToggle labelledBy="achievements-title" />}
+          />
         </div>
 
-        <div data-home-reveal="scale" className="mt-12">
+        <div data-home-reveal="scale" className={cn(hiddenWhenCollapsed, "mt-12")}>
           <Surface level="sheet">
             <dl className="grid gap-x-8 gap-y-8 sm:grid-cols-2 lg:grid-cols-4">
               {figures.map((figure, index) => (
@@ -61,7 +70,7 @@ export function Achievements({ locale }: { locale: Locale }) {
           </Surface>
         </div>
 
-        <div data-home-reveal="rise" className="mt-16">
+        <div data-home-reveal="rise" className={cn(hiddenWhenCollapsed, "mt-16")}>
           <Label size="section" className="mb-3">
             {t.completedEyebrow}
           </Label>
@@ -71,11 +80,11 @@ export function Achievements({ locale }: { locale: Locale }) {
         </div>
 
         {completed.length === 0 ? (
-          <p data-home-reveal="rise" className="mt-6 text-[length:var(--text-body)] text-[var(--color-muted)]">
+          <p data-home-reveal="rise" className={cn(hiddenWhenCollapsed, "mt-6 text-[length:var(--text-body)] text-[var(--color-muted)]")}>
             {t.completedEmpty}
           </p>
         ) : (
-          <ul className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          <ul className={cn(hiddenWhenCollapsed, "mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-3")}>
             {completed.map((project, index) => (
               <li
                 key={project.slug}
@@ -88,7 +97,7 @@ export function Achievements({ locale }: { locale: Locale }) {
           </ul>
         )}
       </Container>
-    </section>
+    </MobileCollapseSection>
   );
 }
 

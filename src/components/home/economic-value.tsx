@@ -5,6 +5,8 @@ import { getHomeStory } from "@/config/home-story";
 import { getTranslations } from "@/config/translations";
 import { textHeadline, textLead, textTitleTight } from "@/components/ui/typography";
 import { cn } from "@/lib/utils";
+import { MobileCollapseSection, MobileCollapseToggle } from "./mobile-collapse";
+import { collapsibleHeading, hiddenWhenCollapsed } from "./mobile-collapse-classes";
 
 /**
  * Die Brücke von Ökologie zu Wirtschaft – bewusst nüchtern: vier Abhängigkeiten
@@ -19,22 +21,25 @@ export function EconomicValue({ locale }: { locale: Locale }) {
   const figures = getTranslations(locale).biodiversityExplainer.economyFigures.slice(2);
 
   return (
-    <section aria-labelledby="economy-title" className="py-16 sm:py-32">
+    <MobileCollapseSection aria-labelledby="economy-title" className="py-16 sm:py-32">
       <Container>
         <div data-home-reveal="rise" className="max-w-[62ch]">
-          <Label size="section">{t.eyebrow}</Label>
-          <h2
-            id="economy-title"
-            className={cn(textHeadline, "mt-4 text-[var(--color-ink)]")}
-          >
-            {t.title}
-          </h2>
-          <p className={cn(textLead, "mt-5")}>
+          <div className="relative">
+            <Label size="section">{t.eyebrow}</Label>
+            <h2
+              id="economy-title"
+              className={cn(textHeadline, "mt-4 text-[var(--color-ink)]", collapsibleHeading)}
+            >
+              {t.title}
+            </h2>
+            <MobileCollapseToggle labelledBy="economy-title" />
+          </div>
+          <p className={cn(textLead, "mt-5", hiddenWhenCollapsed)}>
             {t.lead}
           </p>
         </div>
 
-        <div className="mt-14 grid gap-14 lg:grid-cols-[minmax(0,1.3fr)_minmax(0,0.7fr)] lg:gap-20">
+        <div className={cn(hiddenWhenCollapsed, "mt-14 grid gap-14 lg:grid-cols-[minmax(0,1.3fr)_minmax(0,0.7fr)] lg:gap-20")}>
           <dl data-home-reveal="rise" className="grid gap-x-10 sm:grid-cols-2">
             {t.points.map(([term, description]) => (
               <div key={term} className="border-t border-[var(--color-line)] py-6">
@@ -61,6 +66,6 @@ export function EconomicValue({ locale }: { locale: Locale }) {
           </div>
         </div>
       </Container>
-    </section>
+    </MobileCollapseSection>
   );
 }

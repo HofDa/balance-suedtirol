@@ -7,6 +7,8 @@ import { getTranslations } from "@/config/translations";
 import { textHeadline } from "@/components/ui/typography";
 import { cn } from "@/lib/utils";
 import { ArrowIcon } from "@/components/ui/arrow-icon";
+import { MobileCollapseSection, MobileCollapseToggle } from "./mobile-collapse";
+import { collapsibleHeading, hiddenWhenCollapsed } from "./mobile-collapse-classes";
 
 /**
  * Kurzfassung der CO₂-Haltung: These, die drei Gründe als Überschriften und
@@ -17,30 +19,33 @@ export function CarbonStanceTeaser({ locale }: { locale: Locale }) {
   const t = translations.carbonStance;
 
   return (
-    <section aria-labelledby="carbon-title" className="bg-[var(--color-sage)]/35 py-16 sm:py-32">
+    <MobileCollapseSection aria-labelledby="carbon-title" className="bg-[var(--color-sage)]/35 py-16 sm:py-32">
       <Container>
         <div className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:gap-20">
           <div data-home-reveal="rise">
-            <Label size="section">{t.eyebrow}</Label>
-            <h2
-              id="carbon-title"
-              className={cn(textHeadline, "mt-4 text-[var(--color-ink)]")}
-            >
-              {t.title}
-            </h2>
-            <p className="mt-5 max-w-[54ch] text-[length:var(--text-body-lg)] leading-[var(--leading-body)] text-[var(--color-muted)]">
+            <div className="relative">
+              <Label size="section">{t.eyebrow}</Label>
+              <h2
+                id="carbon-title"
+                className={cn(textHeadline, "mt-4 text-[var(--color-ink)]", collapsibleHeading)}
+              >
+                {t.title}
+              </h2>
+              <MobileCollapseToggle labelledBy="carbon-title" />
+            </div>
+            <p className={cn(hiddenWhenCollapsed, "mt-5 max-w-[54ch] text-[length:var(--text-body-lg)] leading-[var(--leading-body)] text-[var(--color-muted)]")}>
               {translations.featured.stanceTeaser}
             </p>
             <Link
               href={`/${locale}/co2-und-biodiversitaet`}
-              className={`group mt-8 inline-flex min-h-11 items-center gap-2 text-sm font-bold text-[var(--color-forest)] ${focusRing}`}
+              className={`${hiddenWhenCollapsed} group mt-8 inline-flex min-h-11 items-center gap-2 text-sm font-bold text-[var(--color-forest)] ${focusRing}`}
             >
               {translations.featured.stanceReadMore}
               <ArrowIcon />
             </Link>
           </div>
 
-          <div data-home-reveal="rise">
+          <div data-home-reveal="rise" className={hiddenWhenCollapsed}>
             <Label size="block" tone="muted">
               {t.reasonsEyebrow}
             </Label>
@@ -62,6 +67,6 @@ export function CarbonStanceTeaser({ locale }: { locale: Locale }) {
           </div>
         </div>
       </Container>
-    </section>
+    </MobileCollapseSection>
   );
 }

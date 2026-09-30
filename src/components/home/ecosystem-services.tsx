@@ -7,7 +7,7 @@ import { ServiceIllustration } from "./service-illustrations";
 import { textDisplay, textTitleTight } from "@/components/ui/typography";
 import { cn } from "@/lib/utils";
 import { MobileCollapseSection, MobileCollapseToggle } from "./mobile-collapse";
-import { hiddenWhenCollapsed } from "./mobile-collapse-classes";
+import { collapsibleHeading, hiddenWhenCollapsed } from "./mobile-collapse-classes";
 
 /**
  * Sechs Leistungen als offene Komposition: Überschrift links stehend, rechts
@@ -26,7 +26,7 @@ export function EcosystemServices({ locale }: { locale: Locale }) {
               <Label size="section">{t.eyebrow}</Label>
               <h2
                 id="services-title"
-                className={cn(textDisplay, "mt-4 text-[var(--color-ink)] max-sm:pr-14")}
+                className={cn(textDisplay, "mt-4 text-[var(--color-ink)]", collapsibleHeading)}
               >
                 {t.title}
               </h2>

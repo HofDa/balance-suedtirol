@@ -48,7 +48,6 @@ export type HomeStoryCopy = {
     facts: [string, string][];
     factsSource: string;
     closing: string;
-    cta: string;
   };
   economy: {
     eyebrow: string;
@@ -153,8 +152,7 @@ const homeStory: Localized<HomeStoryCopy> = {
         ["6", "Heu- und Fangschreckenarten sind in Südtirol in den letzten 100 Jahren ausgestorben."]
       ],
       factsSource: "Quelle: Biodiversitätsmonitoring Südtirol (Eurac Research), Artengruppen Tagfalter und Heuschrecken.",
-      closing: "Verlorene Lebensräume lassen sich nicht überall zurückholen. Aber an vielen Orten lassen sie sich erhalten, vergrößern und wieder verbinden.",
-      cta: "Sieh, wo wir Lebensräume wiederherstellen"
+      closing: "Verlorene Lebensräume lassen sich nicht überall zurückholen. Aber an vielen Orten lassen sie sich erhalten, vergrößern und wieder verbinden."
     },
     economy: {
       eyebrow: "Natur und Wirtschaft",
@@ -249,8 +247,7 @@ const homeStory: Localized<HomeStoryCopy> = {
         ["6", "specie di ortotteri e mantidi si sono estinte in Alto Adige negli ultimi 100 anni."]
       ],
       factsSource: "Fonte: Monitoraggio della biodiversità Alto Adige (Eurac Research), gruppi farfalle diurne e ortotteri.",
-      closing: "Non ovunque gli habitat perduti si possono recuperare. Ma in molti luoghi si possono conservare, ampliare e ricollegare.",
-      cta: "Guarda dove ripristiniamo gli habitat"
+      closing: "Non ovunque gli habitat perduti si possono recuperare. Ma in molti luoghi si possono conservare, ampliare e ricollegare."
     },
     economy: {
       eyebrow: "Natura ed economia",
@@ -345,8 +342,7 @@ const homeStory: Localized<HomeStoryCopy> = {
         ["6", "grasshopper and mantis species have died out in South Tyrol over the past 100 years."]
       ],
       factsSource: "Source: Biodiversity Monitoring South Tyrol (Eurac Research), groups butterflies and grasshoppers.",
-      closing: "Lost habitats cannot be brought back everywhere. But in many places they can be preserved, enlarged and reconnected.",
-      cta: "See where we restore habitats"
+      closing: "Lost habitats cannot be brought back everywhere. But in many places they can be preserved, enlarged and reconnected."
     },
     economy: {
       eyebrow: "Nature and the economy",

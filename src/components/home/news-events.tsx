@@ -11,6 +11,8 @@ import { getNewsItems } from "@/data/news";
 import type { NewsItem } from "@/types/news";
 import { textTitle } from "@/components/ui/typography";
 import { cn } from "@/lib/utils";
+import { MobileCollapseSection, MobileCollapseToggle } from "./mobile-collapse";
+import { hiddenWhenCollapsed } from "./mobile-collapse-classes";
 
 /**
  * Termine und Neuigkeiten stehen in einem Raster, nicht in zwei Spalten:
@@ -22,18 +24,25 @@ export function NewsEvents({ locale }: { locale: Locale }) {
   const items = getNewsItems(locale);
 
   return (
-    <section className="py-16 sm:py-32">
+    <MobileCollapseSection aria-labelledby="news-title" className="py-16 sm:py-32">
       <Container>
         <div data-home-reveal="rise">
-          <SectionHeading eyebrow={t.eyebrow} title={t.title} copy={t.copy} />
+          <SectionHeading
+            id="news-title"
+            eyebrow={t.eyebrow}
+            title={t.title}
+            copy={t.copy}
+            copyClassName={hiddenWhenCollapsed}
+            toggle={<MobileCollapseToggle labelledBy="news-title" />}
+          />
         </div>
 
         {items.length === 0 ? (
-          <p data-home-reveal="rise" className="mt-12 text-[length:var(--text-body)] text-[var(--color-muted)]">
+          <p data-home-reveal="rise" className={cn(hiddenWhenCollapsed, "mt-12 text-[length:var(--text-body)] text-[var(--color-muted)]")}>
             {t.empty}
           </p>
         ) : (
-          <ul className="mt-12 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          <ul className={cn(hiddenWhenCollapsed, "mt-12 grid gap-3 sm:grid-cols-2 lg:grid-cols-3")}>
             {items.map((item, index) => (
               <li
                 key={item.slug}
@@ -46,7 +55,7 @@ export function NewsEvents({ locale }: { locale: Locale }) {
           </ul>
         )}
       </Container>
-    </section>
+    </MobileCollapseSection>
   );
 }
 

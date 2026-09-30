@@ -82,6 +82,8 @@ export const projects: Project[] = [
     status: "support-needed",
     municipality: "Klausen, Natz-Schabs",
     organization: "b*nature",
+    // Übergangslösung: b*nature hat seinen Rechtssitz vorerst bei b*coop (siehe Impressum).
+    organizationAddress: "c/o b*coop, Vintlerstraße 34, 39042 Brixen",
     location: { lat: 46.6497, lng: 11.5731 },
     // Die vierte Fläche wird ergänzt, sobald sie feststeht.
     sites: [
@@ -135,6 +137,8 @@ export const projects: Project[] = [
     status: "support-needed",
     municipality: "Südtirolweit",
     organization: "b*nature",
+    // Übergangslösung: b*nature hat seinen Rechtssitz vorerst bei b*coop (siehe Impressum).
+    organizationAddress: "c/o b*coop, Vintlerstraße 34, 39042 Brixen",
     location: { lat: 46.68, lng: 11.42 },
     image: "/projects/vorfahrt-fuer-den-igel.webp",
     supporters: 0,
@@ -219,6 +223,7 @@ const projectTranslations: Record<Exclude<Locale, "de">, Record<string, Partial<
     },
     "meine-gemeinde-meine-natur": {
       title: "Il mio comune, la mia natura",
+      organizationAddress: "c/o b*coop, Via Vintler 34, 39042 Bressanone",
       gallery: [
         { src: "/projects/meine-gemeinde-meine-natur-herde-hang.webp", alt: "Pastore con cane da pastore e un gregge di capre e pecore su un ripido pendio erboso", caption: "Il pastore, il suo cane e il gregge di pecore e capre su un pendio ripido." },
         { src: "/projects/meine-gemeinde-meine-natur-ziegen-weg.webp", alt: "Capre su un sentiero tra recinzioni di legno, dietro il pastore e le montagne", caption: "In cammino con il gregge: capre su un sentiero tra recinzioni di legno." },
@@ -259,6 +264,7 @@ const projectTranslations: Record<Exclude<Locale, "de">, Record<string, Partial<
     },
     "vorfahrt-fuer-den-igel": {
       title: "Precedenza al riccio",
+      organizationAddress: "c/o b*coop, Via Vintler 34, 39042 Bressanone",
       summary: "Un progetto per la tutela e lo studio del nostro vicino selvatico: rilievi sulla popolazione, una campagna di sensibilizzazione e «strade dei ricci» che collegano i giardini.",
       description: "Stiamo verificando se il riccio orientale sia presente anche in Alto Adige e dove passi l’eventuale limite del suo areale. Avviamo inoltre una campagna di informazione e sensibilizzazione sul riccio e sul suo habitat, usando i media e gli strumenti di comunicazione più diversi e molte idee creative per raggiungere il maggior numero di persone: attività di citizen science, media analogici e digitali, laboratori e molto altro. Infine realizziamo misure concrete per proteggere e migliorare il suo habitat: le cosiddette «strade dei ricci», che permettono all’animale di muoversi liberamente tra i giardini e gli altri habitat. Con il riccio come specie ombrello tuteliamo e favoriamo anche molte altre specie vegetali e animali.",
       whyItMatters: "Il riccio è un animale molto amato che, secondo la percezione comune, si avvista sempre più raramente in Alto Adige. Finora però non esistono dati concreti sulle popolazioni locali. Per questo vogliamo condurre rilievi mirati e standardizzati sulla consistenza attuale del riccio e risolvere al tempo stesso un enigma affascinante: in Alto Adige sono presenti entrambe le specie europee di riccio? Accanto al riccio europeo occidentale (Erinaceus europaeus), diffuso in tutta Europa, in Alto Adige è infatti atteso anche il riccio orientale (Erinaceus roumanicus), documentato nei paesi e nelle regioni confinanti a est.",

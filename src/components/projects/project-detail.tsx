@@ -219,6 +219,12 @@ export function ProjectDetail({ project, otherProjects, locale }: ProjectDetailP
                   <dt className="text-xs font-semibold text-[var(--color-muted)]">{copy.organization}</dt>
                   <dd className="mt-1 text-sm font-semibold text-[var(--color-ink)]">{project.organization}</dd>
                 </div>
+                {project.organizationAddress && (
+                  <div>
+                    <dt className="text-xs font-semibold text-[var(--color-muted)]">{copy.organizationAddress}</dt>
+                    <dd className="mt-1 text-sm text-[var(--color-ink)]">{project.organizationAddress}</dd>
+                  </div>
+                )}
               </dl>
               <a href={mapUrl} target="_blank" rel="noreferrer" className={`mt-6 inline-flex min-h-11 items-center gap-2 text-sm font-bold text-[var(--color-forest)] hover:underline ${focusRing}`}>
                 {copy.openMap}

@@ -24,7 +24,7 @@ export type HomeStoryCopy = {
     imageAlt: string;
     imageCaption: string;
     /** Beschriftung der Höhenstufen im Foto, von oben nach unten. */
-    annotations: { peaks: string; pastures: string; forest: string; valley: string };
+    annotations: { peaks: string; alpine: string; pastures: string; forest: string; valley: string };
   };
   figures: {
     title: string;
@@ -39,6 +39,8 @@ export type HomeStoryCopy = {
     title: string;
     lead: string;
     items: { id: ServiceId; title: string; copy: string }[];
+    /** Fazit unter dem Summenstrich. */
+    conclusion: string;
   };
   loss: {
     eyebrow: string;
@@ -101,9 +103,9 @@ const homeStory: Localized<HomeStoryCopy> = {
         ["Klima", "Submediterrane Wärme im Süden, trockene inneralpine Täler wie der Vinschgau, feuchte Lagen am Alpenhauptkamm."],
         ["Kulturlandschaft", "Jahrhundertelange Nutzung hat Mähwiesen, Weiden, Hecken, Trockenmauern und Kastanienhaine geschaffen – Lebensräume, die es ohne Bewirtschaftung nicht gäbe."]
       ],
-      imageAlt: "Blick über den Vinschgau bei Schluderns: Dorf und Felder im Talboden, bewaldete Hänge, Almflächen und vergletscherte Gipfel im Hintergrund",
-      imageCaption: "Vinschgau bei Schluderns: Talboden, Kulturlandschaft, Bergwald, Almen und Hochgebirge in einem Blick.",
-      annotations: { peaks: "Hochgebirge", pastures: "Almen", forest: "Bergwald", valley: "Talboden & Kulturland" }
+      imageAlt: "Blick über den Vinschgau bei Schluderns: Dorf und Felder im Talboden, bewaldete Hänge, Wiesen, Weiden, Almen und vergletscherte Gipfel im Hintergrund",
+      imageCaption: "Vinschgau bei Schluderns: Talboden, Kulturlandschaft, Wald, Wiesen, Weiden, Almen und Hochgebirge in einem Blick.",
+      annotations: { peaks: "Hochgebirge", alpine: "Almen", pastures: "Wiesen und Weiden", forest: "Wald", valley: "Talboden & Kulturland" }
     },
     figures: {
       title: "Kleine Fläche, große Vielfalt.",
@@ -132,7 +134,8 @@ const homeStory: Localized<HomeStoryCopy> = {
         ["Bodenfruchtbarkeit", "Bodenorganismen halten Nährstoffkreisläufe am Laufen."],
         ["Kohlenstoffspeicherung", "Wälder, Böden und Moore binden langfristig Kohlenstoff."],
         ["Erosionsschutz", "Vegetation stabilisiert Böden und reduziert Bodenverlust."]
-      ])
+      ]),
+      conclusion: "Das alles macht unser Land klimaresilienter."
     },
     loss: {
       eyebrow: "Unter Druck",
@@ -196,9 +199,9 @@ const homeStory: Localized<HomeStoryCopy> = {
         ["Clima", "Il calore submediterraneo del sud, valli interne aride come la Val Venosta, versanti umidi lungo la cresta principale delle Alpi."],
         ["Paesaggio culturale", "Secoli di utilizzo hanno creato prati da sfalcio, pascoli, siepi, muretti a secco e castagneti – habitat che senza coltivazione non esisterebbero."]
       ],
-      imageAlt: "Vista sulla Val Venosta presso Sluderno: paese e campi nel fondovalle, versanti boscosi, alpeggi e vette con ghiacciai sullo sfondo",
-      imageCaption: "Val Venosta presso Sluderno: fondovalle, paesaggio coltivato, bosco montano, alpeggi e alta montagna in un solo sguardo.",
-      annotations: { peaks: "Alta montagna", pastures: "Alpeggi", forest: "Bosco montano", valley: "Fondovalle e colture" }
+      imageAlt: "Vista sulla Val Venosta presso Sluderno: paese e campi nel fondovalle, versanti boscosi, prati, pascoli, alpeggi e vette con ghiacciai sullo sfondo",
+      imageCaption: "Val Venosta presso Sluderno: fondovalle, paesaggio coltivato, bosco, prati, pascoli, alpeggi e alta montagna in un solo sguardo.",
+      annotations: { peaks: "Alta montagna", alpine: "Alpeggi", pastures: "Prati e pascoli", forest: "Bosco", valley: "Fondovalle e colture" }
     },
     figures: {
       title: "Piccola superficie, grande varietà.",
@@ -227,7 +230,8 @@ const homeStory: Localized<HomeStoryCopy> = {
         ["Fertilità del suolo", "Gli organismi del suolo mantengono attivi i cicli dei nutrienti."],
         ["Stoccaggio del carbonio", "Boschi, suoli e torbiere trattengono il carbonio a lungo termine."],
         ["Protezione dall’erosione", "La vegetazione stabilizza i suoli e riduce la perdita di terreno."]
-      ])
+      ]),
+      conclusion: "Tutto questo rende la nostra terra più resiliente al clima."
     },
     loss: {
       eyebrow: "Sotto pressione",
@@ -291,9 +295,9 @@ const homeStory: Localized<HomeStoryCopy> = {
         ["Climate", "Sub-Mediterranean warmth in the south, dry inner-Alpine valleys such as the Vinschgau, damp slopes along the main Alpine ridge."],
         ["Cultural landscape", "Centuries of use have created hay meadows, pastures, hedgerows, dry-stone walls and chestnut groves – habitats that would not exist without farming."]
       ],
-      imageAlt: "View over the Vinschgau near Schluderns: village and fields on the valley floor, forested slopes, alpine pastures and glaciated peaks behind",
-      imageCaption: "Vinschgau near Schluderns: valley floor, farmland, mountain forest, alpine pastures and high peaks in a single view.",
-      annotations: { peaks: "High mountains", pastures: "Alpine pastures", forest: "Mountain forest", valley: "Valley floor & farmland" }
+      imageAlt: "View over the Vinschgau near Schluderns: village and fields on the valley floor, forested slopes, meadows, pastures, high pastures and glaciated peaks behind",
+      imageCaption: "Vinschgau near Schluderns: valley floor, farmland, forest, meadows, pastures, high pastures and high peaks in a single view.",
+      annotations: { peaks: "High mountains", alpine: "High pastures", pastures: "Meadows and pastures", forest: "Forest", valley: "Valley floor & farmland" }
     },
     figures: {
       title: "Small in area, big in diversity.",
@@ -322,7 +326,8 @@ const homeStory: Localized<HomeStoryCopy> = {
         ["Soil fertility", "Soil organisms keep nutrient cycles running."],
         ["Carbon storage", "Forests, soils and peatlands lock up carbon for the long term."],
         ["Erosion control", "Vegetation stabilises soils and reduces soil loss."]
-      ])
+      ]),
+      conclusion: "Together, this makes our land more resilient to climate change."
     },
     loss: {
       eyebrow: "Under pressure",

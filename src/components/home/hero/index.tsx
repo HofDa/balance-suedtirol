@@ -11,9 +11,10 @@ import { textDisplay } from "@/components/ui/typography";
 import { cn } from "@/lib/utils";
 
 /**
- * Der Hero trägt eine Leitzeile und einen Satz dazu, was b*alance tut. Kein
- * Check-Knopf, keine Kennzahlen: Die Seite erzählt darunter der Reihe nach –
- * Vielfalt, Leistungen, Verlust, Projekte – und erklärt das Modell erst danach.
+ * Der Hero trägt eine Leitzeile, einen Satz dazu, was b*alance tut, und den
+ * direkten Weg zu den Projekten. Kein Check-Knopf, keine Kennzahlen: Die Seite
+ * erzählt darunter der Reihe nach – Vielfalt, Leistungen, Verlust, Projekte –
+ * und erklärt das Modell erst danach.
  */
 export function Hero({ locale }: { locale: Locale }) {
   const t = getTranslations(locale).hero;

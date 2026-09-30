@@ -23,6 +23,7 @@ export type Project = {
   status: ProjectStatus;
   municipality: string;
   organization: string;
+  /** Rechtssitz des Projektträgers, auf der Projektseite unter dem Namen. */
   organizationAddress?: string;
   location: { lat: number; lng: number };
   /**

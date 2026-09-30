@@ -17,13 +17,21 @@ import { cn } from "@/lib/utils";
  * Höhenstufen im Foto, von oben nach unten. Die Punkte sitzen auf dem Motiv
  * (Prozent der Bildfläche) und erklären, was der Text behauptet: viele
  * Lebensräume in einem Blick. Unter `sm` stehen sie nur in der Bildunterschrift.
+ * Etiketten mit `flip` stehen links vom Punkt: am rechten Bildrand, damit sie
+ * nicht über den Rand laufen, und beim Wald, damit er den Almen Platz lässt.
  */
-const annotationSpots = [
+const annotationSpots: ReadonlyArray<{
+  key: "peaks" | "alpine" | "forest" | "pastures" | "valley";
+  left: string;
+  top: string;
+  flip?: boolean;
+}> = [
   { key: "peaks", left: "27%", top: "31%" },
-  { key: "forest", left: "44%", top: "40%" },
-  { key: "pastures", left: "79%", top: "48%" },
-  { key: "valley", left: "66%", top: "67%" }
-] as const;
+  { key: "alpine", left: "87%", top: "37%", flip: true },
+  { key: "forest", left: "44%", top: "40%", flip: true },
+  { key: "pastures", left: "79%", top: "48%", flip: true },
+  { key: "valley", left: "66%", top: "67%", flip: true }
+];
 
 /**
  * Der erste Abschnitt nach dem Hero: Was Südtirol besitzt. Text und Foto
@@ -91,11 +99,14 @@ export function BiodiversityRichness({ locale }: { locale: Locale }) {
                 {annotationSpots.map((spot) => (
                   <li
                     key={spot.key}
-                    className="absolute flex -translate-y-1/2 items-center gap-2"
+                    className={cn(
+                      "absolute flex -translate-y-1/2 items-center gap-2",
+                      spot.flip && "-translate-x-full flex-row-reverse"
+                    )}
                     style={{ left: spot.left, top: spot.top }}
                   >
-                    <span className="-ml-1.5 size-3 shrink-0 rounded-full border-2 border-white bg-[var(--color-forest)] shadow-[var(--shadow-on-photo)]" />
-                    <span className="rounded-[var(--radius-sm)] bg-[var(--color-ink)]/78 px-2 py-1 text-[11px] font-bold uppercase tracking-[0.14em] text-white backdrop-blur-sm">
+                    <span className={cn(spot.flip ? "-mr-1.5" : "-ml-1.5", "size-3 shrink-0 rounded-full border-2 border-white bg-[var(--color-forest)] shadow-[var(--shadow-on-photo)]")} />
+                    <span className="whitespace-nowrap rounded-[var(--radius-sm)] bg-[var(--color-ink)]/78 px-2 py-1 text-[11px] font-bold uppercase tracking-[0.14em] text-white backdrop-blur-sm">
                       {t.annotations[spot.key]}
                     </span>
                   </li>

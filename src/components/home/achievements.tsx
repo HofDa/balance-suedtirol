@@ -1,4 +1,6 @@
 import type { CSSProperties } from "react";
+import Image from "next/image";
+import { withBasePath } from "@/lib/public-path";
 import { Container } from "@/components/ui/container";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { Surface } from "@/components/ui/surface";
@@ -23,6 +25,7 @@ export function Achievements({ locale }: { locale: Locale }) {
   const stats = getAchievementStats();
   const completed = getCompletedProjects(locale);
   const number = new Intl.NumberFormat(localeTags[locale]);
+  const photo = getTranslations(locale).hero.photo;
 
   const figures = [
     { value: number.format(stats.projects), label: t.stats.projects },
@@ -32,17 +35,35 @@ export function Achievements({ locale }: { locale: Locale }) {
   ];
 
   return (
-    <MobileCollapseSection aria-labelledby="achievements-title" className="bg-[var(--color-sage)]/35 py-16 sm:py-32">
+    <MobileCollapseSection aria-labelledby="achievements-title" className="py-16 sm:py-32">
       <Container>
-        <div data-home-reveal="rise">
-          <SectionHeading
-            id="achievements-title"
-            eyebrow={t.eyebrow}
-            title={t.title}
-            copy={t.copy}
-            copyClassName={hiddenWhenCollapsed}
-            toggle={<MobileCollapseToggle labelledBy="achievements-title" />}
-          />
+        {/* Oben rechts ein Beleg aus dem Gelände: Die Zwergdommel brütet wieder
+            in der Millander Au. Die Namensnennung wünscht der Fotograf. */}
+        <div className="flex flex-col gap-8 lg:flex-row lg:items-start lg:justify-between lg:gap-16">
+          <div data-home-reveal="rise">
+            <SectionHeading
+              id="achievements-title"
+              eyebrow={t.eyebrow}
+              title={t.title}
+              copy={t.copy}
+              copyClassName={hiddenWhenCollapsed}
+              toggle={<MobileCollapseToggle labelledBy="achievements-title" />}
+            />
+          </div>
+          <figure data-home-reveal="scale" className={cn(hiddenWhenCollapsed, "w-full shrink-0 sm:max-w-md lg:w-[24rem]")}>
+            <div className="relative aspect-[3/2] overflow-hidden rounded-[var(--radius-lg)] bg-[var(--color-sage)]">
+              <Image
+                src={withBasePath("/projects/millander-au-zwergdommel.webp")}
+                alt={t.highlightAlt}
+                fill
+                sizes="(min-width: 1024px) 384px, (min-width: 640px) 448px, 100vw"
+                className="object-cover"
+              />
+            </div>
+            <figcaption className="mt-3 text-xs leading-5 text-[var(--color-muted)]">
+              {t.highlightCaption} {photo}: Sepp Gamper
+            </figcaption>
+          </figure>
         </div>
 
         <div data-home-reveal="scale" className={cn(hiddenWhenCollapsed, "mt-12")}>

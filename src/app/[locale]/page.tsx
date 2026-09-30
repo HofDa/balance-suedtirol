@@ -17,8 +17,9 @@ import { isLocale } from "@/config/site";
 
 /**
  * Die Startseite erzählt linear: Was Südtirol besitzt, was es leistet, was
- * verloren geht, welche Projekte dagegen arbeiten – und erst dann, warum das
- * auch wirtschaftlich zählt und wie b*alance funktioniert.
+ * verloren geht, welche Projekte dagegen arbeiten, was dort schon entstanden
+ * ist und was gerade passiert – und erst dann, warum das auch wirtschaftlich
+ * zählt und wie b*alance funktioniert.
  */
 export default async function HomePage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
@@ -33,13 +34,13 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
       <HabitatLoss locale={locale} />
       <FeaturedProjects locale={locale} />
       <Achievements locale={locale} />
+      <NewsEvents locale={locale} />
       <EconomicValue locale={locale} />
       <BalanceModel locale={locale} />
       <PlatformPartners locale={locale} />
       <SciencePartners locale={locale} />
       <HouseIntro locale={locale} />
       <CarbonStanceTeaser locale={locale} />
-      <NewsEvents locale={locale} />
       <ImpactBridge locale={locale} />
     </div>
   );

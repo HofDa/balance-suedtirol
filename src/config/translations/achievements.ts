@@ -11,7 +11,9 @@ export const achievementsCopy = {
     },
     completedEyebrow: "Abgeschlossen",
     completedTitle: "Projekte, die fertig sind und weiterwirken.",
-    completedEmpty: "Noch ist kein Projekt abgeschlossen. Sobald das erste seine Pflegephase beendet, steht es hier."
+    completedEmpty: "Noch ist kein Projekt abgeschlossen. Sobald das erste seine Pflegephase beendet, steht es hier.",
+    highlightAlt: "Zwergdommel im Schilf",
+    highlightCaption: "Zwergdommel in der Millander Au: 2025 brütete sie dort erstmals seit rund 30 Jahren wieder."
   },
   it: {
     eyebrow: "Risultati finora",
@@ -25,7 +27,9 @@ export const achievementsCopy = {
     },
     completedEyebrow: "Conclusi",
     completedTitle: "Progetti conclusi che continuano a produrre effetti.",
-    completedEmpty: "Nessun progetto è ancora concluso. Non appena il primo termina la fase di cura, comparirà qui."
+    completedEmpty: "Nessun progetto è ancora concluso. Non appena il primo termina la fase di cura, comparirà qui.",
+    highlightAlt: "Tarabusino nel canneto",
+    highlightCaption: "Tarabusino nella Millander Au: nel 2025 vi ha nidificato di nuovo per la prima volta da circa 30 anni."
   },
   en: {
     eyebrow: "Achieved so far",
@@ -39,6 +43,8 @@ export const achievementsCopy = {
     },
     completedEyebrow: "Completed",
     completedTitle: "Projects that are finished and still working.",
-    completedEmpty: "No project has been completed yet. As soon as the first finishes its care phase, it will appear here."
+    completedEmpty: "No project has been completed yet. As soon as the first finishes its care phase, it will appear here.",
+    highlightAlt: "Little bittern in the reeds",
+    highlightCaption: "Little bittern in the Millander Au: in 2025 it bred there again for the first time in around 30 years."
   }
 } as const;

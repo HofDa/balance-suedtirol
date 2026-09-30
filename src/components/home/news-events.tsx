@@ -24,7 +24,7 @@ export function NewsEvents({ locale }: { locale: Locale }) {
   const items = getNewsItems(locale);
 
   return (
-    <MobileCollapseSection aria-labelledby="news-title" className="py-16 sm:py-32">
+    <MobileCollapseSection aria-labelledby="news-title" className="bg-[var(--color-sage)]/35 py-16 sm:py-32">
       <Container>
         <div data-home-reveal="rise">
           <SectionHeading

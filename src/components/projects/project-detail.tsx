@@ -389,6 +389,14 @@ export function ProjectDetail({ project, otherProjects, locale }: ProjectDetailP
               </Link>
             </div>
           </section>
+
+          {/* Öffentliche Unterstützung steht hier und nur hier: kein
+              Hauptinvestor, keine Kachel, sondern eine Zeile am Schluss. */}
+          {project.supportedBy && (
+            <p className="mt-10 text-sm text-[var(--color-muted)]">
+              {copy.supportedBy}: <span className="font-semibold text-[var(--color-ink)]">{project.supportedBy}</span>
+            </p>
+          )}
         </Container>
       </section>
 

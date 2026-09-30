@@ -49,10 +49,7 @@ export const projects: Project[] = [
       { src: "/projects/millander-au-bekassine.webp", alt: "Bekassine am Ufer", caption: "Bekassine auf Nahrungssuche am Ufer, einer der Zugvögel, die hier rasten.", credit: "Sepp Gamper" }
     ],
     supporters: 0,
-    mainSponsor: {
-      name: "Amt für Natur – Autonome Provinz Bozen",
-      contribution: "Hauptförderer der Erweiterung der Millander Au."
-    },
+    supportedBy: "Amt für Natur – Autonome Provinz Bozen",
     whyItMatters:
       "Die Millander Au ist der Rest einer Auenlandschaft, die einst die gesamte Flusslandschaft von Brixen bis Albeins einnahm. 1988 wurde sie in letzter Sekunde vor der Nutzung als Bauschuttdeponie bewahrt und unter Schutz gestellt. Bei Schlechtwetterfronten über dem Alpenhauptkamm ist sie für Zugvögel eine überlebenswichtige Raststätte: Rund 130 Vogelarten werden hier jährlich nachgewiesen, 30 bis 35 davon brüten im Biotop. Die 2026 renaturierte Nachbarparzelle zeigt, wie schnell neue Lebensräume angenommen werden.",
     impact: [
@@ -105,10 +102,7 @@ export const projects: Project[] = [
       { src: "/projects/meine-gemeinde-meine-natur-haufen-baeume.webp", alt: "Schnittgut unter Bäumen aufgeschichtet", caption: "Das Schnittgut liegt aufgeschichtet unter den Bäumen." }
     ],
     supporters: 0,
-    mainSponsor: {
-      name: "Amt für Natur – Autonome Provinz Bozen",
-      contribution: "Im Projektdokument als Förderpartner genannt."
-    },
+    supportedBy: "Amt für Natur – Autonome Provinz Bozen",
     whyItMatters:
       "In fast jeder Ortschaft Südtirols finden wir natürliche und naturnahe Lebensräume, die seltene und gefährdete Lebensgemeinschaften vorweisen und daher als Biotop oder Naturdenkmal geschützt sind. Diese Gebiete befinden sich oft in unmittelbarer Nähe der Ortschaften und wurden meist durch geführte Beweidung von Menschen geschaffen und erhalten. Im Laufe der letzten Jahrzehnte wurde jedoch die Beweidung oft aufgegeben und diese wertvollen Lebensräume verbrachen und verbuschen. Ein vielblütiger Trockenrasen voller Insekten kann so in wenigen Jahren von Sträuchern und Bäumen überwachsen werden.",
     impact: [
@@ -142,10 +136,7 @@ export const projects: Project[] = [
     location: { lat: 46.68, lng: 11.42 },
     image: "/projects/vorfahrt-fuer-den-igel.webp",
     supporters: 0,
-    mainSponsor: {
-      name: "Amt für Natur – Autonome Provinz Bozen",
-      contribution: "Im Projektdokument als Förderpartner genannt."
-    },
+    supportedBy: "Amt für Natur – Autonome Provinz Bozen",
     whyItMatters:
       "Der Igel ist ein sehr beliebtes Tier, das jedoch laut subjektiver Wahrnehmung immer seltener in Südtirol zu sichten ist. Es liegen bislang aber keine konkreten Daten zu den heimischen Igel-Beständen vor. Deshalb möchten wir gezielte, standardisierte Erhebungen zum aktuellen Bestand des Igels durchführen und dabei ein spannendes Rätsel lösen: Gibt es bei uns in Südtirol beide europäische Igelarten? Denn neben dem in Europa weit verbreiteten Braunbrustigel (Erinaceus europaeus) ist in Südtirol auch der Nördliche Weißbrustigel (Erinaceus roumanicus) zu erwarten, welcher in den östlichen Nachbarländern und -regionen nachgewiesen wurde.",
     impact: [
@@ -210,10 +201,7 @@ const projectTranslations: Record<Exclude<Locale, "de">, Record<string, Partial<
         { value: "ca. 130", label: "specie di uccelli all’anno" },
         { value: "30–35", label: "specie nidificanti" }
       ],
-      mainSponsor: {
-        name: "Ufficio Natura – Provincia autonoma di Bolzano",
-        contribution: "Principale finanziatore dell’ampliamento della Millander Au."
-      },
+      supportedBy: "Ufficio Natura – Provincia autonoma di Bolzano",
       monitoring: {
         species: "Uccelli migratori e nidificanti; ne beneficiano anche anfibi, libellule e altri insetti",
         surveys: "Osservazione ornitologica continua di AuRaum, hyla e AVK Südtirol",
@@ -251,10 +239,7 @@ const projectTranslations: Record<Exclude<Locale, "de">, Record<string, Partial<
         { value: "10", label: "capre nel gregge" },
         { value: "Prati aridi", label: "habitat centrale" }
       ],
-      mainSponsor: {
-        name: "Ufficio Natura – Provincia autonoma di Bolzano",
-        contribution: "Indicato come partner finanziatore nel documento di progetto."
-      },
+      supportedBy: "Ufficio Natura – Provincia autonoma di Bolzano",
       monitoring: {
         species: "Da definire",
         surveys: "Da definire",
@@ -275,10 +260,7 @@ const projectTranslations: Record<Exclude<Locale, "de">, Record<string, Partial<
         { value: "Specie ombrello", label: "il riccio rappresenta molte altre specie" },
         { value: "Tutto l’Alto Adige", label: "area di rilevamento" }
       ],
-      mainSponsor: {
-        name: "Ufficio Natura – Provincia autonoma di Bolzano",
-        contribution: "Indicato come partner finanziatore nel documento di progetto."
-      },
+      supportedBy: "Ufficio Natura – Provincia autonoma di Bolzano",
       monitoring: {
         species: "Riccio europeo occidentale e riccio orientale; ne beneficiano anche micromammiferi, insetti e lombrichi",
         surveys: "Rilievi standardizzati della popolazione, integrati da segnalazioni di citizen science",
@@ -333,10 +315,7 @@ const projectTranslations: Record<Exclude<Locale, "de">, Record<string, Partial<
         { value: "approx. 130", label: "bird species per year" },
         { value: "30–35", label: "breeding species" }
       ],
-      mainSponsor: {
-        name: "Nature Office – Autonomous Province of Bolzano",
-        contribution: "Lead sponsor of the Millander Au expansion."
-      },
+      supportedBy: "Nature Office – Autonomous Province of Bolzano",
       monitoring: {
         species: "Migrating and breeding birds; amphibians, dragonflies and other insects also benefit",
         surveys: "Ongoing bird monitoring by AuRaum, hyla and AVK Südtirol",
@@ -373,10 +352,7 @@ const projectTranslations: Record<Exclude<Locale, "de">, Record<string, Partial<
         { value: "10", label: "goats in the flock" },
         { value: "Dry grassland", label: "core habitat" }
       ],
-      mainSponsor: {
-        name: "Nature Office – Autonomous Province of Bolzano",
-        contribution: "Named as funding partner in the project document."
-      },
+      supportedBy: "Nature Office – Autonomous Province of Bolzano",
       monitoring: {
         species: "To be defined",
         surveys: "To be defined",
@@ -396,10 +372,7 @@ const projectTranslations: Record<Exclude<Locale, "de">, Record<string, Partial<
         { value: "Umbrella species", label: "the hedgehog stands for many others" },
         { value: "South Tyrol-wide", label: "survey area" }
       ],
-      mainSponsor: {
-        name: "Nature Office – Autonomous Province of Bolzano",
-        contribution: "Named as funding partner in the project document."
-      },
+      supportedBy: "Nature Office – Autonomous Province of Bolzano",
       monitoring: {
         species: "European and northern white-breasted hedgehog; small mammals, insects and earthworms benefit alongside them",
         surveys: "Standardised population surveys, complemented by citizen science records",

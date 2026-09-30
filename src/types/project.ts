@@ -68,7 +68,14 @@ export type Project = {
     reporting: string;
     summary: string;
   };
+  /** Hauptinvestor: nur private Geldgeber, nie die öffentliche Hand. */
   mainSponsor?: Sponsor;
+  /**
+   * Öffentliche Stelle, die das Projekt unterstützt (etwa das Amt für Natur).
+   * Steht bewusst nicht als Hauptinvestor auf Kacheln, sondern nur ganz unten
+   * auf der Projektseite.
+   */
+  supportedBy?: string;
   otherSponsors?: Sponsor[];
 };
 

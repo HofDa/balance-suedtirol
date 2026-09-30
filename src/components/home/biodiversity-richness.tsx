@@ -27,8 +27,8 @@ const annotationSpots: ReadonlyArray<{
   flip?: boolean;
 }> = [
   { key: "peaks", left: "27%", top: "31%" },
-  { key: "alpine", left: "87%", top: "37%", flip: true },
-  { key: "forest", left: "44%", top: "40%", flip: true },
+  { key: "alpine", left: "88%", top: "33%", flip: true },
+  { key: "forest", left: "38%", top: "54%", flip: true },
   { key: "pastures", left: "79%", top: "48%", flip: true },
   { key: "valley", left: "66%", top: "67%", flip: true }
 ];

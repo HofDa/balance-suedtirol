@@ -135,7 +135,7 @@ const homeStory: Localized<HomeStoryCopy> = {
         ["Kohlenstoffspeicherung", "Wälder, Böden und Moore binden langfristig Kohlenstoff."],
         ["Erosionsschutz", "Vegetation stabilisiert Böden und reduziert Bodenverlust."]
       ]),
-      conclusion: "Das alles macht unser Land klimaresilienter."
+      conclusion: "Intakte Lebensräume machen unser Land klimaresilienter."
     },
     loss: {
       eyebrow: "Unter Druck",
@@ -231,7 +231,7 @@ const homeStory: Localized<HomeStoryCopy> = {
         ["Stoccaggio del carbonio", "Boschi, suoli e torbiere trattengono il carbonio a lungo termine."],
         ["Protezione dall’erosione", "La vegetazione stabilizza i suoli e riduce la perdita di terreno."]
       ]),
-      conclusion: "Tutto questo rende la nostra terra più resiliente al clima."
+      conclusion: "Gli habitat intatti rendono la nostra terra più resiliente al clima."
     },
     loss: {
       eyebrow: "Sotto pressione",
@@ -327,7 +327,7 @@ const homeStory: Localized<HomeStoryCopy> = {
         ["Carbon storage", "Forests, soils and peatlands lock up carbon for the long term."],
         ["Erosion control", "Vegetation stabilises soils and reduces soil loss."]
       ]),
-      conclusion: "Together, this makes our land more resilient to climate change."
+      conclusion: "Intact habitats make our land more resilient to climate change."
     },
     loss: {
       eyebrow: "Under pressure",

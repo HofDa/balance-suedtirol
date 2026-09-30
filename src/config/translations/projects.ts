@@ -112,7 +112,8 @@ export const projectsCopy = {
       transparencyCopy: "Maßnahmenplan, Monitoring und Ergebnisse stehen auf dieser Seite und werden aktualisiert.",
       sponsorsEyebrow: "Ermöglicht durch",
       sponsorsTitle: "Förderpartner des Projekts",
-      mainSponsor: "Hauptförderer",
+      mainSponsor: "Hauptinvestor",
+      supportedBy: "Unterstützt von",
       supportingSponsors: "Weitere Förderpartner",
       relatedEyebrow: "Weitere Projekte",
       relatedTitle: "Ähnliche Projekte in Südtirol",
@@ -130,7 +131,7 @@ export const projectsCopy = {
       volunteeringCopy: "Als ehrenamtliche Person unterstützt du bei Pflanzaktionen und Monitoring vor Ort. Wir senden dir alle Details per E-Mail.",
       confirm: "Jetzt verbindlich bestätigen"
     },
-    card: { view: "Projekt ansehen", of: "von", supporters: "Unterstützer", funding: "Finanzierung", open: "offen", status: "Projektstatus", mainSponsor: "Hauptförderer", placeholder: "Platzhalter", partner: "Partner" }
+    card: { view: "Projekt ansehen", of: "von", supporters: "Unterstützer", funding: "Finanzierung", open: "offen", status: "Projektstatus", mainSponsor: "Hauptinvestor", placeholder: "Platzhalter", partner: "Partner" }
   },
   it: {
     projectSubmission: {
@@ -245,7 +246,8 @@ export const projectsCopy = {
       transparencyCopy: "Piano degli interventi, monitoraggio e risultati sono su questa pagina e vengono aggiornati.",
       sponsorsEyebrow: "Reso possibile da",
       sponsorsTitle: "Partner finanziatori del progetto",
-      mainSponsor: "Partner principale",
+      mainSponsor: "Investitore principale",
+      supportedBy: "Con il sostegno di",
       supportingSponsors: "Altri partner",
       relatedEyebrow: "Altri progetti",
       relatedTitle: "Progetti simili in Alto Adige",
@@ -263,7 +265,7 @@ export const projectsCopy = {
       volunteeringCopy: "Come volontario o volontaria puoi partecipare alle attività di piantumazione e monitoraggio sul posto. Ti invieremo tutti i dettagli via e-mail.",
       confirm: "Conferma"
     },
-    card: { view: "Vedi il progetto", of: "su", supporters: "sostenitori", funding: "Finanziamento", open: "mancanti", status: "Stato del progetto", mainSponsor: "Partner principale", placeholder: "Segnaposto", partner: "Partner" }
+    card: { view: "Vedi il progetto", of: "su", supporters: "sostenitori", funding: "Finanziamento", open: "mancanti", status: "Stato del progetto", mainSponsor: "Investitore principale", placeholder: "Segnaposto", partner: "Partner" }
   },
   en: {
     projectSubmission: {
@@ -378,7 +380,8 @@ export const projectsCopy = {
       transparencyCopy: "Action plan, monitoring and results are on this page and are kept up to date.",
       sponsorsEyebrow: "Made possible by",
       sponsorsTitle: "Project funding partners",
-      mainSponsor: "Lead sponsor",
+      mainSponsor: "Lead investor",
+      supportedBy: "Supported by",
       supportingSponsors: "Supporting partners",
       relatedEyebrow: "More projects",
       relatedTitle: "Similar projects in South Tyrol",
@@ -396,6 +399,6 @@ export const projectsCopy = {
       volunteeringCopy: "As a volunteer, you can help with planting and on-site monitoring. We will send you all details by email.",
       confirm: "Confirm contribution"
     },
-    card: { view: "View project", of: "of", supporters: "supporters", funding: "Funding", open: "remaining", status: "Project status", mainSponsor: "Lead sponsor", placeholder: "Placeholder", partner: "Partner" }
+    card: { view: "View project", of: "of", supporters: "supporters", funding: "Funding", open: "remaining", status: "Project status", mainSponsor: "Lead investor", placeholder: "Placeholder", partner: "Partner" }
   }
 } as const;

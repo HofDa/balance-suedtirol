@@ -177,6 +177,106 @@ def bird(x, y, s=1.0):
     ]
 
 
+def limb(x1, y1, x2, y2, x3, y3, w):
+    """Arm oder Bein als runder Strich über ein Gelenk."""
+    return (
+        f'<path d="M{f(x1)} {f(y1)}L{f(x2)} {f(y2)}L{f(x3)} {f(y3)}" fill="none" '
+        f'stroke="currentColor" strokeWidth="{f(w)}" strokeLinecap="round" strokeLinejoin="round"/>'
+    )
+
+
+def person(x, base, h, facing=1, stride=1.0, hand=None, backpack=False, stick=False):
+    """Gehende Figur. `hand` legt die vordere Hand fest (zum Händchenhalten)."""
+    head_r = h * 0.085
+    shoulder_y, hip_y = base - h * 0.78, base - h * 0.46
+    lean = facing * h * 0.02
+    out = [circle(x + lean * 1.5, base - h + head_r, head_r)]
+    sw, hw = h * 0.105, h * 0.085
+    out.append(
+        f'<path d="{poly([(x + lean - sw, shoulder_y), (x + lean + sw, shoulder_y), (x + hw, hip_y + 2), (x - hw, hip_y + 2)])}"/>'
+    )
+    out.append(f'<ellipse cx="{f(x + lean)}" cy="{f(shoulder_y + 1)}" rx="{f(sw)}" ry="{f(h * 0.045)}"/>')
+    leg_w, arm_w = h * 0.085, h * 0.062
+    step = h * 0.2 * stride
+    # Beine: vorne gestreckt, hinten leicht gebeugt.
+    out.append(limb(x + facing * 1, hip_y, x + facing * step * 0.55, base - h * 0.23, x + facing * step, base - 1, leg_w))
+    out.append(limb(x - facing * 1, hip_y, x - facing * step * 0.25, base - h * 0.22, x - facing * step * 0.75, base - 1, leg_w))
+    # Arme
+    sx = x + lean
+    if hand:
+        out.append(limb(sx + facing * sw * 0.6, shoulder_y + 2, (sx + hand[0]) / 2 + facing * 1, (shoulder_y + hand[1]) / 2 + 3, hand[0], hand[1], arm_w))
+    else:
+        out.append(limb(sx + facing * sw * 0.6, shoulder_y + 2, sx + facing * h * 0.1, base - h * 0.6, sx + facing * h * 0.17, base - h * 0.47, arm_w))
+    out.append(limb(sx - facing * sw * 0.6, shoulder_y + 2, sx - facing * h * 0.08, base - h * 0.6, sx - facing * h * 0.13, base - h * 0.48, arm_w))
+    if backpack:
+        bx = sx - facing * (sw + h * 0.07)
+        out.append(f'<rect x="{f(bx - h * 0.07)}" y="{f(shoulder_y - h * 0.01)}" width="{f(h * 0.14)}" height="{f(h * 0.26)}" rx="{f(h * 0.04)}"/>')
+    if stick:
+        hx, hy = sx + facing * h * 0.17, base - h * 0.47
+        out.append(
+            f'<path d="M{f(hx - facing * 1)} {f(hy - h * 0.06)}L{f(hx + facing * h * 0.12)} {f(base)}" fill="none" '
+            f'stroke="currentColor" strokeWidth="{f(h * 0.028)}" strokeLinecap="round"/>'
+        )
+    return out
+
+
+def farmer(x, base, h, facing=-1):
+    """Bäuerin oder Bauer beim Mähen mit der Sense: breiter Stand, Oberkörper
+    nach vorn, beide Hände am Sensenbaum, das Blatt knapp über dem Boden. Das
+    Gras unter dem Blatt und dahinter ist schon gemäht (siehe Gräser unten)."""
+    head_r = h * 0.085
+    hip_x, hip_y = x, base - h * 0.44
+    sh_x, sh_y = x + facing * h * 0.09, base - h * 0.74
+    out = []
+    # Beine: breiter Stand, vorderes Knie gebeugt.
+    leg_w = h * 0.085
+    out.append(limb(hip_x + facing * 1, hip_y, x + facing * h * 0.14, base - h * 0.22, x + facing * h * 0.2, base - 1, leg_w))
+    out.append(limb(hip_x - facing * 1, hip_y, x - facing * h * 0.08, base - h * 0.22, x - facing * h * 0.17, base - 1, leg_w))
+    # Rumpf, nach vorn geneigt
+    sw, hw = h * 0.1, h * 0.085
+    out.append(f'<path d="{poly([(sh_x - sw, sh_y - 1), (sh_x + sw, sh_y + 1), (hip_x + hw, hip_y + 2), (hip_x - hw, hip_y + 2)])}"/>')
+    out.append(f'<ellipse cx="{f(sh_x)}" cy="{f(sh_y)}" rx="{f(sw)}" ry="{f(h * 0.045)}"/>')
+    # Kopf mit Hut
+    hx, hy = sh_x + facing * h * 0.07, sh_y - h * 0.13
+    out.append(circle(hx, hy, head_r))
+    out.append(f'<ellipse cx="{f(hx)}" cy="{f(hy - head_r * 0.55)}" rx="{f(h * 0.14)}" ry="{f(h * 0.022)}"/>')
+    out.append(f'<rect x="{f(hx - head_r * 0.85)}" y="{f(hy - head_r * 1.55)}" width="{f(head_r * 1.7)}" height="{f(head_r * 1.05)}" rx="{f(head_r * 0.35)}"/>')
+    # Sensenbaum: leicht geschwungen, oben hinter der Hüfte, unten vor den Füßen.
+    top = (x - facing * h * 0.1, base - h * 0.66)
+    bottom = (x + facing * h * 0.46, base - h * 0.07)
+    ctrl = ((top[0] + bottom[0]) / 2 + facing * h * 0.02, (top[1] + bottom[1]) / 2 - h * 0.08)
+    out.append(
+        f'<path d="M{f(top[0])} {f(top[1])}Q{f(ctrl[0])} {f(ctrl[1])} {f(bottom[0])} {f(bottom[1])}" fill="none" '
+        f'stroke="currentColor" strokeWidth="{f(h * 0.032)}" strokeLinecap="round"/>'
+    )
+
+    def on_snath(t):
+        return ((1 - t) ** 2 * top[0] + 2 * (1 - t) * t * ctrl[0] + t * t * bottom[0],
+                (1 - t) ** 2 * top[1] + 2 * (1 - t) * t * ctrl[1] + t * t * bottom[1])
+
+    # Griffe und Arme
+    arm_w = h * 0.062
+    for t, grip in [(0.12, h * 0.07), (0.5, h * 0.06)]:
+        gx, gy = on_snath(t)
+        out.append(
+            f'<path d="M{f(gx)} {f(gy)}L{f(gx + facing * grip * 0.35)} {f(gy - grip)}" fill="none" '
+            f'stroke="currentColor" strokeWidth="{f(h * 0.03)}" strokeLinecap="round"/>'
+        )
+    g1 = on_snath(0.12)
+    g2 = on_snath(0.5)
+    out.append(limb(sh_x - facing * sw * 0.5, sh_y + 2, (sh_x + g1[0]) / 2 - facing * 2, (sh_y + g1[1]) / 2 + 4, g1[0] + facing * h * 0.02, g1[1] - h * 0.06, arm_w))
+    out.append(limb(sh_x + facing * sw * 0.5, sh_y + 2, (sh_x + g2[0]) / 2 + facing * 1, (sh_y + g2[1]) / 2 + 2, g2[0] + facing * h * 0.02, g2[1] - h * 0.05, arm_w))
+    # Sensenblatt: vom unteren Ende zurück zu den Füßen, am Ansatz breit, zur Spitze schmal.
+    bx, by = bottom
+    tip = (bx - facing * h * 0.5, base - h * 0.03)
+    out.append(
+        f'<path d="M{f(bx)} {f(by - h * 0.02)}'
+        f'Q{f((bx + tip[0]) / 2)} {f(by - h * 0.07)} {f(tip[0])} {f(tip[1])}'
+        f'Q{f((bx + tip[0]) / 2)} {f(by + h * 0.005)} {f(bx)} {f(by + h * 0.03)}Z"/>'
+    )
+    return out
+
+
 # ---------------------------------------------------------------- Szene
 groups = []  # (delay_ms, kind, [svg elements])
 
@@ -210,24 +310,23 @@ add(300, reeds)
 # Mitte: nur niedrige Wiese, damit darüber der Satz Platz hat.
 add(420, daisy(430, g(430), 44, 3))
 add(460, umbel(474, g(474), 56, -2))
-add(500, daisy(532, g(532), 36, -3))
-add(540, bell(584, g(584), 52, 4))
+add(500, daisy(508, g(508), 36, -3))
+add(540, bell(628, g(628), 48, 4))
 add(580, seedhead(652, g(652), 64, 6))
 add(620, umbel(702, g(702), 48, 3))
 add(660, daisy(762, g(762), 50, -2))
 add(700, bell(822, g(822), 44, -3))
 add(740, umbel(862, g(862), 60, 2))
 add(780, seedhead(952, g(952), 60, -5))
-add(820, daisy(994, g(994), 42, 3))
-add(860, bell(1034, g(1034), 50, 2))
-add(900, seedhead(1062, g(1062), 58, 4))
+add(820, daisy(944, g(944), 42, 3))
 
 # Gräser über die ganze Breite, in Büscheln gruppiert.
 x = 0.0
 cluster, cluster_start = [], 0.0
 while x < W:
     mid = 380 <= x <= 1060
-    h = random.uniform(14, 32) if mid else random.uniform(18, 46)
+    mown = 972 <= x <= 1075  # schon gemäht: unter dem Sensenblatt und hinter der Figur
+    h = random.uniform(3, 6) if mown else random.uniform(14, 32) if mid else random.uniform(18, 46)
     cluster.append(blade(x, g(x), h, random.uniform(3.5, 5.5), random.uniform(-9, 9)))
     x += random.uniform(6, 12)
     if x - cluster_start > 120 or x >= W:
@@ -236,8 +335,15 @@ while x < W:
 
 # Tiere zuletzt.
 add(1000, hedgehog(906, g(906)))
-add(1100, butterfly(618, 192), "fade")
+add(1100, butterfly(700, 186), "fade")
 add(1150, bird(1182, 70) + bird(1214, 96, 0.7), "fade")
+
+# Menschen gehören dazu: Elternteil und Kind Hand in Hand, und wer die Wiese
+# pflegt: jemand mäht mit der Sense.
+adult_x, child_x = 556, 588
+hand = (572, g(572) - 64 * 0.5)
+add(1200, person(adult_x, g(adult_x), 66, 1, 0.9, hand=hand) + person(child_x, g(child_x), 42, 1, 0.8, hand=(hand[0] + 2, hand[1] + 1)), "fade")
+add(1260, farmer(1010, g(1010), 66, -1), "fade")
 
 ground_path = "M0 280 L" + " L".join(f"{x} {f(g(x))}" for x in range(0, W + 1, 40)) + f" L{W} 280Z"
 

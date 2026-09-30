@@ -23,7 +23,11 @@ export default function nextConfig(phase: string): NextConfig {
       ? {}
       : {
           async redirects() {
-            return [{ source: "/", destination: "/de", permanent: false }];
+            return [
+              { source: "/", destination: "/de", permanent: false },
+              { source: "/neu", destination: "/de", permanent: true },
+              { source: "/neu/:path+", destination: "/:path+", permanent: true },
+            ];
           },
           async headers() {
             return [

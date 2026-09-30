@@ -134,7 +134,7 @@ export const projects: Project[] = [
     // Übergangslösung: b*nature hat seinen Rechtssitz vorerst bei b*coop (siehe Impressum).
     organizationAddress: "c/o b*coop, Vintlerstraße 34, 39042 Brixen",
     location: { lat: 46.68, lng: 11.42 },
-    image: "/projects/vorfahrt-fuer-den-igel.webp",
+    image: "/projects/vorfahrt-fuer-den-igel-foto.webp",
     supporters: 0,
     supportedBy: "Amt für Natur – Autonome Provinz Bozen",
     whyItMatters:

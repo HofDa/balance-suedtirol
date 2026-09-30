@@ -15,8 +15,12 @@ The downloaded photographs were cropped to a consistent 8:5 aspect ratio,
 resized to 1600 × 1000 pixels, stripped of metadata, and converted to WebP.
 Replace them before launch if the final projects provide their own imagery.
 
-`vorfahrt-fuer-den-igel.webp` is likewise a generated placeholder (an abstract
-hedge line with gaps standing for the hedgehog highways), not a photograph.
+`vorfahrt-fuer-den-igel-foto.webp` is a photograph of a European hedgehog in autumn
+leaves by Alexas_Fotos, used under the [Unsplash License](https://unsplash.com/license)
+(free use, attribution not required but documented here):
+[Unsplash photo OMCgkp1oZ3Q](https://unsplash.com/photos/OMCgkp1oZ3Q). Cropped
+to 8:5, resized to 1600 × 1000 pixels, stripped of metadata and converted to
+WebP. Replace it with the project's own imagery once available.
 
 The `*-before.webp` files are not separate photographs: they are desaturated,
 darkened and tinted versions of the corresponding project photo, generated with

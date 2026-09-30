@@ -50,6 +50,19 @@ Oder gesammelt:
 npm run check
 ```
 
+## Hauptseite und Deployment
+
+Die überarbeitete Website aus `startseite-redesign` ist die einzige Anwendung.
+Die regulären Routen sind `/de/`, `/it/` und `/en/`; `/` führt zu `/de/`.
+Der Pages-Workflow baut genau diese Anwendung aus `main`, ohne separaten
+Legacy-Build oder Branch-Checkout für eine Vorschau. Die Änderungen müssen
+zum Veröffentlichen nach `main` übernommen werden.
+
+Frühere `/neu/`-Links führen zu den entsprechenden regulären Seiten. Bei
+GitHub Pages erzeugt `npm run build:pages` dafür kleine HTML-Weiterleitungen,
+auch für lokalisierte Unterseiten; Suchparameter und Anker bleiben erhalten.
+Auf dem Next.js-Server übernehmen permanente Redirects dieselbe Aufgabe.
+
 ## Hero-Bild
 
 Der Hero auf der Startseite zeigt ein vollflächiges Foto mit einem belegten Zitat von Eurac Research oben links und dem Bild-Credit unten rechts. Bild, Zitat und Kennzahlen stehen in `src/config/hero.ts`, die Datei liegt in `public/assets/hero/`.
@@ -64,21 +77,19 @@ Details und Lizenzhinweise stehen in `public/assets/hero/CREDITS.md`.
 
 ## Haus-Grafiken
 
-Die Haustour zeichnet Möbel als einzelne Sprites auf `public/assets/house/houseempty.webp`. Die Sprites liegen in `public/assets/house/cutout/` und werden aus den Studio-Renderings in `assets-source/house/` erzeugt:
+Die Haustour verwendet die zusammenhängende Hausansicht unter
+`public/images/house-tour/full-house/`. Raumansichten und Objektmasken werden aus
+`assets-source/house/full-house/house-x4.webp` erzeugt. Die Platzierung steht in
+`src/features/house-tour/config/full-house-layout.json`.
 
 ```bash
-python3 scripts/build-house-cutouts.py
+node scripts/build-full-house-objects.mjs
+python3 scripts/refine-house-masks.py
+python3 scripts/build-sky-mask.py
 ```
 
-Das Skript entfernt den weißen Hintergrund, beschneidet die Motive und schreibt verkleinerte WebP-Dateien. Die Ausgangsbilder selbst sind deckende RGB-Renderings und dürfen nicht direkt über das Haus gelegt werden. Die Platzierung steht in `src/features/house-tour/config/house-overlays.ts`, angegeben in Prozent der quadratischen Zeichenfläche.
-
-Photovoltaik und Regentonne sind bereits in `houseempty.webp` gemalt und lassen sich deshalb nicht abhängig von der Antwort ein- oder ausblenden.
-
-### Warum das Quellmaterial nicht in `public/` liegt
-
-Next liefert alles unter `public/` unter einer öffentlichen URL aus und nimmt es in jeden Deploy mit. Die Roh-Renderings lagen dort und machten 51 MB aus, die keine Seite referenziert hat. Sie liegen jetzt unter `assets-source/`, das nicht ausgeliefert wird — Details in `assets-source/README.md`.
-
-Ausgeliefert werden nur die Ergebnisse: 22 Sprites (~376 KB) und das Hintergrundbild als WebP (86 KB statt 1,74 MB als PNG). `public/` ist dadurch von 55 MB auf rund 4 MB geschrumpft.
+Details stehen in `public/images/house-tour/full-house/README.md`. Rohbilder und
+frühere Gestaltungsreferenzen bleiben unter `assets-source/` und werden nicht ausgeliefert.
 
 ## Südtirol-Karte
 

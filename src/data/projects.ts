@@ -107,9 +107,9 @@ export const projects: Project[] = [
       "In fast jeder Ortschaft Südtirols finden wir natürliche und naturnahe Lebensräume, die seltene und gefährdete Lebensgemeinschaften vorweisen und daher als Biotop oder Naturdenkmal geschützt sind. Diese Gebiete befinden sich oft in unmittelbarer Nähe der Ortschaften und wurden meist durch geführte Beweidung von Menschen geschaffen und erhalten. Im Laufe der letzten Jahrzehnte wurde jedoch die Beweidung oft aufgegeben und diese wertvollen Lebensräume verbrachen und verbuschen. Ein vielblütiger Trockenrasen voller Insekten kann so in wenigen Jahren von Sträuchern und Bäumen überwachsen werden.",
     impact: [
       { value: "4", label: "Biotopflächen" },
-      { value: "30", label: "Schafe in der Herde" },
-      { value: "10", label: "Ziegen in der Herde" },
-      { value: "Trockenrasen", label: "zentraler Lebensraum" }
+      { value: "30 + 10", label: "Schafe und Ziegen in der Herde" },
+      { value: "Wiesen und Weiden", label: "artenreich, zentraler Lebensraum" },
+      { value: "Seltene Arten", label: "viele seltene Pflanzen- und Tierarten" }
     ],
     monitoring: {
       species: "Noch festzulegen",
@@ -235,9 +235,9 @@ const projectTranslations: Record<Exclude<Locale, "de">, Record<string, Partial<
       ],
       impact: [
         { value: "4", label: "superfici di biotopo" },
-        { value: "30", label: "pecore nel gregge" },
-        { value: "10", label: "capre nel gregge" },
-        { value: "Prati aridi", label: "habitat centrale" }
+        { value: "30 + 10", label: "pecore e capre nel gregge" },
+        { value: "Prati e pascoli", label: "ricchi di specie, habitat centrale" },
+        { value: "Specie rare", label: "molte specie rare di piante e animali" }
       ],
       supportedBy: "Ufficio Natura – Provincia autonoma di Bolzano",
       monitoring: {
@@ -348,9 +348,9 @@ const projectTranslations: Record<Exclude<Locale, "de">, Record<string, Partial<
       ],
       impact: [
         { value: "4", label: "biotope sites" },
-        { value: "30", label: "sheep in the flock" },
-        { value: "10", label: "goats in the flock" },
-        { value: "Dry grassland", label: "core habitat" }
+        { value: "30 + 10", label: "sheep and goats in the flock" },
+        { value: "Meadows and pastures", label: "species-rich, core habitat" },
+        { value: "Rare species", label: "many rare plant and animal species" }
       ],
       supportedBy: "Nature Office – Autonomous Province of Bolzano",
       monitoring: {

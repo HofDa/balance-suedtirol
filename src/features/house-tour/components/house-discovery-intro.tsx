@@ -9,8 +9,9 @@ import type { Locale } from "@/config/site";
 import { availableRooms } from "../config/rooms";
 import { getRoomProgress } from "../model/scoring";
 import type { RoomId } from "../model/types";
+import type { Localized } from "@/lib/i18n";
 
-const headlineByLocale: Record<Locale, string> = {
+const headlineByLocale: Localized<string> = {
   de: "Hinter jedem Gegenstand steckt eine Verbindung zur Natur.",
   it: "Ogni oggetto racchiude un legame con la natura.",
   en: "Every object has a connection to nature."
@@ -47,8 +48,8 @@ export function HouseDiscoveryIntro({
       : 0;
 
     return (
-      <section className="flex h-full min-h-0 flex-col justify-center overflow-y-auto bg-white px-4 py-6 sm:px-6 sm:py-8">
-        <div className="mx-auto w-full max-w-lg">
+      <section className="flex h-full min-h-0 flex-col overflow-y-auto bg-white px-4 py-6 sm:px-6 sm:py-8">
+        <div className="m-auto w-full max-w-lg">
           <Label size="dense">Dein Lebensraum-Check</Label>
           <h1 className="mt-2 text-2xl font-semibold leading-tight tracking-[-0.03em] sm:text-3xl">
             {resumeRoom ? "Weiter, wo du aufgehört hast." : "Alle Objekte erfasst."}
@@ -109,20 +110,20 @@ export function HouseDiscoveryIntro({
   }
 
   return (
-    <section className="flex h-full min-h-0 flex-col justify-center overflow-y-auto bg-white px-4 py-6 sm:px-6 sm:py-8">
-      <div className="mx-auto w-full max-w-lg">
+    <section className="flex h-full min-h-0 flex-col overflow-y-auto bg-white px-4 py-6 sm:px-6 sm:py-8">
+      <div className="m-auto w-full max-w-lg">
         <Label size="dense">Interaktiver Lebensraum-Check</Label>
         <h1 className="mt-2 text-2xl font-semibold leading-tight tracking-[-0.03em] sm:text-3xl">
           {headlineByLocale[locale]}
         </h1>
         <p className="mt-3 text-sm leading-6 text-[var(--color-muted)]">
-          Wähle direkt im Haus einen Raum. Darin führen dich alltägliche Gegenstände Schritt für Schritt zu ihren Verbindungen mit Lebensräumen und Biodiversität.
+          Sechs Räume, 18 kurze Fragen: Entdecke, wie dein Alltag mit der Natur verbunden ist. Beginne im Schlafzimmer oder wähle deinen eigenen Weg durch das Haus.
         </p>
 
         <ol className="mt-7 grid gap-3" aria-label="So funktioniert der Lebensraum-Check">
           {[
             { icon: MousePointer2, title: "Raum wählen", copy: "Klicke direkt auf einen Raum im Haus." },
-            { icon: Search, title: "Objekt entdecken", copy: "Der Raum tritt zurück, ein Objekt steht im Licht." },
+            { icon: Search, title: "Objekt entdecken", copy: "Wähle einen der illustrierten Gegenstände im Raum." },
             { icon: CheckCircle2, title: "Zusammenhang verstehen", copy: "Eine kurze Frage zeigt die ökologische Verbindung." }
           ].map(({ icon: Icon, title, copy }, index) => (
             <li key={title} className="flex items-center gap-3 rounded-[var(--radius-lg)] border border-[var(--color-line)] p-3.5">
@@ -149,7 +150,7 @@ export function HouseDiscoveryIntro({
               focusRingTool
             )}
           >
-            Im {availableRooms[0].title} beginnen
+            Im Schlafzimmer beginnen
             <ChevronRight className="size-4" aria-hidden />
           </button>
         )}

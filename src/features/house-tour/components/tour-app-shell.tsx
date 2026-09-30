@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useMemo } from "react";
+import { useCallback, useEffect, useMemo, useRef } from "react";
 import dynamic from "next/dynamic";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/utils";
@@ -14,6 +14,17 @@ import { TourToolbar } from "./tour-toolbar";
 import { RoomScene } from "../scenes/room-scenes";
 import type { Locale } from "@/config/site";
 import { getTourProgress } from "../model/scoring";
+import { CAMERA_SECONDS, type CameraTarget } from "../model/house-camera";
+
+/** Hinausfahren, Aufleuchten des fertigen Raums bis zum Höhepunkt, dann weiter. */
+const NEXT_ROOM_PAUSE_MS = 1700;
+
+/** Der Rahmen um das Hausbild: bleibt sichtbar, bis das Raumbild übergeblendet hat. */
+const houseFrameVariants = {
+  fromRoom: { opacity: 1 },
+  whole: { opacity: 1 },
+  toRoom: { opacity: 1, transition: { duration: CAMERA_SECONDS + 0.3 } }
+};
 
 const TourResults = dynamic(
   () => import("./tour-results").then((module) => module.TourResults),
@@ -23,6 +34,19 @@ const TourResults = dynamic(
 export function TourAppShell({ locale }: { locale: Locale }) {
   const { state, dispatch, scores, totals, completedRooms } = useHouseTour();
   const reduce = useReducedMotion();
+  // Die Kamera braucht den Raum, in den sie fährt oder aus dem sie kommt; beim
+  // Wechsel zur Hausübersicht ist `activeRoom` schon leer.
+  const lastRoomRef = useRef<RoomId | null>(null);
+  const previousViewRef = useRef(state.view);
+  if (state.activeRoom) lastRoomRef.current = state.activeRoom;
+  const cameraRoom = state.activeRoom ?? lastRoomRef.current;
+  const cameraTarget: CameraTarget = cameraRoom
+    ? { roomId: cameraRoom, questionIndex: state.activeQuestionIndex }
+    : null;
+  const enteringFromHouse = previousViewRef.current === "house";
+  useEffect(() => {
+    previousViewRef.current = state.view;
+  }, [state.view]);
   const room = getRoom(state.activeRoom);
   const question = room?.questions[state.activeQuestionIndex];
   const progress = useMemo(
@@ -39,16 +63,27 @@ export function TourAppShell({ locale }: { locale: Locale }) {
     [state.answers]
   );
 
+  // Eine geplante Fahrt zum nächsten Raum; jede eigene Navigation hebt sie auf.
+  const pendingFlight = useRef<number | null>(null);
+  const cancelFlight = () => {
+    if (pendingFlight.current !== null) window.clearTimeout(pendingFlight.current);
+    pendingFlight.current = null;
+  };
+  useEffect(() => cancelFlight, []);
+
   const openRoom = useCallback((roomId: RoomId, questionIndex?: number) => {
+    cancelFlight();
     const target = getRoom(roomId);
     if (questionIndex !== undefined) {
-      dispatch({ type: "OPEN_ROOM", roomId, questionIndex });
+      dispatch({ type: "OPEN_ROOM", roomId, questionIndex, open: true });
     } else {
       const firstOpen =
         target?.questions.findIndex(
           (item) => !state.answers[item.id] && !state.skippedQuestions[item.id]
-        ) ?? 0;
-      dispatch({ type: "OPEN_ROOM", roomId, questionIndex: Math.max(0, firstOpen) });
+        ) ?? -1;
+      // Ein fertiger Raum öffnet mit seinem Abschluss, jeder andere direkt in
+      // der ersten offenen Frage.
+      dispatch({ type: "OPEN_ROOM", roomId, questionIndex: Math.max(0, firstOpen), open: firstOpen >= 0 });
     }
   }, [dispatch, state.answers, state.skippedQuestions]);
 
@@ -115,15 +150,36 @@ export function TourAppShell({ locale }: { locale: Locale }) {
   const clearAdjustment = useCallback((questionId: string) => {
     dispatch({ type: "CLEAR_ADJUSTMENT", questionId });
   }, [dispatch]);
-  const openHouse = useCallback(() => dispatch({ type: "OPEN_HOUSE" }), [dispatch]);
-  const showResults = useCallback(() => dispatch({ type: "SHOW_RESULTS" }), [dispatch]);
+  const openHouse = useCallback(() => {
+    cancelFlight();
+    dispatch({ type: "OPEN_HOUSE" });
+  }, [dispatch]);
+  const showResults = useCallback(() => {
+    cancelFlight();
+    dispatch({ type: "SHOW_RESULTS" });
+  }, [dispatch]);
   const openCurrentObject = useCallback(
     () => dispatch({ type: "OPEN_OBJECT", questionIndex: state.activeQuestionIndex }),
     [dispatch, state.activeQuestionIndex]
   );
+  /**
+   * Der Weg zum nächsten Raum führt durchs Haus: hinausfahren, den fertigen
+   * Raum aufleuchten lassen, in den nächsten hineinfahren. So sieht man, was
+   * der abgeschlossene Raum am Haus verändert hat, und wo es weitergeht.
+   */
   const openNextRoom = useCallback(() => {
-    if (nextRoom) openRoom(nextRoom.id);
-  }, [nextRoom, openRoom]);
+    if (!nextRoom) return;
+    if (reduce) {
+      openRoom(nextRoom.id);
+      return;
+    }
+    dispatch({ type: "OPEN_HOUSE" });
+    const target = nextRoom.id;
+    pendingFlight.current = window.setTimeout(() => {
+      pendingFlight.current = null;
+      openRoom(target);
+    }, NEXT_ROOM_PAUSE_MS);
+  }, [dispatch, nextRoom, openRoom, reduce]);
 
   // Die Bilanz ist eine Lesefläche, keine Werkzeugansicht: sie verlässt das
   // Zweispaltenraster, statt mobil in einem 42dvh hohen Fenster zu scrollen.
@@ -162,7 +218,7 @@ export function TourAppShell({ locale }: { locale: Locale }) {
         // Nur noch eine Steuerungsebene über dem Inhalt statt Kopfzeile plus Raumleiste.
         "grid h-full min-h-0 min-w-0 grid-cols-[minmax(0,1fr)] overflow-hidden bg-[var(--color-paper)] md:grid-cols-[minmax(0,1.3fr)_minmax(23rem,1fr)] md:grid-rows-[3.5rem_minmax(0,1fr)]",
         state.view === "room"
-          ? "grid-rows-[3.5rem_minmax(0,0.9fr)_minmax(0,1.1fr)]"
+          ? "grid-rows-[3.5rem_minmax(7rem,min(34dvh,calc(100dvh_-_30rem)))_minmax(0,1fr)]"
           : "grid-rows-[3.5rem_minmax(10rem,42dvh)_minmax(0,1fr)]"
       )}
     >
@@ -179,18 +235,22 @@ export function TourAppShell({ locale }: { locale: Locale }) {
 
       {/* Mobil obere Hälfte, auf dem Desktop linke Spalte: die Szene */}
       <div className="relative flex h-full min-h-0 min-w-0 items-center justify-center overflow-hidden border-b border-[var(--color-line)] md:col-start-1 md:row-span-2 md:row-start-1 md:border-b-0 md:border-r">
-        <AnimatePresence mode="wait" initial={false}>
+        {/* Haus und Raum liegen während des Wechsels übereinander: die Kamera
+            fährt im Hausbild in den Raum, und das scharfe Raumbild blendet am
+            Ende der Fahrt darüber. Zurück läuft es umgekehrt. */}
+        <AnimatePresence initial={false} custom={cameraTarget}>
           {state.view === "house" ? (
             <motion.div
               key="house"
-              className="h-full"
-              initial={reduce ? false : { opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={reduce ? undefined : { opacity: 0.35, scale: 1.04 }}
-              transition={{ duration: reduce ? 0 : 0.32 }}
+              className="absolute inset-0 z-0"
+              custom={cameraTarget}
+              initial={reduce || !cameraRoom ? false : "fromRoom"}
+              animate="whole"
+              exit={reduce ? undefined : "toRoom"}
+              variants={houseFrameVariants}
             >
               <HouseOverview
-                onRoom={(id) => openRoom(id)}
+                onRoom={openRoom}
                 answers={state.answers}
                 skippedQuestions={state.skippedQuestions}
                 activeRoom={state.activeRoom}
@@ -199,14 +259,21 @@ export function TourAppShell({ locale }: { locale: Locale }) {
           ) : room ? (
             <motion.div
               key={room.id}
-              className="h-full"
-              initial={reduce ? false : { opacity: 0, scale: 0.96 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={reduce ? undefined : { opacity: 0 }}
-              transition={{ duration: reduce ? 0 : 0.3 }}
+              className="absolute inset-0 z-10"
+              initial={reduce ? false : { opacity: 0 }}
+              animate={{
+                opacity: 1,
+                transition: {
+                  duration: reduce ? 0 : 0.25,
+                  // Aus dem Haus kommend erst am Ende der Kamerafahrt überblenden.
+                  delay: reduce || !enteringFromHouse ? 0 : CAMERA_SECONDS * 0.75
+                }
+              }}
+              exit={reduce ? undefined : { opacity: 0, transition: { duration: 0.3 } }}
             >
               <RoomScene
                 roomId={room.id}
+                questionIndex={state.activeQuestionIndex}
                 answers={state.answers}
                 skippedQuestions={state.skippedQuestions}
                 onSelectObject={selectObject}
@@ -249,6 +316,7 @@ export function TourAppShell({ locale }: { locale: Locale }) {
             onContinue={continueToNextObject}
             onSkip={skipCurrentObject}
             onBack={goToPreviousObject}
+            onGoTo={selectObject}
             onOpenObject={openCurrentObject}
             onHouse={openHouse}
             onSelectRoom={(id) => openRoom(id)}

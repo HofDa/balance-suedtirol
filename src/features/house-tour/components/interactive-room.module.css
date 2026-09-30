@@ -1,0 +1,268 @@
+/* Spotlight highlight. The resting picture is the exact original; while an
+   object is active, hovered or focused, the scene dims and the object's cutout
+   (same pixels, soft alpha edge) shows through at full brightness. A soft edge
+   forgives a pixel of mask drift; a hard outline traced every step of it.
+   Hover and focus never translate or scale the furniture. */
+.dim {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: rgb(24 50 41 / 0.38);
+  opacity: 0;
+  transition: opacity 180ms ease;
+}
+.sprite {
+  opacity: 0;
+  transition: opacity 180ms ease;
+  filter: drop-shadow(0 0 1px rgb(255 255 255 / 0.75)) drop-shadow(0 0 4px rgb(255 255 255 / 0.25));
+}
+
+.scene:has(.object:hover, .object:focus-visible, .object[data-active="true"]) .dim {
+  opacity: 1;
+}
+.object[data-active="true"] .sprite,
+.object:hover .sprite,
+.object:focus-visible .sprite {
+  opacity: 1;
+}
+/* Pointing at another object moves the spotlight there. */
+.scene:has(.object:hover) .object[data-active="true"]:not(:hover) .sprite,
+.scene:has(.object:focus-visible) .object[data-active="true"]:not(:focus-visible) .sprite {
+  opacity: 0;
+}
+
+/* A new state (answered, skipped) pops the badge once. */
+.badge {
+  animation: badge-pop 360ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+@keyframes badge-pop {
+  from {
+    transform: scale(0.4);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* House overview: the rooms come alive with progress. The layer sits over the
+   room's pixels and filters what lies behind it; it never takes clicks. */
+.roomLight {
+  position: absolute;
+  pointer-events: none;
+  transition:
+    backdrop-filter 900ms ease 450ms,
+    -webkit-backdrop-filter 900ms ease 450ms,
+    box-shadow 900ms ease 450ms;
+}
+.roomLight[data-room-state="open"] {
+  -webkit-backdrop-filter: saturate(0.45) brightness(0.96);
+  backdrop-filter: saturate(0.45) brightness(0.96);
+}
+.roomLight[data-room-state="started"] {
+  -webkit-backdrop-filter: saturate(0.8);
+  backdrop-filter: saturate(0.8);
+}
+.roomLight[data-room-state="complete"] {
+  box-shadow: inset 0 0 28px 4px rgb(255 206 128 / 0.42);
+}
+/* Once, when a finished room is seen for the first time: the lights go on. */
+.roomLightUp {
+  animation: room-light-up 1400ms ease-out 500ms both;
+}
+@keyframes room-light-up {
+  0% {
+    -webkit-backdrop-filter: saturate(0.8) brightness(1);
+    backdrop-filter: saturate(0.8) brightness(1);
+    box-shadow: inset 0 0 28px 4px rgb(255 206 128 / 0);
+  }
+  45% {
+    -webkit-backdrop-filter: saturate(1.15) brightness(1.12);
+    backdrop-filter: saturate(1.15) brightness(1.12);
+    box-shadow: inset 0 0 60px 14px rgb(255 206 128 / 0.7);
+  }
+  100% {
+    -webkit-backdrop-filter: saturate(1) brightness(1);
+    backdrop-filter: saturate(1) brightness(1);
+    box-shadow: inset 0 0 28px 4px rgb(255 206 128 / 0.42);
+  }
+}
+
+/* Before the first answer the room labels breathe, so it is clear they are
+   tappable. A ring instead of scaling: the labels are centred by transform. */
+.invite {
+  animation: label-invite 2.8s ease-in-out infinite;
+}
+@keyframes label-invite {
+  0%,
+  60%,
+  100% {
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 0 0 0 rgb(40 87 68 / 0);
+  }
+  20% {
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 0 0 7px rgb(40 87 68 / 0.28);
+  }
+}
+
+/* Ambient life on the house overview. Percent translations on full-size
+   tracks keep every path proportional to the scene at any screen size. */
+.sky {
+  position: absolute;
+  inset: 0;
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+}
+.cloudTrack {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 9%;
+  will-change: transform;
+  animation: cloud-drift linear infinite;
+}
+.cloudSlow {
+  animation-duration: 140s;
+  animation-delay: -35s;
+}
+.cloudMid {
+  animation-duration: 110s;
+  animation-delay: -80s;
+}
+.cloudFast {
+  animation-duration: 90s;
+  animation-delay: -15s;
+}
+.cloud {
+  position: absolute;
+  inset: 0 auto 0 0;
+  opacity: 0.8;
+  background:
+    radial-gradient(closest-side at 28% 62%, rgb(255 255 255 / 0.9), rgb(255 255 255 / 0)),
+    radial-gradient(closest-side at 52% 44%, rgb(255 255 255 / 0.95), rgb(255 255 255 / 0)),
+    radial-gradient(closest-side at 74% 60%, rgb(255 255 255 / 0.85), rgb(255 255 255 / 0));
+}
+@keyframes cloud-drift {
+  from {
+    transform: translateX(-30%);
+  }
+  to {
+    transform: translateX(105%);
+  }
+}
+
+.butterflyPath {
+  position: absolute;
+  inset: 0;
+  will-change: transform;
+  animation: butterfly-path 34s ease-in-out infinite;
+}
+.butterflyBob {
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: block;
+  width: 3.4%;
+  animation: butterfly-bob 1.3s ease-in-out infinite alternate;
+}
+.butterfly {
+  display: block;
+  width: 100%;
+  overflow: visible;
+  filter: drop-shadow(0 1px 1px rgb(0 0 0 / 0.25));
+}
+.wingLeft,
+.wingRight {
+  transform-box: view-box;
+  transform-origin: 10px 8px;
+  animation: wing-flap 0.18s ease-in-out infinite alternate;
+}
+@keyframes wing-flap {
+  from {
+    transform: scaleX(1);
+  }
+  to {
+    transform: scaleX(0.25);
+  }
+}
+@keyframes butterfly-bob {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-40%);
+  }
+}
+/* Over the lawn and the flower beds in front of the house, where a white
+   wing reads against green; with a rest on the flowers. */
+@keyframes butterfly-path {
+  0% {
+    transform: translate(-5%, 86%);
+  }
+  12% {
+    transform: translate(9%, 81%);
+  }
+  24% {
+    transform: translate(21%, 87%);
+  }
+  32%,
+  42% {
+    transform: translate(28%, 84%);
+  }
+  54% {
+    transform: translate(39%, 74%);
+  }
+  64% {
+    transform: translate(51%, 70%);
+  }
+  74% {
+    transform: translate(60%, 79%);
+  }
+  86% {
+    transform: translate(44%, 89%);
+  }
+  100% {
+    transform: translate(-5%, 86%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sky,
+  .butterflyPath {
+    display: none;
+  }
+  .roomLight {
+    transition: none;
+  }
+  .roomLightUp,
+  .invite {
+    animation: none;
+  }
+  .dim,
+  .sprite {
+    transition: none;
+  }
+  .badge {
+    animation: none;
+  }
+}
+
+/* Mobile camera: the room fills the width and slides vertically so the active
+   object sits in the middle, clamped to the picture's edges. A room shorter
+   than the frame stays centred and does not move. */
+@media (max-width: 767.98px) {
+  .panFrame {
+    align-items: safe center;
+  }
+  .pan {
+    width: 100cqw !important;
+    flex-shrink: 0;
+    transform: translateY(min(0px, max(calc(100cqh - var(--scene-h)), calc(50cqh - var(--focus-y) * var(--scene-h)))));
+    transition: transform 320ms ease;
+  }
+}
+@media (max-width: 767.98px) and (prefers-reduced-motion: reduce) {
+  .pan {
+    transition: none;
+  }
+}

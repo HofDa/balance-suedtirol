@@ -49,6 +49,7 @@ export const projects: Project[] = [
       { src: "/projects/millander-au-bekassine.webp", alt: "Bekassine am Ufer", caption: "Bekassine auf Nahrungssuche am Ufer, einer der Zugvögel, die hier rasten.", credit: "Sepp Gamper" }
     ],
     supporters: 0,
+    supportedBy: "Amt für Natur – Autonome Provinz Bozen",
     whyItMatters:
       "Die Millander Au ist der Rest einer Auenlandschaft, die einst die gesamte Flusslandschaft von Brixen bis Albeins einnahm. 1988 wurde sie in letzter Sekunde vor der Nutzung als Bauschuttdeponie bewahrt und unter Schutz gestellt. Bei Schlechtwetterfronten über dem Alpenhauptkamm ist sie für Zugvögel eine überlebenswichtige Raststätte: Rund 130 Vogelarten werden hier jährlich nachgewiesen, 30 bis 35 davon brüten im Biotop. Die 2026 renaturierte Nachbarparzelle zeigt, wie schnell neue Lebensräume angenommen werden.",
     impact: [
@@ -73,25 +74,42 @@ export const projects: Project[] = [
     summary:
       "Die Biotope vor unserer Haustür entdecken und pflegen: Eine Schaf- und Ziegenherde hält Trockenrasen und Magerweiden im Eisacktal offen.",
     description:
-      "Wir bringen die Wichtigkeit dieser Lebensräume allen Alters- und Bevölkerungsgruppen näher und führen Pflegemaßnahmen zum Erhalt der Biodiversität in diesen Biotopen durch. Dabei arbeiten wir mit einem professionellen Hirten zusammen, der mit seiner Schaf- und Ziegenherde auf traditionelle Weise diese Lebensräume pflegt. Die Flächen liegen in Raas, Gufidaun und Klausen.",
+      "Wir bringen die Wichtigkeit dieser Lebensräume allen Alters- und Bevölkerungsgruppen näher und führen Pflegemaßnahmen zum Erhalt der Biodiversität in diesen Biotopen durch. Dabei arbeiten wir mit einem professionellen Hirten zusammen, der mit seiner Schaf- und Ziegenherde auf traditionelle Weise diese Lebensräume pflegt. Drei der vier Flächen liegen im Raier Moos, in Gufidaun und beim Kloster Säben; die vierte kommt noch dazu.",
     categoryIds: ["cultural-landscapes", "meadows-dry-grasslands"],
     status: "support-needed",
-    municipality: "Klausen",
+    municipality: "Klausen, Natz-Schabs",
     organization: "b*nature",
+    // Übergangslösung: b*nature hat seinen Rechtssitz vorerst bei b*coop (siehe Impressum).
+    organizationAddress: "c/o b*coop, Vintlerstraße 34, 39042 Brixen",
     location: { lat: 46.6497, lng: 11.5731 },
+    // Die vierte Fläche wird ergänzt, sobald sie feststeht.
+    sites: [
+      { name: "Raier Moos", municipality: "Natz-Schabs" },
+      { name: "Gufidaun", municipality: "Klausen" },
+      { name: "Kloster Säben", municipality: "Klausen" }
+    ],
     image: "/projects/meine-gemeinde-meine-natur.webp",
+    gallery: [
+      { src: "/projects/meine-gemeinde-meine-natur-herde-hang.webp", alt: "Hirte mit Hütehund und einer Herde aus Ziegen und Schafen an einem steilen Wiesenhang", caption: "Der Hirte, sein Hütehund und die Herde aus Schafen und Ziegen an einem steilen Hang." },
+      { src: "/projects/meine-gemeinde-meine-natur-ziegen-weg.webp", alt: "Ziegen auf einem Weg zwischen Holzzäunen, dahinter der Hirte und die Berge", caption: "Unterwegs mit der Herde: Ziegen auf einem Weg zwischen Holzzäunen." },
+      { src: "/projects/meine-gemeinde-meine-natur-herde-winter.webp", alt: "Ziegen und Schafe auf einem Weg neben gestapelten Baumstämmen, am Rand liegt Schnee", caption: "Auch im Winter ist die Herde unterwegs." },
+      { src: "/projects/meine-gemeinde-meine-natur-hirte-schnee.webp", alt: "Der Hirte mit seinem Hütehund vor der Herde auf einer verschneiten Fläche", caption: "Der Hirte mit Hütehund und Herde im Schnee." },
+      { src: "/projects/meine-gemeinde-meine-natur-mahd.webp", alt: "Blick über ein Mähgerät auf eine hochgewachsene Fläche, im Hintergrund arbeitet eine weitere Person", caption: "Pflegeeinsatz im September 2026: Die hochgewachsene Fläche wird gemäht." },
+      { src: "/projects/meine-gemeinde-meine-natur-rechen.webp", alt: "Eine Person recht auf einer gemähten Fläche das Schnittgut zusammen", caption: "Das Schnittgut wird zusammengerecht." },
+      { src: "/projects/meine-gemeinde-meine-natur-maehgut.webp", alt: "Gemähte Wiese mit einem Haufen Schnittgut, dahinter Wald und eine Stromleitung", caption: "Nach der Mahd wird das Schnittgut auf Haufen gesammelt." },
+      { src: "/projects/meine-gemeinde-meine-natur-gemaehte-flaeche.webp", alt: "Gemähte Fläche mit Reihen und Haufen aus Schnittgut vor Gehölzen", caption: "Die gemähte Fläche am Ende des Einsatztags." },
+      { src: "/projects/meine-gemeinde-meine-natur-haufen-waldrand.webp", alt: "Haufen aus Schnittgut am Waldrand", caption: "Schnittgut-Haufen am Rand der Fläche." },
+      { src: "/projects/meine-gemeinde-meine-natur-haufen-baeume.webp", alt: "Schnittgut unter Bäumen aufgeschichtet", caption: "Das Schnittgut liegt aufgeschichtet unter den Bäumen." }
+    ],
     supporters: 0,
-    mainSponsor: {
-      name: "Amt für Natur – Autonome Provinz Bozen",
-      contribution: "Im Projektdokument als Förderpartner genannt."
-    },
+    supportedBy: "Amt für Natur – Autonome Provinz Bozen",
     whyItMatters:
       "In fast jeder Ortschaft Südtirols finden wir natürliche und naturnahe Lebensräume, die seltene und gefährdete Lebensgemeinschaften vorweisen und daher als Biotop oder Naturdenkmal geschützt sind. Diese Gebiete befinden sich oft in unmittelbarer Nähe der Ortschaften und wurden meist durch geführte Beweidung von Menschen geschaffen und erhalten. Im Laufe der letzten Jahrzehnte wurde jedoch die Beweidung oft aufgegeben und diese wertvollen Lebensräume verbrachen und verbuschen. Ein vielblütiger Trockenrasen voller Insekten kann so in wenigen Jahren von Sträuchern und Bäumen überwachsen werden.",
     impact: [
       { value: "4", label: "Biotopflächen" },
-      { value: "30", label: "Schafe in der Herde" },
-      { value: "10", label: "Ziegen in der Herde" },
-      { value: "Trockenrasen", label: "zentraler Lebensraum" }
+      { value: "30 + 10", label: "Schafe und Ziegen in der Herde" },
+      { value: "Wiesen und Weiden", label: "artenreich, zentraler Lebensraum" },
+      { value: "Seltene Arten", label: "viele seltene Pflanzen- und Tierarten" }
     ],
     monitoring: {
       species: "Noch festzulegen",
@@ -113,13 +131,12 @@ export const projects: Project[] = [
     status: "support-needed",
     municipality: "Südtirolweit",
     organization: "b*nature",
+    // Übergangslösung: b*nature hat seinen Rechtssitz vorerst bei b*coop (siehe Impressum).
+    organizationAddress: "c/o b*coop, Vintlerstraße 34, 39042 Brixen",
     location: { lat: 46.68, lng: 11.42 },
-    image: "/projects/vorfahrt-fuer-den-igel.webp",
+    image: "/projects/vorfahrt-fuer-den-igel-foto.webp",
     supporters: 0,
-    mainSponsor: {
-      name: "Amt für Natur – Autonome Provinz Bozen",
-      contribution: "Im Projektdokument als Förderpartner genannt."
-    },
+    supportedBy: "Amt für Natur – Autonome Provinz Bozen",
     whyItMatters:
       "Der Igel ist ein sehr beliebtes Tier, das jedoch laut subjektiver Wahrnehmung immer seltener in Südtirol zu sichten ist. Es liegen bislang aber keine konkreten Daten zu den heimischen Igel-Beständen vor. Deshalb möchten wir gezielte, standardisierte Erhebungen zum aktuellen Bestand des Igels durchführen und dabei ein spannendes Rätsel lösen: Gibt es bei uns in Südtirol beide europäische Igelarten? Denn neben dem in Europa weit verbreiteten Braunbrustigel (Erinaceus europaeus) ist in Südtirol auch der Nördliche Weißbrustigel (Erinaceus roumanicus) zu erwarten, welcher in den östlichen Nachbarländern und -regionen nachgewiesen wurde.",
     impact: [
@@ -136,10 +153,6 @@ export const projects: Project[] = [
     }
   }
 ];
-
-export function getProject(slug: string) {
-  return projects.find((project) => project.slug === slug);
-}
 
 const projectTranslations: Record<Exclude<Locale, "de">, Record<string, Partial<Project>>> = {
   it: {
@@ -188,6 +201,7 @@ const projectTranslations: Record<Exclude<Locale, "de">, Record<string, Partial<
         { value: "ca. 130", label: "specie di uccelli all’anno" },
         { value: "30–35", label: "specie nidificanti" }
       ],
+      supportedBy: "Ufficio Natura – Provincia autonoma di Bolzano",
       monitoring: {
         species: "Uccelli migratori e nidificanti; ne beneficiano anche anfibi, libellule e altri insetti",
         surveys: "Osservazione ornitologica continua di AuRaum, hyla e AVK Südtirol",
@@ -197,20 +211,35 @@ const projectTranslations: Record<Exclude<Locale, "de">, Record<string, Partial<
     },
     "meine-gemeinde-meine-natur": {
       title: "Il mio comune, la mia natura",
+      organizationAddress: "c/o b*coop, Via Vintler 34, 39042 Bressanone",
+      gallery: [
+        { src: "/projects/meine-gemeinde-meine-natur-herde-hang.webp", alt: "Pastore con cane da pastore e un gregge di capre e pecore su un ripido pendio erboso", caption: "Il pastore, il suo cane e il gregge di pecore e capre su un pendio ripido." },
+        { src: "/projects/meine-gemeinde-meine-natur-ziegen-weg.webp", alt: "Capre su un sentiero tra recinzioni di legno, dietro il pastore e le montagne", caption: "In cammino con il gregge: capre su un sentiero tra recinzioni di legno." },
+        { src: "/projects/meine-gemeinde-meine-natur-herde-winter.webp", alt: "Capre e pecore su una strada accanto a cataste di tronchi, ai lati c’è neve", caption: "Il gregge è in cammino anche d’inverno." },
+        { src: "/projects/meine-gemeinde-meine-natur-hirte-schnee.webp", alt: "Il pastore con il suo cane davanti al gregge su un terreno innevato", caption: "Il pastore con il cane e il gregge nella neve." },
+        { src: "/projects/meine-gemeinde-meine-natur-mahd.webp", alt: "Vista oltre una falciatrice su un’area con erba alta, sullo sfondo lavora un’altra persona", caption: "Intervento di cura a settembre 2026: l’area con erba alta viene falciata." },
+        { src: "/projects/meine-gemeinde-meine-natur-rechen.webp", alt: "Una persona rastrella l’erba tagliata su un’area falciata", caption: "L’erba tagliata viene raccolta con il rastrello." },
+        { src: "/projects/meine-gemeinde-meine-natur-maehgut.webp", alt: "Prato falciato con un cumulo di erba tagliata, dietro bosco e una linea elettrica", caption: "Dopo lo sfalcio l’erba tagliata viene raccolta in cumuli." },
+        { src: "/projects/meine-gemeinde-meine-natur-gemaehte-flaeche.webp", alt: "Area falciata con file e cumuli di erba tagliata davanti a boschetti", caption: "L’area falciata alla fine della giornata di lavoro." },
+        { src: "/projects/meine-gemeinde-meine-natur-haufen-waldrand.webp", alt: "Cumulo di erba tagliata al margine del bosco", caption: "Cumulo di erba tagliata al margine dell’area." },
+        { src: "/projects/meine-gemeinde-meine-natur-haufen-baeume.webp", alt: "Erba tagliata accatastata sotto gli alberi", caption: "L’erba tagliata accatastata sotto gli alberi." }
+      ],
       summary: "Scoprire e curare i biotopi dietro casa: un gregge di pecore e capre mantiene aperti prati aridi e pascoli magri in Valle Isarco.",
-      description: "Vogliamo far conoscere l’importanza di questi habitat a ogni fascia d’età e a tutta la popolazione, realizzando interventi di cura per conservare la biodiversità di questi biotopi. Collaboriamo con un pastore professionista che con il suo gregge di pecore e capre cura questi habitat secondo la tradizione. Le superfici si trovano a Rasa, Gudon e Chiusa.",
+      description: "Vogliamo far conoscere l’importanza di questi habitat a ogni fascia d’età e a tutta la popolazione, realizzando interventi di cura per conservare la biodiversità di questi biotopi. Collaboriamo con un pastore professionista che con il suo gregge di pecore e capre cura questi habitat secondo la tradizione. Tre delle quattro superfici si trovano al Raier Moos presso Rasa, a Gudon e al Monastero di Sabiona; la quarta si aggiungerà in seguito.",
       whyItMatters: "In quasi ogni località dell’Alto Adige si trovano habitat naturali e seminaturali che ospitano comunità rare e minacciate e sono perciò tutelati come biotopo o monumento naturale. Queste aree si trovano spesso nelle immediate vicinanze dei paesi e sono state create e mantenute dall’uomo, per lo più attraverso il pascolo guidato. Negli ultimi decenni il pascolo è però stato spesso abbandonato e questi habitat preziosi si stanno imboschendo. Un prato arido ricco di fiori e di insetti può così essere invaso da arbusti e alberi nel giro di pochi anni.",
-      municipality: "Chiusa",
+      municipality: "Chiusa, Naz-Sciaves",
+      sites: [
+        { name: "Raier Moos (Rasa)", municipality: "Naz-Sciaves" },
+        { name: "Gudon", municipality: "Chiusa" },
+        { name: "Monastero di Sabiona", municipality: "Chiusa" }
+      ],
       impact: [
         { value: "4", label: "superfici di biotopo" },
-        { value: "30", label: "pecore nel gregge" },
-        { value: "10", label: "capre nel gregge" },
-        { value: "Prati aridi", label: "habitat centrale" }
+        { value: "30 + 10", label: "pecore e capre nel gregge" },
+        { value: "Prati e pascoli", label: "ricchi di specie, habitat centrale" },
+        { value: "Specie rare", label: "molte specie rare di piante e animali" }
       ],
-      mainSponsor: {
-        name: "Ufficio Natura – Provincia autonoma di Bolzano",
-        contribution: "Indicato come partner finanziatore nel documento di progetto."
-      },
+      supportedBy: "Ufficio Natura – Provincia autonoma di Bolzano",
       monitoring: {
         species: "Da definire",
         surveys: "Da definire",
@@ -220,6 +249,7 @@ const projectTranslations: Record<Exclude<Locale, "de">, Record<string, Partial<
     },
     "vorfahrt-fuer-den-igel": {
       title: "Precedenza al riccio",
+      organizationAddress: "c/o b*coop, Via Vintler 34, 39042 Bressanone",
       summary: "Un progetto per la tutela e lo studio del nostro vicino selvatico: rilievi sulla popolazione, una campagna di sensibilizzazione e «strade dei ricci» che collegano i giardini.",
       description: "Stiamo verificando se il riccio orientale sia presente anche in Alto Adige e dove passi l’eventuale limite del suo areale. Avviamo inoltre una campagna di informazione e sensibilizzazione sul riccio e sul suo habitat, usando i media e gli strumenti di comunicazione più diversi e molte idee creative per raggiungere il maggior numero di persone: attività di citizen science, media analogici e digitali, laboratori e molto altro. Infine realizziamo misure concrete per proteggere e migliorare il suo habitat: le cosiddette «strade dei ricci», che permettono all’animale di muoversi liberamente tra i giardini e gli altri habitat. Con il riccio come specie ombrello tuteliamo e favoriamo anche molte altre specie vegetali e animali.",
       whyItMatters: "Il riccio è un animale molto amato che, secondo la percezione comune, si avvista sempre più raramente in Alto Adige. Finora però non esistono dati concreti sulle popolazioni locali. Per questo vogliamo condurre rilievi mirati e standardizzati sulla consistenza attuale del riccio e risolvere al tempo stesso un enigma affascinante: in Alto Adige sono presenti entrambe le specie europee di riccio? Accanto al riccio europeo occidentale (Erinaceus europaeus), diffuso in tutta Europa, in Alto Adige è infatti atteso anche il riccio orientale (Erinaceus roumanicus), documentato nei paesi e nelle regioni confinanti a est.",
@@ -230,10 +260,7 @@ const projectTranslations: Record<Exclude<Locale, "de">, Record<string, Partial<
         { value: "Specie ombrello", label: "il riccio rappresenta molte altre specie" },
         { value: "Tutto l’Alto Adige", label: "area di rilevamento" }
       ],
-      mainSponsor: {
-        name: "Ufficio Natura – Provincia autonoma di Bolzano",
-        contribution: "Indicato come partner finanziatore nel documento di progetto."
-      },
+      supportedBy: "Ufficio Natura – Provincia autonoma di Bolzano",
       monitoring: {
         species: "Riccio europeo occidentale e riccio orientale; ne beneficiano anche micromammiferi, insetti e lombrichi",
         surveys: "Rilievi standardizzati della popolazione, integrati da segnalazioni di citizen science",
@@ -288,6 +315,7 @@ const projectTranslations: Record<Exclude<Locale, "de">, Record<string, Partial<
         { value: "approx. 130", label: "bird species per year" },
         { value: "30–35", label: "breeding species" }
       ],
+      supportedBy: "Nature Office – Autonomous Province of Bolzano",
       monitoring: {
         species: "Migrating and breeding birds; amphibians, dragonflies and other insects also benefit",
         surveys: "Ongoing bird monitoring by AuRaum, hyla and AVK Südtirol",
@@ -297,20 +325,34 @@ const projectTranslations: Record<Exclude<Locale, "de">, Record<string, Partial<
     },
     "meine-gemeinde-meine-natur": {
       title: "My municipality, my nature",
+      gallery: [
+        { src: "/projects/meine-gemeinde-meine-natur-herde-hang.webp", alt: "Shepherd with herding dog and a flock of goats and sheep on a steep grassy slope", caption: "The shepherd, his herding dog and the flock of sheep and goats on a steep slope." },
+        { src: "/projects/meine-gemeinde-meine-natur-ziegen-weg.webp", alt: "Goats on a path between wooden fences, with the shepherd and mountains behind", caption: "On the move with the flock: goats on a path between wooden fences." },
+        { src: "/projects/meine-gemeinde-meine-natur-herde-winter.webp", alt: "Goats and sheep on a track beside stacked logs, with snow at the edges", caption: "The flock is on the move in winter too." },
+        { src: "/projects/meine-gemeinde-meine-natur-hirte-schnee.webp", alt: "The shepherd with his herding dog in front of the flock on snow-covered ground", caption: "The shepherd with dog and flock in the snow." },
+        { src: "/projects/meine-gemeinde-meine-natur-mahd.webp", alt: "View over a mower onto a patch of tall vegetation, with another person working in the background", caption: "Management work in September 2026: the overgrown patch is mown." },
+        { src: "/projects/meine-gemeinde-meine-natur-rechen.webp", alt: "A person raking cut vegetation on a mown area", caption: "The cuttings are raked together." },
+        { src: "/projects/meine-gemeinde-meine-natur-maehgut.webp", alt: "Mown meadow with a pile of cuttings, woodland and a power line behind", caption: "After mowing, the cuttings are gathered into piles." },
+        { src: "/projects/meine-gemeinde-meine-natur-gemaehte-flaeche.webp", alt: "Mown area with rows and piles of cuttings in front of trees and shrubs", caption: "The mown area at the end of the work day." },
+        { src: "/projects/meine-gemeinde-meine-natur-haufen-waldrand.webp", alt: "Pile of cuttings at the edge of the woods", caption: "A pile of cuttings at the edge of the site." },
+        { src: "/projects/meine-gemeinde-meine-natur-haufen-baeume.webp", alt: "Cuttings stacked beneath trees", caption: "The cuttings stacked beneath the trees." }
+      ],
       summary: "Discovering and caring for the biotopes on our doorstep: a flock of sheep and goats keeps dry grasslands and poor pastures in the Eisack Valley open.",
-      description: "We want to bring the importance of these habitats home to every age group and part of the population, and carry out management work that preserves the biodiversity of these biotopes. We work with a professional shepherd who tends these habitats in the traditional way with his flock of sheep and goats. The sites lie in Raas, Gufidaun and Klausen.",
+      description: "We want to bring the importance of these habitats home to every age group and part of the population, and carry out management work that preserves the biodiversity of these biotopes. We work with a professional shepherd who tends these habitats in the traditional way with his flock of sheep and goats. Three of the four sites are the Raier Moos, Gufidaun and Säben Abbey; the fourth will be added later.",
       whyItMatters: "In almost every village in South Tyrol there are natural and semi-natural habitats that harbour rare and endangered communities and are therefore protected as biotopes or natural monuments. These areas often lie right next to the settlements and were mostly created and maintained by people through managed grazing. Over recent decades grazing has frequently been abandoned, and these valuable habitats are turning to scrub. A flower-rich dry grassland full of insects can be overgrown by shrubs and trees within a few years.",
-      municipality: "Klausen",
+      municipality: "Klausen, Natz-Schabs",
+      sites: [
+        { name: "Raier Moos", municipality: "Natz-Schabs" },
+        { name: "Gufidaun", municipality: "Klausen" },
+        { name: "Säben Abbey", municipality: "Klausen" }
+      ],
       impact: [
         { value: "4", label: "biotope sites" },
-        { value: "30", label: "sheep in the flock" },
-        { value: "10", label: "goats in the flock" },
-        { value: "Dry grassland", label: "core habitat" }
+        { value: "30 + 10", label: "sheep and goats in the flock" },
+        { value: "Meadows and pastures", label: "species-rich, core habitat" },
+        { value: "Rare species", label: "many rare plant and animal species" }
       ],
-      mainSponsor: {
-        name: "Nature Office – Autonomous Province of Bolzano",
-        contribution: "Named as funding partner in the project document."
-      },
+      supportedBy: "Nature Office – Autonomous Province of Bolzano",
       monitoring: {
         species: "To be defined",
         surveys: "To be defined",
@@ -330,10 +372,7 @@ const projectTranslations: Record<Exclude<Locale, "de">, Record<string, Partial<
         { value: "Umbrella species", label: "the hedgehog stands for many others" },
         { value: "South Tyrol-wide", label: "survey area" }
       ],
-      mainSponsor: {
-        name: "Nature Office – Autonomous Province of Bolzano",
-        contribution: "Named as funding partner in the project document."
-      },
+      supportedBy: "Nature Office – Autonomous Province of Bolzano",
       monitoring: {
         species: "European and northern white-breasted hedgehog; small mammals, insects and earthworms benefit alongside them",
         surveys: "Standardised population surveys, complemented by citizen science records",

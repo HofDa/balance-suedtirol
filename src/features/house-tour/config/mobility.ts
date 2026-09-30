@@ -22,7 +22,7 @@ export const mobilityRoom: TourRoom = {
         min: 0,
         max: 200,
         step: 5,
-        defaults: { car: 60, mixed: 50, active: 45 },
+        defaults: { car: 60, mixed: 50, active: 45, "short-average": 50 },
         hint: "Einkauf, Schule, Arbeit, Besuche — alles unter fünf Kilometern."
       },
       options: [
@@ -43,6 +43,19 @@ export const mobilityRoom: TourRoom = {
           label: "Fast immer zu Fuß, mit Rad oder E-Bike",
           params: { co2PerKm: 0.005, kwhPerKm: 0.01 },
           impact: { biodiversity: 3, carbon: 9, resources: 5 },
+        },
+        {
+          id: "short-average",
+          label: "Weiß ich nicht",
+          // Wege bis 2 km (27 % aller Wege) und 2–5 km (26 %, mit der Verteilung
+          // für 2–10 km): 40 % Auto oder Motorrad, 12 % öffentlich, 47 % zu Fuß
+          // oder Rad. Öffentlich 0,05 kg und 0,18 kWh je Personenkilometer.
+          params: { co2PerKm: 0.105, kwhPerKm: 0.33 },
+          regionalAverage: {
+            source: "ASTAT, Lokale Mobilität: Wege 2024 (astat info 51/2024)",
+            basis: "In Südtirol werden Wege bis 2 km zu 21 % mit Auto oder Motorrad zurückgelegt, Wege von 2 bis 10 km zu 60 %. Wegeanteile sind als Kilometeranteile angesetzt; die Wochenkilometer bleiben die Vorgabe des Rechners."
+          },
+          impact: { carbon: 0, resources: 0 },
         }
       ]
     },

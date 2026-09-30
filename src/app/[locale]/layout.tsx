@@ -3,16 +3,17 @@ import { notFound } from "next/navigation";
 import { Footer } from "@/components/layout/footer";
 import { Header } from "@/components/layout/header";
 import { fontVariables } from "@/config/fonts";
-import { isLocale, locales, type Locale } from "@/config/site";
+import { isLocale, locales } from "@/config/site";
 import { getTranslations } from "@/config/translations";
 import { withBasePath } from "@/lib/public-path";
 import "../globals.css";
+import type { Localized } from "@/lib/i18n";
 
 export function generateStaticParams() {
   return locales.map((locale) => ({ locale }));
 }
 
-const metadataByLocale: Record<Locale, { title: string; description: string }> = {
+const metadataByLocale: Localized<{ title: string; description: string }> = {
   de: {
     title: "b*alance – Biodiversitätsplattform Südtirol",
     description: "Biodiversität verstehen, lokale Projekte entdecken und gemeinsam Wirkung entfalten."

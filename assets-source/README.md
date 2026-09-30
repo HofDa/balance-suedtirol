@@ -14,28 +14,12 @@ geschrumpft.
 27 Studio-Renderings der Einrichtungsgegenstände als PNG, dazu `houseempty.png`,
 `housefull1.png`, `housefull2.png` und `asset_positions.json`.
 
-Aus diesen Dateien erzeugt `scripts/build-house-cutouts.py` die freigestellten
-Sprites in `public/assets/house/cutout/` (22 WebP, zusammen ~376 KB):
+Diese Studio-Renderings gehören zur abgelösten Haustour und bleiben als
+Gestaltungsreferenz erhalten. Die zugehörigen Sprites und der alte Generator
+wurden entfernt; sie werden nicht mehr ausgeliefert.
 
-```bash
-python3 scripts/build-house-cutouts.py
-```
-
-Das Skript liest ausschließlich aus diesem Verzeichnis und schreibt
-ausschließlich nach `public/`. Die Renderings sind deckende RGB-Bilder auf
-nahezu weißem Grund und dürfen nicht direkt über das Haus gelegt werden.
-
-`houseempty.png` ist die Vorlage für `public/assets/house/houseempty.webp`
-(1,74 MB → 86 KB). Bei Änderungen neu erzeugen:
-
-```python
-from PIL import Image
-Image.open("assets-source/house/houseempty.png").save(
-    "public/assets/house/houseempty.webp", quality=90, method=6)
-```
-
-`housefull1.png` und `housefull2.png` werden von nichts referenziert. Sie liegen
-als Gestaltungsreferenz bei.
+Die aktive Haustour verwendet `house/full-house/`. Quellen, Masken und
+Rebuild-Anleitung stehen in `house/full-house/README.md`.
 
 ## `house/processed/`
 

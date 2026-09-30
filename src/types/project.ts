@@ -23,8 +23,15 @@ export type Project = {
   status: ProjectStatus;
   municipality: string;
   organization: string;
+  /** Rechtssitz des Projektträgers, auf der Projektseite unter dem Namen. */
   organizationAddress?: string;
   location: { lat: number; lng: number };
+  /**
+   * Einzelne Flächen, wenn ein Projekt an mehreren Orten arbeitet. Die
+   * Projektseite listet sie statt der einen Gemeinde; `municipality` bleibt
+   * die Kurzfassung für Karte, Kachel und Suche.
+   */
+  sites?: Array<{ name: string; municipality: string }>;
   image: string;
   /**
    * Fotopaar vom selben Standpunkt, vor und nach der Maßnahme. Fehlt es,
@@ -61,7 +68,14 @@ export type Project = {
     reporting: string;
     summary: string;
   };
+  /** Hauptinvestor: nur private Geldgeber, nie die öffentliche Hand. */
   mainSponsor?: Sponsor;
+  /**
+   * Öffentliche Stelle, die das Projekt unterstützt (etwa das Amt für Natur).
+   * Steht bewusst nicht als Hauptinvestor auf Kacheln, sondern nur ganz unten
+   * auf der Projektseite.
+   */
+  supportedBy?: string;
   otherSponsors?: Sponsor[];
 };
 

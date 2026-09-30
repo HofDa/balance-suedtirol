@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { ArrowRight, ArrowUpRight, Leaf, Sprout } from "lucide-react";
+import { ArrowUpRight, Leaf, Sprout } from "lucide-react";
 import { Container } from "@/components/ui/container";
 import { Label } from "@/components/ui/label";
 import { Surface } from "@/components/ui/surface";
@@ -10,6 +10,9 @@ import { isLocale, locales } from "@/config/site";
 import { getTranslations } from "@/config/translations";
 import { focusRing, focusRingOnDark } from "@/components/ui/focus";
 import { withBasePath } from "@/lib/public-path";
+import { textDisplay, textHeadline, textLead, textTitleTight } from "@/components/ui/typography";
+import { cn } from "@/lib/utils";
+import { ArrowIcon } from "@/components/ui/arrow-icon";
 
 const route = "/ueber-uns";
 
@@ -47,10 +50,10 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
         <Container>
           <div className="max-w-3xl">
             <Label size="section">{t.eyebrow}</Label>
-            <h1 className="mt-4 font-display text-balance text-[length:var(--text-display)] leading-[var(--leading-display)]">
+            <h1 className={cn(textDisplay, "mt-4")}>
               {t.title}
             </h1>
-            <p className="mt-6 max-w-[58ch] text-[length:var(--text-body-lg)] leading-[var(--leading-body)] text-[var(--color-muted)]">
+            <p className={cn(textLead, "mt-6")}>
               {t.lead}
             </p>
           </div>
@@ -60,7 +63,7 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
             <div className="grid gap-8 lg:grid-cols-[0.8fr_1.2fr] lg:gap-12">
               <div>
                 <Label size="block">{t.teamEyebrow}</Label>
-                <h2 className="mt-4 font-display text-balance text-[length:var(--text-headline)] leading-[var(--leading-headline)]">
+                <h2 className={cn(textHeadline, "mt-4")}>
                   {t.teamTitle}
                 </h2>
               </div>
@@ -88,7 +91,7 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
                   <div className="flex size-11 items-center justify-center rounded-full bg-[var(--color-sage)] text-[var(--color-forest)]">
                     <Icon className="size-5" aria-hidden />
                   </div>
-                  <h3 className="mt-5 text-[length:var(--text-title)] font-semibold leading-[var(--leading-title)] tracking-[-0.02em]">
+                  <h3 className={cn(textTitleTight, "mt-5")}>
                     {org.name}
                   </h3>
                   <p className="mt-1 text-sm font-semibold text-[var(--color-forest)]">{org.role}</p>
@@ -115,7 +118,7 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
             {t.principles.map(([title, copy], index) => (
               <Surface key={title} as="li" level="sheet">
                 <p className="text-sm font-bold tabular-nums text-[var(--color-forest)]">0{index + 1}</p>
-                <h3 className="mt-5 text-[length:var(--text-title)] font-semibold leading-[var(--leading-title)] tracking-[-0.02em]">
+                <h3 className={cn(textTitleTight, "mt-5")}>
                   {title}
                 </h3>
                 <p className="mt-3 max-w-[58ch] leading-7 text-[var(--color-muted)]">{copy}</p>
@@ -129,7 +132,7 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
       <section className="pb-14 sm:pb-20">
         <Container>
           <div className="overflow-hidden rounded-[var(--radius-xl)] bg-[var(--color-ink)] px-6 py-12 text-white sm:px-12 sm:py-16 lg:px-16">
-            <h2 className="max-w-3xl font-display text-balance text-[length:var(--text-headline)] leading-[var(--leading-headline)]">
+            <h2 className={cn(textHeadline, "max-w-3xl")}>
               {t.ctaTitle}
             </h2>
             <p className="mt-3 max-w-xl text-sm leading-6 text-white/70 sm:text-base">{t.ctaCopy}</p>
@@ -139,7 +142,7 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
                 className={`group inline-flex min-h-12 items-center gap-2 rounded-[var(--radius-md)] bg-white px-5 text-sm font-bold text-[var(--color-ink)] transition-colors hover:bg-[var(--color-paper)] ${focusRingOnDark}`}
               >
                 {t.ctaProjects}
-                <ArrowRight className="size-4 transition-transform duration-300 group-hover:translate-x-1" aria-hidden />
+                <ArrowIcon />
               </Link>
               <Link
                 href={`/${locale}/projekt-einreichen`}

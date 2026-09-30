@@ -10,7 +10,6 @@ export const siteConfig = {
   navigation: [
     { label: "Was ist b*alance", href: "/was-ist-balance" },
     { label: "Projekte", href: "/projekte" },
-    { label: "Biodiversität in Südtirol", href: "/biodiversitaet-in-suedtirol" },
     { label: "CO₂-Kompensation?", href: "/co2-und-biodiversitaet" },
     { label: "Über uns", href: "/ueber-uns" }
   ]

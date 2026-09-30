@@ -7,11 +7,14 @@ import { HeroBackdrop } from "./hero-backdrop";
 import { HeroQuotes } from "./hero-quotes";
 import { Label } from "@/components/ui/label";
 import { focusRingOnDark } from "@/components/ui/focus";
+import { textDisplay } from "@/components/ui/typography";
+import { cn } from "@/lib/utils";
 
 /**
- * Der Hero beantwortet nur vier Fragen: Worum geht es, was muss ich tun,
- * was erhalte ich und wie belastbar ist das Ergebnis? Wissenschaftliches Zitat,
- * Prozessgrafik und Kennzahlen stehen bewusst nicht in dieser ersten Ebene.
+ * Der Hero trägt eine Leitzeile, einen Satz dazu, was b*alance tut, und den
+ * direkten Weg zu den Projekten. Kein Check-Knopf, keine Kennzahlen: Die Seite
+ * erzählt darunter der Reihe nach – Vielfalt, Leistungen, Verlust, Projekte –
+ * und erklärt das Modell erst danach.
  */
 export function Hero({ locale }: { locale: Locale }) {
   const t = getTranslations(locale).hero;
@@ -28,7 +31,7 @@ export function Hero({ locale }: { locale: Locale }) {
 
           <h1
             id="hero-title"
-            className="font-display hero-reveal hero-reveal-headline mt-4 text-balance text-[length:var(--text-display)] leading-[var(--leading-display)] text-white"
+            className={cn(textDisplay, "hero-reveal hero-reveal-headline mt-4 text-white")}
           >
             {/* Mobil läuft die Akzentzeile im Satz mit: Als eigener Block bricht
                 sie bei 390 px in „Grundlage / unseres Lebens.“ um, und die

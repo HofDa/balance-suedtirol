@@ -10,6 +10,9 @@ import { isLocale, locales } from "@/config/site";
 import { getTranslations } from "@/config/translations";
 import { focusRing, focusRingOnDark } from "@/components/ui/focus";
 import { withBasePath } from "@/lib/public-path";
+import { textDisplay, textHeadline, textLead, textTitleTight } from "@/components/ui/typography";
+import { cn } from "@/lib/utils";
+import { ArrowIcon } from "@/components/ui/arrow-icon";
 
 const route = "/was-ist-balance";
 
@@ -48,10 +51,10 @@ export default async function WhatIsPage({ params }: { params: Promise<{ locale:
         <Container>
           <div className="max-w-3xl">
             <Label size="section">{t.eyebrow}</Label>
-            <h1 className="mt-4 font-display text-balance text-[length:var(--text-display)] leading-[var(--leading-display)]">
+            <h1 className={cn(textDisplay, "mt-4")}>
               {t.title}
             </h1>
-            <p className="mt-6 max-w-[58ch] text-[length:var(--text-body-lg)] leading-[var(--leading-body)] text-[var(--color-muted)]">
+            <p className={cn(textLead, "mt-6")}>
               {t.lead}
             </p>
           </div>
@@ -64,7 +67,7 @@ export default async function WhatIsPage({ params }: { params: Promise<{ locale:
               {t.steps.map(([title, copy], index) => (
                 <Surface key={title} as="li" level="sheet" className="sm:p-6">
                   <p className="text-sm font-bold tabular-nums text-[var(--color-forest)]">0{index + 1}</p>
-                  <h3 className="mt-5 text-[length:var(--text-title)] font-semibold leading-[var(--leading-title)] tracking-[-0.02em]">
+                  <h3 className={cn(textTitleTight, "mt-5")}>
                     {title}
                   </h3>
                   <p className="mt-3 leading-7 text-[var(--color-muted)]">{copy}</p>
@@ -84,7 +87,7 @@ export default async function WhatIsPage({ params }: { params: Promise<{ locale:
             <dl>
               {t.nots.map(([title, copy], index) => (
                 <div key={title} className="border-t border-[var(--color-line)] py-6 first:border-t-0 first:pt-0">
-                  <dt className="text-[length:var(--text-title)] font-semibold leading-[var(--leading-title)] tracking-[-0.02em] text-[var(--color-ink)]">
+                  <dt className={cn(textTitleTight, "text-[var(--color-ink)]")}>
                     {title}
                   </dt>
                   <dd className="mt-2 max-w-[58ch] leading-7 text-[var(--color-muted)]">
@@ -111,7 +114,7 @@ export default async function WhatIsPage({ params }: { params: Promise<{ locale:
           <div className="mt-10 grid gap-4 md:grid-cols-3">
             {t.who.map(([title, copy, cta], index) => (
               <Surface key={title} as="article" level="sheet" className="flex flex-col">
-                <h3 className="text-[length:var(--text-title)] font-semibold leading-[var(--leading-title)] tracking-[-0.02em]">
+                <h3 className={textTitleTight}>
                   {title}
                 </h3>
                 <p className="mt-3 max-w-[58ch] flex-1 leading-7 text-[var(--color-muted)]">{copy}</p>
@@ -120,7 +123,7 @@ export default async function WhatIsPage({ params }: { params: Promise<{ locale:
                   className={`group mt-6 inline-flex min-h-11 items-center gap-2 self-start text-sm font-bold text-[var(--color-forest)] hover:underline ${focusRing}`}
                 >
                   {cta}
-                  <ArrowRight className="size-4 transition-transform duration-300 group-hover:translate-x-1" aria-hidden />
+                  <ArrowIcon />
                 </Link>
               </Surface>
             ))}
@@ -138,7 +141,7 @@ export default async function WhatIsPage({ params }: { params: Promise<{ locale:
       <section className="pb-14 sm:pb-20">
         <Container>
           <div className="flex flex-col items-start gap-6 overflow-hidden rounded-[var(--radius-xl)] bg-[var(--color-ink)] px-6 py-12 text-white sm:flex-row sm:items-center sm:justify-between sm:px-12 sm:py-14 lg:px-16">
-            <h2 className="font-display text-balance text-[length:var(--text-headline)] leading-[var(--leading-headline)]">
+            <h2 className={textHeadline}>
               {t.ctaTitle}
             </h2>
             <div className="flex flex-wrap items-center gap-4">
@@ -147,7 +150,7 @@ export default async function WhatIsPage({ params }: { params: Promise<{ locale:
                 className={`group inline-flex min-h-12 items-center gap-2 rounded-[var(--radius-md)] bg-[var(--color-accent)] px-6 text-sm font-bold text-[var(--color-ink)] transition-colors hover:bg-[var(--color-accent-hover)] ${focusRingOnDark}`}
               >
                 {t.ctaCheck}
-                <ArrowRight className="size-4 transition-transform duration-300 group-hover:translate-x-1" aria-hidden />
+                <ArrowIcon />
               </Link>
               <Link
                 href={`/${locale}/projekte`}

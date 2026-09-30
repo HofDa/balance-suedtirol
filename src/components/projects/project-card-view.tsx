@@ -1,12 +1,15 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, MapPin } from "lucide-react";
+import { MapPin } from "lucide-react";
 import type { ProjectCardData } from "@/types/project";
 import type { Locale } from "@/config/site";
 import { ProjectCardSponsor } from "./project-card-sponsor";
 import { ProjectCategoryBadge, ProjectCategoryMarker } from "./project-category";
 import type { ProjectCategoryId } from "@/config/project-categories";
 import { withBasePath } from "@/lib/public-path";
+import { textTitleTight } from "@/components/ui/typography";
+import { cn } from "@/lib/utils";
+import { ArrowIcon } from "@/components/ui/arrow-icon";
 
 export type ProjectCardViewCopy = {
   view: string;
@@ -72,7 +75,7 @@ export function ProjectCardView({
           <span className="truncate">{project.organization}</span>
         </p>
 
-        <h3 className="mt-2 text-[length:var(--text-title)] font-semibold leading-[var(--leading-title)] tracking-[-0.02em] text-[var(--color-ink)] transition-colors group-hover:text-[var(--color-forest)]">
+        <h3 className={cn(textTitleTight, "mt-2 text-[var(--color-ink)] transition-colors group-hover:text-[var(--color-forest)]")}>
           <Link
             href={`/${locale}/projekte/${project.slug}`}
             className="after:absolute after:inset-0 after:content-[''] focus-visible:outline-none"
@@ -106,7 +109,7 @@ export function ProjectCardView({
             </span>
             <span className="inline-flex min-h-10 items-center gap-1.5 rounded-[var(--radius-sm)] bg-[var(--color-forest)] px-3.5 text-sm font-semibold text-white transition-colors group-hover:bg-[var(--color-ink)]" aria-hidden>
               {copy.view}
-              <ArrowRight className="size-4 transition-transform duration-300 group-hover:translate-x-1" />
+              <ArrowIcon />
             </span>
           </div>
         </div>

@@ -1,4 +1,4 @@
-import type { Locale } from "./site";
+import type { Localized } from "../lib/i18n";
 
 export type HeroImage = {
   src: string;
@@ -59,20 +59,13 @@ export const heroQuote: HeroQuote = {
   sourceUrl: "https://tirol.orf.at/stories/3320220/"
 };
 
-/** Nur Aussagen über die eigene Plattform, keine fremden Forschungszahlen. */
-export const heroStats = [
-  { value: "3–5 min", label: "für deinen Einstieg in den Lebensraum-Check" },
-  { value: "100 %", label: "Projekte aus Südtirol" },
-  { value: "DE · IT · EN", label: "dreisprachig angelegt" }
-] as const;
-
 export type HeroQuoteMock = {
   id: string;
   /** Zitattext je Sprache — frei übersetzbar, weil es sich um Musterinhalte handelt. */
-  text: Record<Locale, string>;
+  text: Localized<string>;
   /** Platzhaltername. Echte Personen erst nennen, wenn Zitat und Nennung freigegeben sind. */
   author: string;
-  role: Record<Locale, string>;
+  role: Localized<string>;
 };
 
 /**

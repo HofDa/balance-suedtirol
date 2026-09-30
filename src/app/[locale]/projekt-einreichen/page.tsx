@@ -15,6 +15,8 @@ import { Label } from "@/components/ui/label";
 import { Surface } from "@/components/ui/surface";
 import { focusRing } from "@/components/ui/focus";
 import { withBasePath } from "@/lib/public-path";
+import { textDisplay, textLead } from "@/components/ui/typography";
+import { cn } from "@/lib/utils";
 
 const stepIcons = [Lightbulb, Leaf, ClipboardList, ChartNoAxesCombined, FileCheck2];
 
@@ -169,10 +171,10 @@ export default async function SubmitProjectPage({
         <div className="grid gap-12 lg:grid-cols-[0.82fr_1.18fr] lg:items-start">
           <div className="lg:sticky lg:top-28">
             <Label size="section">{copy.eyebrow}</Label>
-            <h1 className="mt-4 font-display text-balance text-[length:var(--text-display)] leading-[var(--leading-display)]">
+            <h1 className={cn(textDisplay, "mt-4")}>
               {copy.title}
             </h1>
-            <p className="mt-6 max-w-[58ch] text-[length:var(--text-body-lg)] leading-[var(--leading-body)] text-[var(--color-muted)]">
+            <p className={cn(textLead, "mt-6")}>
               {copy.copy}
             </p>
 

@@ -12,7 +12,7 @@
     "start": "next start",
     "lint": "eslint .",
     "test": "node scripts/run-all-tests.mjs",
-    "test:calculator": "node scripts/run-house-calculator-tests.mjs",
+    "test:calculator": "node scripts/run-all-tests.mjs house-calculator",
     "typecheck": "tsc --noEmit",
     "check": "npm test && npm run typecheck && npm run lint && npm run build"
   },

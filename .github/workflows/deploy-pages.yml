@@ -35,47 +35,13 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Build static site
+      # The redesign is the only site. Do not build a second branch under /neu.
+      - name: Build main site
         run: npm run build:pages
         env:
           GITHUB_PAGES: "true"
           PAGES_BASE_PATH: /${{ github.event.repository.name }}
           NEXT_PUBLIC_BASE_PATH: /${{ github.event.repository.name }}
-          NEXT_PUBLIC_SITE_URL: ${{ steps.pages.outputs.origin }}
-
-      # Vorschau der überarbeiteten Startseite unter /neu/, neben der Live-Version.
-      # Erst nach dem Live-Build auschecken: Der Ordner liegt im Workspace, und
-      # tsconfig.json schließt "**/*.ts" ein – vorher würde der Live-Build die
-      # Vorschau mitprüfen. Zum Abschalten den Branch löschen oder die Schritte
-      # entfernen; fehlt der Branch, läuft nur die Live-Version.
-      - name: Check for preview branch
-        id: preview
-        run: |
-          if git ls-remote --exit-code --heads origin "$PREVIEW_BRANCH" > /dev/null; then
-            echo "exists=true" >> "$GITHUB_OUTPUT"
-          fi
-        env:
-          PREVIEW_BRANCH: startseite-redesign
-
-      - name: Checkout preview
-        if: steps.preview.outputs.exists == 'true'
-        uses: actions/checkout@v4
-        with:
-          ref: startseite-redesign
-          path: preview
-
-      - name: Build preview
-        if: steps.preview.outputs.exists == 'true'
-        working-directory: preview
-        run: |
-          npm ci
-          npm run build:pages
-          mkdir -p ../out/neu
-          cp -R out/. ../out/neu/
-        env:
-          GITHUB_PAGES: "true"
-          PAGES_BASE_PATH: /${{ github.event.repository.name }}/neu
-          NEXT_PUBLIC_BASE_PATH: /${{ github.event.repository.name }}/neu
           NEXT_PUBLIC_SITE_URL: ${{ steps.pages.outputs.origin }}
 
       - name: Upload Pages artifact

@@ -1,4 +1,5 @@
 import type { Locale } from "./site";
+import type { Localized } from "../lib/i18n";
 
 export const projectCategoryIds = [
   "cultural-landscapes",
@@ -43,7 +44,7 @@ const visuals: Record<ProjectCategoryId, { surface: string; marker: string }> = 
   }
 };
 
-const labels: Record<Locale, Record<ProjectCategoryId, string>> = {
+const labels: Localized<Record<ProjectCategoryId, string>> = {
   de: {
     "cultural-landscapes": "Kulturlandschaften",
     forests: "Wälder",
@@ -73,7 +74,7 @@ const labels: Record<Locale, Record<ProjectCategoryId, string>> = {
   }
 };
 
-const allLabels: Record<Locale, string> = {
+const allLabels: Localized<string> = {
   de: "Alle",
   it: "Tutti",
   en: "All"

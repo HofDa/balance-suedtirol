@@ -16,6 +16,8 @@ import {
   type ProjectCategoryId
 } from "@/config/project-categories";
 import { withBasePath } from "@/lib/public-path";
+import { textDisplay, textHeadline } from "@/components/ui/typography";
+import { cn } from "@/lib/utils";
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params;
@@ -49,7 +51,7 @@ export default async function ProjectsPage({ params }: { params: Promise<{ local
       <Container>
         <div className="max-w-3xl">
           <Label size="section">{page.eyebrow}</Label>
-          <h1 className="mt-4 font-display text-balance text-[length:var(--text-display)] leading-[var(--leading-display)]">{page.title}</h1>
+          <h1 className={cn(textDisplay, "mt-4")}>{page.title}</h1>
           <p className="mt-5 text-lg leading-8 text-[var(--color-muted)]">
             {page.copy}
           </p>
@@ -77,7 +79,7 @@ export default async function ProjectsPage({ params }: { params: Promise<{ local
         <aside className="mt-14 flex flex-col gap-6 rounded-[var(--radius-xl)] border border-[var(--color-line)] bg-[var(--color-sage)]/55 p-6 sm:flex-row sm:items-end sm:justify-between sm:p-8">
           <div className="max-w-2xl">
             <Label size="block">{submission.eyebrow}</Label>
-            <h2 className="mt-3 font-display text-balance text-[length:var(--text-headline)] leading-[var(--leading-headline)]">{submission.title}</h2>
+            <h2 className={cn(textHeadline, "mt-3")}>{submission.title}</h2>
             <p className="mt-3 text-sm leading-6 text-[var(--color-muted)] sm:text-base">{submission.copy}</p>
           </div>
           <Link

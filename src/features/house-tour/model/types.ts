@@ -26,6 +26,12 @@ export type TourOption = {
    * ein Emissionsfaktor nur an einer Stelle gepflegt wird.
    */
   params?: Record<string, number>;
+  /**
+   * Die Antwort „Weiß ich nicht“: ein Südtiroler Durchschnitt statt einer
+   * Lücke in der Bilanz. Nur wo eine amtliche Quelle die Verteilung liefert;
+   * die Herleitung prüft `tests/house-calculator.test.ts`.
+   */
+  regionalAverage?: { source: string; basis: string };
 };
 
 /**
@@ -79,7 +85,7 @@ export type TourState = {
 
 export type TourAction =
   | { type: "OPEN_HOUSE" }
-  | { type: "OPEN_ROOM"; roomId: RoomId; questionIndex?: number }
+  | { type: "OPEN_ROOM"; roomId: RoomId; questionIndex?: number; open?: boolean }
   | { type: "OPEN_OBJECT"; questionIndex: number }
   | { type: "SELECT_ANSWER"; questionId: string; optionId: string }
   | { type: "SET_ADJUSTMENT"; questionId: string; quantity: number }

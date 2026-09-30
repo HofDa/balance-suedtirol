@@ -10,6 +10,8 @@ import { isLocale, locales } from "@/config/site";
 import { getTranslations } from "@/config/translations";
 import { focusRing, focusRingOnDark } from "@/components/ui/focus";
 import { withBasePath } from "@/lib/public-path";
+import { textDisplay, textHeadline, textLead, textTitleTight } from "@/components/ui/typography";
+import { cn } from "@/lib/utils";
 
 const route = "/co2-und-biodiversitaet";
 
@@ -31,9 +33,8 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
  * Die Haltungsseite zur naheliegendsten Rückfrage an den Check: „Ihr rechnet
  * mein CO₂ aus — wo kann ich es ausgleichen?"
  *
- * Die vier Gründe argumentieren ohne Zahlen aus dem eigenen Haus: Bilanzgrenze
- * des Rechners (`docs/BILANZ-FAKTOREN.md`) und die Methodikregel, dass eine
- * Aussage ohne Beleg gestrichen wird. Der Südtirol-Abschnitt („Und warum nicht
+ * Die drei Gründe argumentieren ohne Zahlen aus dem eigenen Haus, gestützt auf
+ * die Bilanzgrenze des Rechners (`docs/BILANZ-FAKTOREN.md`). Der Südtirol-Abschnitt („Und warum nicht
  * hier?“) führt drei Kennzahlen – jede mit Quelle unter dem Block.
  */
 export default async function CarbonStancePage({
@@ -53,10 +54,10 @@ export default async function CarbonStancePage({
         <Container>
           <div className="max-w-3xl">
             <Label size="section">{t.eyebrow}</Label>
-            <h1 className="mt-4 font-display text-balance text-[length:var(--text-display)] leading-[var(--leading-display)]">
+            <h1 className={cn(textDisplay, "mt-4")}>
               {t.title}
             </h1>
-            <p className="mt-6 max-w-[58ch] text-[length:var(--text-body-lg)] leading-[var(--leading-body)] text-[var(--color-muted)]">
+            <p className={cn(textLead, "mt-6")}>
               {t.lead}
             </p>
           </div>
@@ -65,7 +66,7 @@ export default async function CarbonStancePage({
               Ausweichen vor der Zahl. */}
           <Surface as="section" level="sheet" className="mt-12 max-w-3xl">
             <Label size="block">{t.scopeEyebrow}</Label>
-            <h2 className="mt-4 text-[length:var(--text-title)] font-semibold leading-[var(--leading-title)] tracking-[-0.02em]">
+            <h2 className={cn(textTitleTight, "mt-4")}>
               {t.scopeTitle}
             </h2>
             <p className="mt-4 max-w-[58ch] leading-7 text-[var(--color-muted)]">{t.scopeCopy}</p>
@@ -73,18 +74,18 @@ export default async function CarbonStancePage({
         </Container>
       </section>
 
-      {/* ③ Die vier Gründe — nummeriert wie auf der Methodikseite, damit beide
+      {/* ③ Die drei Gründe — nummeriert wie auf der Methodikseite, damit beide
           Argumentationsflächen als dasselbe Format erkennbar sind. */}
       <section className="bg-[var(--color-sage)]/35 py-14 sm:py-20">
         <Container>
           <SectionHeading eyebrow={t.reasonsEyebrow} title={t.reasonsTitle} />
-          <div className="mt-10 grid gap-4 md:grid-cols-2">
+          <div className="mt-10 grid gap-4 lg:grid-cols-3">
             {t.reasons.map(([title, copy], index) => (
               <Surface key={title} as="article" level="sheet">
                 <p className="text-sm font-bold tabular-nums text-[var(--color-forest)]">
                   0{index + 1}
                 </p>
-                <h3 className="mt-5 text-[length:var(--text-title)] font-semibold leading-[var(--leading-title)] tracking-[-0.02em]">
+                <h3 className={cn(textTitleTight, "mt-5")}>
                   {title}
                 </h3>
                 <p className="mt-3 max-w-[58ch] leading-7 text-[var(--color-muted)]">{copy}</p>
@@ -135,7 +136,7 @@ export default async function CarbonStancePage({
               copy={t.insteadCopy}
             />
             <Surface level="sheet">
-              <h2 className="text-[length:var(--text-title)] font-semibold leading-[var(--leading-title)] tracking-[-0.02em]">
+              <h2 className={textTitleTight}>
                 {t.storageTitle}
               </h2>
               <p className="mt-4 max-w-[58ch] leading-7 text-[var(--color-muted)]">
@@ -153,7 +154,7 @@ export default async function CarbonStancePage({
             <Label size="section" tone="moss">
               {t.pathEyebrow}
             </Label>
-            <h2 className="mt-4 max-w-3xl font-display text-balance text-[length:var(--text-headline)] leading-[var(--leading-headline)]">
+            <h2 className={cn(textHeadline, "mt-4 max-w-3xl")}>
               {t.pathTitle}
             </h2>
 

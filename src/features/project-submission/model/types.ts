@@ -1,4 +1,4 @@
-import type { Locale } from "@/config/site";
+import type { Localized } from "../../../lib/i18n";
 
 /**
  * Beschriftungen liegen am Feld, nicht an der Sprache.
@@ -11,7 +11,7 @@ import type { Locale } from "@/config/site";
  * Eintrag fiele erst im Italienischen auf. Hier hält TypeScript stattdessen
  * jedes einzelne Feld vollständig: fehlt eine Sprache, bricht der Build.
  */
-export type LocalizedText = Record<Locale, string>;
+export type LocalizedText = Localized<string>;
 
 export type FieldKind =
   | "text"

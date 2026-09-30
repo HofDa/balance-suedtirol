@@ -1,6 +1,6 @@
 import { availableRooms } from "../config/rooms";
 import { optionValues } from "./calculator";
-import type { RoomId, ScoreDimension, Scores, TourRoom } from "./types";
+import type { ScoreDimension, Scores, TourRoom } from "./types";
 
 export const scoreDimensions: { id: ScoreDimension; label: string; compact: string }[] = [
   { id: "biodiversity", label: "Biodiversität", compact: "Natur" },
@@ -127,15 +127,6 @@ export function calculateScores(
   }
   for (const dimension of scoreDimensions) scores[dimension.id] = clamp(scores[dimension.id]);
   return scores;
-}
-
-export function isRoomComplete(
-  roomId: RoomId,
-  answers: Record<string, string>,
-  skippedQuestions: Record<string, boolean> = {}
-) {
-  const room = availableRooms.find((item) => item.id === roomId);
-  return room ? getRoomProgress(room, answers, skippedQuestions).isComplete : false;
 }
 
 export function completedRoomIds(

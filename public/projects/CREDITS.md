@@ -15,12 +15,12 @@ The downloaded photographs were cropped to a consistent 8:5 aspect ratio,
 resized to 1600 × 1000 pixels, stripped of metadata, and converted to WebP.
 Replace them before launch if the final projects provide their own imagery.
 
-`meine-gemeinde-meine-natur.webp` is not a photograph: it is a generated
-placeholder in the platform palette (`scripts` are not needed to reproduce it —
-it is four flat shapes), used until the project provides its own image.
-
-`vorfahrt-fuer-den-igel.webp` is likewise a generated placeholder (an abstract
-hedge line with gaps standing for the hedgehog highways), not a photograph.
+`vorfahrt-fuer-den-igel-foto.webp` is a photograph of a European hedgehog in autumn
+leaves by Alexas_Fotos, used under the [Unsplash License](https://unsplash.com/license)
+(free use, attribution not required but documented here):
+[Unsplash photo OMCgkp1oZ3Q](https://unsplash.com/photos/OMCgkp1oZ3Q). Cropped
+to 8:5, resized to 1600 × 1000 pixels, stripped of metadata and converted to
+WebP. Replace it with the project's own imagery once available.
 
 The `*-before.webp` files are not separate photographs: they are desaturated,
 darkened and tinted versions of the corresponding project photo, generated with
@@ -48,3 +48,25 @@ photographs are to be used without a credit; the bird photographs are by Sepp
 Gamper, who asked to be named, so the page prints his name under them. Before/
 after pair cropped to 8:5 (1440 × 900), gallery images to 3:2 (1500 × 1000),
 all converted to WebP.
+
+## Meine Gemeinde, meine Natur (real project imagery)
+
+| Local asset | Content | Credit |
+| --- | --- | --- |
+| `meine-gemeinde-meine-natur.webp` | Card image: shepherd, herding dog and flock on a steep slope (crop of `-herde-hang`) | not yet clarified |
+| `meine-gemeinde-meine-natur-herde-hang.webp` | Shepherd, herding dog and flock on a steep slope | not yet clarified |
+| `meine-gemeinde-meine-natur-ziegen-weg.webp` | Goats on a path between wooden fences | not yet clarified |
+| `meine-gemeinde-meine-natur-herde-winter.webp` | Flock on a track beside stacked logs, winter | not yet clarified |
+| `meine-gemeinde-meine-natur-hirte-schnee.webp` | Shepherd with dog and flock in the snow | not yet clarified |
+| `meine-gemeinde-meine-natur-mahd.webp` | Mowing an overgrown patch, 23 September 2026 | not yet clarified |
+| `meine-gemeinde-meine-natur-rechen.webp` | Raking cuttings, 24 September 2026 | not yet clarified |
+| `meine-gemeinde-meine-natur-maehgut.webp` | Mown meadow with a pile of cuttings, 24 September 2026 | not yet clarified |
+| `meine-gemeinde-meine-natur-gemaehte-flaeche.webp` | Mown area at the end of the work day, 24 September 2026 | not yet clarified |
+| `meine-gemeinde-meine-natur-haufen-waldrand.webp` | Pile of cuttings at the edge of the woods, 24 September 2026 | not yet clarified |
+| `meine-gemeinde-meine-natur-haufen-baeume.webp` | Cuttings stacked beneath trees, 24 September 2026 | not yet clarified |
+
+Supplied by the project team (b*nature). Rotated per EXIF, resized to at most
+1500 px on the long side (the card image to 1600 × 1000, 8:5), stripped of
+metadata including GPS, and converted to WebP (quality 62–68). Original set:
+21.7 MB, converted gallery: 2.1 MB. Whether the photographers want to be named
+is still open; add a `credit` to the gallery entries once that is known.

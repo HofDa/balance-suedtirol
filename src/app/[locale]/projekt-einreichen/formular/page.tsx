@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { isLocale, locales, type Locale } from "@/config/site";
+import { isLocale, locales } from "@/config/site";
 import { SubmissionForm } from "@/features/project-submission/components/submission-form";
 import { withBasePath } from "@/lib/public-path";
+import type { Localized } from "@/lib/i18n";
 
 const route = "/projekt-einreichen/formular";
 
-const pageTitles: Record<Locale, { title: string; description: string }> = {
+const pageTitles: Localized<{ title: string; description: string }> = {
   de: {
     title: "Projekt einreichen – Formular",
     description: "Reiche dein Biodiversitätsprojekt in Südtirol zur Prüfung und Begleitung ein."

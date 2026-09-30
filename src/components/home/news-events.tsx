@@ -5,11 +5,14 @@ import { SectionHeading } from "@/components/ui/section-heading";
 import { Surface } from "@/components/ui/surface";
 import { Label } from "@/components/ui/label";
 import type { Locale } from "@/config/site";
+import { localeTags } from "@/lib/i18n";
 import { getTranslations } from "@/config/translations";
 import { getNewsItems } from "@/data/news";
 import type { NewsItem } from "@/types/news";
-
-const localeTags: Record<Locale, string> = { de: "de-IT", it: "it-IT", en: "en-GB" };
+import { textTitle } from "@/components/ui/typography";
+import { cn } from "@/lib/utils";
+import { MobileCollapseSection, MobileCollapseToggle } from "./mobile-collapse";
+import { hiddenWhenCollapsed } from "./mobile-collapse-classes";
 
 /**
  * Termine und Neuigkeiten stehen in einem Raster, nicht in zwei Spalten:
@@ -21,18 +24,25 @@ export function NewsEvents({ locale }: { locale: Locale }) {
   const items = getNewsItems(locale);
 
   return (
-    <section className="py-24 sm:py-32">
+    <MobileCollapseSection aria-labelledby="news-title" className="bg-[var(--color-sage)]/35 py-16 sm:py-32">
       <Container>
         <div data-home-reveal="rise">
-          <SectionHeading eyebrow={t.eyebrow} title={t.title} copy={t.copy} />
+          <SectionHeading
+            id="news-title"
+            eyebrow={t.eyebrow}
+            title={t.title}
+            copy={t.copy}
+            copyClassName={hiddenWhenCollapsed}
+            toggle={<MobileCollapseToggle labelledBy="news-title" />}
+          />
         </div>
 
         {items.length === 0 ? (
-          <p data-home-reveal="rise" className="mt-12 text-[length:var(--text-body)] text-[var(--color-muted)]">
+          <p data-home-reveal="rise" className={cn(hiddenWhenCollapsed, "mt-12 text-[length:var(--text-body)] text-[var(--color-muted)]")}>
             {t.empty}
           </p>
         ) : (
-          <ul className="mt-12 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          <ul className={cn(hiddenWhenCollapsed, "mt-12 grid gap-3 sm:grid-cols-2 lg:grid-cols-3")}>
             {items.map((item, index) => (
               <li
                 key={item.slug}
@@ -45,7 +55,7 @@ export function NewsEvents({ locale }: { locale: Locale }) {
           </ul>
         )}
       </Container>
-    </section>
+    </MobileCollapseSection>
   );
 }
 
@@ -85,7 +95,7 @@ function NewsCard({
         </time>
       </div>
 
-      <h3 className="mt-4 text-[length:var(--text-title)] font-semibold leading-[var(--leading-title)] tracking-[-0.01em] text-[var(--color-ink)]">
+      <h3 className={cn(textTitle, "mt-4 tracking-[-0.01em] text-[var(--color-ink)]")}>
         {item.title}
       </h3>
       <p className="mt-2 text-[length:var(--text-meta)] leading-[var(--leading-body)] text-[var(--color-muted)]">

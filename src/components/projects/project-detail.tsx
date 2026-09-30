@@ -14,7 +14,7 @@ import {
 } from "lucide-react";
 import { Container } from "@/components/ui/container";
 import { ProjectCard } from "@/components/projects/project-card";
-import { formatCurrency } from "@/lib/utils";
+import { cn, formatCurrency } from "@/lib/utils";
 import type { Project } from "@/types/project";
 import type { Locale } from "@/config/site";
 import { Label } from "@/components/ui/label";
@@ -35,6 +35,7 @@ import {
   type ProjectSupportCopy
 } from "./project-support";
 import { withBasePath } from "@/lib/public-path";
+import { textDisplay, textHeadline } from "@/components/ui/typography";
 
 interface ProjectDetailProps {
   project: Project;
@@ -163,7 +164,7 @@ export function ProjectDetail({ project, otherProjects, locale }: ProjectDetailP
                 {copy.verified}
               </span>
             </div>
-            <h1 className="mt-4 font-display text-balance text-[length:var(--text-display)] leading-[var(--leading-display)]">
+            <h1 className={cn(textDisplay, "mt-4")}>
               {project.title}
             </h1>
             <p className="mt-5 max-w-[66ch] text-[length:var(--text-body-lg)] leading-[var(--leading-body)] text-[var(--color-muted)]">
@@ -194,14 +195,36 @@ export function ProjectDetail({ project, otherProjects, locale }: ProjectDetailP
                 <Label as="span" size="section">{copy.location}</Label>
               </h2>
               <dl className="mt-6 space-y-5">
-                <div>
-                  <dt className="text-xs font-semibold text-[var(--color-muted)]">{copy.municipality}</dt>
-                  <dd className="mt-1 text-lg font-bold text-[var(--color-ink)]">{project.municipality}</dd>
-                </div>
+                {project.sites && project.sites.length > 0 ? (
+                  <div>
+                    <dt className="text-xs font-semibold text-[var(--color-muted)]">{copy.sites}</dt>
+                    <dd className="mt-1">
+                      <ul className="space-y-2">
+                        {project.sites.map((site) => (
+                          <li key={site.name}>
+                            <span className="block text-lg font-bold leading-snug text-[var(--color-ink)]">{site.name}</span>
+                            <span className="block text-sm text-[var(--color-muted)]">{copy.municipality} {site.municipality}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </dd>
+                  </div>
+                ) : (
+                  <div>
+                    <dt className="text-xs font-semibold text-[var(--color-muted)]">{copy.municipality}</dt>
+                    <dd className="mt-1 text-lg font-bold text-[var(--color-ink)]">{project.municipality}</dd>
+                  </div>
+                )}
                 <div>
                   <dt className="text-xs font-semibold text-[var(--color-muted)]">{copy.organization}</dt>
                   <dd className="mt-1 text-sm font-semibold text-[var(--color-ink)]">{project.organization}</dd>
                 </div>
+                {project.organizationAddress && (
+                  <div>
+                    <dt className="text-xs font-semibold text-[var(--color-muted)]">{copy.organizationAddress}</dt>
+                    <dd className="mt-1 text-sm text-[var(--color-ink)]">{project.organizationAddress}</dd>
+                  </div>
+                )}
               </dl>
               <a href={mapUrl} target="_blank" rel="noreferrer" className={`mt-6 inline-flex min-h-11 items-center gap-2 text-sm font-bold text-[var(--color-forest)] hover:underline ${focusRing}`}>
                 {copy.openMap}
@@ -218,13 +241,13 @@ export function ProjectDetail({ project, otherProjects, locale }: ProjectDetailP
 
           <section className="mt-20 grid gap-12 lg:grid-cols-2 lg:gap-16">
             <div>
-              <h2 className="font-display text-balance text-[length:var(--text-headline)] leading-[var(--leading-headline)]">
+              <h2 className={textHeadline}>
                 {copy.whyMatters}
               </h2>
               <p className="mt-5 text-base leading-7 text-[var(--color-muted)]">{project.whyItMatters}</p>
             </div>
             <div className="border-t border-[var(--color-line)] pt-8 lg:border-l lg:border-t-0 lg:pl-12 lg:pt-0">
-              <h2 className="font-display text-balance text-[length:var(--text-headline)] leading-[var(--leading-headline)]">
+              <h2 className={textHeadline}>
                 {copy.whatItDoes}
               </h2>
               <p className="mt-5 text-base leading-7 text-[var(--color-muted)]">{project.description}</p>
@@ -348,7 +371,7 @@ export function ProjectDetail({ project, otherProjects, locale }: ProjectDetailP
 
           <section className="mt-20 rounded-[var(--radius-xl)] bg-[var(--color-ink)] p-6 text-white sm:p-10" aria-labelledby="project-final-cta">
             <div className="max-w-2xl">
-              <h2 id="project-final-cta" className="font-display text-balance text-[length:var(--text-headline)] leading-[var(--leading-headline)]">{copy.finalTitle}</h2>
+              <h2 id="project-final-cta" className={textHeadline}>{copy.finalTitle}</h2>
               <p className="mt-3 text-sm leading-6 text-white/70 sm:text-base">{copy.finalCopy}</p>
             </div>
             <div className="mt-7 flex flex-col gap-3 sm:flex-row">
@@ -366,6 +389,14 @@ export function ProjectDetail({ project, otherProjects, locale }: ProjectDetailP
               </Link>
             </div>
           </section>
+
+          {/* Öffentliche Unterstützung steht hier und nur hier: kein
+              Hauptinvestor, keine Kachel, sondern eine Zeile am Schluss. */}
+          {project.supportedBy && (
+            <p className="mt-10 text-sm text-[var(--color-muted)]">
+              {copy.supportedBy}: <span className="font-semibold text-[var(--color-ink)]">{project.supportedBy}</span>
+            </p>
+          )}
         </Container>
       </section>
 

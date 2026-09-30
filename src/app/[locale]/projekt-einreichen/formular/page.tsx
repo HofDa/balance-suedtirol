@@ -1,8 +1,8 @@
+import { localizedAlternates } from "@/lib/site-metadata";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { isLocale, locales } from "@/config/site";
+import { isLocale } from "@/config/site";
 import { SubmissionForm } from "@/features/project-submission/components/submission-form";
-import { withBasePath } from "@/lib/public-path";
 import type { Localized } from "@/lib/i18n";
 
 const route = "/projekt-einreichen/formular";
@@ -33,10 +33,7 @@ export async function generateMetadata({
   return {
     title: meta.title,
     description: meta.description,
-    alternates: {
-      canonical: withBasePath(`/${locale}${route}`),
-      languages: Object.fromEntries(locales.map((language) => [language, withBasePath(`/${language}${route}`)]))
-    }
+    alternates: localizedAlternates(locale, route)
   };
 }
 

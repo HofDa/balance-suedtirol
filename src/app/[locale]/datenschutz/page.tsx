@@ -1,8 +1,8 @@
+import { localizedAlternates } from "@/lib/site-metadata";
 import type { Metadata } from "next";
 import { Container } from "@/components/ui/container";
-import { isLocale, locales, type Locale } from "@/config/site";
+import { isLocale, type Locale } from "@/config/site";
 import { Surface } from "@/components/ui/surface";
-import { withBasePath } from "@/lib/public-path";
 import type { Localized } from "@/lib/i18n";
 import { textTitle } from "@/components/ui/typography";
 import { cn } from "@/lib/utils";
@@ -22,10 +22,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   return {
     title: meta.title,
     description: meta.description,
-    alternates: {
-      canonical: withBasePath(`/${locale}${route}`),
-      languages: Object.fromEntries(locales.map((language) => [language, withBasePath(`/${language}${route}`)]))
-    }
+    alternates: localizedAlternates(locale, route)
   };
 }
 

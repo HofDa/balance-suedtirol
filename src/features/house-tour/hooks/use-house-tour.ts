@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect, useMemo, useReducer, useState } from "react";
+import { useEffect, useMemo, useReducer, useRef, useState } from "react";
 import { calculateScores, completedRoomIds } from "../model/scoring";
 import { totalValues } from "../model/calculator";
+import type { RoomId } from "../model/types";
 import { initialTourState, tourReducer } from "../model/reducer";
 
 // V3 trennt frühere Reglersemantiken (z. B. Bildschirmstunden) von den neuen
@@ -12,6 +13,7 @@ const STORAGE_WRITE_DELAY_MS = 300;
 
 export function useHouseTour() {
   const [state, dispatch] = useReducer(tourReducer, initialTourState);
+  const celebratedRooms = useRef(new Set<RoomId>());
   const [restored, setRestored] = useState(false);
 
   useEffect(() => {
@@ -60,5 +62,5 @@ export function useHouseTour() {
     () => completedRoomIds(state.answers, state.skippedQuestions),
     [state.answers, state.skippedQuestions]
   );
-  return { state, dispatch, scores, totals, completedRooms };
+  return { state, dispatch, scores, totals, completedRooms, celebratedRooms };
 }

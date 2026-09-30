@@ -1,3 +1,4 @@
+import { localeTags } from "@/lib/i18n";
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -14,7 +15,8 @@ import {
 } from "lucide-react";
 import { Container } from "@/components/ui/container";
 import { ProjectCard } from "@/components/projects/project-card";
-import { cn, formatCurrency } from "@/lib/utils";
+import { cn } from "@/lib/utils";
+import { formatCurrency } from "@/lib/format";
 import type { Project } from "@/types/project";
 import type { Locale } from "@/config/site";
 import { Label } from "@/components/ui/label";
@@ -300,11 +302,11 @@ export function ProjectDetail({ project, otherProjects, locale }: ProjectDetailP
                 <>
                   <p className="mt-5 text-sm font-medium text-[var(--color-muted)]">{copy.fundingProgress}</p>
                   <div className="mt-1 flex items-end justify-between gap-3">
-                    <p className="text-3xl font-bold tracking-[-0.03em] tabular-nums text-[var(--color-ink)]">{formatCurrency(project.funded ?? 0)}</p>
+                    <p className="text-3xl font-bold tracking-[-0.03em] tabular-nums text-[var(--color-ink)]">{formatCurrency(project.funded ?? 0, localeTags[locale])}</p>
                     <span className="text-sm font-bold tabular-nums text-[var(--color-forest)]">{progress} %</span>
                   </div>
                   <p className="mt-1 text-xs tabular-nums text-[var(--color-muted)]">
-                    {copy.fundingTarget.replace("{goal}", formatCurrency(project.goal!))}
+                    {copy.fundingTarget.replace("{goal}", formatCurrency(project.goal!, localeTags[locale]))}
                   </p>
                   <Progress value={progress} label={`${copy.fundingProgress}: ${progress} %`} className="mt-5" />
                 </>
@@ -341,7 +343,9 @@ export function ProjectDetail({ project, otherProjects, locale }: ProjectDetailP
               sponsorsEyebrow: copy.sponsorsEyebrow,
               sponsorsTitle: copy.sponsorsTitle,
               mainSponsor: copy.mainSponsor,
-              supportingSponsors: copy.supportingSponsors
+              supportingSponsors: copy.supportingSponsors,
+              placeholder: getTranslations(locale).card.placeholder,
+              website: copy.sponsorWebsite
             }}
           />
 

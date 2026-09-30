@@ -6,8 +6,7 @@
 - React und React DOM 19.2.7
 - Framer Motion für die interaktive Haustour
 - Lucide React für Icons
-- Zod für spätere Validierung
-- clsx, tailwind-merge und class-variance-authority für UI-Klassen und Varianten
+- clsx und tailwind-merge für UI-Klassen
 
 ## Entwicklung
 

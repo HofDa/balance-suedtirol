@@ -3,7 +3,7 @@ export type ScoreDimension = "biodiversity" | "carbon" | "water" | "resources";
 export type Scores = Record<ScoreDimension, number>;
 export type ScoreImpact = Partial<Record<ScoreDimension, number>>;
 
-export type RoomId = "kitchen" | "bath" | "living" | "bedroom" | "mobility" | "garden" | "travel";
+export type RoomId = "kitchen" | "bath" | "living" | "bedroom" | "mobility" | "garden";
 export type TourView = "house" | "room" | "results";
 
 /** Jahreswerte pro Person. Bilanzgrenzen siehe `model/calculator.ts`. */
@@ -94,5 +94,5 @@ export type TourAction =
   /** `open` hält das Objekt geöffnet, damit der Weiter-Weg ohne Szenenklick trägt. */
   | { type: "SET_QUESTION"; index: number; open?: boolean }
   | { type: "SHOW_RESULTS" }
-  | { type: "RESTORE"; state: Partial<TourState> }
+  | { type: "RESTORE"; state: unknown }
   | { type: "RESET" };

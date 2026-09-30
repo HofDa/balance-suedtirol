@@ -1,8 +1,8 @@
+import { localizedAlternates } from "@/lib/site-metadata";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { TourAppShell } from "@/features/house-tour/components/tour-app-shell";
-import { isLocale, locales } from "@/config/site";
-import { withBasePath } from "@/lib/public-path";
+import { isLocale } from "@/config/site";
 import type { Localized } from "@/lib/i18n";
 
 const route = "/haus-tour";
@@ -32,10 +32,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   return {
     title: meta.title,
     description: meta.description,
-    alternates: {
-      canonical: withBasePath(`/${locale}${route}`),
-      languages: Object.fromEntries(locales.map((language) => [language, withBasePath(`/${language}${route}`)]))
-    }
+    alternates: localizedAlternates(locale, route)
   };
 }
 

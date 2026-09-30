@@ -1,13 +1,12 @@
 import type { MetadataRoute } from "next";
 import { locales } from "@/config/site";
 import { projects } from "@/data/projects";
-import { withBasePath } from "@/lib/public-path";
+import { absoluteSiteUrl } from "@/lib/site-metadata";
 
 // Statischer Export (`output: "export"` für GitHub Pages) verlangt das ausdrücklich.
 export const dynamic = "force-static";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://balance-suedtirol.it";
 
   const staticRoutes = [
     { route: "", priority: 1.0, changeFrequency: "weekly" as const },
@@ -29,13 +28,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
   for (const { route, priority, changeFrequency } of staticRoutes) {
     for (const locale of locales) {
       entries.push({
-        url: `${baseUrl}${withBasePath(`/${locale}${route}`)}`,
+        url: absoluteSiteUrl(`/${locale}${route}`),
         lastModified: now,
         changeFrequency,
         priority,
         alternates: {
           languages: Object.fromEntries(
-            locales.map((lang) => [lang, `${baseUrl}${withBasePath(`/${lang}${route}`)}`])
+            locales.map((lang) => [lang, absoluteSiteUrl(`/${lang}${route}`)])
           )
         }
       });
@@ -46,13 +45,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     const route = `/projekte/${project.slug}`;
     for (const locale of locales) {
       entries.push({
-        url: `${baseUrl}${withBasePath(`/${locale}${route}`)}`,
+        url: absoluteSiteUrl(`/${locale}${route}`),
         lastModified: now,
         changeFrequency: "weekly",
         priority: 0.8,
         alternates: {
           languages: Object.fromEntries(
-            locales.map((lang) => [lang, `${baseUrl}${withBasePath(`/${lang}${route}`)}`])
+            locales.map((lang) => [lang, absoluteSiteUrl(`/${lang}${route}`)])
           )
         }
       });

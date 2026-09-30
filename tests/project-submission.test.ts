@@ -1,3 +1,4 @@
+import { restoreSubmissionDraft } from "../src/features/project-submission/model/draft";
 import assert from "node:assert/strict";
 import test from "node:test";
 import { locales } from "../src/config/site";
@@ -140,4 +141,36 @@ test("Dateinamen sind ASCII-Slugs und begrenzt", () => {
   assert.equal(buildFileName({ projektname: "" }), "balance-projekteinreichung.txt");
   assert.equal(buildFileName({ projektname: "***" }), "balance-projekteinreichung.txt");
   assert.ok(buildFileName({ projektname: "a".repeat(200) }).length <= "balance-projekteinreichung-.txt".length + 60);
+});
+
+
+test("restored drafts reject malformed values and preserve valid field types", () => {
+  const valid = validValues();
+  assert.deepEqual(restoreSubmissionDraft({ values: valid, stepIndex: 1 }).values, valid);
+  for (const input of [null, false, [], "invalid"]) {
+    assert.deepEqual(restoreSubmissionDraft(input), { values: emptyValues(), stepIndex: 0 });
+  }
+  const malformed = Object.fromEntries(allFields.map((field) => [field.id, { invalid: true }]));
+  assert.deepEqual(restoreSubmissionDraft({ values: malformed }).values, emptyValues());
+  const restored = restoreSubmissionDraft({ values: { ...valid, projektname: null, unknown: "old" } });
+  assert.equal(restored.values.projektname, "");
+  assert.ok(!("unknown" in restored.values));
+});
+
+test("restored selections reject unknown choices and deduplicate multi-select values", () => {
+  const select = allFields.find((field) => field.kind === "select")!;
+  const checkbox = allFields.find((field) => field.kind === "checkboxes")!;
+  const option = getFieldOptions(checkbox, "de")[0].value;
+  const restored = restoreSubmissionDraft({ values: { [select.id]: "removed", [checkbox.id]: [option, option, "removed", null, 5] } });
+  assert.equal(restored.values[select.id], "");
+  assert.deepEqual(restored.values[checkbox.id], [option]);
+});
+
+test("restored wizard steps are finite integers within the current schema", () => {
+  for (const stepIndex of [NaN, Infinity, -Infinity, "2", null]) {
+    assert.equal(restoreSubmissionDraft({ stepIndex }).stepIndex, 0);
+  }
+  assert.equal(restoreSubmissionDraft({ stepIndex: 1.8 }).stepIndex, 1);
+  assert.equal(restoreSubmissionDraft({ stepIndex: -10 }).stepIndex, 0);
+  assert.equal(restoreSubmissionDraft({ stepIndex: 999 }).stepIndex, formSteps.length - 1);
 });

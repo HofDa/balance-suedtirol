@@ -32,7 +32,7 @@ const TourResults = dynamic(
 );
 
 export function TourAppShell({ locale }: { locale: Locale }) {
-  const { state, dispatch, scores, totals, completedRooms } = useHouseTour();
+  const { state, dispatch, scores, totals, completedRooms, celebratedRooms } = useHouseTour();
   const reduce = useReducedMotion();
   // Die Kamera braucht den Raum, in den sie fährt oder aus dem sie kommt; beim
   // Wechsel zur Hausübersicht ist `activeRoom` schon leer.
@@ -137,9 +137,10 @@ export function TourAppShell({ locale }: { locale: Locale }) {
 
   const reset = useCallback(() => {
     if (window.confirm("Möchtest du alle Antworten des Lebensraum-Checks zurücksetzen?")) {
+      celebratedRooms.current.clear();
       dispatch({ type: "RESET" });
     }
-  }, [dispatch]);
+  }, [dispatch, celebratedRooms]);
 
   const answerQuestion = useCallback((questionId: string, optionId: string) => {
     dispatch({ type: "SELECT_ANSWER", questionId, optionId });
@@ -250,10 +251,10 @@ export function TourAppShell({ locale }: { locale: Locale }) {
               variants={houseFrameVariants}
             >
               <HouseOverview
+                celebratedRooms={celebratedRooms}
                 onRoom={openRoom}
                 answers={state.answers}
                 skippedQuestions={state.skippedQuestions}
-                activeRoom={state.activeRoom}
               />
             </motion.div>
           ) : room ? (

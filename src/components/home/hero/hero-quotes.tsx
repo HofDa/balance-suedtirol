@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { heroQuotes, heroQuotesAreMockup } from "@/config/hero";
 import type { Locale } from "@/config/site";
-import { getTranslations } from "@/config/translations";
+import { heroCopy } from "@/config/translations/hero";
 import { focusRingOnDark } from "@/components/ui/focus";
 
 const DWELL_MS = 7000;
@@ -24,7 +24,7 @@ const DWELL_MS = 7000;
  */
 const ROTATE_QUERY = "(min-width: 1024px)";
 export function HeroQuotes({ locale }: { locale: Locale }) {
-  const t = getTranslations(locale).hero;
+  const t = heroCopy[locale];
   const [index, setIndex] = useState(0);
   const [paused, setPaused] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);

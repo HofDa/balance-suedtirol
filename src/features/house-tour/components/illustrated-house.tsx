@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, type RefObject } from "react";
 import { Check, SkipForward } from "lucide-react";
 import { motion } from "framer-motion";
 import { overviewLabelVariants } from "../model/house-camera";
@@ -54,25 +54,19 @@ function AmbientLife() {
   );
 }
 
-/**
- * Räume, deren Abschluss schon gefeiert wurde. Bewusst nur für diese Sitzung:
- * die Hausansicht wird bei jeder Rückkehr neu aufgebaut, das Aufleuchten soll
- * aber nur beim ersten Mal nach dem Abschluss kommen.
- */
-const celebratedRooms = new Set<RoomId>();
-
-export function IllustratedHouse({ answers, skippedQuestions, onRoom }: {
+export function IllustratedHouse({ answers, skippedQuestions, onRoom, celebratedRooms }: {
+  celebratedRooms: RefObject<Set<RoomId>>;
   answers: Record<string, string>; skippedQuestions: Record<string, boolean>; onRoom: (id: RoomId, questionIndex?: number) => void;
 }) {
   const progressByRoom = availableRooms.map((room) => ({ room, progress: getRoomProgress(room, answers, skippedQuestions) }));
   // Einmal beim Aufbau festgelegt: ein erneutes Rendern mitten im Aufleuchten
   // darf die Animation nicht abschneiden.
   const [freshlyComplete] = useState(() => progressByRoom
-    .filter(({ room, progress }) => progress.isComplete && !celebratedRooms.has(room.id))
+    .filter(({ room, progress }) => progress.isComplete && !celebratedRooms.current.has(room.id))
     .map(({ room }) => room.id));
   useEffect(() => {
-    freshlyComplete.forEach((id) => celebratedRooms.add(id));
-  }, [freshlyComplete]);
+    freshlyComplete.forEach((id) => celebratedRooms.current.add(id));
+  }, [freshlyComplete, celebratedRooms]);
   // Solange noch nichts beantwortet ist, laden die Schilder zum Antippen ein.
   const untouched = progressByRoom.every(({ progress }) => progress.handled === 0);
   const [size] = layout.size;
@@ -90,7 +84,7 @@ export function IllustratedHouse({ answers, skippedQuestions, onRoom }: {
           const state = progress.isComplete ? "complete" : progress.isStarted ? "started" : "open";
           return (
             <span key={room.id} aria-hidden data-room-state={state}
-              className={cn(styles.roomLight, freshlyComplete.includes(room.id) && styles.roomLightUp)}
+              className={cn(styles.roomLight, progress.isComplete && freshlyComplete.includes(room.id) && styles.roomLightUp)}
               style={{ left: `${left / size * 100}%`, top: `${top / size * 100}%`, width: `${width / size * 100}%`, height: `${height / size * 100}%` }} />
           );
         })}

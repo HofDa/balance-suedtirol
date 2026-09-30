@@ -1,3 +1,4 @@
+import { localizedAlternates } from "@/lib/site-metadata";
 import Link from "next/link";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
@@ -6,10 +7,9 @@ import { Container } from "@/components/ui/container";
 import { Label } from "@/components/ui/label";
 import { Surface } from "@/components/ui/surface";
 import { SectionHeading } from "@/components/ui/section-heading";
-import { isLocale, locales } from "@/config/site";
+import { isLocale } from "@/config/site";
 import { getTranslations } from "@/config/translations";
 import { focusRing, focusRingOnDark } from "@/components/ui/focus";
-import { withBasePath } from "@/lib/public-path";
 import { textDisplay, textHeadline, textLead, textTitleTight } from "@/components/ui/typography";
 import { cn } from "@/lib/utils";
 
@@ -22,10 +22,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   return {
     title: t.carbonStance.eyebrow,
     description: t.featured.stanceTeaser,
-    alternates: {
-      canonical: withBasePath(`/${locale}${route}`),
-      languages: Object.fromEntries(locales.map((language) => [language, withBasePath(`/${language}${route}`)]))
-    }
+    alternates: localizedAlternates(locale, route)
   };
 }
 

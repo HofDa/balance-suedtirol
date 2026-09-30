@@ -8,7 +8,7 @@ import {
   referenceValues,
   totalValues
 } from "../src/features/house-tour/model/calculator";
-import { initialTourState, tourReducer } from "../src/features/house-tour/model/reducer";
+import { initialTourState, restoreTourState, tourReducer } from "../src/features/house-tour/model/reducer";
 import { calculateScores } from "../src/features/house-tour/model/scoring";
 import type { TourQuestion } from "../src/features/house-tour/model/types";
 
@@ -174,4 +174,22 @@ test("Südtirol-Durchschnitte folgen aus den ASTAT-Anteilen und den Faktoren der
   const active = params("mobility-short", "active");
   closeTo(average("mobility-short").co2PerKm, privateShare * car.co2PerKm + transitShare * 0.05 + activeShare * active.co2PerKm, 0.002);
   closeTo(average("mobility-short").kwhPerKm, privateShare * car.kwhPerKm + transitShare * 0.18 + activeShare * active.kwhPerKm, 0.005);
+});
+
+
+test("tour restoration falls back from removed rooms and malformed stored data", () => {
+  for (const input of [null, [], 42, { view: "room", activeRoom: "travel" }, { view: "room", activeRoom: null }]) {
+    assert.deepEqual(restoreTourState(input), initialTourState);
+  }
+  assert.equal(restoreTourState({ view: "results", activeRoom: "travel" }).view, "results");
+  assert.equal(restoreTourState({ view: "house", activeRoom: "bath" }).activeRoom, null);
+});
+
+test("tour restoration clamps question indices to actual room questions", () => {
+  const room = availableRooms[0];
+  for (const index of [Infinity, NaN, -20, null, "1"]) {
+    assert.equal(restoreTourState({ view: "room", activeRoom: room.id, activeQuestionIndex: index }).activeQuestionIndex, 0);
+  }
+  assert.equal(restoreTourState({ view: "room", activeRoom: room.id, activeQuestionIndex: 999 }).activeQuestionIndex, room.questions.length - 1);
+  assert.equal(restoreTourState({ view: "room", activeRoom: room.id, activeQuestionIndex: 1.8 }).activeQuestionIndex, 1);
 });

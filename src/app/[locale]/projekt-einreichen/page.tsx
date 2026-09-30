@@ -1,3 +1,4 @@
+import { localizedAlternates } from "@/lib/site-metadata";
 import Link from "next/link";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
@@ -10,11 +11,10 @@ import {
   Lightbulb
 } from "lucide-react";
 import { Container } from "@/components/ui/container";
-import { isLocale, locales, type Locale } from "@/config/site";
+import { isLocale, type Locale } from "@/config/site";
 import { Label } from "@/components/ui/label";
 import { Surface } from "@/components/ui/surface";
 import { focusRing } from "@/components/ui/focus";
-import { withBasePath } from "@/lib/public-path";
 import { textDisplay, textLead } from "@/components/ui/typography";
 import { cn } from "@/lib/utils";
 
@@ -149,10 +149,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   return {
     title: copy.eyebrow,
     description: copy.copy,
-    alternates: {
-      canonical: withBasePath(`/${locale}${route}`),
-      languages: Object.fromEntries(locales.map((language) => [language, withBasePath(`/${language}${route}`)]))
-    }
+    alternates: localizedAlternates(locale, route)
   };
 }
 

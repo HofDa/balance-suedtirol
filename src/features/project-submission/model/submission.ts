@@ -1,5 +1,6 @@
 import { getProjectCategories } from "../../../config/project-categories";
 import type { Locale } from "../../../config/site";
+import { formatCurrency } from "../../../lib/format";
 import { localeTags } from "../../../lib/i18n";
 import type { SubmissionCopy } from "../config/copy";
 import { submissionRecipient } from "../config/copy";
@@ -42,7 +43,7 @@ function formatNumber(field: Field, raw: string, locale: Locale): string {
   if (!Number.isFinite(parsed)) return raw;
   const tag = localeTags[locale];
   if (field.unit === "eur") {
-    return new Intl.NumberFormat(tag, { style: "currency", currency: "EUR", maximumFractionDigits: 0 }).format(parsed);
+    return formatCurrency(parsed, tag);
   }
   const number = new Intl.NumberFormat(tag, { maximumFractionDigits: 3 }).format(parsed);
   return field.unit ? `${number} ${field.unit}` : number;
@@ -153,12 +154,7 @@ export function getBudgetHint(values: FormValues, locale: Locale, copy: Submissi
   const parts = funding + own;
   if (Math.abs(parts - total) <= total * 0.01) return null;
 
-  const money = new Intl.NumberFormat(localeTags[locale], {
-    style: "currency",
-    currency: "EUR",
-    maximumFractionDigits: 0
-  });
-  return copy.budgetHint(money.format(parts), money.format(total));
+  return copy.budgetHint(formatCurrency(parts, localeTags[locale]), formatCurrency(total, localeTags[locale]));
 }
 
 /** Die vollständige Einreichung als Klartext — Grundlage für E-Mail und Datei. */

@@ -5,7 +5,7 @@ import { Header } from "@/components/layout/header";
 import { fontVariables } from "@/config/fonts";
 import { isLocale, locales } from "@/config/site";
 import { getTranslations } from "@/config/translations";
-import { withBasePath } from "@/lib/public-path";
+import { localizedAlternates, siteUrl } from "@/lib/site-metadata";
 import "../globals.css";
 import type { Localized } from "@/lib/i18n";
 
@@ -28,22 +28,15 @@ const metadataByLocale: Localized<{ title: string; description: string }> = {
   }
 };
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://balance-suedtirol.it";
-
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params;
   const meta = metadataByLocale[isLocale(locale) ? locale : "de"];
 
   return {
-    metadataBase: new URL(siteUrl),
+    metadataBase: siteUrl,
     title: { default: meta.title, template: "%s | b*alance" },
     description: meta.description,
-    alternates: {
-      canonical: withBasePath(`/${locale}`),
-      languages: Object.fromEntries(
-        locales.map((language) => [language, withBasePath(`/${language}`)])
-      )
-    }
+    alternates: localizedAlternates(isLocale(locale) ? locale : "de"),
   };
 }
 

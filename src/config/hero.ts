@@ -14,15 +14,6 @@ export type HeroImage = {
   isPlaceholder: boolean;
 };
 
-export type HeroQuote = {
-  text: string;
-  author: string;
-  role: string;
-  organisation: string;
-  sourceLabel: string;
-  sourceUrl: string;
-};
-
 /**
  * Platzhalter bis die Bilder der Fotografen vorliegen.
  * Zum Austauschen: neue Datei nach `public/assets/hero/` legen, hier `src`, `alt`,
@@ -41,24 +32,6 @@ export const heroImage: HeroImage = {
   isPlaceholder: true
 };
 
-/**
- * Wörtliches Zitat zur Vorstellung des ersten Ergebnisberichts des
- * Biodiversitätsmonitorings Südtirol. Nur belegte Zitate verwenden, nichts kürzen
- * oder umformulieren.
- *
- * Das Zitat ist eine Quellenangabe, keine Trägerschaft: Eurac Research darf im
- * Hero ausschließlich in der Autorenzeile und im Quellenlink vorkommen, nicht als
- * Label, Badge oder Absender der Plattform.
- */
-export const heroQuote: HeroQuote = {
-  text: "Südtirol verfügt über einen beeindruckenden Schatz an Biodiversität",
-  author: "Ulrike Tappeiner",
-  role: "Projektleiterin Biodiversitätsmonitoring Südtirol",
-  organisation: "Eurac Research",
-  sourceLabel: "ORF Tirol, 04.09.2025",
-  sourceUrl: "https://tirol.orf.at/stories/3320220/"
-};
-
 export type HeroQuoteMock = {
   id: string;
   /** Zitattext je Sprache — frei übersetzbar, weil es sich um Musterinhalte handelt. */
@@ -72,9 +45,7 @@ export type HeroQuoteMock = {
  * Musterzitate für die Zitatebene im Hero.
  *
  * Bewusst erfundene Stimmen mit Platzhalternamen: Ein zugeordnetes Zitat ohne
- * Freigabe wäre eine Behauptung über eine reale Person. Das belegte Zitat oben
- * (`heroQuote`) läuft hier nicht mit, weil es wörtlich zitiert werden muss und
- * sich deshalb nicht in drei Sprachen ausspielen lässt.
+ * Freigabe wäre eine Behauptung über eine reale Person.
  *
  * Zum Ersetzen: `text` und `role` durch die freigegebene Fassung ersetzen,
  * `author` auf den echten Namen setzen und `heroQuotesAreMockup` auf false stellen.

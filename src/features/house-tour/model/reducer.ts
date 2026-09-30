@@ -120,33 +120,28 @@ export function tourReducer(state: TourState, action: TourAction): TourState {
       };
     case "SHOW_RESULTS":
       return { ...state, view: "results", activeRoom: null, objectOpen: false };
-    case "RESTORE": {
-      const restoredRoom = action.state.activeRoom as string | null | undefined;
-      const roomStillExists =
-        !restoredRoom ||
-        ["kitchen", "bath", "living", "bedroom", "mobility", "garden", "travel"].includes(
-          restoredRoom
-        );
-      const restoredView = action.state.view;
-      const view = restoredView === "house" || restoredView === "room" || restoredView === "results"
-        ? restoredView
-        : initialTourState.view;
-      const questionIndex = action.state.activeQuestionIndex;
-      const answers = sanitizeAnswers(action.state.answers);
-      return {
-        view: roomStillExists ? view : "house",
-        activeRoom: roomStillExists ? action.state.activeRoom ?? null : null,
-        activeQuestionIndex:
-          typeof questionIndex === "number" && Number.isFinite(questionIndex)
-            ? Math.max(0, Math.floor(questionIndex))
-            : 0,
-        // Wer mitten in einem Raum neu lädt, landet wieder in der Frage.
-        objectOpen: roomStillExists && view === "room",
-        answers,
-        skippedQuestions: sanitizeSkipped(action.state.skippedQuestions, answers),
-        adjustments: sanitizeAdjustments(action.state.adjustments)
-      };
-    }
+    case "RESTORE": return restoreTourState(action.state);
     case "RESET": return initialTourState;
   }
+}
+
+/** Restore only rooms and questions that exist in the current tour. */
+export function restoreTourState(input: unknown): TourState {
+  const source = recordOrEmpty<unknown>(input);
+  const room = availableRooms.find((candidate) => candidate.id === source.activeRoom);
+  const requestedView = source.view;
+  const view = requestedView === "results" ? "results" : requestedView === "room" && room ? "room" : "house";
+  const questionIndex = source.activeQuestionIndex;
+  const answers = sanitizeAnswers(source.answers);
+  return {
+    view,
+    activeRoom: view === "room" && room ? room.id : null,
+    activeQuestionIndex: room && typeof questionIndex === "number" && Number.isFinite(questionIndex)
+      ? Math.min(room.questions.length - 1, Math.max(0, Math.floor(questionIndex)))
+      : 0,
+    objectOpen: view === "room",
+    answers,
+    skippedQuestions: sanitizeSkipped(source.skippedQuestions, answers),
+    adjustments: sanitizeAdjustments(source.adjustments),
+  };
 }

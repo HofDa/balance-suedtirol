@@ -1,6 +1,5 @@
-import Image from "next/image";
 import { Label } from "@/components/ui/label";
-import { withBasePath } from "@/lib/public-path";
+import { SponsorIdentity } from "./sponsor-identity";
 import type { Sponsor } from "@/types/project";
 
 export function ProjectCardSponsor({
@@ -18,26 +17,7 @@ export function ProjectCardSponsor({
         <Label size="dense" tone="muted" className="mb-1">
           {copy.mainSponsor}{mainSponsor.isPlaceholder ? " · Demo" : ""}
         </Label>
-        <span className="inline-flex flex-wrap items-center gap-2">
-          {mainSponsor.logo ? (
-            <Image
-              src={withBasePath(mainSponsor.logo)}
-              alt={`${mainSponsor.name} Logo${mainSponsor.isPlaceholder ? " – Platzhalter" : ""}`}
-              width={100}
-              height={28}
-              className="h-auto max-h-7 w-auto max-w-[6.25rem] object-contain"
-            />
-          ) : (
-            <span className="text-sm font-semibold tracking-[-0.02em] text-[var(--color-ink)]">
-              {mainSponsor.name}
-            </span>
-          )}
-          {mainSponsor.isPlaceholder ? (
-            <span className="rounded-[var(--radius-sm)] bg-[var(--color-stone)] px-1.5 py-0.5 text-[11px] font-bold uppercase tracking-[0.12em] text-[var(--color-muted)]">
-              {copy.placeholder}
-            </span>
-          ) : null}
-        </span>
+        <SponsorIdentity sponsor={mainSponsor} size="card" copy={copy} />
       </div>
       {additionalCount > 0 ? (
         <span className="shrink-0 text-xs tabular-nums text-[var(--color-muted)]">

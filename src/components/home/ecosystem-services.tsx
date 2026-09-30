@@ -1,5 +1,4 @@
 import type { CSSProperties } from "react";
-import { Equal } from "lucide-react";
 import { Container } from "@/components/ui/container";
 import { Label } from "@/components/ui/label";
 import type { Locale } from "@/config/site";
@@ -9,17 +8,20 @@ import { textDisplay, textTitleTight } from "@/components/ui/typography";
 import { cn } from "@/lib/utils";
 import { MobileCollapseSection, MobileCollapseToggle } from "./mobile-collapse";
 import { collapsibleHeading, hiddenWhenCollapsed } from "./mobile-collapse-classes";
+import { HabitatSilhouette } from "./habitat-silhouette";
 
 /**
  * Sechs Leistungen als offene Komposition: Überschrift links stehend, rechts
  * zwei versetzte Spalten aus Zeichnung und kurzem Text. Keine Rahmen, keine
- * Flächen – die Haarlinie über jedem Eintrag reicht als Ordnung.
+ * Flächen – die Haarlinie über jedem Eintrag reicht als Ordnung. Am Schluss
+ * wächst aus dem dunklen Abschnitt darunter ein Lebensraum aus Silhouetten, und
+ * über seiner niedrigen Mitte steht das Fazit.
  */
 export function EcosystemServices({ locale }: { locale: Locale }) {
   const t = getHomeStory(locale).services;
 
   return (
-    <MobileCollapseSection aria-labelledby="services-title" className="bg-[var(--color-sage)]/35 py-16 sm:py-32">
+    <MobileCollapseSection aria-labelledby="services-title" className="bg-[var(--color-sage)]/35 pt-16 sm:pt-32">
       <Container>
         <div className="grid gap-10 sm:gap-14 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:gap-20">
           <div data-home-reveal="rise" className="lg:sticky lg:top-28 lg:self-start">
@@ -38,8 +40,7 @@ export function EcosystemServices({ locale }: { locale: Locale }) {
             </p>
           </div>
 
-          <div className={hiddenWhenCollapsed}>
-          <ul className="grid gap-x-12 gap-y-6 sm:grid-cols-2 sm:gap-y-14 sm:pb-20">
+          <ul className={cn(hiddenWhenCollapsed, "grid gap-x-12 gap-y-6 sm:grid-cols-2 sm:gap-y-14 sm:pb-20")}>
             {t.items.map((item, index) => (
               <li key={item.id} className="sm:even:translate-y-20">
                 <div
@@ -56,20 +57,25 @@ export function EcosystemServices({ locale }: { locale: Locale }) {
               </li>
             ))}
           </ul>
-
-          {/* Das Fazit als Summe: Die sechs Leistungen stehen darüber wie
-              Summanden, der kräftige Strich schließt sie ab, darunter das
-              Ergebnis. */}
-          <div data-home-reveal="rise" className="mt-10 sm:mt-12">
-            <div aria-hidden className="h-0.5 bg-[var(--color-forest)]" />
-            <p className="mt-6 flex items-center gap-4 font-display text-balance text-[1.625rem] leading-[1.25] tracking-[-0.02em] text-[var(--color-ink)] sm:text-[2rem]">
-              <Equal aria-hidden className="size-7 shrink-0 self-start mt-[0.15em] text-[var(--color-forest)] sm:size-8" strokeWidth={2.25} />
-              <span>{t.conclusion}</span>
-            </p>
-          </div>
-          </div>
         </div>
       </Container>
+
+      {/* Das Fazit im Lebensraum: Der Satz steht über der niedrigen Wiese in der
+          Mitte, die Bäume an den Rändern rahmen ihn. Ab `lg` rückt die Szene
+          unter den Satz hoch; darunter steht er schlicht über ihr. */}
+      <div className={cn(hiddenWhenCollapsed, "mt-16 sm:mt-24")}>
+        <Container>
+          <p
+            data-home-reveal="rise"
+            className="relative z-10 mx-auto max-w-[22ch] text-center font-display text-balance text-[clamp(1.75rem,3.4vw,3rem)] leading-[1.15] tracking-[-0.025em] text-[var(--color-ink)]"
+          >
+            {t.conclusion}
+          </p>
+        </Container>
+        <div data-home-reveal="grow" className="relative -mb-px mt-8 lg:-mt-[9vw]">
+          <HabitatSilhouette className="block h-auto w-full text-[var(--color-ink)]" />
+        </div>
+      </div>
     </MobileCollapseSection>
   );
 }

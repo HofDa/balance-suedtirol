@@ -84,6 +84,18 @@ export const projects: Project[] = [
     organization: "b*nature",
     location: { lat: 46.6497, lng: 11.5731 },
     image: "/projects/meine-gemeinde-meine-natur.webp",
+    gallery: [
+      { src: "/projects/meine-gemeinde-meine-natur-herde-hang.webp", alt: "Hirte mit Hütehund und einer Herde aus Ziegen und Schafen an einem steilen Wiesenhang", caption: "Der Hirte, sein Hütehund und die Herde aus Schafen und Ziegen an einem steilen Hang." },
+      { src: "/projects/meine-gemeinde-meine-natur-ziegen-weg.webp", alt: "Ziegen auf einem Weg zwischen Holzzäunen, dahinter der Hirte und die Berge", caption: "Unterwegs mit der Herde: Ziegen auf einem Weg zwischen Holzzäunen." },
+      { src: "/projects/meine-gemeinde-meine-natur-herde-winter.webp", alt: "Ziegen und Schafe auf einem Weg neben gestapelten Baumstämmen, am Rand liegt Schnee", caption: "Auch im Winter ist die Herde unterwegs." },
+      { src: "/projects/meine-gemeinde-meine-natur-hirte-schnee.webp", alt: "Der Hirte mit seinem Hütehund vor der Herde auf einer verschneiten Fläche", caption: "Der Hirte mit Hütehund und Herde im Schnee." },
+      { src: "/projects/meine-gemeinde-meine-natur-mahd.webp", alt: "Blick über ein Mähgerät auf eine hochgewachsene Fläche, im Hintergrund arbeitet eine weitere Person", caption: "Pflegeeinsatz im September 2026: Die hochgewachsene Fläche wird gemäht." },
+      { src: "/projects/meine-gemeinde-meine-natur-rechen.webp", alt: "Eine Person recht auf einer gemähten Fläche das Schnittgut zusammen", caption: "Das Schnittgut wird zusammengerecht." },
+      { src: "/projects/meine-gemeinde-meine-natur-maehgut.webp", alt: "Gemähte Wiese mit einem Haufen Schnittgut, dahinter Wald und eine Stromleitung", caption: "Nach der Mahd wird das Schnittgut auf Haufen gesammelt." },
+      { src: "/projects/meine-gemeinde-meine-natur-gemaehte-flaeche.webp", alt: "Gemähte Fläche mit Reihen und Haufen aus Schnittgut vor Gehölzen", caption: "Die gemähte Fläche am Ende des Einsatztags." },
+      { src: "/projects/meine-gemeinde-meine-natur-haufen-waldrand.webp", alt: "Haufen aus Schnittgut am Waldrand", caption: "Schnittgut-Haufen am Rand der Fläche." },
+      { src: "/projects/meine-gemeinde-meine-natur-haufen-baeume.webp", alt: "Schnittgut unter Bäumen aufgeschichtet", caption: "Das Schnittgut liegt aufgeschichtet unter den Bäumen." }
+    ],
     supporters: 0,
     mainSponsor: {
       name: "Amt für Natur – Autonome Provinz Bozen",
@@ -201,6 +213,18 @@ const projectTranslations: Record<Exclude<Locale, "de">, Record<string, Partial<
     },
     "meine-gemeinde-meine-natur": {
       title: "Il mio comune, la mia natura",
+      gallery: [
+        { src: "/projects/meine-gemeinde-meine-natur-herde-hang.webp", alt: "Pastore con cane da pastore e un gregge di capre e pecore su un ripido pendio erboso", caption: "Il pastore, il suo cane e il gregge di pecore e capre su un pendio ripido." },
+        { src: "/projects/meine-gemeinde-meine-natur-ziegen-weg.webp", alt: "Capre su un sentiero tra recinzioni di legno, dietro il pastore e le montagne", caption: "In cammino con il gregge: capre su un sentiero tra recinzioni di legno." },
+        { src: "/projects/meine-gemeinde-meine-natur-herde-winter.webp", alt: "Capre e pecore su una strada accanto a cataste di tronchi, ai lati c’è neve", caption: "Il gregge è in cammino anche d’inverno." },
+        { src: "/projects/meine-gemeinde-meine-natur-hirte-schnee.webp", alt: "Il pastore con il suo cane davanti al gregge su un terreno innevato", caption: "Il pastore con il cane e il gregge nella neve." },
+        { src: "/projects/meine-gemeinde-meine-natur-mahd.webp", alt: "Vista oltre una falciatrice su un’area con erba alta, sullo sfondo lavora un’altra persona", caption: "Intervento di cura a settembre 2026: l’area con erba alta viene falciata." },
+        { src: "/projects/meine-gemeinde-meine-natur-rechen.webp", alt: "Una persona rastrella l’erba tagliata su un’area falciata", caption: "L’erba tagliata viene raccolta con il rastrello." },
+        { src: "/projects/meine-gemeinde-meine-natur-maehgut.webp", alt: "Prato falciato con un cumulo di erba tagliata, dietro bosco e una linea elettrica", caption: "Dopo lo sfalcio l’erba tagliata viene raccolta in cumuli." },
+        { src: "/projects/meine-gemeinde-meine-natur-gemaehte-flaeche.webp", alt: "Area falciata con file e cumuli di erba tagliata davanti a boschetti", caption: "L’area falciata alla fine della giornata di lavoro." },
+        { src: "/projects/meine-gemeinde-meine-natur-haufen-waldrand.webp", alt: "Cumulo di erba tagliata al margine del bosco", caption: "Cumulo di erba tagliata al margine dell’area." },
+        { src: "/projects/meine-gemeinde-meine-natur-haufen-baeume.webp", alt: "Erba tagliata accatastata sotto gli alberi", caption: "L’erba tagliata accatastata sotto gli alberi." }
+      ],
       summary: "Scoprire e curare i biotopi dietro casa: un gregge di pecore e capre mantiene aperti prati aridi e pascoli magri in Valle Isarco.",
       description: "Vogliamo far conoscere l’importanza di questi habitat a ogni fascia d’età e a tutta la popolazione, realizzando interventi di cura per conservare la biodiversità di questi biotopi. Collaboriamo con un pastore professionista che con il suo gregge di pecore e capre cura questi habitat secondo la tradizione. Le superfici si trovano a Rasa, Gudon e Chiusa.",
       whyItMatters: "In quasi ogni località dell’Alto Adige si trovano habitat naturali e seminaturali che ospitano comunità rare e minacciate e sono perciò tutelati come biotopo o monumento naturale. Queste aree si trovano spesso nelle immediate vicinanze dei paesi e sono state create e mantenute dall’uomo, per lo più attraverso il pascolo guidato. Negli ultimi decenni il pascolo è però stato spesso abbandonato e questi habitat preziosi si stanno imboschendo. Un prato arido ricco di fiori e di insetti può così essere invaso da arbusti e alberi nel giro di pochi anni.",
@@ -305,6 +329,18 @@ const projectTranslations: Record<Exclude<Locale, "de">, Record<string, Partial<
     },
     "meine-gemeinde-meine-natur": {
       title: "My municipality, my nature",
+      gallery: [
+        { src: "/projects/meine-gemeinde-meine-natur-herde-hang.webp", alt: "Shepherd with herding dog and a flock of goats and sheep on a steep grassy slope", caption: "The shepherd, his herding dog and the flock of sheep and goats on a steep slope." },
+        { src: "/projects/meine-gemeinde-meine-natur-ziegen-weg.webp", alt: "Goats on a path between wooden fences, with the shepherd and mountains behind", caption: "On the move with the flock: goats on a path between wooden fences." },
+        { src: "/projects/meine-gemeinde-meine-natur-herde-winter.webp", alt: "Goats and sheep on a track beside stacked logs, with snow at the edges", caption: "The flock is on the move in winter too." },
+        { src: "/projects/meine-gemeinde-meine-natur-hirte-schnee.webp", alt: "The shepherd with his herding dog in front of the flock on snow-covered ground", caption: "The shepherd with dog and flock in the snow." },
+        { src: "/projects/meine-gemeinde-meine-natur-mahd.webp", alt: "View over a mower onto a patch of tall vegetation, with another person working in the background", caption: "Management work in September 2026: the overgrown patch is mown." },
+        { src: "/projects/meine-gemeinde-meine-natur-rechen.webp", alt: "A person raking cut vegetation on a mown area", caption: "The cuttings are raked together." },
+        { src: "/projects/meine-gemeinde-meine-natur-maehgut.webp", alt: "Mown meadow with a pile of cuttings, woodland and a power line behind", caption: "After mowing, the cuttings are gathered into piles." },
+        { src: "/projects/meine-gemeinde-meine-natur-gemaehte-flaeche.webp", alt: "Mown area with rows and piles of cuttings in front of trees and shrubs", caption: "The mown area at the end of the work day." },
+        { src: "/projects/meine-gemeinde-meine-natur-haufen-waldrand.webp", alt: "Pile of cuttings at the edge of the woods", caption: "A pile of cuttings at the edge of the site." },
+        { src: "/projects/meine-gemeinde-meine-natur-haufen-baeume.webp", alt: "Cuttings stacked beneath trees", caption: "The cuttings stacked beneath the trees." }
+      ],
       summary: "Discovering and caring for the biotopes on our doorstep: a flock of sheep and goats keeps dry grasslands and poor pastures in the Eisack Valley open.",
       description: "We want to bring the importance of these habitats home to every age group and part of the population, and carry out management work that preserves the biodiversity of these biotopes. We work with a professional shepherd who tends these habitats in the traditional way with his flock of sheep and goats. The sites lie in Raas, Gufidaun and Klausen.",
       whyItMatters: "In almost every village in South Tyrol there are natural and semi-natural habitats that harbour rare and endangered communities and are therefore protected as biotopes or natural monuments. These areas often lie right next to the settlements and were mostly created and maintained by people through managed grazing. Over recent decades grazing has frequently been abandoned, and these valuable habitats are turning to scrub. A flower-rich dry grassland full of insects can be overgrown by shrubs and trees within a few years.",

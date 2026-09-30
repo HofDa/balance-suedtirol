@@ -72,7 +72,7 @@ export function EcosystemServices({ locale }: { locale: Locale }) {
             {t.conclusion}
           </p>
         </Container>
-        <div data-home-reveal="grow" className="relative -mb-px mt-8 lg:-mt-[9vw]">
+        <div data-home-reveal="grow" className="relative -mb-px mt-8 lg:-mt-[15vw]">
           <HabitatSilhouette className="block h-auto w-full text-[var(--color-ink)]" />
         </div>
       </div>

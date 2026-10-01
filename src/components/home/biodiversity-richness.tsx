@@ -12,6 +12,7 @@ import { MobileCollapseSection, MobileCollapseToggle } from "./mobile-collapse";
 import { collapsibleHeading, hiddenWhenCollapsed } from "./mobile-collapse-classes";
 import { textDisplay, textHeadline, textLead } from "@/components/ui/typography";
 import { cn } from "@/lib/utils";
+import { CountUp } from "./count-up";
 
 /**
  * Höhenstufen im Foto, von oben nach unten. Die Punkte sitzen auf dem Motiv
@@ -154,7 +155,7 @@ export function BiodiversityRichness({ locale }: { locale: Locale }) {
                   {item.prefix ? (
                     <span className="mr-[0.25em] text-[0.42em] tracking-[-0.01em] text-[var(--color-forest)]/75">{item.prefix}</span>
                   ) : null}
-                  {item.value}
+                  <CountUp value={item.value} />
                   {item.suffix ? (
                     <span className="ml-[0.3em] text-[0.42em] tracking-[-0.01em] text-[var(--color-forest)]/75">{item.suffix}</span>
                   ) : null}

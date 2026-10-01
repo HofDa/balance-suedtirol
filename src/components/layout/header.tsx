@@ -13,7 +13,7 @@ import { focusRing, focusRingTool } from "@/components/ui/focus";
 export function Header({ locale }: { locale: Locale }) {
   const t = getTranslations(locale);
   return (
-    <header className="header-reveal sticky top-0 z-50 border-b border-[var(--color-line)] bg-transparent backdrop-blur-xl transition-colors duration-300">
+    <header className="header-reveal sticky top-0 z-50 border-b border-[var(--color-line)] bg-[var(--color-paper)]">
       <Container className="relative flex h-18 items-center justify-between">
         {/* Left: LOGO */}
         <Link
@@ -61,7 +61,7 @@ export function Header({ locale }: { locale: Locale }) {
 
           <Link
             href={`/${locale}/projekte`}
-            className={`inline-flex h-9 items-center justify-center rounded-[var(--radius-md)] bg-[var(--color-forest)] px-3.5 text-xs font-bold text-white shadow-sm transition-colors hover:bg-[var(--color-ink)] ${focusRingTool}`}
+            className={`hidden h-9 items-center sm:inline-flex justify-center rounded-[var(--radius-md)] bg-[var(--color-forest)] px-3.5 text-xs font-bold text-white shadow-sm transition-colors hover:bg-[var(--color-ink)] ${focusRingTool}`}
           >
             {t.headerCta}
           </Link>

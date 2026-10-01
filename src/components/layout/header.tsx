@@ -31,7 +31,7 @@ export function Header({ locale }: { locale: Locale }) {
           />
         </Link>
 
-        {/* Right: Aligned Navigation Group (Projects · DE · IT · EN · CTA) */}
+        {/* Desktop navigation, languages, and projects CTA */}
         <div className="hidden items-center xl:flex">
           <nav className="flex items-center gap-7" aria-label={t.navLabel}>
             {siteConfig.navigation.map((item, index) => (
@@ -46,7 +46,7 @@ export function Header({ locale }: { locale: Locale }) {
           </div>
 
           <Link
-            href={`/${locale}/haus-tour`}
+            href={`/${locale}/projekte`}
             className={`ml-10 inline-flex min-h-11 items-center justify-center rounded-[var(--radius-md)] bg-[var(--color-forest)] px-5 text-sm font-bold text-white shadow-sm transition-all duration-200 ease-out hover:bg-[var(--color-ink)] hover:shadow-md ${focusRingTool}`}
           >
             {t.headerCta}
@@ -60,7 +60,7 @@ export function Header({ locale }: { locale: Locale }) {
           </div>
 
           <Link
-            href={`/${locale}/haus-tour`}
+            href={`/${locale}/projekte`}
             className={`inline-flex h-9 items-center justify-center rounded-[var(--radius-md)] bg-[var(--color-forest)] px-3.5 text-xs font-bold text-white shadow-sm transition-colors hover:bg-[var(--color-ink)] ${focusRingTool}`}
           >
             {t.headerCta}
@@ -103,7 +103,7 @@ export function Header({ locale }: { locale: Locale }) {
               </div>
 
               <Link
-                href={`/${locale}/haus-tour`}
+                href={`/${locale}/projekte`}
                 className={`mt-4 flex min-h-11 items-center justify-center rounded-[var(--radius-md)] bg-[var(--color-forest)] px-5 text-sm font-bold text-white shadow-sm transition-colors hover:bg-[var(--color-ink)] ${focusRingTool}`}
               >
                 {t.headerCta}

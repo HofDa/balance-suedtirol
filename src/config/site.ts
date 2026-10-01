@@ -9,7 +9,7 @@ export const siteConfig = {
     "Biodiversität verstehen, lokale Projekte entdecken und gemeinsam Wirkung entfalten.",
   navigation: [
     { label: "Was ist b*alance", href: "/was-ist-balance" },
-    { label: "Projekte", href: "/projekte" },
+    { label: "Lebensraum-Check", href: "#lebensraum-check" },
     { label: "CO₂-Kompensation?", href: "/co2-und-biodiversitaet" },
     { label: "Über uns", href: "/ueber-uns" }
   ]

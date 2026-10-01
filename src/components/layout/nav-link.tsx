@@ -19,13 +19,13 @@ interface NavLinkProps {
 export function NavLink({ href, children, className = "" }: NavLinkProps) {
   const pathname = usePathname();
 
-  const isHabitatCheck = href.endsWith("/haus-tour");
+  const isHabitatCheck = href.endsWith("#lebensraum-check");
   const isHomePage = Boolean(pathname?.match(/^\/[a-z]{2}\/?$/));
 
   const isActive =
     pathname === href ||
     (href.length > 3 && !isHabitatCheck && pathname?.startsWith(href)) ||
-    (isHabitatCheck && (pathname === href || isHomePage));
+    (isHabitatCheck && (pathname?.endsWith("/haus-tour") || isHomePage));
 
   return (
     <Link

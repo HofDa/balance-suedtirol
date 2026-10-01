@@ -163,7 +163,7 @@ test("jede Neuigkeit ist in it und en übersetzt", () => {
 
 test("jedes Navigationsziel hat eine Seite unter src/app/[locale]", () => {
   for (const item of siteConfig.navigation) {
-    const page = path.join(process.cwd(), "src", "app", "[locale]", item.href.replace(/^\//, ""), "page.tsx");
+    const page = path.join(process.cwd(), "src", "app", "[locale]", item.href.split("#")[0].replace(/^\//, ""), "page.tsx");
     assert.ok(fs.existsSync(page), `${item.href}: keine page.tsx gefunden`);
   }
 });

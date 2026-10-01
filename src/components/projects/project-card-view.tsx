@@ -54,19 +54,24 @@ export function ProjectCardView({
           sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
           className="object-cover transition duration-500 group-hover:scale-[1.03]"
         />
-        <div className="absolute inset-x-4 top-4 flex flex-wrap gap-1.5">
-          {project.categoryIds.map((categoryId) => (
-            <ProjectCategoryBadge
-              key={categoryId}
-              categoryId={categoryId}
-              label={categoryLabels[categoryId]}
-            />
-          ))}
-        </div>
       </div>
 
       <div className="flex flex-1 flex-col p-5 sm:p-6">
-        <p className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-[var(--color-muted)]">
+        {/* Die Lebensraum-Etiketten stehen unter dem Bild statt darauf: Bei
+            zwei, drei Kategorien deckten sie sonst einen guten Teil des Fotos ab. */}
+        <ul className="flex flex-wrap gap-1.5">
+          {project.categoryIds.map((categoryId) => (
+            <li key={categoryId}>
+              <ProjectCategoryBadge
+                categoryId={categoryId}
+                label={categoryLabels[categoryId]}
+                className="min-h-6 px-2 text-[10px]"
+              />
+            </li>
+          ))}
+        </ul>
+
+        <p className="mt-4 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-[var(--color-muted)]">
           <span className="inline-flex items-center gap-1.5 font-medium">
             <MapPin className="size-3.5 shrink-0" aria-hidden />
             {project.municipality}

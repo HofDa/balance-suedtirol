@@ -41,7 +41,7 @@ export function HouseIntro({ locale }: { locale: Locale }) {
   const href = `/${locale}/haus-tour`;
 
   return (
-    <MobileCollapseSection aria-labelledby="house-title" className="py-16 sm:py-28">
+    <MobileCollapseSection id="lebensraum-check" aria-labelledby="house-title" className="scroll-mt-20 py-16 sm:py-28">
       <Container>
         <div className="grid gap-10 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:items-center lg:gap-16">
           <div data-home-reveal="rise">

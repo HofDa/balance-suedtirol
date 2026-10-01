@@ -68,6 +68,7 @@ export function ProjectDetail({ project, otherProjects, locale }: ProjectDetailP
   };
 
   const beforeAfter = project.beforeAfter?.isPlaceholder ? undefined : project.beforeAfter;
+  const isHedgehogProject = project.slug === "vorfahrt-fuer-den-igel";
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -138,14 +139,24 @@ export function ProjectDetail({ project, otherProjects, locale }: ProjectDetailP
             </figure>
           ) : (
             <Surface level="sheet" className="mt-7 overflow-hidden p-0 sm:p-0">
-              <div className="relative aspect-[21/9] min-h-[260px] overflow-hidden sm:min-h-[360px]">
+              <div
+                className={cn(
+                  "relative overflow-hidden",
+                  isHedgehogProject
+                    ? "aspect-[4/3] sm:aspect-[16/9]"
+                    : "aspect-[21/9] min-h-[260px] sm:min-h-[360px]"
+                )}
+              >
                 <Image
                   src={withBasePath(project.image)}
                   alt={`${project.title}, ${project.municipality}`}
                   fill
                   priority
                   sizes="(min-width: 1280px) 1180px, 100vw"
-                  className="object-cover"
+                  className={cn(
+                    "object-cover",
+                    isHedgehogProject && "object-[35%_50%] sm:object-center"
+                  )}
                 />
               </div>
             </Surface>

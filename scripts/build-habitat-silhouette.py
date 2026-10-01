@@ -99,15 +99,33 @@ def deciduous(x, base, h, r):
 
 
 def shrub(x, base, w, h):
-    """Strauch mit Höhe h (Einheiten) aus überlappenden Ballen."""
-    out = []
-    n = 6
+    """Strauch mit Höhe h (Einheiten): Die Krone sitzt etwas über dem Boden,
+    damit darunter die Gerten sichtbar bleiben, die aus einem Punkt fächern –
+    das unterscheidet ihn vom Stein. Der Rand ist aus kleinen Blattballen
+    gezackt."""
     rng = random.Random(int(x) + 3)
+    out = []
+    # Gerten: schmal zulaufend, aus der Mitte nach außen gespreizt.
+    crown_bottom = base - h * 0.28
+    for i, spread in enumerate([-0.34, -0.17, 0, 0.18, 0.33]):
+        top_x = x + spread * w + rng.uniform(-1.5, 1.5)
+        foot = x + spread * 4
+        out.append(p(poly([(foot - 1.3, base + 3), (top_x - 0.5, crown_bottom - 4), (top_x + 0.5, crown_bottom - 4), (foot + 1.3, base + 3)])))
+    # Krone: Kern als Ellipse, Rand aus Ballen, unten flacher als oben.
+    cx, cy = x, base - h * 0.62
+    rx, ry = w / 2, h * 0.36
+    out.append(f'<ellipse cx="{f(cx)}" cy="{f(cy)}" rx="{f(rx * 0.86)}" ry="{f(ry * 0.9)}"/>')
+    n = 16
     for i in range(n):
-        cx = x - w / 2 + w * (i + 0.5) / n
-        rr = h * rng.uniform(0.3, 0.5)
-        top = h * (0.6 + 0.4 * math.sin(math.pi * (i + 0.5) / n))
-        out.append(circle(cx, base - top + rr, rr))
+        a = math.pi + i / (n - 1) * math.pi + rng.uniform(-0.08, 0.08)  # obere Hälfte
+        px = cx + rx * 0.84 * math.cos(a)
+        py = cy + ry * 0.84 * math.sin(a)
+        out.append(circle(px, py, h * rng.uniform(0.11, 0.17)))
+    for i in range(7):  # Unterkante: kleinere Ballen, leicht hängend
+        t = (i + 0.5) / 7
+        px = cx - rx * 0.8 + rx * 1.6 * t
+        py = cy + ry * 0.62 + math.sin(math.pi * t) * ry * 0.18
+        out.append(circle(px, py, h * rng.uniform(0.08, 0.12)))
     return out
 
 
@@ -211,6 +229,121 @@ def bird(x, y, s=1.0):
     ]
 
 
+def stroke(d, w):
+    return f'<path d="{d}" fill="none" stroke="currentColor" strokeWidth="{f(w)}" strokeLinecap="round" strokeLinejoin="round"/>'
+
+
+def ellipse(cx, cy, rx, ry, rot=0):
+    t = f' transform="rotate({f(rot)} {f(cx)} {f(cy)})"' if rot else ""
+    return f'<ellipse cx="{f(cx)}" cy="{f(cy)}" rx="{f(rx)}" ry="{f(ry)}"{t}/>'
+
+
+def cloud(cx, cy, rx, ry, n, depth=0.55, rng=None):
+    """Ellipse mit Wolkenrand: n Bögen, die zwischen Punkten auf der Ellipse
+    nach außen wölben – liest sich als Wolle."""
+    pts = []
+    for i in range(n):
+        a = 2 * math.pi * i / n + (rng.uniform(-0.06, 0.06) if rng else 0)
+        pts.append((cx + rx * math.cos(a), cy + ry * math.sin(a)))
+    d = f"M{f(pts[0][0])} {f(pts[0][1])}"
+    for i in range(n):
+        x2, y2 = pts[(i + 1) % n]
+        chord = math.dist(pts[i], (x2, y2))
+        r = chord * depth * (rng.uniform(0.9, 1.1) if rng else 1)
+        d += f"A{f(r)} {f(r)} 0 0 1 {f(x2)} {f(y2)}"
+    return p(d + "Z")
+
+
+def sheep(x, base, facing=1, grazing=False, s=1.0):
+    """Schaf von der Seite, wie man es aus Piktogrammen kennt: rundlicher
+    Rumpf mit Wolkenrand ringsum, glatter tropfenförmiger Kopf mit
+    abstehendem Ohr, vier dünne, gerade Beine. Gezeichnet nach rechts blickend
+    um den Ursprung, dann gespiegelt und verschoben."""
+    rng = random.Random(int(x) + 11)
+    out = []
+    for lx in (-11, -6.5, 6.5, 11):
+        out.append(stroke(f"M{f(lx)} -12L{f(lx)} -0.3", 1.8))
+    out.append(cloud(0, -18, 15.5, 8.5, 15, 0.62, rng))
+    head = [
+        p("M11 -23L17.5 -28.5L20.5 -21L12.5 -15Z"),  # Hals
+        p("M17 -26.5Q19.8 -31.8 24 -29L28.3 -21.3Q28.8 -19 26.2 -19.2L18.6 -21.6Z"),
+        ellipse(16.4, -29.8, 3.8, 1.25, 27),  # Ohr, steht über die Wolle hinaus
+    ]
+    if grazing:
+        out.append(f'<g transform="rotate(68 14 -20)">{"".join(head)}</g>')
+    else:
+        out += head
+    return [f'<g transform="translate({f(x)} {f(base)}) scale({f(facing * s)} {f(s)})">{"".join(out)}</g>']
+
+
+def goat(x, base, facing=-1, s=1.0, reach=0.0):
+    """Ziege: schlank und hochbeinig, glattes Fell, Hörner nach hinten
+    gebogen, Bart, kurzer hochstehender Schwanz. `reach` hebt den Kopf
+    (zum Knabbern am Strauch)."""
+    L = m(1.05) * s
+    cy = base - m(0.62) * s
+    out = []
+    w = 2.1 * s
+    # Beine mit leichtem Knick
+    for dx, k in ((0.32, 1), (0.22, -1), (-0.27, 1), (-0.36, -1)):
+        lx = x + facing * L * dx
+        out.append(stroke(f"M{f(lx)} {f(cy)}L{f(lx + k * 1.2 * s)} {f(base - m(0.25) * s)}L{f(lx)} {f(base - 0.4)}", w))
+    out.append(ellipse(x, cy, L * 0.42, m(0.15) * s))
+    out.append(ellipse(x + facing * L * 0.05, cy + m(0.04) * s, L * 0.34, m(0.14) * s))
+    # Hals und Kopf
+    nx, ny = x + facing * L * 0.36, cy - m(0.06) * s
+    hx, hy = x + facing * (L * 0.55 + 3 * s), cy - m(0.36 + reach) * s
+    out.append(p(poly([(nx - facing * 4 * s, ny - 3 * s), (hx - facing * 1.5 * s, hy - 2 * s), (hx + facing * 1.5 * s, hy + 2 * s), (nx + facing * 3 * s, ny + 4 * s)])))
+    out.append(ellipse(hx + facing * 2.5 * s, hy + 1.2 * s, 4.6 * s, 2.1 * s, facing * 35))
+    out.append(p(poly([(hx + facing * 3 * s, hy + 3 * s), (hx + facing * 4.5 * s, hy + 3.5 * s), (hx + facing * 3 * s, hy + 7 * s)])))  # Bart
+    out.append(ellipse(hx - facing * 1.8 * s, hy - 0.2 * s, 2.4 * s, 0.85 * s, facing * 10))  # Ohr
+    out.append(stroke(f"M{f(hx)} {f(hy - 1.5 * s)}Q{f(hx - facing * 1 * s)} {f(hy - 7 * s)} {f(hx - facing * 5.5 * s)} {f(hy - 6 * s)}", 1.5 * s))  # Horn
+    tx, ty = x - facing * L * 0.42, cy - m(0.06) * s
+    out.append(p(poly([(tx, ty - 1 * s), (tx - facing * 3 * s, ty - 4.5 * s), (tx - facing * 1 * s, ty + 1.5 * s)])))
+    return out
+
+
+def grasshopper(x, y, facing=1, s=1.0, jumping=False):
+    """Heuschrecke, stark überzeichnet: langer Leib, das große Sprungbein als
+    spitzes Dach darüber, lange Fühler."""
+    out = [ellipse(x, y, 4.6 * s, 1.3 * s, -facing * 8), circle(x + facing * 4.4 * s, y - 0.9 * s, 1.4 * s)]
+    if jumping:
+        out.append(stroke(f"M{f(x - facing * 1 * s)} {f(y)}L{f(x - facing * 5 * s)} {f(y + 1.5 * s)}L{f(x - facing * 9.5 * s)} {f(y + 3.5 * s)}", 1.1 * s))
+    else:
+        out.append(stroke(f"M{f(x - facing * 0.5 * s)} {f(y)}L{f(x - facing * 3.8 * s)} {f(y - 3.4 * s)}", 1.4 * s))
+        out.append(stroke(f"M{f(x - facing * 3.8 * s)} {f(y - 3.4 * s)}L{f(x - facing * 6.2 * s)} {f(y + 2.2 * s)}", 0.6 * s))
+    for dx in (1.5, 2.8):
+        out.append(stroke(f"M{f(x + facing * dx * s)} {f(y + 0.6 * s)}L{f(x + facing * (dx + 0.6) * s)} {f(y + 2.4 * s)}", 0.5 * s))
+    out.append(stroke(f"M{f(x + facing * 5.2 * s)} {f(y - 1.8 * s)}Q{f(x + facing * 8 * s)} {f(y - 7 * s)} {f(x + facing * 12 * s)} {f(y - 6.5 * s)}", 0.35 * s))
+    return out
+
+
+def bee(x, y, facing=1, s=1.0, trail=None):
+    """Biene im Flug: runder Leib, zwei Flügel darüber. Optional eine
+    gepunktete Flugbahn (Liste von Punkten hinter der Biene)."""
+    out = [
+        ellipse(x, y, 2.4 * s, 1.5 * s, facing * 12),
+        circle(x + facing * 2.4 * s, y - 0.4 * s, 1 * s),
+        ellipse(x - facing * 0.4 * s, y - 2.3 * s, 1.1 * s, 2 * s, -facing * 30),
+        ellipse(x + facing * 0.8 * s, y - 2.2 * s, 0.9 * s, 1.7 * s, facing * 15),
+    ]
+    if trail:
+        d = f"M{f(trail[0][0])} {f(trail[0][1])}Q{f(trail[1][0])} {f(trail[1][1])} {f(trail[2][0])} {f(trail[2][1])}"
+        out.append(f'<path d="{d}" fill="none" stroke="currentColor" strokeWidth="0.7" strokeLinecap="round" strokeDasharray="0.1 2.4"/>')
+    return out
+
+
+def songbird(x, base, facing=1, s=1.0):
+    """Sitzender Singvogel, etwa 2,5-fach überzeichnet."""
+    return [
+        ellipse(x, base - 3.6 * s, 3.7 * s, 2.4 * s, -facing * 22),
+        circle(x + facing * 2.8 * s, base - 6.2 * s, 1.9 * s),
+        p(poly([(x + facing * 4.4 * s, base - 6.8 * s), (x + facing * 6.4 * s, base - 6.1 * s), (x + facing * 4.4 * s, base - 5.5 * s)])),
+        p(poly([(x - facing * 2.2 * s, base - 4 * s), (x - facing * 7 * s, base - 0.5 * s), (x - facing * 6 * s, base + 0.6 * s), (x - facing * 1.5 * s, base - 2 * s)])),
+        stroke(f"M{f(x)} {f(base - 1.5 * s)}L{f(x + facing * 0.5 * s)} {f(base + 0.5)}", 0.6 * s),
+    ]
+
+
 # ---------------------------------------------------------------- Menschen
 
 def limb(x1, y1, x2, y2, x3, y3, w):
@@ -308,11 +441,10 @@ add(0, spruce(72, g(72), m(10.5), m(3.7)))
 add(60, spruce(14, g(14), m(6), m(2.2)))
 add(120, deciduous(196, g(196), m(8), m(2.3)))
 add(180, spruce(300, g(300), m(7), m(2.5)))
-add(260, shrub(360, g(360), m(2.6), m(1.3)))
+add(260, shrub(360, g(360), m(2.6), m(1.6)))
 add(0, spruce(1350, g(1350), m(11), m(3.9)))
 add(60, spruce(1428, g(1428), m(5.5), m(2)))
 add(120, deciduous(1238, g(1238), m(8.5), m(2.45)))
-add(260, shrub(1090, g(1090), m(2.3), m(1.2)))
 reeds = []
 for i, rx in enumerate([1118, 1126, 1135, 1143, 1152, 1160]):
     h = m([1.7, 1.9, 1.6, 1.85, 1.75, 1.65][i])
@@ -331,8 +463,8 @@ add(600, umbel(704, g(704), m(0.8), 1))
 add(630, daisy(730, g(730), m(0.45), 1))
 add(660, daisy(764, g(764), m(0.5), -1))
 add(690, bell(820, g(820), m(0.5), -1))
-add(720, umbel(862, g(862), m(0.9), 1))
-add(750, daisy(884, g(884), m(0.4), 1))
+add(720, umbel(926, g(926), m(0.9), 1))
+add(750, daisy(897, g(897), m(0.4), 1))
 add(780, seedhead(944, g(944), m(0.85), -2))
 add(810, daisy(962, g(962), m(0.45), 1))
 
@@ -357,7 +489,27 @@ while x < W:
 # Tiere zuletzt.
 add(1000, hedgehog(906, g(906)))
 add(1100, butterfly(716, g(716) - m(1.05)), "fade")
-add(1150, bird(1180, 96, 0.55) + bird(1206, 114, 0.4), "fade")
+add(1150, bird(1180, 96, 0.55) + bird(1206, 114, 0.4) + bird(1222, 88, 0.3), "fade")
+add(1180, bird(250, 52, 0.5) + bird(276, 66, 0.38) + bird(230, 72, 0.32), "fade")
+add(1120, songbird(357, g(360) - 44, 1, 1.0), "fade")
+
+# Weidetiere: eine Ziege knabbert am Strauch, Schafe mit Lamm in der Wiese.
+add(900, goat(422, g(422), -1, 1.0, reach=0.12))
+add(920, sheep(768, g(768), 1, grazing=True))
+add(950, sheep(811, g(811), 1, s=0.62))
+add(980, sheep(872, g(872), -1))
+
+# Insekten: Heuschrecken im Sprung und auf der gemähten Fläche, Bienen an
+# den Blüten, mehr Falter.
+add(1060, grasshopper(600, g(600) - m(0.7), 1, 1.0, jumping=True), "fade")
+add(1080, grasshopper(1046, g(1046) - 3, -1, 0.9), "fade")
+add(1100, bee(476, g(470) - m(0.85) - 6, -1, 1.0, trail=[(498, g(470) - m(1.05)), (490, g(470) - m(0.7)), (480, g(470) - m(0.85) - 5)]), "fade")
+add(1130, bee(709, g(704) - m(0.8) - 7, 1, 0.9), "fade")
+add(1160, bee(903, g(897) - m(0.4) - 8, -1, 0.9), "fade")
+add(1110, butterfly(512, g(512) - m(1.0), 7.5), "fade")
+add(1140, butterfly(910, g(910) - m(1.15), 8), "fade")
+add(1170, butterfly(1088, g(1088) - m(1.5), 8.5), "fade")
+add(1190, butterfly(160, g(160) - m(1.3), 7), "fade")
 
 # Menschen gehören dazu: Elternteil und Kind Hand in Hand, und wer die Wiese
 # pflegt: jemand mäht mit der Sense.

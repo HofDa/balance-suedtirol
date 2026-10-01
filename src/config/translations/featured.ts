@@ -8,7 +8,7 @@ export const featuredCopy = {
     next: "Nächstes Projekt",
     stanceButton: "Warum Biodiversität statt CO₂?",
     stanceTeaser: "Artenvielfalt ist für unser Leben mindestens so wichtig wie das Klima. CO₂-Kompensation braucht zudem Fläche, die es in Südtirol nicht gibt. Lebensräume vor Ort kann man erhalten und besuchen.",
-    stanceReadMore: "Ganze Haltung lesen",
+    stanceReadMore: "CO₂-Kompensation?",
     stanceClose: "Schließen"
   },
   it: {
@@ -20,7 +20,7 @@ export const featuredCopy = {
     next: "Progetto successivo",
     stanceButton: "Perché biodiversità invece di CO₂?",
     stanceTeaser: "La varietà delle specie è per la nostra vita importante almeno quanto il clima. La compensazione di CO₂ ha inoltre bisogno di superficie, e in Alto Adige non c’è. Gli habitat sul posto si possono conservare e visitare.",
-    stanceReadMore: "Leggi la posizione completa",
+    stanceReadMore: "Compensazione della CO₂?",
     stanceClose: "Chiudi"
   },
   en: {
@@ -32,7 +32,7 @@ export const featuredCopy = {
     next: "Next project",
     stanceButton: "Why biodiversity instead of CO₂?",
     stanceTeaser: "Biodiversity matters to our lives at least as much as the climate. CO₂ offsetting also needs land, and South Tyrol has none to spare. Habitats nearby can be preserved and visited.",
-    stanceReadMore: "Read the full position",
+    stanceReadMore: "CO₂ offsetting?",
     stanceClose: "Close"
   }
 } as const;

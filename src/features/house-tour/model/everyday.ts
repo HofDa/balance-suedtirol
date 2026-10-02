@@ -2,6 +2,7 @@ import type { Locale } from "../../../config/site";
 import { localeTags } from "../../../lib/i18n";
 import { tourUi, type TourUi } from "../i18n/ui";
 import type { AnnualValues, ScoreImpact } from "./types";
+import { GAS_KWH_PER_SMC, HEATING_OIL_KWH_PER_LITER, SOUTH_TYROL_HOUSEHOLD_KWH_PER_PERSON } from "./calculator";
 
 /**
  * Die Jahreswerte in Bildern aus dem Alltag. „21,9 m³“ sagt kaum jemandem
@@ -19,7 +20,7 @@ const BUCKET_LITERS = 10;
 /** Benzin- oder Dieselauto, kg CO₂e je km — derselbe Faktor wie in der Mobilitätsfrage. */
 export const CAR_CO2_PER_KM = 0.22;
 /** Bozen–Rom und zurück, km — derselbe Anker wie im Hinweis zur Fernreisefrage. */
-const ROME_ROUND_TRIP_KM = 1400;
+export const ROME_ROUND_TRIP_KM = 1400;
 
 type Kind = "water" | "co2" | "co2-plain";
 
@@ -123,4 +124,54 @@ function qualitative(impact: ScoreImpact, w: Words) {
   if (sum > 0) return w.thrifty;
   if (sum < 0) return w.room;
   return w.none;
+}
+
+export type Landmarks = "distance" | "area";
+export type LandmarkKey = "earth" | "rome" | "innsbruck" | "meran" | "tennis" | "parking";
+
+/**
+ * Vergleiche unter großen Reglern: Strecken an Wegen aus der Gegend, Flächen
+ * an Plätzen, die jeder kennt. Es gilt der größte Vergleich, der mindestens
+ * einmal hineinpasst. Straßenkilometer gerundet; Tennisplatz im Doppelfeld
+ * 23,77 × 10,97 m, Parkplatz 2,5 × 5 m.
+ */
+const landmarkSets: Record<Landmarks, { size: number; key: LandmarkKey }[]> = {
+  distance: [
+    { size: 40000, key: "earth" },
+    { size: ROME_ROUND_TRIP_KM, key: "rome" },
+    { size: 120, key: "innsbruck" },
+    { size: 30, key: "meran" }
+  ],
+  area: [
+    { size: 260, key: "tennis" },
+    { size: 12.5, key: "parking" }
+  ]
+};
+
+/** Wie oft ein Vergleich in einen Wert passt; unter zehn auf eine Stelle genau. */
+export function landmark(kind: Landmarks, value: number): { key: LandmarkKey; times: number } | null {
+  const match = landmarkSets[kind].find(({ size }) => value >= size);
+  if (!match) return null;
+  const times = value / match.size;
+  return { key: match.key, times: times < 10 ? Math.round(times * 10) / 10 : Math.round(times) };
+}
+
+/**
+ * Heizenergie in der Einheit, die auf der Rechnung steht: Smc beim Gas,
+ * Liter beim Öl, auf zehn gerundet. So lässt sich der Regler an der Rechnung
+ * einstellen, statt sie erst umzurechnen. Fernwärme und Wärmepumpe rechnen
+ * ohnehin in kWh ab; „Biomasse“ teilt sich die Option mit der Fernwärme und
+ * hat deshalb keine eindeutige Einheit.
+ */
+export function heatingBillUnit(optionId: string | undefined, kwh: number): { key: "gas" | "oil"; amount: number } | null {
+  if (!(kwh > 0)) return null;
+  if (optionId === "heat-gas") return { key: "gas", amount: Math.round(kwh / GAS_KWH_PER_SMC / 10) * 10 };
+  if (optionId === "heat-oil") return { key: "oil", amount: Math.round(kwh / HEATING_OIL_KWH_PER_LITER / 10) * 10 };
+  return null;
+}
+
+/** Haushaltsstrom pro Kopf gegen den Südtiroler Durchschnitt, auf eine Stelle. */
+export function electricityShare(kwh: number) {
+  if (!(kwh > 0)) return null;
+  return Math.round((kwh / SOUTH_TYROL_HOUSEHOLD_KWH_PER_PERSON) * 10) / 10;
 }

@@ -66,14 +66,17 @@ export function AdjustControl({
   quantity,
   isCustom,
   onChange,
-  onReset
+  onReset,
+  note
 }: {
   adjust: QuestionAdjust;
   questionId: string;
   quantity: number;
   isCustom: boolean;
   onChange: (quantity: number) => void;
-  onReset: () => void;
+  onReset?: () => void;
+  /** Ein Vergleich zur eingestellten Menge, etwa „≈ 8× Bozen–Rom und zurück“. */
+  note?: string | null;
 }) {
   const sliderId = `adjust-${questionId}`;
   const decimals = adjust.step < 1 ? 1 : 0;
@@ -99,7 +102,7 @@ export function AdjustControl({
         <label htmlFor={sliderId} className="text-xs font-semibold text-[var(--color-ink)] md:text-sm">
           {adjust.label}
         </label>
-        {isCustom && (
+        {isCustom && onReset && (
           <button
             type="button"
             onClick={onReset}
@@ -153,6 +156,9 @@ export function AdjustControl({
         <p className="mt-1 text-[11px] font-semibold tabular-nums text-[var(--color-forest)]">
           ≈ {(quantity * adjust.base.factor).toLocaleString(localeTags[locale], { maximumFractionDigits: 1 })} {adjust.base.unit}
         </p>
+      )}
+      {note && (
+        <p className="mt-1 text-[11px] font-semibold tabular-nums text-[var(--color-forest)]">{note}</p>
       )}
       {adjust.hint && (
         <p className="mt-1 text-[11px] leading-4 text-[var(--color-muted)]">{adjust.hint}</p>

@@ -34,6 +34,7 @@ export type RoomText = {
 
 const ASTAT_ENERGY = "ASTAT, astat info 61/2022 (Energieverbrauch der Südtiroler Haushalte 2021)";
 const ASTAT_MOBILITY = "ASTAT, astat info 51/2024 (Lokale Mobilität: Wege 2024)";
+const TERNA_ASTAT_ELECTRICITY = "Terna, Elettricità nelle regioni 2024; ASTAT, Bevölkerungsstand 31.12.2024";
 
 /** Der deutsche Abschlusssatz je Raum; der Rest des Deutschen steht in `config/`. */
 export const germanCompletion: Record<RoomId, string> = {
@@ -209,7 +210,15 @@ const it: Record<RoomId, RoomText> = {
         options: {
           "electricity-high": { label: "Consumo alto" },
           "electricity-medium": { label: "Consumo medio" },
-          "electricity-low": { label: "Consumo basso" }
+          "electricity-low": { label: "Consumo basso" },
+          "electricity-average": {
+            label: "Non lo so",
+            regionalAverage: {
+              basis:
+                "Nel 2024 le famiglie della provincia di Bolzano hanno consumato in tutto 510,7 GWh di elettricità; con 539.679 abitanti sono circa 950 kWh a persona.",
+              source: TERNA_ASTAT_ELECTRICITY
+            }
+          }
         }
       },
       "living-lighting": {
@@ -292,8 +301,7 @@ const it: Record<RoomId, RoomText> = {
           "Conta solo sulla CO₂. L’acqua dietro l’alimentazione è acqua virtuale delle regioni di coltivazione e resta fuori dal confine di bilancio.",
         adjust: {
           label: "Pasti con carne a settimana",
-          unit: "pasti",
-          hint: "Conta salumi e affettati come mezzo pasto."
+          unit: "pasti"
         },
         options: {
           "diet-meat": { label: "Carne quasi ogni giorno" },
@@ -618,7 +626,15 @@ const en: Record<RoomId, RoomText> = {
         options: {
           "electricity-high": { label: "High consumption" },
           "electricity-medium": { label: "Medium consumption" },
-          "electricity-low": { label: "Low consumption" }
+          "electricity-low": { label: "Low consumption" },
+          "electricity-average": {
+            label: "Don’t know",
+            regionalAverage: {
+              basis:
+                "In 2024, households in the province of Bolzano used 510.7 GWh of electricity in total; with 539,679 residents that is about 950 kWh per person.",
+              source: TERNA_ASTAT_ELECTRICITY
+            }
+          }
         }
       },
       "living-lighting": {
@@ -701,8 +717,7 @@ const en: Record<RoomId, RoomText> = {
           "Counts only towards CO₂. The water behind food is virtual water from the growing regions and lies outside the boundary.",
         adjust: {
           label: "Meat meals per week",
-          unit: "meals",
-          hint: "Count sausage and cold cuts as half a meal."
+          unit: "meals"
         },
         options: {
           "diet-meat": { label: "Meat almost every day" },

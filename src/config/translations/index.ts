@@ -12,6 +12,7 @@ import { whatIsCopy } from "./what-is";
 import { aboutCopy } from "./about";
 import { carbonStanceCopy } from "./carbon-stance";
 import { projectsCopy } from "./projects";
+import { methodologyCopy } from "./methodology";
 
 function build<L extends Locale>(l: L) {
   return {
@@ -26,6 +27,7 @@ function build<L extends Locale>(l: L) {
     whatIs: whatIsCopy[l],
     about: aboutCopy[l],
     carbonStance: carbonStanceCopy[l],
+    methodology: methodologyCopy[l],
     ...projectsCopy[l],
   };
 }

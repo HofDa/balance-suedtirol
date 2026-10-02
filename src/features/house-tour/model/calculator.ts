@@ -59,6 +59,26 @@ export const KWH_PER_STANDBY_WATT = 8.76;
 export const FUEL_KWH_PER_LITER = 9.7;
 
 /**
+ * Erdgas, wie es auf der Rechnung steht: ARERA rechnet mit einem
+ * konventionellen oberen Heizwert von 0,038520 GJ je Smc, also 10,7 kWh.
+ */
+export const GAS_KWH_PER_SMC = 38.52 / 3.6;
+
+/**
+ * Heizöl je Liter: unterer Heizwert 42,873 GJ/t (ISPRA/MASE, Tabella
+ * parametri standard nazionali, Gasolio riscaldamento) bei 0,84 kg/l, dem
+ * oberen Rand der Dichte nach EN 590. Ergibt rund 10 kWh je Liter.
+ */
+export const HEATING_OIL_KWH_PER_LITER = (42.873 * 0.84) / 3.6;
+
+/**
+ * Haushaltsstrom pro Kopf in Südtirol: 510,7 GWh Verbrauch der Haushalte in
+ * der Provinz Bozen 2024 (Terna, Elettricità nelle regioni) geteilt durch
+ * 539.679 Einwohner (ASTAT, 31.12.2024). Rund 950 kWh.
+ */
+export const SOUTH_TYROL_HOUSEHOLD_KWH_PER_PERSON = 510.7e6 / 539679;
+
+/**
  * Vergleichsanker, nicht Zielwert — und ausdrücklich nur für die Bereiche, die
  * dieser Check abfragt.
  *
@@ -67,9 +87,9 @@ export const FUEL_KWH_PER_LITER = 9.7;
  * kein amtlicher Bevölkerungsdurchschnitt und kein Klimaziel.
  */
 export const referenceValues: AnnualValues = {
-  co2Kg: 4000,
+  co2Kg: 3900,
   waterL: 53000,
-  energyKwh: 9500
+  energyKwh: 8950
 };
 
 /** Die vollen Durchschnittswerte, für die Einordnung in der Bilanz. */
@@ -361,6 +381,55 @@ export function optionValues(
   });
 }
 
+/**
+ * Fragen, deren Optionen nur eine Menge vorgeben: Fleischmahlzeiten,
+ * Regionalanteil, Lebensmittelabfall, Haushaltsstrom. Dort ist die Zahl die
+ * eigentliche Antwort, und eine andere Option heißt eine andere Menge.
+ */
+export const presetsOnly = (question: TourQuestion) =>
+  Boolean(question.adjust) && question.options.every((option) => !option.params);
+
+/**
+ * Die Option, deren Vorgabe einer Menge am nächsten liegt; bei Gleichstand die
+ * mit der größeren Vorgabe. So folgt die Antwort der eingegebenen Zahl, wenn
+ * die Optionen selbst nichts weiter festlegen. „Weiß ich nicht“ kommt dabei
+ * nie heraus: wer eine Zahl eingibt, weiß sie.
+ */
+export function presetFor(question: TourQuestion, quantity: number) {
+  const defaults = question.adjust?.defaults ?? {};
+  const candidates = question.options.filter((option) => !option.regionalAverage);
+  let best = candidates[0];
+  for (const option of candidates) {
+    const distance = Math.abs((defaults[option.id] ?? 0) - quantity);
+    const bestDistance = Math.abs((defaults[best.id] ?? 0) - quantity);
+    if (distance < bestDistance || (distance === bestDistance && (defaults[option.id] ?? 0) > (defaults[best.id] ?? 0))) {
+      best = option;
+    }
+  }
+  return best;
+}
+
+/**
+ * Was eine andere als die gewählte Option ergäbe. Bei reinen Mengenvorgaben
+ * gilt deren Vorgabe statt der eigenen Zahl — sonst wöge „überwiegend
+ * pflanzlich“ bei zwölf eingegebenen Fleischmahlzeiten so viel wie „fast
+ * täglich“, und der Hebel verschwände, sobald jemand seine Zahl einträgt.
+ */
+export function alternativeValues(
+  questionId: string,
+  optionId: string,
+  answers: Record<string, string>,
+  adjustments: Record<string, number>
+): AnnualValues {
+  const question = questionIndex.get(questionId);
+  if (question && presetsOnly(question) && answers[questionId] !== optionId) {
+    const withoutOwn = { ...adjustments };
+    delete withoutOwn[questionId];
+    return optionValues(questionId, optionId, answers, withoutOwn);
+  }
+  return optionValues(questionId, optionId, answers, adjustments);
+}
+
 /** Jahresbilanz aus allen beantworteten Fragen. */
 export function totalValues(
   answers: Record<string, string>,
@@ -376,7 +445,8 @@ export function totalValues(
 /**
  * Was die beste verfügbare Antwort auf diese Frage einsparen würde. Der Regler
  * bleibt dabei stehen, sonst würde die Ersparnis eine Verhaltensänderung
- * enthalten, nach der niemand gefragt hat.
+ * enthalten, nach der niemand gefragt hat. Ausnahme sind reine Mengenvorgaben,
+ * siehe `alternativeValues`.
  */
 export function bestCaseSaving(
   questionId: string,
@@ -389,7 +459,7 @@ export function bestCaseSaving(
 
   const currentValues = optionValues(questionId, current, answers, adjustments);
   const optionResults = question.options.map((option) =>
-    optionValues(questionId, option.id, answers, adjustments)
+    alternativeValues(questionId, option.id, answers, adjustments)
   );
   return bestCaseSavingFromValues(currentValues, optionResults);
 }
@@ -528,7 +598,7 @@ export const questionBasis: Record<string, { factor: string; assumption?: string
   "bedroom-heating": {
     factor: "Dein Anteil am abgerechneten Jahresverbrauch × Faktor des gewählten Heizsystems.",
     assumption:
-      "Geteilte Verbräuche vorher durch die Zahl der Haushaltsmitglieder teilen. Der Rechnungswert ist belastbarer als eine pauschale Gebäudeschätzung."
+      `Geteilte Verbräuche vorher durch die Zahl der Haushaltsmitglieder teilen. Der Rechnungswert ist belastbarer als eine pauschale Gebäudeschätzung. Umrechnung: 1 Smc Erdgas ≈ ${num(GAS_KWH_PER_SMC, 1)} kWh (ARERA), 1 Liter Heizöl ≈ ${num(HEATING_OIL_KWH_PER_LITER, 0)} kWh (ISPRA).`
   },
   "bedroom-textiles": {
     factor:
@@ -542,7 +612,7 @@ export const questionBasis: Record<string, { factor: string; assumption?: string
   },
   "living-tv-streaming": {
     factor: `Persönlicher Haushaltsstrom im Jahr × italienischer Erzeugungsfaktor ${num(GRID_CO2_PER_KWH, 3)} kg CO₂/kWh.`,
-    assumption: "Den Haushaltsverbrauch aus der Stromrechnung durch die Zahl der Personen teilen; separat eingegebenen Wärmepumpenstrom abziehen."
+    assumption: `Den Haushaltsverbrauch aus der Stromrechnung durch die Zahl der Personen teilen; separat eingegebenen Wärmepumpenstrom abziehen. Zum Vergleich: In Südtirol verbrauchen die Haushalte rund ${num(Math.round(SOUTH_TYROL_HOUSEHOLD_KWH_PER_PERSON / 10) * 10, 0)} kWh pro Person (Terna 2024, ASTAT).`
   },
   "living-lighting": {
     factor: "Keine zusätzliche Energiemenge: Beleuchtung ist bereits im eingegebenen Haushaltsstrom enthalten.",

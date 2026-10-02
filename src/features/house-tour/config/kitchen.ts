@@ -24,8 +24,7 @@ export const kitchenRoom: TourRoom = {
         min: 0,
         max: 21,
         step: 1,
-        defaults: { "diet-meat": 12, "diet-mixed": 6, "diet-plant": 1 },
-        hint: "Wurst und Aufschnitt als halbe Mahlzeit rechnen."
+        defaults: { "diet-meat": 12, "diet-mixed": 6, "diet-plant": 1 }
       },
       options: [
         {

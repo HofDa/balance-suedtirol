@@ -1,6 +1,6 @@
 import { availableRooms } from "../config/rooms";
 import { everydayUnits, type EverydayUnit } from "../config/game-copy";
-import { optionValues, totalValues } from "./calculator";
+import { alternativeValues, optionValues, presetsOnly, totalValues } from "./calculator";
 import { BATHTUB_LITERS, CAR_CO2_PER_KM } from "./everyday";
 import type {
   AnnualValues,
@@ -95,7 +95,7 @@ export function leverTheme(questionId: string): LeverTheme {
  * „Hebel“ für den Garten eine Empfehlung gegen die Artenvielfalt. Deshalb
  * zählen nur Optionen, die bei der Biodiversität mindestens gleichauf liegen.
  * Südtirol-Durchschnitte sind keine Handlungsoption und fallen weg. Der Regler
- * bleibt stehen wie in `bestCaseSaving`.
+ * bleibt stehen wie in `bestCaseSaving`, außer bei reinen Mengenvorgaben.
  */
 export function levers(
   answers: Record<string, string>,
@@ -114,7 +114,7 @@ export function levers(
     for (const option of question.options) {
       if (option.id === current.id || option.regionalAverage) continue;
       if ((option.impact.biodiversity ?? 0) < (current.impact.biodiversity ?? 0)) continue;
-      const values = optionValues(question.id, option.id, answers, adjustments);
+      const values = alternativeValues(question.id, option.id, answers, adjustments);
       const key = byWater ? "waterL" : "co2Kg";
       if (values[key] >= now[key]) continue;
       if (!best || values[key] < best.values[key]) best = { option, values };
@@ -149,10 +149,15 @@ export function whatIfTotals(
   whatIf: Record<string, string>
 ) {
   const hypothetical = { ...answers };
+  const hypotheticalAdjustments = { ...adjustments };
   for (const [questionId, optionId] of Object.entries(whatIf)) {
-    if (answers[questionId]) hypothetical[questionId] = optionId;
+    if (!answers[questionId]) continue;
+    hypothetical[questionId] = optionId;
+    // Bei reinen Mengenvorgaben bringt die andere Option ihre eigene Menge mit.
+    const question = questionIndex.get(questionId)?.question;
+    if (question && presetsOnly(question) && optionId !== answers[questionId]) delete hypotheticalAdjustments[questionId];
   }
-  return totalValues(hypothetical, adjustments);
+  return totalValues(hypothetical, hypotheticalAdjustments);
 }
 
 export const MAX_GOALS = 3;

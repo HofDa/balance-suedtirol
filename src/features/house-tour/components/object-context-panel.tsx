@@ -7,10 +7,10 @@ import { cn } from "@/lib/utils";
 import type { Locale } from "@/config/site";
 import { focusRingTool } from "@/components/ui/focus";
 import { Label } from "@/components/ui/label";
-import { isAdjusted, quantityFor } from "../model/calculator";
 import { POINTS } from "../model/game";
 import { useTourI18n } from "../i18n/context";
-import { AdjustControl, EverydayFeedback } from "./metric-readout";
+import { EverydayFeedback } from "./metric-readout";
+import { AnswerInput, keepsScrollStill } from "./answer-input";
 import { ProgressSummary } from "./panel-progress";
 import { RoomCompleteView } from "./room-complete-view";
 import { RoomNavigation } from "./room-navigation";
@@ -118,17 +118,21 @@ export function ObjectContextPanel({
   const { selectedValues, saving } = useQuestionMetrics(question, answers, adjustments);
   const firstEver = Object.keys(answers).length === 0;
 
-  // Die Wirkung erscheint unter den Antworten. Auf dem Telefon läge sie nach
-  // dem Antippen oft unter dem Rand. Nur ein neues Antippen holt sie ins Bild;
-  // wer zu einem beantworteten Gegenstand zurückkehrt, beginnt oben.
+  // Nach der ersten Antwort rückt ins Bild, was als Nächstes zu tun ist: bei
+  // einer Menge die gewählte Option mit ihrer Eingabe, sonst die Wirkung
+  // darunter. In der Essenswoche ist die Eingabe schon da; dort würde jeder
+  // Sprung mitten im Tippen stören. Wer zurückkehrt, beginnt oben.
   const feedbackRef = useRef<HTMLDivElement>(null);
+  const activeOptionRef = useRef<HTMLDivElement>(null);
   const shownAnswer = useRef({ id: question.id, selected });
   useEffect(() => {
     const previous = shownAnswer.current;
     shownAnswer.current = { id: question.id, selected };
-    if (!selected || previous.id !== question.id || previous.selected === selected) return;
-    feedbackRef.current?.scrollIntoView({ block: "nearest", behavior: reduceMotion ? "auto" : "smooth" });
-  }, [question.id, selected, reduceMotion]);
+    if (!selected || previous.id !== question.id || previous.selected) return;
+    if (keepsScrollStill(question.id)) return;
+    const target = question.adjust ? activeOptionRef.current : feedbackRef.current;
+    target?.scrollIntoView({ block: "nearest", behavior: reduceMotion ? "auto" : "smooth" });
+  }, [question.id, question.adjust, selected, reduceMotion]);
 
   const openCard = () => {
     setCardOpen(true);
@@ -218,112 +222,56 @@ export function ObjectContextPanel({
                 {room.title} · {questionIndex + 1}/{room.questions.length}
               </Label>
 
-                  <h2 id="question-title" className="text-lg font-semibold leading-tight tracking-[-0.025em] md:text-2xl md:leading-snug">
-                    {question.title}
-                  </h2>
-                  {firstEver && (
-                    <p className="mt-1.5 text-xs leading-5 text-[var(--color-muted)]">{t.answerHint}</p>
-                  )}
-                  <p className="mt-5 hidden text-[11px] text-[var(--color-muted)] md:block">
-                    {t.panel.keys.keys} <kbd className="font-semibold tabular-nums">1</kbd>–
-                    <kbd className="font-semibold tabular-nums">{question.options.length}</kbd> {t.panel.keys.choose}{" "}
-                    <kbd className="font-semibold">Enter</kbd> {t.panel.keys.next}
-                  </p>
+              <h2 id="question-title" className="text-lg font-semibold leading-tight tracking-[-0.025em] md:text-2xl md:leading-snug">
+                {question.title}
+              </h2>
+              {firstEver && (
+                <p className="mt-1.5 text-xs leading-5 text-[var(--color-muted)]">{t.answerHint}</p>
+              )}
+              <p className="mt-5 hidden text-[11px] text-[var(--color-muted)] md:block">
+                {t.panel.keys.keys} <kbd className="font-semibold tabular-nums">1</kbd>–
+                <kbd className="font-semibold tabular-nums">{question.options.length}</kbd> {t.panel.keys.choose}{" "}
+                <kbd className="font-semibold">Enter</kbd> {t.panel.keys.next}
+              </p>
 
-                  {/* Antworten ohne Zahlen: wer sie vorher sieht, wählt leicht die
-                      „gute“ statt der zutreffenden Option. */}
-                  <div className="mt-3 grid gap-1.5 md:mt-1.5 md:gap-2.5" role="radiogroup" aria-labelledby="question-title">
-                    {question.options.map((option) => {
-                      const active = selected === option.id;
-                      return (
-                        <div
-                          key={option.id}
-                          className={cn(
-                            "overflow-hidden rounded-[var(--radius-md)] border transition md:rounded-[var(--radius-lg)]",
-                            active
-                              ? "border-[var(--color-forest)] bg-[var(--color-sage)]/45"
-                              : "border-[var(--color-line)] hover:border-[var(--color-forest)]/40 hover:bg-[var(--color-paper)]"
-                          )}
-                        >
-                          <motion.button
-                            type="button"
-                            role="radio"
-                            aria-checked={active}
-                            whileTap={reduceMotion ? undefined : { scale: 0.985 }}
-                            onClick={() => choose(option.id)}
-                            className={cn(
-                              "flex min-h-12 w-full items-center gap-2.5 px-3 py-2.5 text-left text-sm font-semibold leading-5 md:min-h-14 md:gap-3 md:px-4 md:py-3",
-                              focusRingTool
-                            )}
-                          >
-                            <span
-                              className={cn(
-                                "grid size-5 shrink-0 place-items-center rounded-full border",
-                                active ? "border-[var(--color-forest)] bg-[var(--color-forest)] text-white" : "border-[var(--color-line)]"
-                              )}
-                            >
-                              {active && (
-                                <motion.span
-                                  className="grid place-items-center"
-                                  initial={reduceMotion ? false : { scale: 0.3, opacity: 0 }}
-                                  animate={{ scale: 1, opacity: 1 }}
-                                  transition={{ type: "spring", stiffness: 520, damping: 22 }}
-                                >
-                                  <Check className="size-3" aria-hidden />
-                                </motion.span>
-                              )}
-                            </span>
-                            <span className="min-w-0 flex-1">
-                              {option.label}
-                              {option.regionalAverage && (
-                                <span className="ml-2 inline-flex translate-y-[-1px] items-center rounded-[var(--radius-sm)] bg-[var(--color-sage)] px-2 py-0.5 align-middle text-[11px] font-semibold text-[var(--color-forest)]">
-                                  {t.panel.southTyrol}
-                                </span>
-                              )}
-                            </span>
-                          </motion.button>
-                          {active && question.adjust && (
-                            <AdjustControl
-                              adjust={question.adjust}
-                              questionId={question.id}
-                              quantity={quantityFor(question, option.id, adjustments)}
-                              isCustom={isAdjusted(question.id, adjustments)}
-                              onChange={(quantity) => onAdjust(question.id, quantity)}
-                              onReset={() => onClearAdjust(question.id)}
-                            />
-                          )}
-                        </div>
-                      );
-                    })}
-                  </div>
+              <AnswerInput
+                question={question}
+                selected={selected}
+                adjustments={adjustments}
+                activeOptionRef={activeOptionRef}
+                onChoose={choose}
+                onAnswer={onAnswer}
+                onAdjust={onAdjust}
+                onClearAdjust={onClearAdjust}
+              />
 
-                  {selectedOption && (
-                    <div ref={feedbackRef} className="scroll-mb-24 md:scroll-mb-4">
-                      <EverydayFeedback
-                        questionId={question.id}
-                        values={selectedValues}
-                        saving={saving}
-                        impact={selectedOption.impact}
-                        locale={locale}
-                      />
-                      <CardButton read={Boolean(cardsRead[question.id])} onOpen={openCard} />
-                    </div>
-                  )}
+              {selectedOption && (
+                <div ref={feedbackRef} className="scroll-mb-24 md:scroll-mb-4">
+                  <EverydayFeedback
+                    questionId={question.id}
+                    values={selectedValues}
+                    saving={saving}
+                    impact={selectedOption.impact}
+                    locale={locale}
+                  />
+                  <CardButton read={Boolean(cardsRead[question.id])} onOpen={openCard} />
+                </div>
+              )}
 
-                  <div className={footerClass}>
-                    {back}
-                    {selected ? (
-                      <button type="button" onClick={onContinue} className={primaryButton}>
-                        {moreObjectsOpen ? t.continue : t.finishRoom}
-                        <ChevronRight className="size-4" aria-hidden />
-                      </button>
-                    ) : (
-                      <button type="button" onClick={onSkip} className={cn(quietButton, "ml-auto min-h-12 md:min-h-11")}>
-                        <SkipForward className="size-3.5" aria-hidden />
-                        {t.panel.skip}
-                      </button>
-                    )}
-                  </div>
+              <div className={footerClass}>
+                {back}
+                {selected ? (
+                  <button type="button" onClick={onContinue} className={primaryButton}>
+                    {moreObjectsOpen ? t.continue : t.finishRoom}
+                    <ChevronRight className="size-4" aria-hidden />
+                  </button>
+                ) : (
+                  <button type="button" onClick={onSkip} className={cn(quietButton, "ml-auto min-h-12 md:min-h-11")}>
+                    <SkipForward className="size-3.5" aria-hidden />
+                    {t.panel.skip}
+                  </button>
+                )}
+              </div>
             </motion.div>
           )}
         </AnimatePresence>

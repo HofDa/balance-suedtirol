@@ -2,8 +2,9 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import { availableRooms } from "../src/features/house-tour/config/rooms";
 import { everydayUnits } from "../src/features/house-tour/config/game-copy";
-import { optionValues, totalValues } from "../src/features/house-tour/model/calculator";
+import { SOUTH_TYROL_HOUSEHOLD_KWH_PER_PERSON, bestCaseSaving, optionValues, presetFor, totalValues } from "../src/features/house-tour/model/calculator";
 import { POINTS, discovery, levers, whatIfTotals } from "../src/features/house-tour/model/game";
+import { electricityShare, heatingBillUnit, landmark } from "../src/features/house-tour/model/everyday";
 import { initialTourState, restoreTourState, tourReducer } from "../src/features/house-tour/model/reducer";
 import type { TourState } from "../src/features/house-tour/model/types";
 
@@ -64,6 +65,50 @@ test("ein Hebel empfiehlt nie etwas, das der Artenvielfalt schadet", () => {
   }
 });
 
+test("die getippte Zahl wählt die Option mit der nächsten Vorgabe", () => {
+  const diet = question("kitchen-diet");
+  assert.deepEqual(
+    [0, 1, 3, 4, 8, 9, 12, 21].map((count) => presetFor(diet, count).id),
+    ["diet-plant", "diet-plant", "diet-plant", "diet-mixed", "diet-mixed", "diet-meat", "diet-meat", "diet-meat"]
+  );
+});
+
+test("eine eingegebene Zahl wird nie zu „Weiß ich nicht“", () => {
+  const electricity = question("living-tv-streaming");
+  assert.equal(presetFor(electricity, 950).id, "electricity-medium");
+  assert.equal(presetFor(electricity, 3000).id, "electricity-high");
+});
+
+test("Mittel und „Weiß ich nicht“ beim Strom stehen auf dem gemessenen Südtiroler Durchschnitt", () => {
+  const { adjust } = question("living-tv-streaming");
+  const measured = Math.round(SOUTH_TYROL_HOUSEHOLD_KWH_PER_PERSON / adjust!.step) * adjust!.step;
+  assert.equal(adjust!.defaults["electricity-medium"], measured);
+  assert.equal(adjust!.defaults["electricity-average"], measured);
+});
+
+test("bei reinen Mengenvorgaben bleibt der Hebel, auch wenn die eigene Zahl eingetragen ist", () => {
+  const answers = { "kitchen-diet": "diet-meat" };
+  const adjustments = { "kitchen-diet": 14 };
+  const lever = levers(answers, adjustments, totalValues(answers, adjustments)).find((item) => item.questionId === "kitchen-diet");
+  assert.equal(lever?.best.id, "diet-plant");
+  // 14 eigene gegen 1 vorgegebene Fleischmahlzeit pro Woche.
+  const expected = optionValues("kitchen-diet", "diet-meat", answers, adjustments).co2Kg -
+    optionValues("kitchen-diet", "diet-plant", answers, {}).co2Kg;
+  assert.ok(Math.abs(lever!.saving.co2Kg - expected) < 1e-9);
+  assert.ok(Math.abs(bestCaseSaving("kitchen-diet", answers, adjustments).co2Kg - expected) < 1e-9);
+  const tried = whatIfTotals(answers, adjustments, { "kitchen-diet": "diet-plant" });
+  assert.ok(Math.abs(totalValues(answers, adjustments).co2Kg - tried.co2Kg - expected) < 1e-9);
+});
+
+test("bei Fragen mit eigenem Faktor bleibt die eigene Menge im Vergleich stehen", () => {
+  const answers = { "bath-shower": "bath-long" };
+  const adjustments = { "bath-shower": 4 };
+  const lever = levers(answers, adjustments, totalValues(answers, adjustments)).find((item) => item.questionId === "bath-shower");
+  const expected = optionValues("bath-shower", "bath-long", answers, adjustments).waterL -
+    optionValues("bath-shower", "bath-eco", answers, adjustments).waterL;
+  assert.ok(Math.abs(lever!.saving.waterL - expected) < 1e-9);
+});
+
 test("höchstens drei Vorhaben, nur aus beantworteten Fragen", () => {
   let state: TourState = { ...initialTourState };
   state.answers = { "bath-shower": "bath-long", "bath-toilet": "flush-full", "kitchen-diet": "diet-meat", "mobility-km": "car-combustion" };
@@ -92,4 +137,26 @@ test("gespeicherte Spielstände werden bereinigt", () => {
 
 test("Alltagsgrößen betreffen existierende Fragen", () => {
   for (const id of Object.keys(everydayUnits)) assert.ok(question(id), id);
+});
+
+test("Vergleiche unter den Reglern nehmen den größten, der hineinpasst", () => {
+  assert.equal(landmark("distance", 20), null);
+  assert.deepEqual(landmark("distance", 45), { key: "meran", times: 1.5 });
+  assert.deepEqual(landmark("distance", 12000), { key: "rome", times: 8.6 });
+  assert.deepEqual(landmark("distance", 40000), { key: "earth", times: 1 });
+  assert.deepEqual(landmark("area", 80), { key: "parking", times: 6.4 });
+  assert.deepEqual(landmark("area", 400), { key: "tennis", times: 1.5 });
+});
+
+test("Heizung erscheint in der Einheit der Rechnung, Strom gegen den Südtiroler Schnitt", () => {
+  // 10.700 kWh Gas sind 1.000 Smc bei 10,7 kWh je Smc (ARERA).
+  assert.deepEqual(heatingBillUnit("heat-gas", 10700), { key: "gas", amount: 1000 });
+  // Rund 10 kWh je Liter Heizöl (ISPRA, 0,84 kg/l).
+  assert.deepEqual(heatingBillUnit("heat-oil", 5000), { key: "oil", amount: 500 });
+  assert.equal(heatingBillUnit("heat-pump", 3000), null);
+  assert.equal(heatingBillUnit("heat-gas", 0), null);
+  // 510,7 GWh ÷ 539.679 Personen ≈ 946 kWh.
+  assert.equal(electricityShare(946), 1);
+  assert.equal(electricityShare(1500), 1.6);
+  assert.equal(electricityShare(0), null);
 });

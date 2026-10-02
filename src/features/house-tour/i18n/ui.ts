@@ -1,3 +1,4 @@
+import type { LandmarkKey } from "../model/everyday";
 import type { Localized } from "../../../lib/i18n";
 import { localeTags } from "../../../lib/i18n";
 import {
@@ -6,10 +7,13 @@ import {
   FOOD_ORIGIN_MAX_CO2,
   FOOD_WASTE_CO2_PER_KG,
   FUEL_KWH_PER_LITER,
+  GAS_KWH_PER_SMC,
   GRID_CO2_PER_KWH,
+  HEATING_OIL_KWH_PER_LITER,
   HOT_WATER_KWH_PER_LITER,
   KWH_PER_STANDBY_WATT,
   OTHER_HOT_WATER_LITERS,
+  SOUTH_TYROL_HOUSEHOLD_KWH_PER_PERSON,
   WATER_SUPPLY_KWH_PER_LITER,
   questionBasis
 } from "../model/calculator";
@@ -97,7 +101,18 @@ export type TourUi = {
   };
   continue: string;
   finishRoom: string;
-  adjust: { reset: string; less: (label: string) => string; more: (label: string) => string };
+  adjust: { reset: string; less: (label: string) => string; more: (label: string) => string; setTo: (value: string) => string };
+  /** Vergleichsgrößen unter großen Reglern; `n` ist schon formatiert. */
+  landmarks: Record<LandmarkKey, (n: string, one: boolean) => string>;
+  /** Heizung in der Einheit der Rechnung, Strom gegen den Südtiroler Durchschnitt. */
+  bill: { gas: (n: string) => string; oil: (n: string) => string; electricity: (n: string) => string };
+  presets: string;
+  mealWeek: {
+    days: string[];
+    meals: string[];
+    prompt: string;
+    cell: (day: string, meal: string, meat: boolean) => string;
+  };
   units: {
     bathtubs: (n: number) => string;
     carKm: string;
@@ -208,7 +223,7 @@ const itBasis: Basis = {
   },
   "bedroom-heating": {
     factor: "La tua quota del consumo annuo in bolletta × fattore del sistema di riscaldamento scelto.",
-    assumption: "Dividi prima i consumi comuni per il numero di persone in casa. Il valore della bolletta è più affidabile di una stima forfettaria dell’edificio."
+    assumption: `Dividi prima i consumi comuni per il numero di persone in casa. Il valore della bolletta è più affidabile di una stima forfettaria dell’edificio. Conversione: 1 Smc di metano ≈ ${num("it", GAS_KWH_PER_SMC, 1)} kWh (ARERA), 1 litro di gasolio da riscaldamento ≈ ${num("it", HEATING_OIL_KWH_PER_LITER, 0)} kWh (ISPRA).`
   },
   "bedroom-textiles": {
     factor: "Capi all’anno × CO₂ per capo, in media sui tipi di abbigliamento (nuovo, misto, usato).",
@@ -220,7 +235,7 @@ const itBasis: Basis = {
   },
   "living-tv-streaming": {
     factor: `Elettricità domestica personale all’anno × fattore di produzione italiano ${num("it", GRID_CO2_PER_KWH, 3)} kg CO₂/kWh.`,
-    assumption: "Dividi il consumo della bolletta per il numero di persone; togli l’elettricità della pompa di calore indicata a parte."
+    assumption: `Dividi il consumo della bolletta per il numero di persone; togli l’elettricità della pompa di calore indicata a parte. Per confronto: in Alto Adige le famiglie consumano circa ${num("it", Math.round(SOUTH_TYROL_HOUSEHOLD_KWH_PER_PERSON / 10) * 10, 0)} kWh a persona (Terna 2024, ASTAT).`
   },
   "living-lighting": {
     factor: "Nessuna quantità di energia in più: l’illuminazione è già compresa nell’elettricità domestica indicata.",
@@ -282,7 +297,7 @@ const enBasis: Basis = {
   },
   "bedroom-heating": {
     factor: "Your share of the billed annual consumption × factor of the chosen heating system.",
-    assumption: "Divide shared consumption by the number of household members first. The bill value is more reliable than a flat building estimate."
+    assumption: `Divide shared consumption by the number of household members first. The bill value is more reliable than a flat building estimate. Conversion: 1 Smc of natural gas ≈ ${num("en", GAS_KWH_PER_SMC, 1)} kWh (ARERA), 1 litre of heating oil ≈ ${num("en", HEATING_OIL_KWH_PER_LITER, 0)} kWh (ISPRA).`
   },
   "bedroom-textiles": {
     factor: "Garments per year × CO₂ per item, averaged over types of clothing (new, mixed, second-hand).",
@@ -294,7 +309,7 @@ const enBasis: Basis = {
   },
   "living-tv-streaming": {
     factor: `Personal household electricity per year × Italian generation factor of ${num("en", GRID_CO2_PER_KWH, 3)} kg CO₂/kWh.`,
-    assumption: "Divide the household consumption from the bill by the number of people; subtract separately entered heat-pump electricity."
+    assumption: `Divide the household consumption from the bill by the number of people; subtract separately entered heat-pump electricity. For comparison: households in South Tyrol use about ${num("en", Math.round(SOUTH_TYROL_HOUSEHOLD_KWH_PER_PERSON / 10) * 10, 0)} kWh per person (Terna 2024, ASTAT).`
   },
   "living-lighting": {
     factor: "No additional energy: lighting is already part of the household electricity you entered.",
@@ -423,7 +438,27 @@ const de: TourUi = {
   },
   continue: "Weiter",
   finishRoom: "Raum abschließen",
-  adjust: { reset: "Vorgabe", less: (label) => `${label}: weniger`, more: (label) => `${label}: mehr` },
+  adjust: { reset: "Vorgabe", less: (label) => `${label}: weniger`, more: (label) => `${label}: mehr`, setTo: (value) => `Auf ${value} setzen` },
+  landmarks: {
+    meran: (n) => `≈ ${n}× Bozen–Meran`,
+    innsbruck: (n) => `≈ ${n}× Bozen–Innsbruck`,
+    rome: (n) => `≈ ${n}× Bozen–Rom und zurück`,
+    earth: (n) => `≈ ${n}× um die Erde`,
+    parking: (n, one) => `≈ ${n} ${one ? "Parkplatz" : "Parkplätze"}`,
+    tennis: (n, one) => `≈ ${n} ${one ? "Tennisplatz" : "Tennisplätze"}`
+  },
+  bill: {
+    gas: (n) => `≈ ${n} Smc Erdgas — die Einheit auf der Gasrechnung`,
+    oil: (n) => `≈ ${n} Liter Heizöl`,
+    electricity: (n) => `≈ ${n}× der Südtiroler Durchschnitt pro Kopf`
+  },
+  presets: "Schnell ausfüllen",
+  mealWeek: {
+    days: ["Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"],
+    meals: ["Früh", "Mittag", "Abend"],
+    prompt: "Tippe die Mahlzeiten mit Fleisch an.",
+    cell: (day, meal, meat) => `${day}, ${meal}: ${meat ? "mit Fleisch" : "ohne Fleisch"}`
+  },
   units: {
     bathtubs: (n) => (n === 1 ? "Badewanne" : "Badewannen"),
     carKm: "km Autofahrt",
@@ -635,7 +670,27 @@ const it: TourUi = {
   },
   continue: "Avanti",
   finishRoom: "Concludi la stanza",
-  adjust: { reset: "Valore predefinito", less: (label) => `${label}: meno`, more: (label) => `${label}: più` },
+  adjust: { reset: "Valore predefinito", less: (label) => `${label}: meno`, more: (label) => `${label}: più`, setTo: (value) => `Imposta a ${value}` },
+  landmarks: {
+    meran: (n) => `≈ ${n}× Bolzano–Merano`,
+    innsbruck: (n) => `≈ ${n}× Bolzano–Innsbruck`,
+    rome: (n) => `≈ ${n}× Bolzano–Roma andata e ritorno`,
+    earth: (n) => `≈ ${n}× il giro della Terra`,
+    parking: (n, one) => `≈ ${n} ${one ? "posto auto" : "posti auto"}`,
+    tennis: (n, one) => `≈ ${n} ${one ? "campo da tennis" : "campi da tennis"}`
+  },
+  bill: {
+    gas: (n) => `≈ ${n} Smc di metano — l’unità della bolletta del gas`,
+    oil: (n) => `≈ ${n} litri di gasolio da riscaldamento`,
+    electricity: (n) => `≈ ${n}× la media altoatesina pro capite`
+  },
+  presets: "Compila in fretta",
+  mealWeek: {
+    days: ["Lu", "Ma", "Me", "Gi", "Ve", "Sa", "Do"],
+    meals: ["Colaz.", "Pranzo", "Cena"],
+    prompt: "Tocca i pasti con carne.",
+    cell: (day, meal, meat) => `${day}, ${meal}: ${meat ? "con carne" : "senza carne"}`
+  },
   units: {
     bathtubs: (n) => (n === 1 ? "vasca da bagno" : "vasche da bagno"),
     carKm: "km in auto",
@@ -847,7 +902,27 @@ const en: TourUi = {
   },
   continue: "Next",
   finishRoom: "Finish room",
-  adjust: { reset: "Default", less: (label) => `${label}: less`, more: (label) => `${label}: more` },
+  adjust: { reset: "Default", less: (label) => `${label}: less`, more: (label) => `${label}: more`, setTo: (value) => `Set to ${value}` },
+  landmarks: {
+    meran: (n) => `≈ ${n}× Bolzano–Merano`,
+    innsbruck: (n) => `≈ ${n}× Bolzano–Innsbruck`,
+    rome: (n) => `≈ ${n}× Bolzano–Rome and back`,
+    earth: (n) => `≈ ${n}× around the Earth`,
+    parking: (n, one) => `≈ ${n} ${one ? "parking space" : "parking spaces"}`,
+    tennis: (n, one) => `≈ ${n} ${one ? "tennis court" : "tennis courts"}`
+  },
+  bill: {
+    gas: (n) => `≈ ${n} Smc of natural gas — the unit on your gas bill`,
+    oil: (n) => `≈ ${n} litres of heating oil`,
+    electricity: (n) => `≈ ${n}× the South Tyrol average per person`
+  },
+  presets: "Quick fill",
+  mealWeek: {
+    days: ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"],
+    meals: ["Breakf.", "Lunch", "Dinner"],
+    prompt: "Tap the meals with meat.",
+    cell: (day, meal, meat) => `${day}, ${meal}: ${meat ? "with meat" : "no meat"}`
+  },
   units: {
     bathtubs: (n) => (n === 1 ? "bathtub" : "bathtubs"),
     carKm: "km by car",

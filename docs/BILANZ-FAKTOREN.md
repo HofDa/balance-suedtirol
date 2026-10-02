@@ -52,15 +52,17 @@ ein Fehler.
 ## Südtirol-Durchschnitte („Weiß ich nicht“)
 
 Vier Fragen bieten statt einer Lücke den Südtiroler Durchschnitt an. Amtliche
-Quellen liefern dafür nur die **Verteilung** (welcher Energieträger, welches
+Quellen liefern dafür meist nur die **Verteilung** (welcher Energieträger, welches
 Verkehrsmittel), keine Mengen: Kilowattstunden und Kilometer bleiben die
-Vorgaben des Rechners. Die Herleitung rechnet `tests/house-calculator.test.ts`
+Vorgaben des Rechners. Einzige Ausnahme ist der Haushaltsstrom, für den eine
+gemessene Menge pro Person vorliegt. Die Herleitung rechnet `tests/house-calculator.test.ts`
 aus den Anteilen nach.
 
 | Frage | Wert | Grundlage |
 |---|---|---|
 | Heizung | 0,20 kg CO₂e/kWh | 47 % Methan, 33 % Biomasse, 10 % Heizöl, 5 % Flüssiggas, 4 % Strom — ASTAT, Energieverbrauch der Südtiroler Haushalte 2021 (astat info 61/2022) |
 | Warmwasser | 0,199 kg CO₂e/kWh bei 89 % Wirkungsgrad | 44 % Methan, 26 % Biomasse, 10 % Heizöl, 5 % Flüssiggas, 10 % Strom, 5 % Solar — ebd. |
+| Haushaltsstrom | 950 kWh pro Person | 510,7 GWh Haushaltsverbrauch Provinz Bozen 2024 (Terna, Elettricità nelle regioni) ÷ 539.679 Einwohner (ASTAT, 31.12.2024); auch Vorgabe für „Mittlerer Verbrauch“ |
 | Beleuchtung | 18,4 W je Leuchtstelle | 28 % herkömmliche Glühbirnen (45 W), 72 % Sparlampen (8 W) — ebd.; wirkt nur qualitativ |
 | Kurze Wege | 0,105 kg CO₂e/km · 0,33 kWh/km | Bis 2 km: 21 % Auto/Motorrad, 8 % öffentlich, 71 % zu Fuß/Rad; 2–10 km: 60 % / 17 % / 23 % — ASTAT, Lokale Mobilität: Wege 2024 (astat info 51/2024) |
 
@@ -94,9 +96,9 @@ Referenzwerte auf den erfassten Ausschnitt zugeschnitten:
 
 | Kennzahl | Referenz im Check | Voller Durchschnitt |
 |---|---|---|
-| CO₂ | 4.000 kg/a | ~7.000 kg/a (Konsum, Italien) |
+| CO₂ | 3.900 kg/a | ~7.000 kg/a (Konsum, Italien) |
 | Wasser | 53.000 L/a | ~78.000 L/a (215 L/Tag) |
-| Energie | 9.500 kWh/a | ~12.500 kWh/a inkl. Verkehr |
+| Energie | 8.950 kWh/a | ~12.500 kWh/a inkl. Verkehr |
 
 Eine persönliche „Paris-Zielmarke“ wird nicht angezeigt: Sie wäre für den hier
 erfassten, unvollständigen Ausschnitt methodisch nicht belastbar.

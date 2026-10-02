@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useMemo, useRef } from "react";
 import type { AnnualValues, TourQuestion, TourRoom } from "../model/types";
 import { getRoomProgress } from "../model/scoring";
-import { bestCaseSavingFromValues, optionValues } from "../model/calculator";
+import { alternativeValues, bestCaseSavingFromValues } from "../model/calculator";
 
 export function useQuestionPanelInteraction({
   room, question, questionIndex, objectOpen, answers, skippedQuestions,
@@ -121,7 +121,7 @@ export function useQuestionMetrics(question: TourQuestion, answers: Record<strin
   const optionResults = useMemo(
     () => question.options.map((option) => ({
       option,
-      values: optionValues(question.id, option.id, answers, adjustments)
+      values: alternativeValues(question.id, option.id, answers, adjustments)
     })),
     [question, answers, adjustments]
   );

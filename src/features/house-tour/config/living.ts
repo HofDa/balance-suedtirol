@@ -22,7 +22,10 @@ export const livingRoom: TourRoom = {
         min: 0,
         max: 6000,
         step: 50,
-        defaults: { "electricity-high": 2500, "electricity-medium": 1500, "electricity-low": 800 },
+        // Mittel und „Weiß ich nicht“ stehen auf dem gemessenen Südtiroler
+        // Durchschnitt (SOUTH_TYROL_HOUSEHOLD_KWH_PER_PERSON, auf die
+        // Reglerstufe gerundet). Hoch und niedrig sind keine Messwerte.
+        defaults: { "electricity-high": 2500, "electricity-medium": 950, "electricity-low": 800, "electricity-average": 950 },
         hint: "Alle Haushaltsgeräte zusammen; Wärmepumpenstrom abziehen, wenn er bei Heizung steht."
       },
       options: [
@@ -40,6 +43,15 @@ export const livingRoom: TourRoom = {
           id: "electricity-low",
           label: "Niedriger Verbrauch",
           impact: { carbon: 6, resources: 5 },
+        },
+        {
+          id: "electricity-average",
+          label: "Weiß ich nicht",
+          regionalAverage: {
+            source: "Terna, Elettricità nelle regioni 2024; ASTAT, Bevölkerungsstand 31.12.2024",
+            basis: "Die Haushalte in der Provinz Bozen verbrauchten 2024 zusammen 510,7 GWh Strom; bei 539.679 Einwohnern sind das rund 950 kWh pro Person."
+          },
+          impact: { carbon: 1, resources: 1 },
         }
       ]
     },

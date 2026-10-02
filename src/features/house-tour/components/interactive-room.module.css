@@ -260,6 +260,12 @@
     transform: translateY(min(0px, max(calc(100cqh - var(--scene-h)), calc(50cqh - var(--focus-y) * var(--scene-h)))));
     transition: transform 320ms ease;
   }
+  /* Das quadratische Haus füllt mobil die Breite statt seitlicher Balken;
+     oben und unten fallen nur Himmel und Wiese weg, die Schilder bleiben drin. */
+  .cover {
+    width: max(100cqw, 100cqh) !important;
+    flex-shrink: 0;
+  }
 }
 @media (max-width: 767.98px) and (prefers-reduced-motion: reduce) {
   .pan {

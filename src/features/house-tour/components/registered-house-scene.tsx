@@ -48,7 +48,7 @@ export function RegisteredHouseScene({ roomId, questionIndex, answers, skippedQu
     <div className={cn("flex h-full min-h-0 w-full items-center justify-center [container-type:size]", isRoomCrop && styles.panFrame)}>
       {/* Nur ein Raum wird auf seine Fläche beschnitten; die Hausansicht darf beim
           Hineinfahren über ihr Quadrat hinaus bis an den Rand der Spalte wachsen. */}
-      <div className={cn(styles.scene, "relative isolate", isRoomCrop && cn("overflow-hidden", styles.pan))} data-house-scene={roomId ?? "house"}
+      <div className={cn(styles.scene, "relative isolate", isRoomCrop ? cn("overflow-hidden", styles.pan) : styles.cover)} data-house-scene={roomId ?? "house"}
         data-source-crop={crop.join(",")}
         style={{
           aspectRatio: `${width} / ${height}`, width: `min(100cqw, ${width / height * 100}cqh)`,

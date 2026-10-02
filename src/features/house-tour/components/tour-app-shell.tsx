@@ -15,6 +15,7 @@ import { RoomScene } from "../scenes/room-scenes";
 import type { Locale } from "@/config/site";
 import { getTourProgress } from "../model/scoring";
 import { CAMERA_SECONDS, type CameraTarget } from "../model/house-camera";
+import layout from "../config/full-house-layout.json";
 
 /** Hinausfahren, Aufleuchten des fertigen Raums bis zum Höhepunkt, dann weiter. */
 const NEXT_ROOM_PAUSE_MS = 1700;
@@ -25,6 +26,18 @@ const houseFrameVariants = {
   whole: { opacity: 1 },
   toRoom: { opacity: 1, transition: { duration: CAMERA_SECONDS + 0.3 } }
 };
+
+/**
+ * Mobile Höhe des Raumbilds: so hoch wie der Raum bei voller Breite, höchstens
+ * 55 % unter der Werkzeugleiste. Bei 34 dvh sah man auf einem iPhone 13 nur
+ * 44–48 % eines quadratischen Raums und 28 % des Gartens; jetzt rund 87 % und
+ * 52 %, und der Fragenbereich behält gut 270 px.
+ */
+function sceneRow(roomId: RoomId | null) {
+  const crop = roomId ? layout.rooms[roomId as keyof typeof layout.rooms] : undefined;
+  const ratio = crop ? crop[3] / crop[2] : 1;
+  return `minmax(7rem,min(calc(100vw*${ratio.toFixed(3)}),calc((100dvh - 3.5rem - env(safe-area-inset-top) - env(safe-area-inset-bottom))*0.55)))`;
+}
 
 const TourResults = dynamic(
   () => import("./tour-results").then((module) => module.TourResults),
@@ -189,6 +202,7 @@ export function TourAppShell({ locale }: { locale: Locale }) {
       <div className="flex h-full min-h-0 flex-col overflow-hidden bg-[var(--color-paper)]">
         <div className="h-14 shrink-0">
           <TourToolbar
+            locale={locale}
             view={state.view}
             completedObjects={completedObjects}
             totalObjects={totalObjects}
@@ -219,12 +233,14 @@ export function TourAppShell({ locale }: { locale: Locale }) {
         // Nur noch eine Steuerungsebene über dem Inhalt statt Kopfzeile plus Raumleiste.
         "grid h-full min-h-0 min-w-0 grid-cols-[minmax(0,1fr)] overflow-hidden bg-[var(--color-paper)] md:grid-cols-[minmax(0,1.3fr)_minmax(23rem,1fr)] md:grid-rows-[3.5rem_minmax(0,1fr)]",
         state.view === "room"
-          ? "grid-rows-[3.5rem_minmax(7rem,min(34dvh,calc(100dvh_-_30rem)))_minmax(0,1fr)]"
+          ? "grid-rows-[3.5rem_var(--scene-row)_minmax(0,1fr)]"
           : "grid-rows-[3.5rem_minmax(10rem,42dvh)_minmax(0,1fr)]"
       )}
+      style={{ ["--scene-row" as string]: sceneRow(state.activeRoom) }}
     >
       <div className="min-w-0 md:col-start-2">
         <TourToolbar
+          locale={locale}
           view={state.view}
           completedObjects={completedObjects}
           totalObjects={totalObjects}

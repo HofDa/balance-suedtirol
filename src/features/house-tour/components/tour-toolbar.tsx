@@ -1,11 +1,16 @@
 "use client";
 
+import Image from "next/image";
+import Link from "next/link";
 import { BarChart3, Home, RotateCcw } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { withBasePath } from "@/lib/public-path";
+import type { Locale } from "@/config/site";
 import { focusRingTool } from "@/components/ui/focus";
 import type { TourView } from "../model/types";
 
 export function TourToolbar({
+  locale,
   view,
   completedObjects,
   totalObjects,
@@ -13,6 +18,7 @@ export function TourToolbar({
   onReset,
   onResults
 }: {
+  locale: Locale;
   view: TourView;
   completedObjects: number;
   totalObjects: number;
@@ -22,6 +28,23 @@ export function TourToolbar({
 }) {
   return (
     <div className="flex h-full items-center justify-between gap-3 border-b border-[var(--color-line)] bg-[var(--color-paper)] px-3 sm:px-5">
+      <div className="flex min-w-0 items-center gap-2">
+      {/* Mobil ist die Kopfzeile der Website ausgeblendet; das Logo führt zurück. */}
+      <Link
+        href={`/${locale}`}
+        aria-label="b*alance – zur Startseite"
+        className={cn("inline-flex min-h-11 shrink-0 items-center md:hidden", focusRingTool)}
+      >
+        <Image
+          src={withBasePath("/balance-logo-harmonized.svg")}
+          alt=""
+          width={1280}
+          height={610}
+          sizes="64px"
+          className="h-8 w-16 object-contain"
+        />
+      </Link>
+      <span className="h-6 w-px bg-[var(--color-line)] md:hidden" aria-hidden />
       <button
         type="button"
         onClick={onHouse}
@@ -35,6 +58,7 @@ export function TourToolbar({
         <Home className="size-4" aria-hidden />
         Haus
       </button>
+      </div>
 
       <div className="flex items-center gap-1">
         {/* „12/21 Objekte“ las sich wie eine Anzeige, nicht wie ein Weg. Das

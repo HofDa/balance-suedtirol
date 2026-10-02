@@ -70,8 +70,8 @@
   aspect-ratio: 1.3;
   transform: translate(-50%, -50%);
   border-radius: 50%;
-  background: radial-gradient(closest-side, rgb(150 195 255 / 0.75), rgb(120 165 255 / 0.28) 50%, rgb(120 160 255 / 0));
-  mix-blend-mode: screen;
+  /* Ohne screen-Mischung: auf der hellen Wohnzimmerwand verschwand das Licht. */
+  background: radial-gradient(closest-side, rgb(120 175 255 / 0.55), rgb(110 155 255 / 0.22) 50%, rgb(110 150 255 / 0));
   animation: tv-flicker 3.2s steps(1, end) infinite;
 }
 @keyframes tv-flicker {
@@ -179,7 +179,8 @@
   aspect-ratio: 1.3;
   border-radius: 50%;
   /* Hell genug für den dunklen Garagenboden, sonst verschwindet der Rauch. */
-  background: radial-gradient(closest-side, rgb(235 235 228 / 0.9), rgb(215 215 208 / 0.5) 55%, rgb(200 200 195 / 0));
+  /* Mittelgrau mit hellem Saum: sichtbar auf dunklem Schatten wie auf hellem Kies. */
+  background: radial-gradient(closest-side, rgb(150 150 145 / 0.9), rgb(205 205 198 / 0.65) 55%, rgb(225 225 220 / 0));
   animation: exhaust 2.7s ease-out infinite;
 }
 @keyframes exhaust {
@@ -377,11 +378,11 @@
 /* --- Music notes (one per song) ------------------------------------------ */
 .note {
   position: absolute;
-  font-size: max(15px, 2.8cqw);
-  font-weight: 700;
-  line-height: 1;
-  color: rgb(255 255 255 / 0.95);
-  text-shadow: 0 0 3px rgb(20 45 38 / 0.85), 0 1px 1px rgb(20 45 38 / 0.6);
+  width: max(10px, 1.9cqw);
+  overflow: visible;
+  fill: rgb(255 255 255 / 0.95);
+  stroke: rgb(255 255 255 / 0.95);
+  filter: drop-shadow(0 0 1.5px rgb(20 45 38 / 0.85)) drop-shadow(0 1px 1px rgb(20 45 38 / 0.5));
   animation: note-rise 3.3s ease-out infinite both;
 }
 @keyframes note-rise {
@@ -484,6 +485,34 @@
   }
 }
 
+/* --- Globe: a plane on an orbit around the sphere ------------------------ */
+/* The orbit is a tilted ellipse around the sphere (upper 70 % of the box);
+   the plane rides its rim, nose along the path. */
+.orbit {
+  position: absolute;
+  left: 2%;
+  top: 6%;
+  width: 96%;
+  height: 66%;
+  border-radius: 50%;
+  transform: rotate(-18deg);
+  animation: orbit 5s linear infinite;
+}
+@keyframes orbit {
+  to {
+    transform: rotate(342deg);
+  }
+}
+.plane {
+  position: absolute;
+  top: -6%;
+  left: 50%;
+  width: max(9px, 2.2cqw);
+  transform: translateX(-50%) rotate(90deg);
+  fill: #fff;
+  filter: drop-shadow(0 1px 1.5px rgb(20 45 38 / 0.7));
+}
+
 /* --- Reaction burst after every input ---------------------------------- */
 .burst {
   position: absolute;
@@ -565,6 +594,7 @@
     animation: none;
   }
   .rain,
+  .orbit,
   .note,
   .swirl,
   .heatWave,

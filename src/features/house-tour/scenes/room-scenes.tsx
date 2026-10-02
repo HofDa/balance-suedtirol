@@ -4,6 +4,7 @@ import { memo } from "react";
 import { motion } from "framer-motion";
 import type { RoomId } from "../model/types";
 import { IllustratedRoom } from "../components/illustrated-house";
+import { useTourI18n } from "../i18n/context";
 
 interface SceneProps {
   roomId: RoomId;
@@ -15,11 +16,12 @@ interface SceneProps {
 }
 
 export const RoomScene = memo(function RoomScene({ roomId, questionIndex, answers, adjustments, skippedQuestions, onSelectObject }: SceneProps) {
+  const { t, room } = useTourI18n();
   return (
     <motion.div
       layoutId={`room-frame-${roomId}`}
       className="relative h-full w-full overflow-hidden bg-[var(--color-stone)]"
-      aria-label={`Visualisierung für ${roomId}`}
+      aria-label={t.scene.visualization(room(roomId)?.title ?? roomId)}
     >
       <IllustratedRoom
         roomId={roomId}

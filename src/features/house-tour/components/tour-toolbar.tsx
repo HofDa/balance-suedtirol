@@ -2,15 +2,50 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { BarChart3, Home, RotateCcw } from "lucide-react";
+import { BarChart3, Home, RotateCcw, Sparkles } from "lucide-react";
+import { motion, useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { withBasePath } from "@/lib/public-path";
 import type { Locale } from "@/config/site";
 import { focusRingTool } from "@/components/ui/focus";
 import type { TourView } from "../model/types";
+import { useTourI18n } from "../i18n/context";
+
+/**
+ * Der Punktestand ist zugleich der Weg in die Wissensmappe: Punkte entstehen
+ * dort, wo Wissen gesammelt wird. Bei jedem Zuwachs federt die Zahl einmal.
+ */
+function PointsButton({ points, onClick }: { points: number; onClick: () => void }) {
+  const reduce = useReducedMotion();
+  const { t } = useTourI18n();
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-label={t.toolbar.pointsAria(points)}
+      className={cn(
+        "inline-flex min-h-11 items-center gap-1.5 rounded-[var(--radius-md)] px-2.5 text-xs font-semibold text-[var(--color-forest)] transition-colors hover:bg-[var(--color-ink)]/5",
+        focusRingTool
+      )}
+    >
+      <Sparkles className="size-4" aria-hidden />
+      <motion.span
+        key={points}
+        initial={reduce || points === 0 ? false : { scale: 1.5, color: "var(--color-ink)" }}
+        animate={{ scale: 1, color: "var(--color-forest)" }}
+        transition={{ type: "spring", stiffness: 500, damping: 16 }}
+        className="inline-block min-w-[2ch] tabular-nums"
+      >
+        {points}
+      </motion.span>
+    </button>
+  );
+}
 
 export function TourToolbar({
   locale,
+  points,
+  onOpenFolder,
   view,
   completedObjects,
   totalObjects,
@@ -19,6 +54,8 @@ export function TourToolbar({
   onResults
 }: {
   locale: Locale;
+  points: number;
+  onOpenFolder: () => void;
   view: TourView;
   completedObjects: number;
   totalObjects: number;
@@ -26,13 +63,14 @@ export function TourToolbar({
   onReset: () => void;
   onResults: () => void;
 }) {
+  const { t } = useTourI18n();
   return (
     <div className="flex h-full items-center justify-between gap-3 border-b border-[var(--color-line)] bg-[var(--color-paper)] px-3 sm:px-5">
       <div className="flex min-w-0 items-center gap-2">
       {/* Mobil ist die Kopfzeile der Website ausgeblendet; das Logo führt zurück. */}
       <Link
         href={`/${locale}`}
-        aria-label="b*alance – zur Startseite"
+        aria-label={t.toolbar.logo}
         className={cn("inline-flex min-h-11 shrink-0 items-center md:hidden", focusRingTool)}
       >
         <Image
@@ -56,11 +94,12 @@ export function TourToolbar({
         )}
       >
         <Home className="size-4" aria-hidden />
-        Haus
+        <span className="max-[400px]:sr-only">{t.toolbar.home}</span>
       </button>
       </div>
 
-      <div className="flex items-center gap-1">
+      <div className="flex items-center gap-0.5 sm:gap-1">
+        <PointsButton points={points} onClick={onOpenFolder} />
         {/* „12/21 Objekte“ las sich wie eine Anzeige, nicht wie ein Weg. Das
             Verb steht jetzt vorn, der Zähler dahinter. */}
         <button
@@ -68,15 +107,11 @@ export function TourToolbar({
           onClick={onResults}
           disabled={!completedObjects}
           aria-current={view === "results" ? "page" : undefined}
-          title={
-            completedObjects
-              ? "Deine Jahresbilanz ansehen"
-              : "Beantworte ein Objekt, dann wird die Bilanz sichtbar"
-          }
+          title={completedObjects ? t.toolbar.resultsTitle : t.toolbar.resultsDisabledTitle}
           aria-label={
             completedObjects
-              ? `Bilanz ansehen. ${completedObjects} von ${totalObjects} Objekten bearbeitet`
-              : `Bilanz noch nicht verfügbar. Beantworte zuerst ein Objekt von ${totalObjects}`
+              ? t.toolbar.resultsAria(completedObjects, totalObjects)
+              : t.toolbar.resultsDisabledAria(totalObjects)
           }
           className={cn(
             "inline-flex min-h-11 items-center gap-2 rounded-[var(--radius-md)] px-3 text-xs font-semibold text-[var(--color-forest)] transition-colors hover:bg-[var(--color-ink)]/5 disabled:opacity-45",
@@ -85,15 +120,15 @@ export function TourToolbar({
           )}
         >
           <BarChart3 className="size-4" aria-hidden />
-          Bilanz
-          <span className="tabular-nums text-[var(--color-ink)]/40">
+          {t.toolbar.results}
+          <span className="tabular-nums text-[var(--color-ink)]/40 max-[400px]:hidden">
             {completedObjects}/{totalObjects}
           </span>
         </button>
         <button
           type="button"
           onClick={onReset}
-          aria-label="Tour zurücksetzen"
+          aria-label={t.toolbar.reset}
           className={cn(
             "grid size-11 place-items-center rounded-full text-[var(--color-muted)] transition-colors hover:bg-[var(--color-ink)]/5",
             focusRingTool

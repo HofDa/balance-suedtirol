@@ -1,4 +1,4 @@
-import type { TourAction, TourState } from "./types";
+import type { GuessRecord, TourAction, TourState } from "./types";
 import { availableRooms } from "../config/rooms";
 
 const recordOrEmpty = <T>(value: unknown): Record<string, T> =>
@@ -45,6 +45,49 @@ function sanitizeSkipped(value: unknown, answers: Record<string, string>) {
   ) as Record<string, boolean>;
 }
 
+function sanitizeGuesses(value: unknown) {
+  const source = recordOrEmpty<unknown>(value);
+  const clean: Record<string, GuessRecord> = {};
+  for (const [questionId, record] of Object.entries(source)) {
+    if (!questions.has(questionId) || !record || typeof record !== "object") continue;
+    const entry = record as Record<string, unknown>;
+    if (entry.kind === "skipped") clean[questionId] = { kind: "skipped" };
+    else if (entry.kind === "quiz" && typeof entry.choice === "boolean") {
+      clean[questionId] = { kind: "quiz", choice: entry.choice };
+    } else if (
+      entry.kind === "estimate" &&
+      typeof entry.guess === "number" && Number.isFinite(entry.guess) && entry.guess > 0 &&
+      typeof entry.actual === "number" && Number.isFinite(entry.actual) && entry.actual > 0
+    ) {
+      clean[questionId] = { kind: "estimate", guess: entry.guess, actual: entry.actual };
+    }
+  }
+  return clean;
+}
+
+function sanitizeCards(value: unknown) {
+  const source = recordOrEmpty<unknown>(value);
+  return Object.fromEntries(
+    Object.entries(source).filter(([questionId, read]) => read === true && questions.has(questionId))
+  ) as Record<string, true>;
+}
+
+function sanitizeWhatIf(value: unknown, answers: Record<string, string>) {
+  const source = recordOrEmpty<unknown>(value);
+  return Object.fromEntries(
+    Object.entries(source).filter(([questionId, optionId]) =>
+      Boolean(answers[questionId]) &&
+      typeof optionId === "string" &&
+      questions.get(questionId)?.options.some((option) => option.id === optionId)
+    )
+  ) as Record<string, string>;
+}
+
+function sanitizeGoals(value: unknown, answers: Record<string, string>) {
+  if (!Array.isArray(value)) return [];
+  return [...new Set(value.filter((id): id is string => typeof id === "string" && Boolean(answers[id])))].slice(0, 3);
+}
+
 export const initialTourState: TourState = {
   view: "house",
   activeRoom: null,
@@ -52,7 +95,11 @@ export const initialTourState: TourState = {
   objectOpen: false,
   answers: {},
   skippedQuestions: {},
-  adjustments: {}
+  adjustments: {},
+  guesses: {},
+  cardsRead: {},
+  whatIf: {},
+  goals: []
 };
 
 export function tourReducer(state: TourState, action: TourAction): TourState {
@@ -79,11 +126,15 @@ export function tourReducer(state: TourState, action: TourAction): TourState {
       // Fleischmahlzeiten pro Woche.
       const adjustments = { ...state.adjustments };
       delete adjustments[action.questionId];
+      // Ein Was-wäre-wenn bezog sich auf die alte Antwort.
+      const whatIf = { ...state.whatIf };
+      delete whatIf[action.questionId];
       return {
         ...state,
         answers: { ...state.answers, [action.questionId]: action.optionId },
         skippedQuestions,
-        adjustments
+        adjustments,
+        whatIf
       };
     }
     case "SET_ADJUSTMENT": {
@@ -118,6 +169,27 @@ export function tourReducer(state: TourState, action: TourAction): TourState {
         activeQuestionIndex: action.index,
         objectOpen: action.open ?? false
       };
+    case "RECORD_GUESS":
+      // Ein Tipp gilt einmal. Wer die Auflösung kennt, schätzt nicht noch einmal
+      // für Punkte.
+      if (state.guesses[action.questionId] || !questions.has(action.questionId)) return state;
+      return { ...state, guesses: { ...state.guesses, [action.questionId]: action.record } };
+    case "READ_CARD":
+      if (state.cardsRead[action.questionId] || !questions.has(action.questionId)) return state;
+      return { ...state, cardsRead: { ...state.cardsRead, [action.questionId]: true } };
+    case "SET_WHAT_IF": {
+      const whatIf = { ...state.whatIf };
+      if (action.optionId && state.answers[action.questionId]) whatIf[action.questionId] = action.optionId;
+      else delete whatIf[action.questionId];
+      return { ...state, whatIf };
+    }
+    case "TOGGLE_GOAL": {
+      if (state.goals.includes(action.questionId)) {
+        return { ...state, goals: state.goals.filter((id) => id !== action.questionId) };
+      }
+      if (state.goals.length >= 3 || !state.answers[action.questionId]) return state;
+      return { ...state, goals: [...state.goals, action.questionId] };
+    }
     case "SHOW_RESULTS":
       return { ...state, view: "results", activeRoom: null, objectOpen: false };
     case "RESTORE": return restoreTourState(action.state);
@@ -143,5 +215,9 @@ export function restoreTourState(input: unknown): TourState {
     answers,
     skippedQuestions: sanitizeSkipped(source.skippedQuestions, answers),
     adjustments: sanitizeAdjustments(source.adjustments),
+    guesses: sanitizeGuesses(source.guesses),
+    cardsRead: sanitizeCards(source.cardsRead),
+    whatIf: sanitizeWhatIf(source.whatIf, answers),
+    goals: sanitizeGoals(source.goals, answers)
   };
 }

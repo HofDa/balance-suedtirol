@@ -1,0 +1,292 @@
+import { availableRooms } from "../config/rooms";
+import { estimateUnits, quizAnswers, type GuessUnit } from "../config/game-copy";
+import { optionValues, totalValues } from "./calculator";
+import { BATHTUB_LITERS, CAR_CO2_PER_KM, round2 } from "./everyday";
+import type {
+  AnnualValues,
+  GuessRecord,
+  RoomId,
+  TourOption,
+  TourQuestion,
+  TourState
+} from "./types";
+
+/**
+ * Die Spielebene des Lebensraum-Checks.
+ *
+ * Grundregel: Punkte gibt es fürs Entdecken und Wissen, nie für die Antwort.
+ * Eine „grüne“ Antwort bringt keinen einzigen Punkt mehr als eine ehrliche
+ * belastende — sonst würde das Spiel die Selbstauskunft verbiegen, auf der die
+ * Bilanz beruht. Diese Datei liest den Rechner nur; sie ändert keinen Faktor
+ * und keine Antwort.
+ */
+
+export const POINTS = {
+  /** Ein beantworteter Gegenstand. Übersprungene zählen nicht. */
+  found: 1,
+  spot: 3,
+  close: 1,
+  off: 0,
+  quizRight: 2,
+  quizWrong: 0,
+  /** Eine gelesene Wissenskarte. */
+  card: 1
+} as const;
+
+/** Bis zu diesem Faktor daneben ist ein Tipp ein Volltreffer, bis zum zweiten nah dran. */
+const SPOT_FACTOR = 1.25;
+const CLOSE_FACTOR = 1.5;
+
+const questionIndex = new Map<string, { question: TourQuestion; roomId: RoomId }>();
+for (const room of availableRooms) {
+  for (const question of room.questions) questionIndex.set(question.id, { question, roomId: room.id });
+}
+export const allQuestions = availableRooms.flatMap((room) => room.questions);
+
+/** Ein Jahreswert in der Alltagsgröße, in der geschätzt wird. */
+export function toUnit(unit: GuessUnit, values: AnnualValues) {
+  if (unit === "bathtubs") return values.waterL / BATHTUB_LITERS;
+  if (unit === "carKm") return values.co2Kg / CAR_CO2_PER_KM;
+  return values.co2Kg;
+}
+
+export type EstimateSpec = { unit: GuessUnit; min: number; max: number };
+
+/**
+ * Der Schätzbereich einer Frage. Er ergibt sich aus allen Optionen über den
+ * ganzen Reglerbereich, nicht aus der eigenen Antwort: läge die Mitte des
+ * Reglers auf dem eigenen Wert, wäre der Tipp verraten.
+ */
+export function estimateSpec(questionId: string, answers: Record<string, string>): EstimateSpec | null {
+  const unit = estimateUnits[questionId];
+  const entry = questionIndex.get(questionId);
+  if (!unit || !entry) return null;
+  const { question } = entry;
+  const adjust = question.adjust;
+  const quantities = adjust
+    ? [...new Set([
+        adjust.min,
+        adjust.min + adjust.step,
+        ...Object.values(adjust.defaults),
+        adjust.max - adjust.step,
+        adjust.max
+      ])].filter((value) => value >= adjust.min && value <= adjust.max)
+    : [undefined];
+
+  const candidates: number[] = [];
+  for (const option of question.options) {
+    for (const quantity of quantities) {
+      const values = optionValues(
+        questionId,
+        option.id,
+        answers,
+        quantity === undefined ? {} : { [questionId]: quantity }
+      );
+      const value = toUnit(unit, values);
+      if (value > 0) candidates.push(value);
+    }
+  }
+  if (candidates.length === 0) return null;
+  const low = Math.min(...candidates);
+  const high = Math.max(...candidates);
+  return {
+    unit,
+    min: Math.max(1, round2(low * 0.5)),
+    max: Math.max(10, round2(high * 1.5))
+  };
+}
+
+/** Der eigene Wert zur gewählten Antwort, in der Schätzgröße. */
+export function actualFor(
+  questionId: string,
+  answers: Record<string, string>,
+  adjustments: Record<string, number>
+) {
+  const unit = estimateUnits[questionId];
+  const optionId = answers[questionId];
+  if (!unit || !optionId) return null;
+  return toUnit(unit, optionValues(questionId, optionId, answers, adjustments));
+}
+
+export type Challenge =
+  | { kind: "estimate"; spec: EstimateSpec; actual: number }
+  | { kind: "quiz"; correct: boolean }
+  | null;
+
+/**
+ * Was nach der Antwort kommt. Wer kein Auto hat oder nur Schotter, hat nichts
+ * zu schätzen — null Badewannen errät jeder. Dann folgt direkt die Auflösung.
+ */
+export function challengeFor(
+  questionId: string,
+  answers: Record<string, string>,
+  adjustments: Record<string, number>
+): Challenge {
+  const correct = quizAnswers[questionId];
+  if (correct !== undefined) return { kind: "quiz", correct };
+  const spec = estimateSpec(questionId, answers);
+  const actual = actualFor(questionId, answers, adjustments);
+  if (!spec || actual === null || actual < 1) return null;
+  return { kind: "estimate", spec, actual };
+}
+
+export type Rating = "spot" | "close" | "off" | "quizRight" | "quizWrong";
+
+/** Symmetrisch im Verhältnis: das Doppelte und die Hälfte sind gleich weit daneben. */
+export function rateEstimate(guess: number, actual: number): "spot" | "close" | "off" {
+  if (!(guess > 0) || !(actual > 0)) return "off";
+  const distance = Math.abs(Math.log(guess / actual));
+  if (distance <= Math.log(SPOT_FACTOR)) return "spot";
+  if (distance <= Math.log(CLOSE_FACTOR)) return "close";
+  return "off";
+}
+
+export function ratingOf(record: GuessRecord | undefined, questionId: string): Rating | null {
+  if (!record || record.kind === "skipped") return null;
+  if (record.kind === "estimate") return rateEstimate(record.guess, record.actual);
+  const correct = quizAnswers[questionId];
+  if (correct === undefined) return null;
+  return record.choice === correct ? "quizRight" : "quizWrong";
+}
+
+export const pointsFor = (rating: Rating | null) => (rating ? POINTS[rating] : 0);
+
+/** Um welchen Faktor ein Tipp danebenlag, gerundet für den Satz darunter. */
+export const missFactor = (guess: number, actual: number) =>
+  Math.round(Math.max(guess / actual, actual / guess));
+
+export type Discovery = {
+  found: number;
+  total: number;
+  spot: number;
+  close: number;
+  quizRight: number;
+  cardsRead: number;
+  points: number;
+};
+
+export function discovery(state: Pick<TourState, "answers" | "guesses" | "cardsRead">): Discovery {
+  const result: Discovery = { found: 0, total: allQuestions.length, spot: 0, close: 0, quizRight: 0, cardsRead: 0, points: 0 };
+  for (const question of allQuestions) {
+    if (state.answers[question.id]) {
+      result.found += 1;
+      result.points += POINTS.found;
+    }
+    const rating = ratingOf(state.guesses[question.id], question.id);
+    if (rating === "spot") result.spot += 1;
+    if (rating === "close") result.close += 1;
+    if (rating === "quizRight") result.quizRight += 1;
+    result.points += pointsFor(rating);
+    if (state.cardsRead[question.id]) {
+      result.cardsRead += 1;
+      result.points += POINTS.card;
+    }
+  }
+  return result;
+}
+
+// ---------------------------------------------------------------------------
+// Hebel und Was-wäre-wenn
+// ---------------------------------------------------------------------------
+
+export type LeverTheme = "water" | "biodiversity" | "carbon";
+
+export type Lever = {
+  questionId: string;
+  roomId: RoomId;
+  sceneLabel: string;
+  current: TourOption;
+  best: TourOption;
+  saving: AnnualValues;
+  theme: LeverTheme;
+  /** Anteil an der eigenen Bilanz, über CO₂ und Wasser zusammen; nur zum Sortieren. */
+  weight: number;
+};
+
+/** Worum es bei einem Hebel geht: Wasser im Bad, Lebensraum im Garten, sonst Klima. */
+export function leverTheme(questionId: string): LeverTheme {
+  const entry = questionIndex.get(questionId);
+  if (entry?.roomId === "garden") return "biodiversity";
+  if (estimateUnits[questionId] === "bathtubs") return "water";
+  return "carbon";
+}
+
+/**
+ * Die größten Hebel aus den eigenen Antworten. Als bessere Option gilt nur,
+ * was der Natur nicht schadet: Schotter spart Gießwasser, wäre aber als
+ * „Hebel“ für den Garten eine Empfehlung gegen die Artenvielfalt. Deshalb
+ * zählen nur Optionen, die bei der Biodiversität mindestens gleichauf liegen.
+ * Südtirol-Durchschnitte sind keine Handlungsoption und fallen weg. Der Regler
+ * bleibt stehen wie in `bestCaseSaving`.
+ */
+export function levers(
+  answers: Record<string, string>,
+  adjustments: Record<string, number>,
+  totals: AnnualValues
+): Lever[] {
+  const result: Lever[] = [];
+  for (const question of allQuestions) {
+    const currentId = answers[question.id];
+    const current = question.options.find((option) => option.id === currentId);
+    if (!current) continue;
+    const theme = leverTheme(question.id);
+    const byWater = theme !== "carbon";
+    const now = optionValues(question.id, current.id, answers, adjustments);
+    let best: { option: TourOption; values: AnnualValues } | null = null;
+    for (const option of question.options) {
+      if (option.id === current.id || option.regionalAverage) continue;
+      if ((option.impact.biodiversity ?? 0) < (current.impact.biodiversity ?? 0)) continue;
+      const values = optionValues(question.id, option.id, answers, adjustments);
+      const key = byWater ? "waterL" : "co2Kg";
+      if (values[key] >= now[key]) continue;
+      if (!best || values[key] < best.values[key]) best = { option, values };
+    }
+    if (!best) continue;
+    const saving: AnnualValues = {
+      co2Kg: Math.max(0, now.co2Kg - best.values.co2Kg),
+      waterL: Math.max(0, now.waterL - best.values.waterL),
+      energyKwh: Math.max(0, now.energyKwh - best.values.energyKwh)
+    };
+    const weight =
+      saving.co2Kg / Math.max(1, totals.co2Kg) + saving.waterL / Math.max(1, totals.waterL);
+    if (weight < 0.005) continue;
+    result.push({
+      questionId: question.id,
+      roomId: questionIndex.get(question.id)!.roomId,
+      sceneLabel: question.sceneLabel,
+      current,
+      best: best.option,
+      saving,
+      theme,
+      weight
+    });
+  }
+  return result.sort((a, b) => b.weight - a.weight);
+}
+
+/** Die Bilanz mit den eingeschalteten Hebeln. Die echten Antworten bleiben unberührt. */
+export function whatIfTotals(
+  answers: Record<string, string>,
+  adjustments: Record<string, number>,
+  whatIf: Record<string, string>
+) {
+  const hypothetical = { ...answers };
+  for (const [questionId, optionId] of Object.entries(whatIf)) {
+    if (answers[questionId]) hypothetical[questionId] = optionId;
+  }
+  return totalValues(hypothetical, adjustments);
+}
+
+/** Logarithmischer Regler: 0 bis 1 auf den Schätzbereich, damit 5 und 500 gleich gut treffbar sind. */
+export function fromSlider(position: number, min: number, max: number) {
+  const value = Math.exp(Math.log(min) + position * (Math.log(max) - Math.log(min)));
+  return Math.max(min, Math.min(max, round2(value)));
+}
+
+export function toSlider(value: number, min: number, max: number) {
+  if (!(value > 0)) return 0;
+  const position = (Math.log(value) - Math.log(min)) / (Math.log(max) - Math.log(min));
+  return Math.max(0, Math.min(1, position));
+}
+
+export const MAX_GOALS = 3;

@@ -127,10 +127,12 @@ const effects: Record<string, (input: EffectInput) => ReactNode> = {
           <span key={`${left}`} className={styles.steam} style={at(left as number, top as number, { width: width as string, animationDelay: `${delay}s` })} />
         ))}
         {Array.from({ length: notes }, (_, index) => (
-          <span key={`note-${index}`} className={styles.note}
+          <svg key={`note-${index}`} viewBox="0 0 12 16" className={styles.note}
             style={at(30 + ((index * 37) % 50), 14, { animationDelay: `${(index * 0.55).toFixed(2)}s` })}>
-            {index % 2 ? "♫" : "♪"}
-          </span>
+            {/* Achtelnote, gezeichnet statt als Schriftzeichen. */}
+            <ellipse cx="4" cy="12.5" rx="3.4" ry="2.5" transform="rotate(-20 4 12.5)" />
+            <path d="M6.9 12V1.2c1.6 1.4 4.4 2.3 4.4 5.2" fill="none" strokeWidth="1.6" strokeLinecap="round" />
+          </svg>
         ))}
       </>
     );
@@ -191,6 +193,16 @@ const effects: Record<string, (input: EffectInput) => ReactNode> = {
     if (answer === "natural-bed") return bees(2);
     return null;
   },
+  // Globus: Wer fliegt, sieht ein Flugzeug um den Globus kreisen — schneller
+  // bei mehr Fernreise-Kilometern. Bahn und Auto bleiben am Boden.
+  "mobility-long": ({ answer, level }) =>
+    answer === "long-flight" ? (
+      <span className={styles.orbit} style={{ animationDuration: `${(7 - level * 4.5).toFixed(2)}s` }}>
+        <svg viewBox="0 0 24 24" className={styles.plane}>
+          <path d="M21 15.5v-1.7l-8-5V3.3a1.3 1.3 0 0 0-2.6 0v5.5l-8 5v1.7l8-2.5v5.4l-2 1.5v1.3l3.3-1 3.3 1v-1.3l-2-1.5V13z" />
+        </svg>
+      </span>
+    ) : null,
   // Apfelbaum: heimische Blüten ziehen Bienen an, Zierpflanzen kaum.
   "garden-plants": ({ answer }) => bees(answer === "native" ? 4 : answer === "ornamental" ? 1 : 0),
   // Insektenhotel: keine, zwei oder fünf Wildbienen.

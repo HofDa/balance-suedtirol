@@ -9,7 +9,7 @@ import { withBasePath } from "@/lib/public-path";
 import { cn } from "@/lib/utils";
 import { focusRingTool } from "@/components/ui/focus";
 import layout from "../config/full-house-layout.json";
-import { getRoom } from "../config/rooms";
+import { useTourI18n } from "../i18n/context";
 import type { RoomId } from "../model/types";
 import styles from "./interactive-room.module.css";
 
@@ -27,6 +27,7 @@ type SceneProps = {
 
 /** All positions use pixels in the original house. A room is only a camera crop. */
 export function RegisteredHouseScene({ roomId, questionIndex, answers, adjustments = {}, skippedQuestions, onSelectObject, onHoverObject, children }: SceneProps) {
+  const { t, room: getRoom } = useTourI18n();
   const crop = roomId && roomId in layout.rooms
     ? layout.rooms[roomId as keyof typeof layout.rooms]
     : [0, 0, ...layout.size];
@@ -75,7 +76,7 @@ export function RegisteredHouseScene({ roomId, questionIndex, answers, adjustmen
           return (
             <button key={item.id} type="button" data-object-id={item.id} data-source-box={item.box.join(",")}
               data-active={active} aria-pressed={active}
-              aria-label={`${question.sceneLabel} öffnen${answered ? ", beantwortet" : skipped ? ", übersprungen" : ""}`}
+              aria-label={t.scene.openObject(question.sceneLabel, answered ? "answered" : skipped ? "skipped" : "open")}
               onClick={() => onSelectObject(item.room as RoomId, item.question)}
               onMouseEnter={() => onHoverObject?.(item.question)} onMouseLeave={() => onHoverObject?.(null)}
               onFocus={() => onHoverObject?.(item.question)} onBlur={() => onHoverObject?.(null)}

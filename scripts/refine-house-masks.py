@@ -42,7 +42,7 @@ ITERATIONS = 6
 # GrabCut only where the contact sheet showed a clear gain. On other objects it
 # ate thin parts (bed legs, duvet corner) or frayed edges that match their
 # background (tabletop against the cupboards).
-GRABCUT = {"kitchen-origin", "mobility-long"}
+GRABCUT = {"kitchen-origin"}
 
 # Where the generated mask swallows a patch of surroundings and colours cannot
 # separate it, a hand-set outline clips the mask. Points are fractions of the

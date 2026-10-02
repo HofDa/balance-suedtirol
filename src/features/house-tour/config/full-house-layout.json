@@ -212,15 +212,15 @@
     },
     {
       "id": "mobility-long",
-      "room": "mobility",
-      "question": 2,
+      "room": "living",
+      "question": 3,
       "box": [
-        37,
-        735,
-        274,
-        145
+        535,
+        661,
+        40,
+        54
       ],
-      "subject": "the gravel driveway leading away from the garage, exclude foreground shrubs, stone wall, garage wood posts and stepping stones; preserve the exact visible ground shape"
+      "subject": "the desk globe on the living-room sideboard: sphere, meridian ring, stem and foot; mask drawn from measured shape by scripts/build-globe-cutout.py"
     },
     {
       "id": "garden-ground",

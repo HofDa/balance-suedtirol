@@ -1,30 +1,33 @@
 "use client";
 
-import { useMemo } from "react";
-import { CheckCircle2, ChevronRight, Home, TrendingDown, TrendingUp } from "lucide-react";
+import { BookOpen, ChevronRight, Home, SkipForward } from "lucide-react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { focusRingTool } from "@/components/ui/focus";
-import { Label } from "@/components/ui/label";
-import { bestCaseSaving, optionValues, summarizeValues } from "../model/calculator";
-import { MetricBars } from "./metric-readout";
-import type { AnnualValues, TourRoom } from "../model/types";
+import { useTourI18n } from "../i18n/context";
+import type { LocalizedRoom } from "../i18n/localize";
+import { POINTS, pointsFor, ratingOf, type Rating } from "../model/game";
+import type { GuessRecord, TourRoom } from "../model/types";
+import { objectImage } from "./game/knowledge-card";
 
-const completionCopy: Partial<Record<TourRoom["id"], string>> = {
-  bath: "Du hast erkundet, wie Wasserverbrauch und Alltagsprodukte mit Gewässern und natürlichen Ressourcen zusammenhängen.",
-  bedroom: "Du hast erkundet, wie Wärme, Textilien und Elektronik Ressourcen und Lebensräume beeinflussen.",
-  living: "Du hast erkundet, wie Energie, Geräte und Materialien mit der Biodiversität verbunden sind.",
-  kitchen: "Du hast erkundet, wie Ernährung, Herkunft und Abfälle Flächen und Lebensräume beeinflussen.",
-  mobility: "Du hast erkundet, wie unsere Wege Energie, Flächen und die Qualität lokaler Lebensräume prägen.",
-  garden: "Du hast erkundet, wie Boden, Pflanzen und Strukturen direkt neue Lebensräume schaffen."
+const chipTone: Record<Rating, string> = {
+  spot: "bg-[var(--color-forest)] text-white",
+  quizRight: "bg-[var(--color-forest)] text-white",
+  close: "bg-[var(--color-sage)] text-[var(--color-forest)]",
+  off: "bg-[var(--color-stone)] text-[var(--color-ink)]",
+  quizWrong: "bg-[var(--color-stone)] text-[var(--color-ink)]"
 };
 
-/** Abschlussansicht eines Raums: Befund, Zwischenbilanz und der Weg weiter. */
+/**
+ * Raumabschluss als Runde im Rückblick: was entdeckt wurde, wie die Tipps
+ * saßen, welche Karten gesammelt sind. Die Bilanz steht hier bewusst nicht
+ * mehr; sie kommt am Ende mit den Hebeln, wo man mit ihr etwas anfangen kann.
+ */
 export function RoomCompleteView({
   room,
   answers,
-  adjustments,
-  totals,
+  guesses,
+  cardsRead,
   nextRoom,
   allComplete,
   reduceMotion,
@@ -32,10 +35,10 @@ export function RoomCompleteView({
   onNextRoom,
   onHouse
 }: {
-  room: TourRoom;
+  room: TourRoom | LocalizedRoom;
   answers: Record<string, string>;
-  adjustments: Record<string, number>;
-  totals: AnnualValues;
+  guesses: Record<string, GuessRecord>;
+  cardsRead: Record<string, true>;
   nextRoom?: TourRoom;
   allComplete: boolean;
   reduceMotion: boolean | null;
@@ -43,33 +46,16 @@ export function RoomCompleteView({
   onNextRoom: () => void;
   onHouse: () => void;
 }) {
-  /**
-   * Der Befund des Raums: der schwerste beantwortete Posten und der größte
-   * ungenutzte Hebel. Beides rechnet der Rechner ohnehin schon — es stand nur
-   * nirgends.
-   */
-  const roomInsight = useMemo(() => {
-    let driver: { label: string; values: AnnualValues; share: number } | null = null;
-    let lever: { label: string; values: AnnualValues } | null = null;
-
-    for (const item of room.questions) {
-      const answer = answers[item.id];
-      if (!answer) continue;
-
-      const values = optionValues(item.id, answer, answers, adjustments);
-      if (values.co2Kg > 0 && (!driver || values.co2Kg > driver.values.co2Kg)) {
-        driver = { label: item.sceneLabel, values, share: 0 };
-      }
-
-      const potential = bestCaseSaving(item.id, answers, adjustments);
-      if (potential.co2Kg > 0 && (!lever || potential.co2Kg > lever.values.co2Kg)) {
-        lever = { label: item.sceneLabel, values: potential };
-      }
-    }
-
-    if (driver && totals.co2Kg > 0) driver.share = driver.values.co2Kg / totals.co2Kg;
-    return { driver, lever };
-  }, [room, answers, adjustments, totals.co2Kg]);
+  const { t } = useTourI18n();
+  const completion = "completion" in room ? room.completion : room.description;
+  const rows = room.questions.map((question) => {
+    const answered = Boolean(answers[question.id]);
+    const rating = ratingOf(guesses[question.id], question.id);
+    const read = Boolean(cardsRead[question.id]);
+    const points = (answered ? POINTS.found : 0) + pointsFor(rating) + (read ? POINTS.card : 0);
+    return { question, answered, rating, read, points };
+  });
+  const roomPoints = rows.reduce((sum, row) => sum + row.points, 0);
 
   return (
     <motion.div
@@ -77,93 +63,71 @@ export function RoomCompleteView({
       animate={{ opacity: 1, y: 0 }}
       className="mx-auto flex min-h-full max-w-lg flex-col justify-center pb-4"
     >
-      <span className="grid size-11 place-items-center rounded-full bg-[var(--color-sage)] text-[var(--color-forest)]">
-        <CheckCircle2 className="size-5" aria-hidden />
-      </span>
-      <Label size="dense" className="mt-5">Raum abgeschlossen</Label>
-      <h2 className="mt-2 text-2xl font-semibold tracking-[-0.025em]">
-        {room.title} erkundet
-      </h2>
-      <p className="mt-3 text-sm leading-6 text-[var(--color-muted)]">
-        {completionCopy[room.id] ?? room.description}
-      </p>
-
-      {/* Ein Raumabschluss, der nur lobt, sagt nichts. Diese beiden
-          Sätze sind das Ergebnis des Raums: was hier wiegt und wo noch
-          etwas zu holen wäre. */}
-      {(roomInsight.driver || roomInsight.lever) && (
-        <dl className="mt-6 grid gap-2">
-          {roomInsight.driver && (
-            <div className="flex items-start gap-2.5 rounded-[var(--radius-md)] border border-[var(--color-line)] px-3 py-2.5">
-              <TrendingUp className="mt-0.5 size-4 shrink-0 text-[var(--color-clay-ink)]" aria-hidden />
-              <div className="min-w-0">
-                <dt className="text-xs font-semibold">Größter Posten in diesem Raum</dt>
-                <dd className="mt-0.5 text-xs leading-5 text-[var(--color-muted)]">
-                  {roomInsight.driver.label} —{" "}
-                  <span className="tabular-nums text-[var(--color-ink)]">
-                    {summarizeValues(roomInsight.driver.values)}
-                  </span>
-                  {roomInsight.driver.share >= 0.01 && (
-                    <>
-                      {" "}im Jahr, rund{" "}
-                      <span className="tabular-nums text-[var(--color-ink)]">
-                        {Math.round(roomInsight.driver.share * 100)} %
-                      </span>{" "}
-                      deiner bisherigen CO₂-Bilanz.
-                    </>
-                  )}
-                </dd>
-              </div>
-            </div>
-          )}
-
-          {roomInsight.lever && (
-            <div className="flex items-start gap-2.5 rounded-[var(--radius-md)] border border-[var(--color-line)] px-3 py-2.5">
-              <TrendingDown className="mt-0.5 size-4 shrink-0 text-[var(--color-forest)]" aria-hidden />
-              <div className="min-w-0">
-                <dt className="text-xs font-semibold">Größter verbleibender Hebel</dt>
-                <dd className="mt-0.5 text-xs leading-5 text-[var(--color-muted)]">
-                  {roomInsight.lever.label} — bis zu{" "}
-                  <span className="tabular-nums text-[var(--color-ink)]">
-                    {summarizeValues(roomInsight.lever.values)}
-                  </span>{" "}
-                  weniger im Jahr mit der sparsamsten Antwort.
-                </dd>
-              </div>
-            </div>
-          )}
-        </dl>
-      )}
-
-      <div className="mt-4 rounded-[var(--radius-lg)] border border-[var(--color-line)] p-4">
-        <Label size="dense">Deine Jahresbilanz bisher</Label>
-        <div className="mt-3">
-          <MetricBars values={totals} compact />
-        </div>
+      <div className="flex items-baseline justify-between gap-3">
+        <h2 className="text-2xl font-semibold tracking-[-0.025em]">{t.roomComplete.title(room.title)}</h2>
+        <motion.span
+          initial={reduceMotion ? false : { scale: 0.7, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ type: "spring", stiffness: 420, damping: 18, delay: reduceMotion ? 0 : 0.2 }}
+          className="shrink-0 text-sm font-semibold tabular-nums text-[var(--color-forest)]"
+        >
+          +{roomPoints} {t.pointsShort}
+        </motion.span>
       </div>
+      <p className="mt-2 text-sm leading-6 text-[var(--color-muted)]">{completion}</p>
+
+      <ul className="mt-5 grid gap-1.5">
+        {rows.map(({ question, answered, rating, read }, index) => (
+          <motion.li
+            key={question.id}
+            initial={reduceMotion ? false : { opacity: 0, x: -8 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: reduceMotion ? 0 : 0.25 + index * 0.08, duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+            className="flex min-h-14 items-center gap-3 rounded-[var(--radius-lg)] border border-[var(--color-line)] bg-white px-2.5 py-1.5"
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={objectImage(question.id)} alt="" className="size-10 shrink-0 object-contain" />
+            <span className="min-w-0 flex-1 truncate text-sm font-semibold">{question.sceneLabel}</span>
+            {!answered ? (
+              <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-[var(--color-muted)]">
+                <SkipForward className="size-3" aria-hidden />
+                {t.roomComplete.skipped}
+              </span>
+            ) : rating ? (
+              <span className={cn("rounded-[var(--radius-sm)] px-2 py-0.5 text-[11px] font-semibold", chipTone[rating])}>
+                {t.ratings[rating]}
+              </span>
+            ) : null}
+            <BookOpen
+              className={cn("size-4 shrink-0", read ? "text-[var(--color-forest)]" : "text-[var(--color-ink)]/20")}
+              aria-label={read ? t.roomComplete.cardRead : t.roomComplete.cardUnread}
+            />
+          </motion.li>
+        ))}
+      </ul>
 
       <div className="mt-6 flex flex-wrap gap-3">
         <button
           type="button"
           onClick={allComplete ? onResults : onNextRoom}
           className={cn(
-            "inline-flex min-h-11 items-center gap-2 rounded-[var(--radius-md)] bg-[var(--color-forest)] px-5 text-sm font-semibold text-white",
+            "inline-flex min-h-11 items-center gap-2 rounded-[var(--radius-md)] bg-[var(--color-forest)] px-5 text-sm font-semibold text-white transition-colors hover:bg-[var(--color-ink)]",
             focusRingTool
           )}
         >
-          {allComplete ? "Ergebnis ansehen" : `Weiter zu ${nextRoom?.title ?? "nächsten Raum"}`}
+          {allComplete ? t.roomComplete.toResults : t.roomComplete.next(nextRoom?.title ?? t.roomComplete.nextFallback)}
           <ChevronRight className="size-4" aria-hidden />
         </button>
         <button
           type="button"
           onClick={onHouse}
           className={cn(
-            "inline-flex min-h-11 items-center gap-2 rounded-[var(--radius-md)] px-4 text-sm font-semibold text-[var(--color-forest)]",
+            "inline-flex min-h-11 items-center gap-2 rounded-[var(--radius-md)] px-4 text-sm font-semibold text-[var(--color-forest)] transition-colors hover:bg-[var(--color-ink)]/5",
             focusRingTool
           )}
         >
           <Home className="size-4" aria-hidden />
-          Haus ansehen
+          {t.roomComplete.viewHouse}
         </button>
       </div>
     </motion.div>

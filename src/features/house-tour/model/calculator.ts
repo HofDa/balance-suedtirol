@@ -32,28 +32,28 @@ import type { AnnualValues, MetricId, TourOption, TourQuestion } from "./types";
 export const GRID_CO2_PER_KWH = 0.214;
 
 /** Aufheizen von 12 °C auf 38 °C: 4,186 kJ/(kg·K) × 26 K, kWh je Liter. */
-const HOT_WATER_KWH_PER_LITER = 0.0302;
+export const HOT_WATER_KWH_PER_LITER = 0.0302;
 
 /** Warmwasser außerhalb der Dusche (Hände, Spülen, Putzen), Liter/a. */
-const OTHER_HOT_WATER_LITERS = 8000;
+export const OTHER_HOT_WATER_LITERS = 8000;
 
 /** Aufbereitung und Verteilung von Trinkwasser, kWh je Liter. */
-const WATER_SUPPLY_KWH_PER_LITER = 0.0005;
+export const WATER_SUPPLY_KWH_PER_LITER = 0.0005;
 
 /** Vollständige Vorkette weggeworfener Lebensmittel, kg CO₂e je kg. */
-const FOOD_WASTE_CO2_PER_KG = 2.5;
+export const FOOD_WASTE_CO2_PER_KG = 2.5;
 
 /** Ernährung: Sockel einer überwiegend pflanzlichen Kost, kg CO₂e/a. */
-const DIET_BASE_CO2 = 950;
+export const DIET_BASE_CO2 = 950;
 
 /** Aufschlag je Fleischmahlzeit pro Woche über ein Jahr, kg CO₂e/a. */
-const DIET_CO2_PER_WEEKLY_MEAT_MEAL = 105;
+export const DIET_CO2_PER_WEEKLY_MEAT_MEAL = 105;
 
 /** Voller Aufschlag für importierte und außersaisonale Ware, kg CO₂e/a. */
-const FOOD_ORIGIN_MAX_CO2 = 400;
+export const FOOD_ORIGIN_MAX_CO2 = 400;
 
 /** Ein Dauerverbraucher im Standby über ein Jahr: 1 W × 8.760 h. */
-const KWH_PER_STANDBY_WATT = 8.76;
+export const KWH_PER_STANDBY_WATT = 8.76;
 
 /** Brennstoff je gefahrenem Kilometer im Verbrenner, kWh (6,8 l/100 km). */
 export const FUEL_KWH_PER_LITER = 9.7;
@@ -403,15 +403,16 @@ export function bestCaseSaving(
  * sonst 2,64 t über 1,4 t über 0,5 t und die Spalte ließe sich nicht auf einen
  * Blick vergleichen.
  */
-const deFormatters = new Map<number, Intl.NumberFormat>();
-const de = (digits = 0) => {
-  let formatter = deFormatters.get(digits);
+const formatterCache = new Map<string, Intl.NumberFormat>();
+const de = (digits = 0, tag = "de-DE") => {
+  const key = `${tag}:${digits}`;
+  let formatter = formatterCache.get(key);
   if (!formatter) {
-    formatter = new Intl.NumberFormat("de-DE", {
+    formatter = new Intl.NumberFormat(tag, {
       maximumFractionDigits: digits,
       minimumFractionDigits: digits
     });
-    deFormatters.set(digits, formatter);
+    formatterCache.set(key, formatter);
   }
   return formatter;
 };
@@ -443,7 +444,9 @@ export function bestCaseSavingFromValues(
 export function formatMetric(
   metric: MetricId,
   value: number,
-  scaleValue = value
+  scaleValue = value,
+  /** BCP-47-Tag der Sprache; Deutsch und Italienisch teilen das Format. */
+  tag = "de-DE"
 ): { value: string; unit: string; isZero: boolean } {
   const done = (text: string, unit: string, rounded: number) => ({
     value: text,
@@ -454,25 +457,25 @@ export function formatMetric(
   if (metric === "water") {
     if (scaleValue >= 10000) {
       const rounded = Math.round(value / 100) / 10;
-      return done(de(1).format(rounded), "m³", rounded);
+      return done(de(1, tag).format(rounded), "m³", rounded);
     }
     const rounded = Math.round(value / 10) * 10;
-    return done(de().format(rounded), "L", rounded);
+    return done(de(0, tag).format(rounded), "L", rounded);
   }
   if (metric === "energy") {
     if (scaleValue >= 10000) {
       const rounded = Math.round(value / 100) / 10;
-      return done(de(1).format(rounded), "MWh", rounded);
+      return done(de(1, tag).format(rounded), "MWh", rounded);
     }
     const rounded = Math.round(value / 5) * 5;
-    return done(de().format(rounded), "kWh", rounded);
+    return done(de(0, tag).format(rounded), "kWh", rounded);
   }
   if (scaleValue >= 1000) {
     const rounded = Math.round(value / 100) / 10;
-    return done(de(1).format(rounded), "t", rounded);
+    return done(de(1, tag).format(rounded), "t", rounded);
   }
   const rounded = Math.round(value);
-  return done(de().format(rounded), "kg", rounded);
+  return done(de(0, tag).format(rounded), "kg", rounded);
 }
 
 /**
@@ -480,11 +483,11 @@ export function formatMetric(
  * `scale` sind die größten Werte der Frage, damit alle Zeilen dieselbe Einheit
  * tragen. Kennzahlen, die auf null runden, fallen weg — „0 kWh“ ist Rauschen.
  */
-export function summarizeValues(values: AnnualValues, scale: AnnualValues = values): string {
+export function summarizeValues(values: AnnualValues, scale: AnnualValues = values, tag = "de-DE"): string {
   const parts: string[] = [];
   for (const metric of metrics) {
     if (values[metric.key] <= 0) continue;
-    const formatted = formatMetric(metric.id, values[metric.key], scale[metric.key]);
+    const formatted = formatMetric(metric.id, values[metric.key], scale[metric.key], tag);
     if (formatted.isZero) continue;
     parts.push(`${formatted.value} ${formatted.unit}`);
   }

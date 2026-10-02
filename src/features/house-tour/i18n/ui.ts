@@ -1,0 +1,1171 @@
+import type { Localized } from "../../../lib/i18n";
+import { localeTags } from "../../../lib/i18n";
+import {
+  DIET_BASE_CO2,
+  DIET_CO2_PER_WEEKLY_MEAT_MEAL,
+  FOOD_ORIGIN_MAX_CO2,
+  FOOD_WASTE_CO2_PER_KG,
+  FUEL_KWH_PER_LITER,
+  GRID_CO2_PER_KWH,
+  HOT_WATER_KWH_PER_LITER,
+  KWH_PER_STANDBY_WATT,
+  OTHER_HOT_WATER_LITERS,
+  WATER_SUPPLY_KWH_PER_LITER,
+  questionBasis
+} from "../model/calculator";
+import type { MetricId, ScoreDimension } from "../model/types";
+
+/**
+ * Alle Oberflächentexte der Tour in drei Sprachen. Funktionen statt
+ * Platzhaltern, weil Wortstellung und Mehrzahl je Sprache anders laufen.
+ * Fett gesetzte Teile kommen als `{ b: … }`, damit die Komponente sie
+ * auszeichnen kann, ohne Sätze zu zerschneiden.
+ */
+export type Rich = Array<string | { b: string }>;
+type Basis = Record<string, { factor: string; assumption?: string }>;
+
+export type TourUi = {
+  toolbar: {
+    logo: string;
+    home: string;
+    results: string;
+    resultsTitle: string;
+    resultsDisabledTitle: string;
+    resultsAria: (done: number, total: number) => string;
+    resultsDisabledAria: (total: number) => string;
+    reset: string;
+    resetConfirm: string;
+    pointsAria: (points: number) => string;
+  };
+  panelRegion: string;
+  intro: {
+    headline: string;
+    lead: string;
+    loop: { title: string; copy: string }[];
+    loopAria: string;
+    honesty: string;
+    start: string;
+    resumeTitle: string;
+    doneTitle: string;
+    foundOf: (found: number, total: number) => string;
+    foundAria: (found: number, total: number) => string;
+    continueRoom: (room: string) => string;
+    toResults: string;
+    results: string;
+  };
+  house: {
+    explored: (handled: number, total: number) => string;
+    visitAria: (room: string, handled: number, total: number) => string;
+    roomsNav: string;
+  };
+  scene: {
+    objectsNav: string;
+    roomAria: (title: string) => string;
+    visualization: (room: string) => string;
+    openObject: (label: string, state: "answered" | "skipped" | "open") => string;
+    state: { answered: string; skipped: string; open: string };
+    desktopState: { answered: string; skipped: string; active: string; open: string };
+    tapHint: string;
+    chooseObject: string;
+  };
+  roomNav: { label: string; toHouse: string; roomAria: (title: string, handled: number, total: number) => string };
+  progressObjects: string;
+  panel: {
+    back: string;
+    skip: string;
+    discover: (label: string) => string;
+    objectOf: (room: string, index: number, total: number) => string;
+    openObject: (label: string) => string;
+    keys: { keys: string; choose: string; next: string };
+    southTyrol: string;
+    stepOf: (index: number) => string;
+  };
+  stage: { answer: string; guess: string; reveal: string };
+  answerHint: string;
+  guessSubmit: string;
+  guessSkip: string;
+  guessYours: string;
+  guessActual: string;
+  quizQuestion: string;
+  quizTrue: string;
+  quizFalse: string;
+  quizVerdict: { true: string; false: string };
+  ratings: { spot: string; close: string; off: string; quizRight: string; quizWrong: string };
+  offHint: (factor: number) => string;
+  points: (n: number) => string;
+  pointsShort: string;
+  folder: string;
+  folderCount: (read: number, total: number) => string;
+  folderCardAria: (label: string, state: "read" | "new" | "locked") => string;
+  card: {
+    open: string;
+    close: string;
+    yourValues: string;
+    perYear: string;
+    calculation: string;
+    tip: string;
+    source: string;
+    method: string;
+  };
+  continue: string;
+  finishRoom: string;
+  changeAnswer: string;
+  adjust: { reset: string; less: (label: string) => string; more: (label: string) => string };
+  units: {
+    bathtubs: (n: number) => string;
+    carKm: string;
+    co2Kg: string;
+    co2T: string;
+    anchors: { bathtubs: string; carKm: string; co2: (kg: string) => string };
+  };
+  estimatePrompts: Record<string, string>;
+  quiz: Record<string, { statement: string; explanation: string }>;
+  everyday: {
+    bathtubs: (n: string) => string;
+    bucketOne: string;
+    buckets: (n: string) => string;
+    romeTrips: (n: string) => string;
+    carKm: (n: string) => string;
+    tonnes: (n: string) => string;
+    kilos: (n: string) => string;
+    water: (head: string) => string;
+    co2: (head: string) => string;
+    plain: (head: string) => string;
+    heating: (second: string) => string;
+    saving: (less: string) => string;
+    natureStrong: string;
+    natureSome: string;
+    natureNone: string;
+    thrifty: string;
+    room: string;
+    none: string;
+  };
+  roomComplete: {
+    title: (room: string) => string;
+    skipped: string;
+    cardRead: string;
+    cardUnread: string;
+    toResults: string;
+    next: (room: string) => string;
+    nextFallback: string;
+    viewHouse: string;
+  };
+  results: {
+    allFound: string;
+    someFound: (found: number, total: number) => string;
+    summary: (p: { points: number; spot: number; quizRight: number; cards: number; total: number }) => Rich;
+    openFolder: string;
+    continueRoom: (room: string) => string;
+    stillOpen: (rooms: string) => string;
+    whatIfTitle: string;
+    whatIfLead: string;
+    whatIfHint: string;
+    withLevers: (n: number) => string;
+    bathtubs: string;
+    water: string;
+    and: string;
+    perYear: string;
+    climate: string;
+    noLevers: string;
+    instead: (label: string) => string;
+    perYearShort: string;
+    tryIt: string;
+    goal: string;
+    markGoal: string;
+    maxGoals: (n: number) => string;
+    captionNow: string;
+    captionTried: string;
+    goalsTitle: string;
+    themeTitle: string;
+    goalsLead: string;
+    noGoalsLead: (n: number, reason: string) => string;
+    whyNot: string;
+    viewProject: string;
+    exactTitle: string;
+    exactEmpty: string;
+    noAnswers: string;
+    complete: (percent: number) => string;
+    partial: string;
+    answered: (answered: number, total: number) => Rich;
+    calculated: string;
+    calculatedSub: string;
+    referenceNote: string;
+    allFactors: string;
+    estimated: string;
+    estimatedSub: string;
+    of100: string;
+    indexNote: string;
+    modelComparison: string;
+    percentOfModel: (percent: number) => string;
+    toHouse: string;
+  };
+  themes: { water: string; biodiversity: string; carbon: string };
+  reasons: Record<ScoreDimension, string>;
+  dimensions: Record<ScoreDimension, string>;
+  metrics: Record<MetricId, { label: string; short: string; unit: string; scopeNote: string }>;
+  fullFootprintNote: string;
+  basis: Basis;
+};
+
+const num = (locale: keyof typeof localeTags, value: number, digits = 0) =>
+  new Intl.NumberFormat(localeTags[locale], { minimumFractionDigits: digits, maximumFractionDigits: digits }).format(value);
+
+const itBasis: Basis = {
+  "bath-shower": {
+    factor: `Canzoni per doccia × 3 minuti × portata × 365. Scaldare l’acqua costa ${num("it", HOT_WATER_KWH_PER_LITER, 4)} kWh al litro (da 12 °C a 38 °C).`,
+    assumption: "Con cosa si scalda l’acqua lo dice la tua risposta sul sistema dell’acqua calda — per questo questi valori cambiano quando rispondi."
+  },
+  "bath-water-heating": {
+    factor: `${num("it", OTHER_HOT_WATER_LITERS)} litri d’acqua calda all’anno fuori dalla doccia, divisi per il rendimento del sistema.`,
+    assumption: "Lavarsi le mani, lavare i piatti, pulire — come forfait, non chiesto."
+  },
+  "bath-toilet": {
+    factor: `Scarichi al giorno × litri per scarico × 365. Ogni litro d’acqua potabile costa in più ${num("it", WATER_SUPPLY_KWH_PER_LITER, 4)} kWh per captazione, trattamento e distribuzione.`
+  },
+  "bedroom-heating": {
+    factor: "La tua quota del consumo annuo in bolletta × fattore del sistema di riscaldamento scelto.",
+    assumption: "Dividi prima i consumi comuni per il numero di persone in casa. Il valore della bolletta è più affidabile di una stima forfettaria dell’edificio."
+  },
+  "bedroom-textiles": {
+    factor: "Capi all’anno × CO₂ per capo, in media sui tipi di abbigliamento (nuovo, misto, usato).",
+    assumption: "Solo CO₂: i circa 2.700 litri dietro una maglietta di cotone sono acqua virtuale e di proposito non contano nel valore dell’acqua."
+  },
+  "bedroom-standby": {
+    factor: "Nessuna quantità di energia in più: lo standby è già compreso nell’elettricità domestica indicata.",
+    assumption: `Per orientarsi: 1 watt di carico continuo corrisponde a ${num("it", KWH_PER_STANDBY_WATT, 2)} kWh all’anno.`
+  },
+  "living-tv-streaming": {
+    factor: `Elettricità domestica personale all’anno × fattore di produzione italiano ${num("it", GRID_CO2_PER_KWH, 3)} kg CO₂/kWh.`,
+    assumption: "Dividi il consumo della bolletta per il numero di persone; togli l’elettricità della pompa di calore indicata a parte."
+  },
+  "living-lighting": {
+    factor: "Nessuna quantità di energia in più: l’illuminazione è già compresa nell’elettricità domestica indicata.",
+    assumption: "La risposta influisce solo sul profilo qualitativo delle risorse ed evita un doppio conteggio."
+  },
+  "living-plants": {
+    factor: "Nessun contributo a CO₂, acqua ed energia.",
+    assumption: "Le piante d’appartamento agiscono su benessere e legame con la natura. Non si può esprimere in chilogrammi, per questo sta nel profilo d’impatto e non nel bilancio annuo."
+  },
+  "kitchen-diet": {
+    factor: `Base di ${num("it", DIET_BASE_CO2)} kg CO₂e per un’alimentazione prevalentemente vegetale, più ${num("it", DIET_CO2_PER_WEEKLY_MEAT_MEAL)} kg per ogni pasto di carne alla settimana per un anno.`,
+    assumption: "Media sui tipi di carne. Il manzo è ben sopra, il pollame sotto — un pasto di manzo qui pesa quindi troppo poco."
+  },
+  "kitchen-origin": {
+    factor: `Fino a ${num("it", FOOD_ORIGIN_MAX_CO2)} kg CO₂e di supplemento per merce importata e fuori stagione, in proporzione alla tua quota locale.`,
+    assumption: "Trasporto, catena del freddo e serre riscaldate riuniti."
+  },
+  "kitchen-waste": {
+    factor: `Porzioni buttate a settimana × 0,4 kg × 52 × ${num("it", FOOD_WASTE_CO2_PER_KG, 1)} kg CO₂e per chilo.`,
+    assumption: "Valutato con l’intera filiera del prodotto buttato: coltivazione, trasporto e refrigerazione sono già avvenuti."
+  },
+  "mobility-short": {
+    factor: "Chilometri brevi a settimana × 52 × fattore del mezzo.",
+    assumption: "L’auto porta qui un supplemento per l’avviamento a freddo."
+  },
+  "mobility-km": {
+    factor: `Chilometri all’anno × fattore del tipo di veicolo, well-to-wheel. Motori a combustione: ${num("it", FUEL_KWH_PER_LITER, 1)} kWh per litro di carburante.`,
+    assumption: "Parco medio con 6,8 l/100 km; un veicolo proprio può discostarsi molto."
+  },
+  "mobility-long": {
+    factor: "Chilometri di viaggio × fattore del mezzo.",
+    assumption: "Il fattore aereo è un valore d’impatto CO₂e forfettario, compreso un supplemento per gli effetti non-CO₂; i singoli voli possono discostarsi molto."
+  },
+  "garden-ground": {
+    factor: "Superficie irrigata × fabbisogno d’acqua della sistemazione: prato circa 150, aiuola naturale circa 30 litri per metro quadrato all’anno.",
+    assumption: "Valori per un’estate secca in Alto Adige. La ghiaia non ha bisogno d’acqua e nel bilancio annuo risulta quindi la migliore — per la biodiversità la peggiore."
+  },
+  "garden-plants": {
+    factor: "Nessun contributo a CO₂, acqua ed energia.",
+    assumption: "L’effetto riguarda habitat e biodiversità e sta quindi nel profilo d’impatto, non nel bilancio annuo."
+  },
+  "garden-structures": {
+    factor: "Nessun contributo a CO₂, acqua ed energia.",
+    assumption: "Nidi artificiali, legno morto e punti d’acqua creano habitat. Lo mostra il profilo d’impatto, non il bilancio annuo."
+  }
+};
+
+const enBasis: Basis = {
+  "bath-shower": {
+    factor: `Songs per shower × 3 minutes × flow × 365. Heating costs ${num("en", HOT_WATER_KWH_PER_LITER, 4)} kWh per litre (12 °C to 38 °C).`,
+    assumption: "What heats the water comes from your answer on the hot-water system — that’s why these figures change once you answer it."
+  },
+  "bath-water-heating": {
+    factor: `${num("en", OTHER_HOT_WATER_LITERS)} litres of hot water outside the shower per year, divided by the system’s efficiency.`,
+    assumption: "Washing hands, washing up, cleaning — as a flat rate, not asked."
+  },
+  "bath-toilet": {
+    factor: `Flushes per day × litres per flush × 365. Every litre of drinking water also costs ${num("en", WATER_SUPPLY_KWH_PER_LITER, 4)} kWh for extraction, treatment and distribution.`
+  },
+  "bedroom-heating": {
+    factor: "Your share of the billed annual consumption × factor of the chosen heating system.",
+    assumption: "Divide shared consumption by the number of household members first. The bill value is more reliable than a flat building estimate."
+  },
+  "bedroom-textiles": {
+    factor: "Garments per year × CO₂ per item, averaged over types of clothing (new, mixed, second-hand).",
+    assumption: "CO₂ only: the roughly 2,700 litres behind a cotton shirt are virtual water and deliberately don’t count in the water value."
+  },
+  "bedroom-standby": {
+    factor: "No additional energy: standby is already part of the household electricity you entered.",
+    assumption: `For reference: 1 watt of continuous load equals ${num("en", KWH_PER_STANDBY_WATT, 2)} kWh a year.`
+  },
+  "living-tv-streaming": {
+    factor: `Personal household electricity per year × Italian generation factor of ${num("en", GRID_CO2_PER_KWH, 3)} kg CO₂/kWh.`,
+    assumption: "Divide the household consumption from the bill by the number of people; subtract separately entered heat-pump electricity."
+  },
+  "living-lighting": {
+    factor: "No additional energy: lighting is already part of the household electricity you entered.",
+    assumption: "The answer only affects the qualitative resource profile and avoids double counting."
+  },
+  "living-plants": {
+    factor: "No contribution to CO₂, water or energy.",
+    assumption: "House plants affect well-being and connection with nature. That can’t be put in kilograms, so it sits in the impact profile rather than the annual balance."
+  },
+  "kitchen-diet": {
+    factor: `Base of ${num("en", DIET_BASE_CO2)} kg CO₂e for a mostly plant-based diet, plus ${num("en", DIET_CO2_PER_WEEKLY_MEAT_MEAL)} kg for each weekly meat meal over a year.`,
+    assumption: "Averaged over types of meat. Beef is well above, poultry below — so a beef meal weighs too little here."
+  },
+  "kitchen-origin": {
+    factor: `Up to ${num("en", FOOD_ORIGIN_MAX_CO2)} kg CO₂e surcharge for imported and out-of-season goods, in proportion to your local share.`,
+    assumption: "Transport, cold chain and heated greenhouses combined."
+  },
+  "kitchen-waste": {
+    factor: `Portions wasted per week × 0.4 kg × 52 × ${num("en", FOOD_WASTE_CO2_PER_KG, 1)} kg CO₂e per kilogram.`,
+    assumption: "Rated with the full supply chain of the wasted product: growing, transport and cooling have already happened."
+  },
+  "mobility-short": {
+    factor: "Short-trip kilometres per week × 52 × factor of the mode of transport.",
+    assumption: "The car carries a cold-start surcharge here."
+  },
+  "mobility-km": {
+    factor: `Kilometres per year × factor of the vehicle type, well-to-wheel. Combustion engines: ${num("en", FUEL_KWH_PER_LITER, 1)} kWh per litre of fuel.`,
+    assumption: "Average fleet at 6.8 l/100 km; your own vehicle may differ considerably."
+  },
+  "mobility-long": {
+    factor: "Long-distance kilometres × factor of the mode of transport.",
+    assumption: "The flight factor is a flat CO₂e impact value including a surcharge for non-CO₂ effects; individual flights can differ considerably."
+  },
+  "garden-ground": {
+    factor: "Watered area × water demand of the layout: lawn about 150, natural bed about 30 litres per square metre a year.",
+    assumption: "Set for a dry South Tyrolean summer. Gravel needs no water and so comes out best in the annual balance — and worst for biodiversity."
+  },
+  "garden-plants": {
+    factor: "No contribution to CO₂, water or energy.",
+    assumption: "The effect lies with habitats and biodiversity, so it appears in the impact profile, not the annual balance."
+  },
+  "garden-structures": {
+    factor: "No contribution to CO₂, water or energy.",
+    assumption: "Nest aids, deadwood and water points create habitat. The impact profile shows it, not the annual balance."
+  }
+};
+
+const de: TourUi = {
+  toolbar: {
+    logo: "b*alance – zur Startseite",
+    home: "Haus",
+    results: "Bilanz",
+    resultsTitle: "Deine Jahresbilanz ansehen",
+    resultsDisabledTitle: "Beantworte ein Objekt, dann wird die Bilanz sichtbar",
+    resultsAria: (done, total) => `Bilanz ansehen. ${done} von ${total} Objekten bearbeitet`,
+    resultsDisabledAria: (total) => `Bilanz noch nicht verfügbar. Beantworte zuerst ein Objekt von ${total}`,
+    reset: "Tour zurücksetzen",
+    resetConfirm: "Möchtest du alle Antworten des Lebensraum-Checks zurücksetzen?",
+    pointsAria: (points) => `${points} Entdeckerpunkte. Wissensmappe öffnen`
+  },
+  panelRegion: "Fragen, Werte und Steuerung",
+  intro: {
+    headline: "Hinter jedem Gegenstand steckt eine Verbindung zur Natur.",
+    lead: "18 Gegenstände in sechs Räumen, zu jedem eine kurze Runde:",
+    loop: [
+      { title: "Antworten", copy: "ehrlich — es gibt kein Richtig oder Falsch" },
+      { title: "Schätzen", copy: "wie viele Badewannen, wie viele Kilometer?" },
+      { title: "Entdecken", copy: "die Auflösung und eine Karte für deine Mappe" }
+    ],
+    loopAria: "Eine Runde",
+    honesty: "Punkte gibt es fürs Entdecken und für gute Tipps — nie für die Antwort selbst.",
+    start: "Im Schlafzimmer beginnen",
+    resumeTitle: "Weiter, wo du aufgehört hast.",
+    doneTitle: "Das ganze Haus ist entdeckt.",
+    foundOf: (found, total) => `${found} von ${total} Gegenständen`,
+    foundAria: (found, total) => `${found} von ${total} Gegenständen entdeckt`,
+    continueRoom: (room) => `Weiter: ${room}`,
+    toResults: "Zur Auswertung",
+    results: "Auswertung"
+  },
+  house: {
+    explored: (handled, total) => `${handled}/${total} erkundet`,
+    visitAria: (room, handled, total) => `${room} besuchen, ${handled} von ${total} Objekten bearbeitet`,
+    roomsNav: "Räume im Haus"
+  },
+  scene: {
+    objectsNav: "Gegenstände im Raum",
+    roomAria: (title) => `${title}: Objekte entdecken`,
+    visualization: (room) => `Visualisierung für ${room}`,
+    openObject: (label, state) => `${label} öffnen${state === "answered" ? ", beantwortet" : state === "skipped" ? ", übersprungen" : ""}`,
+    state: { answered: "beantwortet", skipped: "übersprungen", open: "offen" },
+    desktopState: { answered: "Beantwortet · ändern", skipped: "Übersprungen · nachholen", active: "Jetzt entdecken", open: "Noch offen" },
+    tapHint: "antippen & entdecken",
+    chooseObject: "Wähle einen Gegenstand"
+  },
+  roomNav: {
+    label: "Räume",
+    toHouse: "Zur Hausübersicht",
+    roomAria: (title, handled, total) => `${title}, ${handled} von ${total} Objekten bearbeitet`
+  },
+  progressObjects: "Gegenstände",
+  panel: {
+    back: "Zurück",
+    skip: "Überspringen",
+    discover: (label) => `Entdecke: ${label}`,
+    objectOf: (room, index, total) => `${room} · Gegenstand ${index} von ${total}`,
+    openObject: (label) => `${label} öffnen`,
+    keys: { keys: "Tasten", choose: "wählen,", next: "weiter" },
+    southTyrol: "Südtirol-Schnitt",
+    stepOf: (index) => `Schritt ${index} von 3: `
+  },
+  stage: { answer: "Deine Antwort", guess: "Schätz mal", reveal: "Auflösung" },
+  answerHint: "Es gibt hier kein Richtig oder Falsch. Punkte gibt es fürs Entdecken, nicht für die Antwort.",
+  guessSubmit: "Tipp abgeben",
+  guessSkip: "Ohne Tipp weiter",
+  guessYours: "Dein Tipp",
+  guessActual: "Deine Antwort ergibt",
+  quizQuestion: "Stimmt das?",
+  quizTrue: "Stimmt",
+  quizFalse: "Stimmt nicht",
+  quizVerdict: { true: "stimmt.", false: "stimmt nicht." },
+  ratings: { spot: "Volltreffer", close: "Nah dran", off: "Daneben", quizRight: "Richtig", quizWrong: "Nicht ganz" },
+  offHint: (factor) => `Um rund das ${factor}-Fache verschätzt — gut, dass du es jetzt weißt.`,
+  points: (n) => `${n} Entdeckerpunkte`,
+  pointsShort: "Punkte",
+  folder: "Wissensmappe",
+  folderCount: (read, total) => `${read} von ${total} Karten`,
+  folderCardAria: (label, state) => `${label}, ${state === "read" ? "gelesen" : state === "new" ? "neu" : "noch nicht entdeckt"}`,
+  card: {
+    open: "Wissenskarte öffnen",
+    close: "Karte schließen",
+    yourValues: "Deine Antwort",
+    perYear: "pro Person und Jahr",
+    calculation: "So wird gerechnet",
+    tip: "Praktischer Tipp",
+    source: "Quelle",
+    method: "Alle Faktoren und Annahmen"
+  },
+  continue: "Weiter",
+  finishRoom: "Raum abschließen",
+  changeAnswer: "Antwort ändern",
+  adjust: { reset: "Vorgabe", less: (label) => `${label}: weniger`, more: (label) => `${label}: mehr` },
+  units: {
+    bathtubs: (n) => (n === 1 ? "Badewanne" : "Badewannen"),
+    carKm: "km Autofahrt",
+    co2Kg: "kg CO₂",
+    co2T: "t CO₂",
+    anchors: {
+      bathtubs: "Eine volle Badewanne fasst rund 150 Liter.",
+      carKm: "Zum Vergleich: Bozen–Rom und zurück sind rund 1.400 km.",
+      co2: (kg) => `Zum Vergleich: Ein Jahr lang täglich zwei Songs duschen ergibt im Check rund ${kg} kg CO₂.`
+    }
+  },
+  estimatePrompts: {
+    "bath-shower": "Wie viele volle Badewannen Wasser läuft deine Dusche im Jahr durch?",
+    "bath-toilet": "Wie viele volle Badewannen spült deine Toilette im Jahr weg?",
+    "garden-ground": "Wie viele volle Badewannen gießt du im Jahr in den Garten?",
+    "bath-water-heating": "Dein übriges Warmwasser: so viel CO₂ wie wie viele Kilometer Autofahrt im Jahr?",
+    "bedroom-heating": "Deine Heizung: so viel CO₂ wie wie viele Kilometer Autofahrt im Jahr?",
+    "bedroom-textiles": "Deine neue Kleidung: so viel CO₂ wie wie viele Kilometer Autofahrt im Jahr?",
+    "living-tv-streaming": "Dein Haushaltsstrom: so viel CO₂ wie wie viele Kilometer Autofahrt im Jahr?",
+    "kitchen-diet": "Deine Ernährung: so viel CO₂ wie wie viele Kilometer Autofahrt im Jahr?",
+    "kitchen-origin": "Der Aufschlag für Importware: so viel CO₂ wie wie viele Kilometer Autofahrt im Jahr?",
+    "kitchen-waste": "Dein weggeworfenes Essen: so viel CO₂ wie wie viele Kilometer Autofahrt im Jahr?",
+    "mobility-short": "Wie viel CO₂ verursachen deine kurzen Wege im Jahr?",
+    "mobility-km": "Wie viel CO₂ verursachen deine übrigen Autokilometer im Jahr?",
+    "mobility-long": "Wie viel CO₂ verursachen deine Fernreisen im Jahr?"
+  },
+  quiz: {
+    "bedroom-standby": {
+      statement: "Geräte im Standby machen in vielen Haushalten fast ein Zehntel des Stromverbrauchs aus.",
+      explanation: "Stimmt — für Geräte, die dabei nichts tun. Rund um die Uhr, das ganze Jahr."
+    },
+    "living-lighting": {
+      statement: "Eine LED braucht für dieselbe Helligkeit etwa halb so viel Strom wie eine Glühlampe.",
+      explanation: "Noch weniger: Eine LED kommt mit rund einem Achtel der Leistung einer Glühlampe aus."
+    },
+    "living-plants": {
+      statement: "Zimmerpflanzen fördern messbar die Artenvielfalt vor deiner Haustür.",
+      explanation: "Sie können die Aufenthaltsqualität stärken, aber ein belastbarer Beitrag zur lokalen Artenvielfalt lässt sich daraus nicht ableiten. Für wildlebende Arten zählen Außenflächen und heimische Pflanzen."
+    },
+    "garden-plants": {
+      statement: "Viele Wildbienenarten können mit gefüllten Zierblüten nichts anfangen.",
+      explanation: "Stimmt. Heimische Blühpflanzen sind auf lokale Insekten abgestimmt; mit gefüllten Zierblüten können viele Wildbienenarten überhaupt nichts anfangen."
+    },
+    "garden-structures": {
+      statement: "Die meisten Wildbienen nisten in Insektenhotels.",
+      explanation: "Die meisten Wildbienen nisten im Boden, nicht in Bohrlöchern. Schon ein sonniger, unbewachsener Bodenstreifen ist für sie wertvoll."
+    }
+  },
+  everyday: {
+    bathtubs: (n) => `${n} volle Badewannen`,
+    bucketOne: "ein Eimer Wasser",
+    buckets: (n) => `${n} Eimer Wasser`,
+    romeTrips: (n) => `${n}-mal mit dem Auto nach Rom und zurück`,
+    carKm: (n) => `${n} km Autofahrt`,
+    tonnes: (n) => `${n} Tonnen CO₂`,
+    kilos: (n) => `${n} kg CO₂`,
+    water: (head) => `Rund ${head} im Jahr.`,
+    co2: (head) => `So viel CO₂ wie ${head} im Jahr.`,
+    plain: (head) => `Rund ${head} im Jahr.`,
+    heating: (second) => `Das Aufheizen wiegt so viel CO₂ wie ${second}.`,
+    saving: (less) => `Mit der sparsamsten Antwort: ${less} weniger.`,
+    natureStrong: "Ein echter Gewinn für Wildbienen, Vögel und Falter.",
+    natureSome: "Ein Anfang für die Artenvielfalt vor deiner Tür.",
+    natureNone: "Hier findet die Natur vor deiner Tür wenig.",
+    thrifty: "Eine sparsame Wahl.",
+    room: "Hier steckt noch Spielraum.",
+    none: "Zählt nicht in die Bilanz — eine Frage zum Nachdenken."
+  },
+  roomComplete: {
+    title: (room) => `${room} entdeckt`,
+    skipped: "übersprungen",
+    cardRead: "Wissenskarte gelesen",
+    cardUnread: "Wissenskarte noch nicht gelesen",
+    toResults: "Zur Auswertung",
+    next: (room) => `Weiter: ${room}`,
+    nextFallback: "nächster Raum",
+    viewHouse: "Haus ansehen"
+  },
+  results: {
+    allFound: "Das ganze Haus ist entdeckt.",
+    someFound: (found, total) => `${found} von ${total} Gegenständen entdeckt.`,
+    summary: ({ points, spot, quizRight, cards, total }) => [
+      { b: `${points} Entdeckerpunkte` },
+      " — davon ",
+      ...(spot > 0 ? [{ b: `${spot} Volltreffer` }, " beim Schätzen"] : ["noch kein Volltreffer beim Schätzen"]),
+      ...(quizRight > 0 ? [", ", { b: `${quizRight}` }, quizRight === 1 ? " richtig eingeschätzte Aussage" : " richtig eingeschätzte Aussagen"] : []),
+      " und ",
+      { b: `${cards} von ${total}` },
+      " Wissenskarten gelesen."
+    ],
+    openFolder: "Wissensmappe öffnen",
+    continueRoom: (room) => `Weiter: ${room}`,
+    stillOpen: (rooms) => `Noch offen: ${rooms}. Die Bilanz unten ist bis dahin ein Zwischenstand.`,
+    whatIfTitle: "Was wäre, wenn …?",
+    whatIfLead: "Deine Antworten bleiben, wie sie sind. Hier probierst du aus, was die größten Hebel aus deinem Haushalt bewirken würden.",
+    whatIfHint: "Schalte einen Hebel ein, um zu sehen, was er im Jahr ausmacht.",
+    withLevers: (n) => (n === 1 ? "Mit diesem Hebel:" : `Mit ${n} Hebeln:`),
+    bathtubs: "Badewannen",
+    water: "Wasser",
+    and: "und",
+    perYear: "im Jahr.",
+    climate: "Deine erfasste Klimawirkung:",
+    noLevers:
+      "In deinen bisherigen Antworten steckt kein Hebel, der ohne Nachteil für die Natur mehr als ein halbes Prozent ausmacht. Entdecke weitere Räume, dann kommen vielleicht welche dazu.",
+    instead: (label) => `statt „${label}“`,
+    perYearShort: "im Jahr",
+    tryIt: "Ausprobieren",
+    goal: "Vorhaben",
+    markGoal: "Als Vorhaben merken",
+    maxGoals: (n) => `Höchstens ${n} Vorhaben`,
+    captionNow: "Jetzt",
+    captionTried: "Ausprobiert",
+    goalsTitle: "Deine Vorhaben in Südtirol",
+    themeTitle: "Wo dein Thema in Südtirol wirkt",
+    goalsLead:
+      "Ein Projekt macht keine Dusche und keinen Kilometer wett — das soll es auch nicht. Es zeigt, wo dasselbe Thema in Südtirol vor Ort Lebensraum schafft.",
+    noGoalsLead: (n, reason) => `Merk dir bis zu ${n} Hebel als Vorhaben, dann ordnen wir sie Projekten zu. Bis dahin: ${reason}`,
+    whyNot: "Warum wir nicht kompensieren",
+    viewProject: "Projekt ansehen",
+    exactTitle: "Genaue Bilanz und Methodik",
+    exactEmpty: "noch leer",
+    noAnswers: "Beantworte mindestens eine Frage, bevor Zahlen eingeordnet werden. ",
+    complete: (percent) => `Das entspricht rund ${percent} % des Vergleichswerts für den erfassten Ausschnitt. `,
+    partial: "Diese Summe ist ein Zwischenstand und darf nicht als vollständiges persönliches Ergebnis gelesen werden. ",
+    answered: (answered, total) => ["Beantwortet sind ", { b: `${answered} von ${total} Fragen` }, "."],
+    calculated: "Gerechnet",
+    calculatedSub: "Physikalische Größen pro Person und Jahr",
+    referenceNote: "Vergleichswert ist ein mittleres, reproduzierbares Antwortprofil dieses Checks — kein Bevölkerungsdurchschnitt und kein Klimaziel.",
+    allFactors: "Alle Faktoren und Annahmen",
+    estimated: "Eingeschätzt",
+    estimatedSub: "Didaktischer Index von 0 bis 100",
+    of100: "von 100",
+    indexNote:
+      "Diese vier Werte sind keine validierten Messwerte. Mengenregler verändern den Index entlang der berechneten Belastung; nicht quantifizierbare Wirkungen bleiben als vorsichtige qualitative Punkte getrennt von den Messwerten oben. Die Entdeckerpunkte des Spiels fließen in keinen dieser Werte ein.",
+    modelComparison: "Modellvergleich",
+    percentOfModel: (percent) => `${percent} % des Modellvergleichs`,
+    toHouse: "Zur Hausübersicht"
+  },
+  themes: { water: "Wasser", biodiversity: "Lebensraum", carbon: "Klima" },
+  reasons: {
+    biodiversity:
+      "Im direkten Wohnumfeld entstehen die Lebensräume, die dein Haushalt am unmittelbarsten prägt — Grünflächen, Nisthilfen und blühende Säume mitten im Siedlungsraum.",
+    water:
+      "Feuchtgebiete speichern Wasser in der Landschaft und puffern Trockenphasen ab. Sie wirken dort, wo dein Wasserverbrauch ansetzt.",
+    carbon:
+      "Gepflegte Kulturlandschaften binden Kohlenstoff in Böden und Gehölzen und halten gleichzeitig die Artenvielfalt, die intensive Nutzung verdrängt.",
+    resources:
+      "Extensiv genutzte Wiesen und Trockenrasen kommen mit wenig Eintrag aus. Sie zeigen, wie ein sparsamer Umgang mit Ressourcen Artenvielfalt erzeugt statt sie zu kosten."
+  },
+  dimensions: { biodiversity: "Biodiversität", carbon: "CO₂", water: "Wasser", resources: "Ressourcen" },
+  metrics: {
+    co2: {
+      label: "Erfasste Klimawirkung",
+      short: "CO₂",
+      unit: "kg/Jahr",
+      scopeNote: "CO₂e der abgefragten Aktivitäten; Vorketten nur, wenn sie im jeweiligen Faktor genannt sind."
+    },
+    water: {
+      label: "Trinkwasser",
+      short: "Wasser",
+      unit: "Liter/Jahr",
+      scopeNote: "Nur direkt verbrauchtes Leitungswasser, ohne virtuelles Wasser aus Produkten."
+    },
+    energy: {
+      label: "Energieeinsatz",
+      short: "Energie",
+      unit: "kWh/Jahr",
+      scopeNote: "Zugeordneter direkter Einsatz von Strom, Wärme, Kraftstoff und Wasserbereitstellung; ohne graue Energie von Produkten."
+    }
+  },
+  fullFootprintNote:
+    "Der Check erfasst ausgewählte Beiträge aus Wohnen, Ernährung und Mobilität. Konsum, Gebäude, öffentliche Leistungen und weitere Alltagsbereiche fehlen; die Summe ist kein vollständiger persönlicher Fußabdruck.",
+  basis: questionBasis
+};
+
+const it: TourUi = {
+  toolbar: {
+    logo: "b*alance – alla pagina iniziale",
+    home: "Casa",
+    results: "Bilancio",
+    resultsTitle: "Guarda il tuo bilancio annuo",
+    resultsDisabledTitle: "Rispondi a un oggetto e il bilancio diventa visibile",
+    resultsAria: (done, total) => `Guarda il bilancio. ${done} di ${total} oggetti completati`,
+    resultsDisabledAria: (total) => `Bilancio non ancora disponibile. Rispondi prima a uno dei ${total} oggetti`,
+    reset: "Ricomincia il percorso",
+    resetConfirm: "Vuoi cancellare tutte le risposte del Check degli habitat?",
+    pointsAria: (points) => `${points} punti scoperta. Apri la cartella delle conoscenze`
+  },
+  panelRegion: "Domande, valori e comandi",
+  intro: {
+    headline: "Ogni oggetto racchiude un legame con la natura.",
+    lead: "18 oggetti in sei stanze, per ognuno un breve turno:",
+    loop: [
+      { title: "Rispondere", copy: "con sincerità — non c’è giusto o sbagliato" },
+      { title: "Stimare", copy: "quante vasche da bagno, quanti chilometri?" },
+      { title: "Scoprire", copy: "la soluzione e una scheda per la tua cartella" }
+    ],
+    loopAria: "Un turno",
+    honesty: "I punti si guadagnano scoprendo e con buone stime — mai per la risposta stessa.",
+    start: "Inizia dalla camera da letto",
+    resumeTitle: "Riprendi da dove avevi lasciato.",
+    doneTitle: "Hai scoperto tutta la casa.",
+    foundOf: (found, total) => `${found} di ${total} oggetti`,
+    foundAria: (found, total) => `${found} di ${total} oggetti scoperti`,
+    continueRoom: (room) => `Avanti: ${room}`,
+    toResults: "Al risultato",
+    results: "Risultato"
+  },
+  house: {
+    explored: (handled, total) => `${handled}/${total} esplorati`,
+    visitAria: (room, handled, total) => `Visita ${room}, ${handled} di ${total} oggetti completati`,
+    roomsNav: "Stanze della casa"
+  },
+  scene: {
+    objectsNav: "Oggetti nella stanza",
+    roomAria: (title) => `${title}: scopri gli oggetti`,
+    visualization: (room) => `Illustrazione per ${room}`,
+    openObject: (label, state) => `Apri ${label}${state === "answered" ? ", con risposta" : state === "skipped" ? ", saltato" : ""}`,
+    state: { answered: "con risposta", skipped: "saltato", open: "aperto" },
+    desktopState: { answered: "Risposto · modifica", skipped: "Saltato · recupera", active: "Scopri ora", open: "Ancora aperto" },
+    tapHint: "tocca e scopri",
+    chooseObject: "Scegli un oggetto"
+  },
+  roomNav: {
+    label: "Stanze",
+    toHouse: "Alla panoramica della casa",
+    roomAria: (title, handled, total) => `${title}, ${handled} di ${total} oggetti completati`
+  },
+  progressObjects: "oggetti",
+  panel: {
+    back: "Indietro",
+    skip: "Salta",
+    discover: (label) => `Scopri: ${label}`,
+    objectOf: (room, index, total) => `${room} · oggetto ${index} di ${total}`,
+    openObject: (label) => `Apri ${label}`,
+    keys: { keys: "Tasti", choose: "per scegliere,", next: "avanti" },
+    southTyrol: "Media Alto Adige",
+    stepOf: (index) => `Passo ${index} di 3: `
+  },
+  stage: { answer: "La tua risposta", guess: "Prova a stimare", reveal: "Soluzione" },
+  answerHint: "Qui non c’è giusto o sbagliato. I punti si guadagnano scoprendo, non con la risposta.",
+  guessSubmit: "Dai la tua stima",
+  guessSkip: "Avanti senza stima",
+  guessYours: "La tua stima",
+  guessActual: "La tua risposta dà",
+  quizQuestion: "È vero?",
+  quizTrue: "Vero",
+  quizFalse: "Falso",
+  quizVerdict: { true: "è vero.", false: "non è vero." },
+  ratings: { spot: "Centrato", close: "Quasi", off: "Fuori bersaglio", quizRight: "Giusto", quizWrong: "Non proprio" },
+  offHint: (factor) => `Sbagliato di circa ${factor} volte — bene che adesso lo sai.`,
+  points: (n) => `${n} punti scoperta`,
+  pointsShort: "punti",
+  folder: "Cartella delle conoscenze",
+  folderCount: (read, total) => `${read} di ${total} schede`,
+  folderCardAria: (label, state) => `${label}, ${state === "read" ? "letta" : state === "new" ? "nuova" : "non ancora scoperta"}`,
+  card: {
+    open: "Apri la scheda",
+    close: "Chiudi la scheda",
+    yourValues: "La tua risposta",
+    perYear: "per persona all’anno",
+    calculation: "Come si calcola",
+    tip: "Consiglio pratico",
+    source: "Fonte",
+    method: "Tutti i fattori e le ipotesi"
+  },
+  continue: "Avanti",
+  finishRoom: "Concludi la stanza",
+  changeAnswer: "Cambia risposta",
+  adjust: { reset: "Valore predefinito", less: (label) => `${label}: meno`, more: (label) => `${label}: più` },
+  units: {
+    bathtubs: (n) => (n === 1 ? "vasca da bagno" : "vasche da bagno"),
+    carKm: "km in auto",
+    co2Kg: "kg CO₂",
+    co2T: "t CO₂",
+    anchors: {
+      bathtubs: "Una vasca da bagno piena contiene circa 150 litri.",
+      carKm: "Per confronto: Bolzano–Roma andata e ritorno sono circa 1.400 km.",
+      co2: (kg) => `Per confronto: fare la doccia per due canzoni al giorno per un anno dà nel check circa ${kg} kg di CO₂.`
+    }
+  },
+  estimatePrompts: {
+    "bath-shower": "Quante vasche da bagno piene d’acqua passano dalla tua doccia in un anno?",
+    "bath-toilet": "Quante vasche da bagno piene scarica il tuo WC in un anno?",
+    "garden-ground": "Quante vasche da bagno piene versi in giardino in un anno?",
+    "bath-water-heating": "Il resto della tua acqua calda: tanta CO₂ quanto quanti chilometri in auto all’anno?",
+    "bedroom-heating": "Il tuo riscaldamento: tanta CO₂ quanto quanti chilometri in auto all’anno?",
+    "bedroom-textiles": "I tuoi vestiti nuovi: tanta CO₂ quanto quanti chilometri in auto all’anno?",
+    "living-tv-streaming": "La tua elettricità domestica: tanta CO₂ quanto quanti chilometri in auto all’anno?",
+    "kitchen-diet": "La tua alimentazione: tanta CO₂ quanto quanti chilometri in auto all’anno?",
+    "kitchen-origin": "Il supplemento per la merce importata: tanta CO₂ quanto quanti chilometri in auto all’anno?",
+    "kitchen-waste": "Il tuo cibo buttato: tanta CO₂ quanto quanti chilometri in auto all’anno?",
+    "mobility-short": "Quanta CO₂ causano i tuoi tragitti brevi in un anno?",
+    "mobility-km": "Quanta CO₂ causano gli altri tuoi chilometri in auto in un anno?",
+    "mobility-long": "Quanta CO₂ causano i tuoi viaggi lunghi in un anno?"
+  },
+  quiz: {
+    "bedroom-standby": {
+      statement: "In molte case gli apparecchi in standby valgono quasi un decimo del consumo elettrico.",
+      explanation: "È vero — per apparecchi che intanto non fanno nulla. Giorno e notte, tutto l’anno."
+    },
+    "living-lighting": {
+      statement: "Per la stessa luminosità un LED consuma circa la metà di una lampadina a incandescenza.",
+      explanation: "Ancora meno: a un LED basta circa un ottavo della potenza di una lampadina a incandescenza."
+    },
+    "living-plants": {
+      statement: "Le piante d’appartamento favoriscono in modo misurabile la biodiversità davanti a casa.",
+      explanation: "Possono migliorare la qualità dello stare, ma un contributo affidabile alla biodiversità locale non se ne può dedurre. Per le specie selvatiche contano gli spazi esterni e le piante autoctone."
+    },
+    "garden-plants": {
+      statement: "Molte specie di api selvatiche non sanno che farsene dei fiori ornamentali doppi.",
+      explanation: "È vero. Le piante da fiore autoctone sono adatte agli insetti locali; dei fiori ornamentali doppi molte specie di api selvatiche non sanno proprio che farsene."
+    },
+    "garden-structures": {
+      statement: "La maggior parte delle api selvatiche nidifica negli hotel per insetti.",
+      explanation: "La maggior parte delle api selvatiche nidifica nel suolo, non nei fori. Già una striscia di terreno soleggiata e senza vegetazione è preziosa per loro."
+    }
+  },
+  everyday: {
+    bathtubs: (n) => `${n} vasche da bagno piene`,
+    bucketOne: "un secchio d’acqua",
+    buckets: (n) => `${n} secchi d’acqua`,
+    romeTrips: (n) => `${n} viaggi in auto a Roma e ritorno`,
+    carKm: (n) => `${n} km in auto`,
+    tonnes: (n) => `${n} tonnellate di CO₂`,
+    kilos: (n) => `${n} kg di CO₂`,
+    water: (head) => `Circa ${head} all’anno.`,
+    co2: (head) => `Tanta CO₂ quanto ${head} all’anno.`,
+    plain: (head) => `Circa ${head} all’anno.`,
+    heating: (second) => `Scaldare l’acqua pesa in CO₂ quanto ${second}.`,
+    saving: (less) => `Con la risposta più parsimoniosa: ${less} in meno.`,
+    natureStrong: "Un vero guadagno per api selvatiche, uccelli e farfalle.",
+    natureSome: "Un inizio per la biodiversità davanti a casa.",
+    natureNone: "Qui la natura davanti a casa trova poco.",
+    thrifty: "Una scelta parsimoniosa.",
+    room: "Qui c’è ancora margine.",
+    none: "Non conta nel bilancio — una domanda per riflettere."
+  },
+  roomComplete: {
+    title: (room) => `${room}: scoperto`,
+    skipped: "saltato",
+    cardRead: "Scheda letta",
+    cardUnread: "Scheda non ancora letta",
+    toResults: "Al risultato",
+    next: (room) => `Avanti: ${room}`,
+    nextFallback: "prossima stanza",
+    viewHouse: "Guarda la casa"
+  },
+  results: {
+    allFound: "Hai scoperto tutta la casa.",
+    someFound: (found, total) => `${found} di ${total} oggetti scoperti.`,
+    summary: ({ points, spot, quizRight, cards, total }) => [
+      { b: `${points} punti scoperta` },
+      " — di cui ",
+      ...(spot > 0 ? [{ b: spot === 1 ? "1 stima centrata" : `${spot} stime centrate` }] : ["ancora nessuna stima centrata"]),
+      ...(quizRight > 0 ? [", ", { b: `${quizRight}` }, quizRight === 1 ? " affermazione valutata giusta" : " affermazioni valutate giuste"] : []),
+      " e ",
+      { b: `${cards} di ${total}` },
+      " schede lette."
+    ],
+    openFolder: "Apri la cartella delle conoscenze",
+    continueRoom: (room) => `Avanti: ${room}`,
+    stillOpen: (rooms) => `Ancora da scoprire: ${rooms}. Fino ad allora il bilancio qui sotto è provvisorio.`,
+    whatIfTitle: "E se …?",
+    whatIfLead: "Le tue risposte restano come sono. Qui provi che effetto avrebbero le leve più grandi della tua casa.",
+    whatIfHint: "Attiva una leva per vedere quanto conta in un anno.",
+    withLevers: (n) => (n === 1 ? "Con questa leva:" : `Con ${n} leve:`),
+    bathtubs: "vasche da bagno",
+    water: "d’acqua",
+    and: "e",
+    perYear: "all’anno.",
+    climate: "Il tuo impatto climatico rilevato:",
+    noLevers:
+      "Nelle tue risposte finora non c’è nessuna leva che, senza svantaggi per la natura, valga più di mezzo punto percentuale. Scopri altre stanze, forse se ne aggiungono.",
+    instead: (label) => `invece di «${label}»`,
+    perYearShort: "all’anno",
+    tryIt: "Prova",
+    goal: "Proposito",
+    markGoal: "Segna come proposito",
+    maxGoals: (n) => `Al massimo ${n} propositi`,
+    captionNow: "Ora",
+    captionTried: "Provato",
+    goalsTitle: "I tuoi propositi in Alto Adige",
+    themeTitle: "Dove il tuo tema agisce in Alto Adige",
+    goalsLead:
+      "Un progetto non compensa nessuna doccia e nessun chilometro — e non deve farlo. Mostra dove lo stesso tema crea habitat sul posto in Alto Adige.",
+    noGoalsLead: (n, reason) => `Segna fino a ${n} leve come propositi e le collegheremo a dei progetti. Nel frattempo: ${reason}`,
+    whyNot: "Perché non compensiamo",
+    viewProject: "Vedi il progetto",
+    exactTitle: "Bilancio esatto e metodo",
+    exactEmpty: "ancora vuoto",
+    noAnswers: "Rispondi ad almeno una domanda prima che i numeri vengano inquadrati. ",
+    complete: (percent) => `Corrisponde a circa il ${percent} % del valore di confronto per l’ambito rilevato. `,
+    partial: "Questa somma è provvisoria e non va letta come risultato personale completo. ",
+    answered: (answered, total) => ["Hai risposto a ", { b: `${answered} domande su ${total}` }, "."],
+    calculated: "Calcolato",
+    calculatedSub: "Grandezze fisiche per persona all’anno",
+    referenceNote: "Il valore di confronto è un profilo di risposta medio e riproducibile di questo check — non una media della popolazione e non un obiettivo climatico.",
+    allFactors: "Tutti i fattori e le ipotesi",
+    estimated: "Stimato",
+    estimatedSub: "Indice didattico da 0 a 100",
+    of100: "su 100",
+    indexNote:
+      "Questi quattro valori non sono misure validate. I cursori delle quantità spostano l’indice lungo il carico calcolato; gli effetti non quantificabili restano punti qualitativi prudenti, separati dai valori misurati sopra. I punti scoperta del gioco non entrano in nessuno di questi valori.",
+    modelComparison: "Confronto modello",
+    percentOfModel: (percent) => `${percent} % del confronto modello`,
+    toHouse: "Alla panoramica della casa"
+  },
+  themes: { water: "Acqua", biodiversity: "Habitat", carbon: "Clima" },
+  reasons: {
+    biodiversity:
+      "Nell’ambiente in cui vivi nascono gli habitat che la tua casa influenza più direttamente — aree verdi, nidi artificiali e margini fioriti in mezzo all’abitato.",
+    water:
+      "Le zone umide trattengono l’acqua nel paesaggio e attenuano i periodi di siccità. Agiscono là dove interviene il tuo consumo d’acqua.",
+    carbon:
+      "I paesaggi rurali curati legano carbonio nei suoli e nelle siepi e mantengono allo stesso tempo la biodiversità che l’uso intensivo fa sparire.",
+    resources:
+      "Prati estensivi e prati aridi richiedono pochi apporti. Mostrano come un uso parsimonioso delle risorse crei biodiversità invece di costarla."
+  },
+  dimensions: { biodiversity: "Biodiversità", carbon: "CO₂", water: "Acqua", resources: "Risorse" },
+  metrics: {
+    co2: {
+      label: "Impatto climatico rilevato",
+      short: "CO₂",
+      unit: "kg/anno",
+      scopeNote: "CO₂e delle attività richieste; filiere a monte solo se indicate nel rispettivo fattore."
+    },
+    water: {
+      label: "Acqua potabile",
+      short: "Acqua",
+      unit: "litri/anno",
+      scopeNote: "Solo acqua di rubinetto consumata direttamente, senza acqua virtuale dei prodotti."
+    },
+    energy: {
+      label: "Energia impiegata",
+      short: "Energia",
+      unit: "kWh/anno",
+      scopeNote: "Impiego diretto attribuito di elettricità, calore, carburante e fornitura d’acqua; senza energia grigia dei prodotti."
+    }
+  },
+  fullFootprintNote:
+    "Il check rileva contributi scelti da abitare, alimentazione e mobilità. Mancano consumi, edifici, servizi pubblici e altri ambiti della vita quotidiana; la somma non è un’impronta personale completa.",
+  basis: itBasis
+};
+
+const en: TourUi = {
+  toolbar: {
+    logo: "b*alance – to the home page",
+    home: "House",
+    results: "Balance",
+    resultsTitle: "See your annual balance",
+    resultsDisabledTitle: "Answer one object and the balance appears",
+    resultsAria: (done, total) => `See balance. ${done} of ${total} objects done`,
+    resultsDisabledAria: (total) => `Balance not available yet. Answer one of the ${total} objects first`,
+    reset: "Reset the tour",
+    resetConfirm: "Do you want to reset all answers of the Habitat Check?",
+    pointsAria: (points) => `${points} discovery points. Open the knowledge folder`
+  },
+  panelRegion: "Questions, values and controls",
+  intro: {
+    headline: "Every object has a connection to nature.",
+    lead: "18 objects in six rooms, each with a short round:",
+    loop: [
+      { title: "Answer", copy: "honestly — there’s no right or wrong" },
+      { title: "Guess", copy: "how many bathtubs, how many kilometres?" },
+      { title: "Discover", copy: "the reveal and a card for your folder" }
+    ],
+    loopAria: "One round",
+    honesty: "Points come from discovering and good guesses — never from the answer itself.",
+    start: "Start in the bedroom",
+    resumeTitle: "Carry on where you left off.",
+    doneTitle: "You’ve discovered the whole house.",
+    foundOf: (found, total) => `${found} of ${total} objects`,
+    foundAria: (found, total) => `${found} of ${total} objects discovered`,
+    continueRoom: (room) => `Next: ${room}`,
+    toResults: "To the result",
+    results: "Result"
+  },
+  house: {
+    explored: (handled, total) => `${handled}/${total} explored`,
+    visitAria: (room, handled, total) => `Visit ${room}, ${handled} of ${total} objects done`,
+    roomsNav: "Rooms in the house"
+  },
+  scene: {
+    objectsNav: "Objects in the room",
+    roomAria: (title) => `${title}: discover objects`,
+    visualization: (room) => `Illustration for ${room}`,
+    openObject: (label, state) => `Open ${label}${state === "answered" ? ", answered" : state === "skipped" ? ", skipped" : ""}`,
+    state: { answered: "answered", skipped: "skipped", open: "open" },
+    desktopState: { answered: "Answered · change", skipped: "Skipped · catch up", active: "Discover now", open: "Still open" },
+    tapHint: "tap & discover",
+    chooseObject: "Choose an object"
+  },
+  roomNav: {
+    label: "Rooms",
+    toHouse: "To the house overview",
+    roomAria: (title, handled, total) => `${title}, ${handled} of ${total} objects done`
+  },
+  progressObjects: "objects",
+  panel: {
+    back: "Back",
+    skip: "Skip",
+    discover: (label) => `Discover: ${label}`,
+    objectOf: (room, index, total) => `${room} · object ${index} of ${total}`,
+    openObject: (label) => `Open ${label}`,
+    keys: { keys: "Keys", choose: "to choose,", next: "next" },
+    southTyrol: "South Tyrol average",
+    stepOf: (index) => `Step ${index} of 3: `
+  },
+  stage: { answer: "Your answer", guess: "Take a guess", reveal: "Reveal" },
+  answerHint: "There’s no right or wrong here. Points come from discovering, not from the answer.",
+  guessSubmit: "Submit guess",
+  guessSkip: "Continue without guessing",
+  guessYours: "Your guess",
+  guessActual: "Your answer gives",
+  quizQuestion: "True or not?",
+  quizTrue: "True",
+  quizFalse: "Not true",
+  quizVerdict: { true: "true.", false: "not true." },
+  ratings: { spot: "Spot on", close: "Close", off: "Way off", quizRight: "Right", quizWrong: "Not quite" },
+  offHint: (factor) => `Off by about ${factor} times — good that you know now.`,
+  points: (n) => `${n} discovery points`,
+  pointsShort: "points",
+  folder: "Knowledge folder",
+  folderCount: (read, total) => `${read} of ${total} cards`,
+  folderCardAria: (label, state) => `${label}, ${state === "read" ? "read" : state === "new" ? "new" : "not discovered yet"}`,
+  card: {
+    open: "Open knowledge card",
+    close: "Close card",
+    yourValues: "Your answer",
+    perYear: "per person per year",
+    calculation: "How it’s calculated",
+    tip: "Practical tip",
+    source: "Source",
+    method: "All factors and assumptions"
+  },
+  continue: "Next",
+  finishRoom: "Finish room",
+  changeAnswer: "Change answer",
+  adjust: { reset: "Default", less: (label) => `${label}: less`, more: (label) => `${label}: more` },
+  units: {
+    bathtubs: (n) => (n === 1 ? "bathtub" : "bathtubs"),
+    carKm: "km by car",
+    co2Kg: "kg CO₂",
+    co2T: "t CO₂",
+    anchors: {
+      bathtubs: "A full bathtub holds about 150 litres.",
+      carKm: "For comparison: Bolzano to Rome and back is about 1,400 km.",
+      co2: (kg) => `For comparison: showering for two songs a day for a year comes to about ${kg} kg CO₂ in the check.`
+    }
+  },
+  estimatePrompts: {
+    "bath-shower": "How many full bathtubs of water run through your shower in a year?",
+    "bath-toilet": "How many full bathtubs does your toilet flush away in a year?",
+    "garden-ground": "How many full bathtubs do you pour onto the garden in a year?",
+    "bath-water-heating": "The rest of your hot water: as much CO₂ as how many kilometres by car a year?",
+    "bedroom-heating": "Your heating: as much CO₂ as how many kilometres by car a year?",
+    "bedroom-textiles": "Your new clothes: as much CO₂ as how many kilometres by car a year?",
+    "living-tv-streaming": "Your household electricity: as much CO₂ as how many kilometres by car a year?",
+    "kitchen-diet": "Your diet: as much CO₂ as how many kilometres by car a year?",
+    "kitchen-origin": "The surcharge for imported food: as much CO₂ as how many kilometres by car a year?",
+    "kitchen-waste": "Your wasted food: as much CO₂ as how many kilometres by car a year?",
+    "mobility-short": "How much CO₂ do your short trips cause in a year?",
+    "mobility-km": "How much CO₂ do your other car kilometres cause in a year?",
+    "mobility-long": "How much CO₂ does your long-distance travel cause in a year?"
+  },
+  quiz: {
+    "bedroom-standby": {
+      statement: "In many households, devices on standby account for almost a tenth of electricity use.",
+      explanation: "True — for devices doing nothing at all. Around the clock, all year."
+    },
+    "living-lighting": {
+      statement: "For the same brightness, an LED uses about half as much electricity as an incandescent bulb.",
+      explanation: "Even less: an LED manages with about an eighth of an incandescent bulb’s power."
+    },
+    "living-plants": {
+      statement: "House plants measurably support the biodiversity outside your door.",
+      explanation: "They can improve how a room feels, but a reliable contribution to local biodiversity can’t be derived from them. For wild species, outdoor spaces and native plants are what count."
+    },
+    "garden-plants": {
+      statement: "Many wild bee species can do nothing with double ornamental flowers.",
+      explanation: "True. Native flowering plants are matched to local insects; many wild bee species can do nothing at all with double ornamental flowers."
+    },
+    "garden-structures": {
+      statement: "Most wild bees nest in insect hotels.",
+      explanation: "Most wild bees nest in the ground, not in drilled holes. Even a sunny strip of bare soil is valuable to them."
+    }
+  },
+  everyday: {
+    bathtubs: (n) => `${n} full bathtubs`,
+    bucketOne: "one bucket of water",
+    buckets: (n) => `${n} buckets of water`,
+    romeTrips: (n) => `${n} car trips to Rome and back`,
+    carKm: (n) => `${n} km by car`,
+    tonnes: (n) => `${n} tonnes of CO₂`,
+    kilos: (n) => `${n} kg of CO₂`,
+    water: (head) => `About ${head} a year.`,
+    co2: (head) => `As much CO₂ as ${head} a year.`,
+    plain: (head) => `About ${head} a year.`,
+    heating: (second) => `Heating the water weighs as much CO₂ as ${second}.`,
+    saving: (less) => `With the most economical answer: ${less} less.`,
+    natureStrong: "A real gain for wild bees, birds and butterflies.",
+    natureSome: "A start for the biodiversity outside your door.",
+    natureNone: "Here nature outside your door finds little.",
+    thrifty: "An economical choice.",
+    room: "There’s still room to move here.",
+    none: "Doesn’t count in the balance — a question for reflection."
+  },
+  roomComplete: {
+    title: (room) => `${room} discovered`,
+    skipped: "skipped",
+    cardRead: "Knowledge card read",
+    cardUnread: "Knowledge card not read yet",
+    toResults: "To the result",
+    next: (room) => `Next: ${room}`,
+    nextFallback: "next room",
+    viewHouse: "View house"
+  },
+  results: {
+    allFound: "You’ve discovered the whole house.",
+    someFound: (found, total) => `${found} of ${total} objects discovered.`,
+    summary: ({ points, spot, quizRight, cards, total }) => [
+      { b: `${points} discovery points` },
+      " — including ",
+      ...(spot > 0 ? [{ b: `${spot} spot-on` }, spot === 1 ? " guess" : " guesses"] : ["no spot-on guess yet"]),
+      ...(quizRight > 0 ? [", ", { b: `${quizRight}` }, quizRight === 1 ? " statement judged right" : " statements judged right"] : []),
+      " and ",
+      { b: `${cards} of ${total}` },
+      " knowledge cards read."
+    ],
+    openFolder: "Open knowledge folder",
+    continueRoom: (room) => `Next: ${room}`,
+    stillOpen: (rooms) => `Still to discover: ${rooms}. Until then the balance below is provisional.`,
+    whatIfTitle: "What if …?",
+    whatIfLead: "Your answers stay as they are. Here you try out what the biggest levers in your household would do.",
+    whatIfHint: "Switch on a lever to see what it makes up in a year.",
+    withLevers: (n) => (n === 1 ? "With this lever:" : `With ${n} levers:`),
+    bathtubs: "bathtubs",
+    water: "of water",
+    and: "and",
+    perYear: "a year.",
+    climate: "Your recorded climate impact:",
+    noLevers:
+      "Your answers so far contain no lever that, without harming nature, makes up more than half a percent. Discover more rooms and some may appear.",
+    instead: (label) => `instead of “${label}”`,
+    perYearShort: "a year",
+    tryIt: "Try it",
+    goal: "Goal",
+    markGoal: "Save as goal",
+    maxGoals: (n) => `At most ${n} goals`,
+    captionNow: "Now",
+    captionTried: "Tried",
+    goalsTitle: "Your goals in South Tyrol",
+    themeTitle: "Where your theme matters in South Tyrol",
+    goalsLead:
+      "A project doesn’t make up for a shower or a kilometre — and it isn’t meant to. It shows where the same theme creates habitat on the ground in South Tyrol.",
+    noGoalsLead: (n, reason) => `Save up to ${n} levers as goals and we’ll match them to projects. Until then: ${reason}`,
+    whyNot: "Why we don’t offset",
+    viewProject: "View project",
+    exactTitle: "Exact balance and method",
+    exactEmpty: "still empty",
+    noAnswers: "Answer at least one question before the numbers are put in context. ",
+    complete: (percent) => `That’s about ${percent} % of the comparison value for the recorded scope. `,
+    partial: "This total is provisional and must not be read as a complete personal result. ",
+    answered: (answered, total) => ["You’ve answered ", { b: `${answered} of ${total} questions` }, "."],
+    calculated: "Calculated",
+    calculatedSub: "Physical quantities per person per year",
+    referenceNote: "The comparison value is a medium, reproducible answer profile of this check — not a population average and not a climate target.",
+    allFactors: "All factors and assumptions",
+    estimated: "Estimated",
+    estimatedSub: "Teaching index from 0 to 100",
+    of100: "of 100",
+    indexNote:
+      "These four values aren’t validated measurements. Quantity sliders move the index along the calculated load; effects that can’t be quantified stay as cautious qualitative points, separate from the measured values above. The game’s discovery points feed into none of these values.",
+    modelComparison: "Model comparison",
+    percentOfModel: (percent) => `${percent} % of the model comparison`,
+    toHouse: "To the house overview"
+  },
+  themes: { water: "Water", biodiversity: "Habitat", carbon: "Climate" },
+  reasons: {
+    biodiversity:
+      "Right where you live are the habitats your household shapes most directly — green spaces, nest aids and flowering verges in the middle of the settlement.",
+    water:
+      "Wetlands store water in the landscape and buffer dry spells. They work where your water use comes in.",
+    carbon:
+      "Well-tended cultural landscapes bind carbon in soils and hedgerows and at the same time keep the biodiversity that intensive use drives out.",
+    resources:
+      "Extensively used meadows and dry grasslands need few inputs. They show how a sparing use of resources creates biodiversity instead of costing it."
+  },
+  dimensions: { biodiversity: "Biodiversity", carbon: "CO₂", water: "Water", resources: "Resources" },
+  metrics: {
+    co2: {
+      label: "Recorded climate impact",
+      short: "CO₂",
+      unit: "kg/year",
+      scopeNote: "CO₂e of the activities asked about; upstream chains only where named in the respective factor."
+    },
+    water: {
+      label: "Drinking water",
+      short: "Water",
+      unit: "litres/year",
+      scopeNote: "Only tap water used directly, without virtual water from products."
+    },
+    energy: {
+      label: "Energy use",
+      short: "Energy",
+      unit: "kWh/year",
+      scopeNote: "Attributed direct use of electricity, heat, fuel and water supply; without embodied energy of products."
+    }
+  },
+  fullFootprintNote:
+    "The check records selected contributions from housing, food and mobility. Consumer goods, buildings, public services and other areas of daily life are missing; the total is not a complete personal footprint.",
+  basis: enBasis
+};
+
+export const tourUi: Localized<TourUi> = { de, it, en };

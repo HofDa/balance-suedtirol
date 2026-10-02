@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useReducer, useRef, useState } from "react";
 import { calculateScores, completedRoomIds } from "../model/scoring";
 import { totalValues } from "../model/calculator";
+import { discovery } from "../model/game";
 import type { RoomId } from "../model/types";
 import { initialTourState, tourReducer } from "../model/reducer";
 
@@ -32,7 +33,11 @@ export function useHouseTour() {
       activeQuestionIndex: state.activeQuestionIndex,
       answers: state.answers,
       skippedQuestions: state.skippedQuestions,
-      adjustments: state.adjustments
+      adjustments: state.adjustments,
+      guesses: state.guesses,
+      cardsRead: state.cardsRead,
+      whatIf: state.whatIf,
+      goals: state.goals
     };
     const timeout = window.setTimeout(() => {
       try {
@@ -47,7 +52,11 @@ export function useHouseTour() {
     state.activeQuestionIndex,
     state.answers,
     state.skippedQuestions,
-    state.adjustments
+    state.adjustments,
+    state.guesses,
+    state.cardsRead,
+    state.whatIf,
+    state.goals
   ]);
 
   const scores = useMemo(
@@ -62,5 +71,9 @@ export function useHouseTour() {
     () => completedRoomIds(state.answers, state.skippedQuestions),
     [state.answers, state.skippedQuestions]
   );
-  return { state, dispatch, scores, totals, completedRooms, celebratedRooms };
+  const progress = useMemo(
+    () => discovery({ answers: state.answers, guesses: state.guesses, cardsRead: state.cardsRead }),
+    [state.answers, state.guesses, state.cardsRead]
+  );
+  return { state, dispatch, scores, totals, completedRooms, celebratedRooms, progress };
 }

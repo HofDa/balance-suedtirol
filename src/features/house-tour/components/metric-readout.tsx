@@ -4,78 +4,11 @@ import { Minus, Plus, RotateCcw } from "lucide-react";
 import { motion, useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { focusRingTool } from "@/components/ui/focus";
-import { formatMetric, metrics, referenceValues } from "../model/calculator";
 import { everydayLine } from "../model/everyday";
+import { useTourI18n } from "../i18n/context";
+import { localeTags } from "@/lib/i18n";
+import type { Locale } from "@/config/site";
 import type { AnnualValues, QuestionAdjust, ScoreImpact } from "../model/types";
-
-/**
- * Die Jahresbilanz als drei Balken gegen den Durchschnitt. Der Durchschnitt ist
- * die 100-Prozent-Marke, damit die Balken auch dann eine Aussage haben, wenn
- * erst zwei Räume beantwortet sind.
- */
-export function MetricBars({
-  values,
-  compact = false
-}: {
-  values: AnnualValues;
-  compact?: boolean;
-}) {
-  const reduceMotion = useReducedMotion();
-
-  return (
-    <dl className={cn("grid gap-3", compact ? "grid-cols-3" : "gap-4")}>
-      {metrics.map((metric) => {
-        const raw = values[metric.key];
-        const reference = referenceValues[metric.key];
-        const share = reference > 0 ? raw / reference : 0;
-        const formatted = formatMetric(metric.id, raw, Math.max(raw, reference));
-        // Über dem Durchschnitt läuft der Balken über die Marke hinaus, aber
-        // gedeckelt — sonst staucht ein Ausreißer alle anderen Balken zu Strichen.
-        const width = Math.min(140, share * 100);
-
-        return (
-          <div key={metric.id} className="min-w-0">
-            <dt className="flex items-baseline justify-between gap-2">
-              <span className="truncate text-[11px] font-semibold text-[var(--color-muted)]">
-                {compact ? metric.short : metric.label}
-              </span>
-            </dt>
-            <dd className="mt-1">
-              <span className="flex items-baseline gap-1">
-                <span className="text-lg font-semibold tabular-nums md:text-xl">{formatted.value}</span>
-                <span className="text-[11px] font-medium text-[var(--color-muted)]">{formatted.unit}</span>
-              </span>
-              <div className="relative mt-1.5 h-1.5 overflow-hidden rounded-full bg-[var(--color-ink)]/8">
-                <motion.div
-                  className={cn(
-                    "h-full rounded-full",
-                    share > 1 ? "bg-[var(--color-clay-ink,#8a5a3b)]" : "bg-[var(--color-forest)]"
-                  )}
-                  initial={reduceMotion ? false : { width: 0 }}
-                  animate={{ width: `${Math.min(100, width)}%` }}
-                  transition={{ duration: reduceMotion ? 0 : 0.45, ease: "easeOut" }}
-                />
-                {/* Marke des Durchschnitts, sobald der eigene Wert darüber liegt. */}
-                {share > 1 && (
-                  <span
-                    className="absolute inset-y-0 w-px bg-[var(--color-ink)]/45"
-                    style={{ left: `${(1 / Math.max(1.4, share)) * 100}%` }}
-                    aria-hidden
-                  />
-                )}
-              </div>
-              <span className="mt-1 block text-[11px] leading-4 text-[var(--color-muted)]">
-                {raw === 0
-                  ? "noch nichts erfasst"
-                  : `${Math.round(share * 100)} % des Durchschnitts`}
-              </span>
-            </dd>
-          </div>
-        );
-      })}
-    </dl>
-  );
-}
 
 /**
  * Die Wirkung der Antwort als Satz aus dem Alltag, nicht als Kennzahlenblock.
@@ -88,15 +21,17 @@ export function EverydayFeedback({
   questionId,
   values,
   saving,
-  impact
+  impact,
+  locale = "de"
 }: {
   questionId: string;
   values: AnnualValues | null;
   saving: AnnualValues | null;
   impact: ScoreImpact;
+  locale?: Locale;
 }) {
   const reduceMotion = useReducedMotion();
-  const line = everydayLine(questionId, values, saving, impact);
+  const line = everydayLine(questionId, values, saving, impact, locale);
   return (
     <motion.section
       key={line.headline}
@@ -142,7 +77,8 @@ export function AdjustControl({
 }) {
   const sliderId = `adjust-${questionId}`;
   const decimals = adjust.step < 1 ? 1 : 0;
-  const display = quantity.toLocaleString("de-DE", {
+  const { t, locale } = useTourI18n();
+  const display = quantity.toLocaleString(localeTags[locale], {
     minimumFractionDigits: 0,
     maximumFractionDigits: decimals
   });
@@ -173,14 +109,14 @@ export function AdjustControl({
             )}
           >
             <RotateCcw className="size-3" aria-hidden />
-            Vorgabe
+            {t.adjust.reset}
           </button>
         )}
       </div>
 
       <div className="mt-1.5 flex items-center gap-2.5">
         <button type="button" onClick={() => nudge(-1)} disabled={quantity <= adjust.min}
-          aria-label={`${adjust.label}: weniger`} className={stepButton}>
+          aria-label={t.adjust.less(adjust.label)} className={stepButton}>
           <Minus className="size-4" aria-hidden />
         </button>
         <input
@@ -203,7 +139,7 @@ export function AdjustControl({
           )}
         />
         <button type="button" onClick={() => nudge(1)} disabled={quantity >= adjust.max}
-          aria-label={`${adjust.label}: mehr`} className={stepButton}>
+          aria-label={t.adjust.more(adjust.label)} className={stepButton}>
           <Plus className="size-4" aria-hidden />
         </button>
         <output htmlFor={sliderId} className="min-w-[4.5rem] shrink-0 text-right text-base font-semibold tabular-nums">
@@ -215,7 +151,7 @@ export function AdjustControl({
       {/* Die Alltagsgröße zurückübersetzt: „2 Songs“ heißt hier sechs Minuten. */}
       {adjust.base && (
         <p className="mt-1 text-[11px] font-semibold tabular-nums text-[var(--color-forest)]">
-          ≈ {(quantity * adjust.base.factor).toLocaleString("de-DE", { maximumFractionDigits: 1 })} {adjust.base.unit}
+          ≈ {(quantity * adjust.base.factor).toLocaleString(localeTags[locale], { maximumFractionDigits: 1 })} {adjust.base.unit}
         </p>
       )}
       {adjust.hint && (

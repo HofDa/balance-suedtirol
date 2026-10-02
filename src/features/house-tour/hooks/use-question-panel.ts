@@ -5,7 +5,7 @@ import type { AnnualValues, TourQuestion, TourRoom } from "../model/types";
 import { getRoomProgress } from "../model/scoring";
 import { bestCaseSavingFromValues, optionValues } from "../model/calculator";
 
-export const AUTO_ADVANCE_MS = 1400;
+export const AUTO_ADVANCE_MS = 900;
 
 export function useQuestionPanelInteraction({
   room, question, questionIndex, objectOpen, answers, skippedQuestions,

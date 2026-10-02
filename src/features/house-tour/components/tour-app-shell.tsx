@@ -1,16 +1,19 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { getRoom, availableRooms } from "../config/rooms";
+import { TourI18nProvider, useTourI18n } from "../i18n/context";
 import { useHouseTour } from "../hooks/use-house-tour";
 import type { RoomId } from "../model/types";
 import { HouseOverview } from "./house-overview";
 import { HouseDiscoveryIntro } from "./house-discovery-intro";
 import { ObjectContextPanel } from "./object-context-panel";
 import { TourToolbar } from "./tour-toolbar";
+import { KnowledgeFolder } from "./game/knowledge-folder";
+import type { GuessRecord } from "../model/types";
 import { RoomScene } from "../scenes/room-scenes";
 import type { Locale } from "@/config/site";
 import { getTourProgress } from "../model/scoring";
@@ -45,7 +48,17 @@ const TourResults = dynamic(
 );
 
 export function TourAppShell({ locale }: { locale: Locale }) {
-  const { state, dispatch, scores, totals, completedRooms, celebratedRooms } = useHouseTour();
+  return (
+    <TourI18nProvider locale={locale}>
+      <TourApp locale={locale} />
+    </TourI18nProvider>
+  );
+}
+
+function TourApp({ locale }: { locale: Locale }) {
+  const i18n = useTourI18n();
+  const { state, dispatch, scores, totals, completedRooms, celebratedRooms, progress: discoveryState } = useHouseTour();
+  const [folderOpen, setFolderOpen] = useState(false);
   const reduce = useReducedMotion();
   // Die Kamera braucht den Raum, in den sie fährt oder aus dem sie kommt; beim
   // Wechsel zur Hausübersicht ist `activeRoom` schon leer.
@@ -60,7 +73,8 @@ export function TourAppShell({ locale }: { locale: Locale }) {
   useEffect(() => {
     previousViewRef.current = state.view;
   }, [state.view]);
-  const room = getRoom(state.activeRoom);
+  // Die Raumobjekte für die Oberfläche kommen in der Sprache der Seite; Struktur und Faktoren sind identisch.
+  const room = i18n.room(state.activeRoom);
   const question = room?.questions[state.activeQuestionIndex];
   const progress = useMemo(
     () => getTourProgress(state.answers, state.skippedQuestions),
@@ -144,16 +158,16 @@ export function TourAppShell({ locale }: { locale: Locale }) {
   }, [dispatch, room, state.activeQuestionIndex]);
 
   const nextRoom = room
-    ? [...availableRooms.slice(availableRooms.indexOf(room) + 1), ...availableRooms.slice(0, availableRooms.indexOf(room))]
+    ? [...i18n.rooms.slice(i18n.rooms.indexOf(room) + 1), ...i18n.rooms.slice(0, i18n.rooms.indexOf(room))]
         .find((item) => !completedRooms.includes(item.id))
     : undefined;
 
   const reset = useCallback(() => {
-    if (window.confirm("Möchtest du alle Antworten des Lebensraum-Checks zurücksetzen?")) {
+    if (window.confirm(i18n.t.toolbar.resetConfirm)) {
       celebratedRooms.current.clear();
       dispatch({ type: "RESET" });
     }
-  }, [dispatch, celebratedRooms]);
+  }, [dispatch, celebratedRooms, i18n.t]);
 
   const answerQuestion = useCallback((questionId: string, optionId: string) => {
     dispatch({ type: "SELECT_ANSWER", questionId, optionId });
@@ -172,6 +186,30 @@ export function TourAppShell({ locale }: { locale: Locale }) {
     cancelFlight();
     dispatch({ type: "SHOW_RESULTS" });
   }, [dispatch]);
+  const openFolder = useCallback(() => setFolderOpen(true), []);
+  const recordGuess = useCallback((questionId: string, record: GuessRecord) => {
+    dispatch({ type: "RECORD_GUESS", questionId, record });
+  }, [dispatch]);
+  const readCard = useCallback((questionId: string) => {
+    dispatch({ type: "READ_CARD", questionId });
+  }, [dispatch]);
+  const setWhatIf = useCallback((questionId: string, optionId: string | null) => {
+    dispatch({ type: "SET_WHAT_IF", questionId, optionId });
+  }, [dispatch]);
+  const toggleGoal = useCallback((questionId: string) => {
+    dispatch({ type: "TOGGLE_GOAL", questionId });
+  }, [dispatch]);
+  const folder = (
+    <KnowledgeFolder
+      open={folderOpen}
+      onClose={() => setFolderOpen(false)}
+      answers={state.answers}
+      adjustments={state.adjustments}
+      cardsRead={state.cardsRead}
+      onReadCard={readCard}
+      locale={locale}
+    />
+  );
   const openCurrentObject = useCallback(
     () => dispatch({ type: "OPEN_OBJECT", questionIndex: state.activeQuestionIndex }),
     [dispatch, state.activeQuestionIndex]
@@ -203,6 +241,8 @@ export function TourAppShell({ locale }: { locale: Locale }) {
         <div className="h-14 shrink-0">
           <TourToolbar
             locale={locale}
+            points={discoveryState.points}
+            onOpenFolder={openFolder}
             view={state.view}
             completedObjects={completedObjects}
             totalObjects={totalObjects}
@@ -215,6 +255,14 @@ export function TourAppShell({ locale }: { locale: Locale }) {
           <TourResults
             scores={scores}
             totals={totals}
+            answers={state.answers}
+            adjustments={state.adjustments}
+            whatIf={state.whatIf}
+            goals={state.goals}
+            progress={discoveryState}
+            onSetWhatIf={setWhatIf}
+            onToggleGoal={toggleGoal}
+            onOpenFolder={openFolder}
             answeredRooms={answeredRooms}
             answeredCount={answeredObjects}
             totalQuestions={totalObjects}
@@ -223,6 +271,7 @@ export function TourAppShell({ locale }: { locale: Locale }) {
             onOpenRoom={(id) => openRoom(id)}
           />
         </div>
+        {folder}
       </div>
     );
   }
@@ -241,6 +290,8 @@ export function TourAppShell({ locale }: { locale: Locale }) {
       <div className="min-w-0 md:col-start-2">
         <TourToolbar
           locale={locale}
+          points={discoveryState.points}
+          onOpenFolder={openFolder}
           view={state.view}
           completedObjects={completedObjects}
           totalObjects={totalObjects}
@@ -304,13 +355,12 @@ export function TourAppShell({ locale }: { locale: Locale }) {
       {/* Mobil untere Hälfte, auf dem Desktop rechte Spalte: Frage, Werte und Aktion */}
       <aside
         className="flex min-h-0 min-w-0 flex-col overflow-hidden bg-white md:col-start-2 md:row-start-2"
-        aria-label="Fragen, Werte und Steuerung"
+        aria-label={i18n.t.panelRegion}
       >
         {state.view === "house" ? (
           <HouseDiscoveryIntro
-            completedObjects={completedObjects}
-            totalObjects={totalObjects}
-            locale={locale}
+            progress={discoveryState}
+            onOpenFolder={openFolder}
             answers={state.answers}
             skippedQuestions={state.skippedQuestions}
             onSelectRoom={(id) => openRoom(id)}
@@ -325,7 +375,10 @@ export function TourAppShell({ locale }: { locale: Locale }) {
             answers={state.answers}
             adjustments={state.adjustments}
             skippedQuestions={state.skippedQuestions}
-            totals={totals}
+            guesses={state.guesses}
+            cardsRead={state.cardsRead}
+            onGuess={recordGuess}
+            onReadCard={readCard}
             nextRoom={nextRoom}
             locale={locale}
             onAnswer={answerQuestion}
@@ -344,6 +397,7 @@ export function TourAppShell({ locale }: { locale: Locale }) {
           />
         ) : null}
       </aside>
+      {folder}
     </div>
   );
 }

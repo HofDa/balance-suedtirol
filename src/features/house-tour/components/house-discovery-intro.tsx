@@ -1,156 +1,130 @@
 "use client";
 
-import { BarChart3, CheckCircle2, ChevronRight, MousePointer2, Search } from "lucide-react";
+import { BarChart3, BookOpen, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { focusRingTool } from "@/components/ui/focus";
-import { Label } from "@/components/ui/label";
 import { Progress } from "@/components/ui/progress";
-import type { Locale } from "@/config/site";
-import { availableRooms } from "../config/rooms";
+import { useTourI18n } from "../i18n/context";
 import { getRoomProgress } from "../model/scoring";
+import type { Discovery } from "../model/game";
 import type { RoomId } from "../model/types";
-import type { Localized } from "@/lib/i18n";
 
-const headlineByLocale: Localized<string> = {
-  de: "Hinter jedem Gegenstand steckt eine Verbindung zur Natur.",
-  it: "Ogni oggetto racchiude un legame con la natura.",
-  en: "Every object has a connection to nature."
-};
+const primary = cn(
+  "inline-flex min-h-11 items-center gap-2 rounded-[var(--radius-md)] bg-[var(--color-forest)] px-5 text-sm font-semibold text-white transition-colors hover:bg-[var(--color-ink)]",
+  focusRingTool
+);
+const quiet = cn(
+  "inline-flex min-h-11 items-center gap-2 rounded-[var(--radius-md)] px-3 text-sm font-semibold text-[var(--color-forest)] transition-colors hover:bg-[var(--color-ink)]/5",
+  focusRingTool
+);
 
 export function HouseDiscoveryIntro({
-  completedObjects,
-  totalObjects,
-  locale,
+  progress,
   answers,
   skippedQuestions,
   onSelectRoom,
-  onResults
+  onResults,
+  onOpenFolder
 }: {
-  completedObjects: number;
-  totalObjects: number;
-  locale: Locale;
+  progress: Discovery;
   answers: Record<string, string>;
   skippedQuestions: Record<string, boolean>;
   onSelectRoom: (id: RoomId) => void;
   onResults: () => void;
+  onOpenFolder: () => void;
 }) {
+  const { t, rooms } = useTourI18n();
+  const intro = t.intro;
+  const handledAny = rooms.some((room) => getRoomProgress(room, answers, skippedQuestions).isStarted);
   // Wer schon einmal hier war, braucht keine Anleitung, sondern die nächste
-  // offene Frage. Der Spielstand liegt längst im Browser — er wurde nur nie
-  // angeboten.
-  const resumeRoom = availableRooms.find((room) =>
+  // offene Runde.
+  const resumeRoom = rooms.find((room) =>
     room.questions.some((item) => !answers[item.id] && !skippedQuestions[item.id])
   );
-  const resuming = completedObjects > 0;
 
-  if (resuming) {
-    const handled = resumeRoom
-      ? getRoomProgress(resumeRoom, answers, skippedQuestions).handled
-      : 0;
-
+  if (handledAny) {
     return (
-      <section className="flex h-full min-h-0 flex-col overflow-y-auto bg-white px-4 py-6 sm:px-6 sm:py-8">
+      <section className="flex h-full min-h-0 flex-col overflow-y-auto bg-white px-4 py-5 sm:px-6 sm:py-8">
         <div className="m-auto w-full max-w-lg">
-          <Label size="dense">Dein Lebensraum-Check</Label>
-          <h1 className="mt-2 text-2xl font-semibold leading-tight tracking-[-0.03em] sm:text-3xl">
-            {resumeRoom ? "Weiter, wo du aufgehört hast." : "Alle Objekte erfasst."}
+          <h1 className="text-2xl font-semibold leading-tight tracking-[-0.03em] sm:text-3xl">
+            {resumeRoom ? intro.resumeTitle : intro.doneTitle}
           </h1>
 
-          <div className="mt-5">
+          <div className="mt-4">
             <div className="flex items-baseline justify-between gap-2 text-xs">
-              <span className="font-semibold">Hausfortschritt</span>
-              <span className="tabular-nums text-[var(--color-muted)]">
-                {completedObjects} / {totalObjects} Objekte
-              </span>
+              <span className="font-semibold tabular-nums">{intro.foundOf(progress.found, progress.total)}</span>
+              <span className="tabular-nums text-[var(--color-forest)]">{t.points(progress.points)}</span>
             </div>
             <div className="mt-2">
-              <Progress
-                value={totalObjects ? (completedObjects / totalObjects) * 100 : 0}
-                label={`${completedObjects} von ${totalObjects} Objekten bearbeitet`}
-              />
+              <Progress value={(progress.found / progress.total) * 100} label={intro.foundAria(progress.found, progress.total)} />
             </div>
           </div>
 
-          <div className="mt-6 flex flex-wrap gap-3">
+          <div className="mt-5 flex flex-wrap gap-2">
             {resumeRoom ? (
-              <button
-                type="button"
-                onClick={() => onSelectRoom(resumeRoom.id)}
-                className={cn(
-                  "inline-flex min-h-11 items-center gap-2 rounded-[var(--radius-md)] bg-[var(--color-forest)] px-5 text-sm font-semibold text-white",
-                  focusRingTool
-                )}
-              >
-                Weiter: {resumeRoom.title}
-                <span className="tabular-nums text-white/70">
-                  {handled}/{resumeRoom.questions.length}
-                </span>
+              <button type="button" onClick={() => onSelectRoom(resumeRoom.id)} className={primary}>
+                {intro.continueRoom(resumeRoom.title)}
                 <ChevronRight className="size-4" aria-hidden />
               </button>
-            ) : null}
-
-            <button
-              type="button"
-              onClick={onResults}
-              className={cn(
-                "inline-flex min-h-11 items-center gap-2 rounded-[var(--radius-md)] px-4 text-sm font-semibold text-[var(--color-forest)]",
-                focusRingTool
-              )}
-            >
-              <BarChart3 className="size-4" aria-hidden />
-              Bilanz ansehen
+            ) : (
+              <button type="button" onClick={onResults} className={primary}>
+                <BarChart3 className="size-4" aria-hidden />
+                {intro.toResults}
+              </button>
+            )}
+            <button type="button" onClick={onOpenFolder} className={quiet}>
+              <BookOpen className="size-4" aria-hidden />
+              {t.folder}
+              <span className="tabular-nums text-[var(--color-muted)]">{progress.cardsRead}/{progress.total}</span>
             </button>
+            {resumeRoom && (
+              <button type="button" onClick={onResults} className={quiet}>
+                <BarChart3 className="size-4" aria-hidden />
+                {intro.results}
+              </button>
+            )}
           </div>
-
-          <p className="mt-5 text-xs leading-5 text-[var(--color-muted)]">
-            Du kannst auch direkt im Haus einen Raum wählen. Jede Antwort lässt sich später ändern.
-          </p>
         </div>
       </section>
     );
   }
 
   return (
-    <section className="flex h-full min-h-0 flex-col overflow-y-auto bg-white px-4 py-6 sm:px-6 sm:py-8">
+    <section className="flex h-full min-h-0 flex-col overflow-y-auto bg-white px-4 py-5 sm:px-6 sm:py-8">
       <div className="m-auto w-full max-w-lg">
-        <Label size="dense">Interaktiver Lebensraum-Check</Label>
-        <h1 className="mt-2 text-2xl font-semibold leading-tight tracking-[-0.03em] sm:text-3xl">
-          {headlineByLocale[locale]}
+        <h1 className="text-2xl font-semibold leading-tight tracking-[-0.03em] sm:text-3xl">
+          {intro.headline}
         </h1>
         <p className="mt-3 text-sm leading-6 text-[var(--color-muted)]">
-          Sechs Räume, 18 kurze Fragen: Entdecke, wie dein Alltag mit der Natur verbunden ist. Beginne im Schlafzimmer oder wähle deinen eigenen Weg durch das Haus.
+          {intro.lead}
         </p>
 
-        <ol className="mt-7 grid gap-3" aria-label="So funktioniert der Lebensraum-Check">
-          {[
-            { icon: MousePointer2, title: "Raum wählen", copy: "Klicke direkt auf einen Raum im Haus." },
-            { icon: Search, title: "Objekt entdecken", copy: "Wähle einen der illustrierten Gegenstände im Raum." },
-            { icon: CheckCircle2, title: "Zusammenhang verstehen", copy: "Eine kurze Frage zeigt die ökologische Verbindung." }
-          ].map(({ icon: Icon, title, copy }, index) => (
-            <li key={title} className="flex items-center gap-3 rounded-[var(--radius-lg)] border border-[var(--color-line)] p-3.5">
-              <span className="grid size-9 shrink-0 place-items-center rounded-full bg-[var(--color-sage)] text-[var(--color-forest)]">
-                <Icon className="size-4" aria-hidden />
+        <ol className="mt-4 grid gap-3 sm:grid-cols-3 sm:gap-4" aria-label={intro.loopAria}>
+          {intro.loop.map((step, index) => (
+            <li key={step.title} className="flex items-start gap-3 sm:block">
+              <span className="flex items-center gap-2">
+                <span className="grid size-7 shrink-0 place-items-center rounded-full bg-[var(--color-forest)] text-xs font-semibold text-white tabular-nums">
+                  {index + 1}
+                </span>
+                {index < intro.loop.length - 1 && (
+                  <span className="hidden h-px flex-1 bg-[var(--color-forest)]/25 sm:block" aria-hidden />
+                )}
               </span>
-              <div>
-                <p className="text-sm font-semibold">
-                  <span className="mr-1.5 text-[var(--color-muted)]">{index + 1}.</span>
-                  {title}
-                </p>
-                <p className="mt-0.5 text-xs leading-5 text-[var(--color-muted)]">{copy}</p>
-              </div>
+              <span className="sm:mt-2 sm:block">
+                <span className="block text-sm font-semibold">{step.title}</span>
+                <span className="block text-xs leading-5 text-[var(--color-muted)]">{step.copy}</span>
+              </span>
             </li>
           ))}
         </ol>
 
-        {availableRooms[0] && (
-          <button
-            type="button"
-            onClick={() => onSelectRoom(availableRooms[0].id)}
-            className={cn(
-              "mt-6 inline-flex min-h-11 items-center gap-2 rounded-[var(--radius-md)] bg-[var(--color-forest)] px-5 text-sm font-semibold text-white",
-              focusRingTool
-            )}
-          >
-            Im Schlafzimmer beginnen
+        <p className="mt-5 text-xs leading-5 text-[var(--color-muted)]">
+          {intro.honesty}
+        </p>
+
+        {rooms[0] && (
+          <button type="button" onClick={() => onSelectRoom(rooms[0].id)} className={cn(primary, "mt-5")}>
+            {intro.start}
             <ChevronRight className="size-4" aria-hidden />
           </button>
         )}

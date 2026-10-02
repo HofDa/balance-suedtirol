@@ -103,45 +103,6 @@ export const mobilityRoom: TourRoom = {
           impact: { carbon: 7, resources: 4, biodiversity: 2 },
         }
       ]
-    },
-    {
-      id: "mobility-long",
-      title: "Womit reist du auf langen Strecken?",
-      sceneLabel: "Fernstrecke planen",
-      description:
-        "Eine einzige Flugreise kann mehr wiegen als ein ganzes Jahr Alltagsmobilität. Deshalb steht sie hier als eigene Option und nicht in einer Sammelkategorie.",
-      impactText:
-        "Gerechnet wird pro Personenkilometer: Bahn rund 0,035 kg CO₂e, Auto mit zwei Personen etwa 0,15 kg, Flugzeug als pauschaler CO₂e-Wirkungswert rund 0,25 kg einschließlich eines Zuschlags für Effekte in großer Höhe.",
-      tip: "Ein Nachtzug ersetzt eine Übernachtung und einen Flug zugleich. Bei Strecken bis rund 1.000 Kilometern ist die Bahn von Tür zu Tür oft nicht einmal langsamer.",
-      adjust: {
-        label: "Fernreise-Kilometer pro Jahr",
-        unit: "km",
-        min: 0,
-        max: 30000,
-        step: 500,
-        defaults: { "long-car": 3000, "long-transit": 4000, "long-flight": 6000 },
-        hint: "Hin- und Rückweg zusammen. Rom und zurück sind ab Bozen rund 1.400 km."
-      },
-      options: [
-        {
-          id: "long-car",
-          label: "Meist mit dem Auto",
-          params: { co2PerKm: 0.15, kwhPerKm: 0.45 },
-          impact: { carbon: -6, resources: -3 },
-        },
-        {
-          id: "long-transit",
-          label: "Meist mit Bahn oder Fernbus",
-          params: { co2PerKm: 0.035, kwhPerKm: 0.09 },
-          impact: { carbon: 7, resources: 4 },
-        },
-        {
-          id: "long-flight",
-          label: "Regelmäßig mit dem Flugzeug",
-          params: { co2PerKm: 0.25, kwhPerKm: 0.75 },
-          impact: { carbon: -9, resources: -5 },
-        }
-      ]
     }
   ]
 };

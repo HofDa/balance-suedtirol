@@ -15,5 +15,6 @@ All files here are generated from the 4× master
 
 Source boxes: `src/features/house-tour/config/full-house-layout.json` (pixels of
 the 1254 px original). Rebuild: `node scripts/build-full-house-objects.mjs`,
-then `python3 scripts/refine-house-masks.py`.
+then `python3 scripts/refine-house-masks.py`, then the two shape-built cutouts
+`python3 scripts/build-tree-cutout.py` and `python3 scripts/build-globe-cutout.py`.
 Extraction prompts, masks and the original: `assets-source/house/full-house/README.md`.

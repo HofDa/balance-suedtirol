@@ -3,7 +3,7 @@
 import { Check, Home } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { focusRingTool } from "@/components/ui/focus";
-import { availableRooms } from "../config/rooms";
+import { useTourI18n } from "../i18n/context";
 import { getRoomProgress } from "../model/scoring";
 import type { RoomId } from "../model/types";
 
@@ -29,15 +29,16 @@ export function RoomNavigation({
   onSelectRoom: (id: RoomId) => void;
   onHouse: () => void;
 }) {
+  const { t, rooms } = useTourI18n();
   return (
     <nav
-      aria-label="Räume"
+      aria-label={t.roomNav.label}
       className="flex items-center gap-1 border-b border-[var(--color-line)] bg-[var(--color-paper)]/65 px-2 md:px-3"
     >
       <button
         type="button"
         onClick={onHouse}
-        aria-label="Zur Hausübersicht"
+        aria-label={t.roomNav.toHouse}
         className={cn(
           "grid size-11 shrink-0 place-items-center rounded-[var(--radius-md)] text-[var(--color-muted)] transition-colors hover:bg-[var(--color-ink)]/5 hover:text-[var(--color-ink)]",
           focusRingTool
@@ -54,7 +55,7 @@ export function RoomNavigation({
           WebkitMaskImage: "linear-gradient(to right, #000 calc(100% - 24px), transparent)"
         }}
       >
-        {availableRooms.map((room) => {
+        {rooms.map((room) => {
           const progress = getRoomProgress(room, answers, skippedQuestions);
           const { handled, isComplete: complete } = progress;
           const started = progress.isStarted && !complete;
@@ -66,7 +67,7 @@ export function RoomNavigation({
                 type="button"
                 onClick={() => onSelectRoom(room.id)}
                 aria-current={active ? "step" : undefined}
-                aria-label={`${room.title}, ${handled} von ${room.questions.length} Objekten bearbeitet`}
+                aria-label={t.roomNav.roomAria(room.title, handled, room.questions.length)}
                 className={cn(
                   "inline-flex min-h-8 items-center gap-1.5 rounded-[var(--radius-sm)] px-2.5 text-[11px] font-semibold transition-colors md:text-xs",
                   focusRingTool,

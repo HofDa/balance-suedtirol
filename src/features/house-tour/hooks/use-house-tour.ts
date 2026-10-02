@@ -6,9 +6,9 @@ import { totalValues } from "../model/calculator";
 import type { RoomId } from "../model/types";
 import { initialTourState, tourReducer } from "../model/reducer";
 
-// V3 trennt frühere Reglersemantiken (z. B. Bildschirmstunden) von den neuen
-// Jahresverbräuchen. Alte Mengen dürfen nicht still als kWh interpretiert werden.
-const STORAGE_KEY = "balance-house-tour-v3";
+// V4: Dusche in Songs, Essensreste in Portionen. Wie schon V3 (Bildschirmstunden
+// zu kWh): alte Mengen dürfen nicht still in der neuen Einheit gelesen werden.
+const STORAGE_KEY = "balance-house-tour-v4";
 const STORAGE_WRITE_DELAY_MS = 300;
 
 export function useHouseTour() {

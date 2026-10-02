@@ -91,14 +91,16 @@ export const kitchenRoom: TourRoom = {
         "Jedes Kilogramm weggeworfener Lebensmittel bringt im Schnitt rund 2,5 kg CO₂e mit. In italienischen Haushalten landen pro Person etwa 65 kg im Jahr im Müll.",
       tip: "Eine sichtbare Restebox auf Augenhöhe im Kühlschrank wirkt zuverlässiger als jeder Einkaufsplan.",
       scopeNote: "Zählt nur auf CO₂ ein, wie alle Fragen zur Ernährung.",
+      // Portionen statt Kilogramm: Reste wiegt niemand, aber man sieht den Teller.
       adjust: {
-        label: "Weggeworfene Lebensmittel pro Woche",
-        unit: "kg",
+        label: "Wie viele Portionen landen pro Woche im Müll?",
+        unit: "Portionen",
         min: 0,
-        max: 8,
-        step: 0.1,
-        defaults: { "waste-often": 2.5, "waste-sometimes": 1.2, "waste-planned": 0.4 },
-        hint: "Ein voller Brotlaib wiegt rund 0,7 kg."
+        max: 20,
+        step: 1,
+        defaults: { "waste-often": 6, "waste-sometimes": 3, "waste-planned": 1 },
+        hint: "Eine Portion ist ein Teller Essen, rund 400 g — oder ein halber Brotlaib.",
+        base: { factor: 0.4, unit: "kg" }
       },
       options: [
         {

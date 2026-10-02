@@ -4,8 +4,8 @@ import { cn } from "@/lib/utils";
 import type { Locale } from "@/config/site";
 import { focusRingTool } from "@/components/ui/focus";
 import { Label } from "@/components/ui/label";
-import { questionBasis } from "../model/calculator";
-import type { TourQuestion } from "../model/types";
+import { hasValues, questionBasis, summarizeValues } from "../model/calculator";
+import type { AnnualValues, TourQuestion } from "../model/types";
 
 /** Erklärt eine fehlende Zahl, statt sie kommentarlos als Null zu zeigen. */
 function ScopeNote({ note }: { note: string }) {
@@ -18,16 +18,20 @@ function ScopeNote({ note }: { note: string }) {
 }
 
 /**
- * Hintergrund zur Frage: Erklärtext, Bilanzgrenze und Rechenweg. Eingeklappt,
- * weil die Entscheidung oben stehen muss — aber vorhanden, weil eine Zahl ohne
- * nachlesbaren Rechenweg in diesem Produkt nichts verloren hat.
+ * Hintergrund zur Frage: Erklärtext, genaue Werte, Bilanzgrenze und Rechenweg.
+ * Eingeklappt, weil oben nur die Entscheidung und ein Alltagssatz stehen —
+ * aber vorhanden, weil eine Zahl ohne nachlesbaren Rechenweg in diesem
+ * Produkt nichts verloren hat.
  */
 export function QuestionDetails({
   question,
-  locale
+  locale,
+  values
 }: {
   question: TourQuestion;
   locale: Locale;
+  /** Jahreswerte der gewählten Antwort; fehlt die Antwort, fehlt die Zeile. */
+  values?: AnnualValues | null;
 }) {
   const basis = questionBasis[question.id];
 
@@ -43,10 +47,20 @@ export function QuestionDetails({
           className="size-3.5 shrink-0 transition-transform group-open:rotate-90 motion-reduce:transition-none"
           aria-hidden
         />
-        Hintergrund und Rechenweg
+        Hintergrund und genaue Werte
       </summary>
 
       <div className="grid gap-2.5 border-t border-[var(--color-line)] px-3 py-3 md:px-4">
+        {values && hasValues(values) && (
+          <p className="text-[11px] leading-4 md:text-xs md:leading-5">
+            <span className="font-semibold">Deine Antwort: </span>
+            <span className="tabular-nums">{summarizeValues(values)}</span>
+            <span className="text-[var(--color-muted)]"> pro Person und Jahr</span>
+          </p>
+        )}
+        <p className="text-[11px] leading-4 text-[var(--color-ink)] md:text-xs md:leading-5">
+          {question.impactText}
+        </p>
         <p className="text-[11px] leading-4 text-[var(--color-muted)] md:text-xs md:leading-5">
           {question.description}
         </p>

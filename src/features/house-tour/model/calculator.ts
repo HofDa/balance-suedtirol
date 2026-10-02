@@ -316,6 +316,18 @@ export function quantityFor(
   return Math.min(question.adjust.max, Math.max(question.adjust.min, raw));
 }
 
+/**
+ * Dieselbe Menge in der Basiseinheit des Rechners: Songs werden zu Minuten,
+ * Portionen zu Kilogramm. Ohne Umrechnung ist es der Reglerwert selbst.
+ */
+export function baseQuantityFor(
+  question: TourQuestion,
+  optionId: string,
+  adjustments: Record<string, number>
+) {
+  return quantityFor(question, optionId, adjustments) * (question.adjust?.base?.factor ?? 1);
+}
+
 /** Ob der Nutzer den Regler dieser Frage selbst verstellt hat. */
 export const isAdjusted = (questionId: string, adjustments: Record<string, number>) =>
   typeof adjustments[questionId] === "number";
@@ -344,7 +356,7 @@ export function optionValues(
 
   return contribution({
     option,
-    quantity: quantityFor(question, optionId, adjustments),
+    quantity: baseQuantityFor(question, optionId, adjustments),
     optionOf
   });
 }
@@ -499,7 +511,7 @@ const num = (value: number, digits = 0) => de(digits).format(value);
  */
 export const questionBasis: Record<string, { factor: string; assumption?: string }> = {
   "bath-shower": {
-    factor: `Duschminuten am Tag × Durchfluss × 365. Das Aufheizen kostet ${num(HOT_WATER_KWH_PER_LITER, 4)} kWh je Liter (12 °C auf 38 °C).`,
+    factor: `Songs pro Dusche × 3 Minuten × Durchfluss × 365. Das Aufheizen kostet ${num(HOT_WATER_KWH_PER_LITER, 4)} kWh je Liter (12 °C auf 38 °C).`,
     assumption:
       "Womit erwärmt wird, kommt aus deiner Antwort zum Warmwassersystem — deshalb ändern sich diese Zahlen, sobald du sie beantwortest."
   },
@@ -548,7 +560,7 @@ export const questionBasis: Record<string, { factor: string; assumption?: string
     assumption: "Transport, Kühlkette und beheizte Gewächshäuser zusammengefasst."
   },
   "kitchen-waste": {
-    factor: `Weggeworfene Kilogramm je Woche × 52 × ${num(FOOD_WASTE_CO2_PER_KG, 1)} kg CO₂e je Kilogramm.`,
+    factor: `Weggeworfene Portionen je Woche × 0,4 kg × 52 × ${num(FOOD_WASTE_CO2_PER_KG, 1)} kg CO₂e je Kilogramm.`,
     assumption:
       "Bewertet mit der vollen Vorkette des weggeworfenen Produkts: Anbau, Transport und Kühlung sind bereits passiert."
   },

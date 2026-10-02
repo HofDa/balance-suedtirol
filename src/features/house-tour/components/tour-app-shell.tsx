@@ -276,6 +276,7 @@ export function TourAppShell({ locale }: { locale: Locale }) {
                 roomId={room.id}
                 questionIndex={state.activeQuestionIndex}
                 answers={state.answers}
+                adjustments={state.adjustments}
                 skippedQuestions={state.skippedQuestions}
                 onSelectObject={selectObject}
               />

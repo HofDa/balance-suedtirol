@@ -59,18 +59,28 @@ test("Standby und Beleuchtung werden neben dem Haushaltsstrom nicht doppelt gez�
 
 test("Warmwasser-Wärmepumpe reduziert Eingangsenergie und Emissionen der Dusche", () => {
   const answers = { "bath-shower": "bath-eco", "bath-water-heating": "heat-pump" };
-  const values = optionValues("bath-shower", "bath-eco", answers, { "bath-shower": 4 });
-  const liters = 6.5 * 4 * 365;
+  // Zwei Songs à drei Minuten.
+  const values = optionValues("bath-shower", "bath-eco", answers, { "bath-shower": 2 });
+  const liters = 6.5 * 2 * 3 * 365;
   const usefulHeat = liters * 0.0302;
   closeTo(values.waterL, liters);
   closeTo(values.energyKwh, usefulHeat / 3 + liters * 0.0005);
   closeTo(values.co2Kg, (usefulHeat / 3 + liters * 0.0005) * GRID_CO2_PER_KWH);
 });
 
+test("Alltagsgrößen werden in die Basiseinheit des Rechners umgerechnet", () => {
+  // Fünf Portionen à 0,4 kg pro Woche, ein Jahr lang, mit 2,5 kg CO₂e je kg.
+  const waste = optionValues("kitchen-waste", "waste-often", {}, { "kitchen-waste": 5 });
+  closeTo(waste.co2Kg, 5 * 0.4 * 52 * 2.5);
+  // Ein Song unter der Normalbrause: drei Minuten zu zehn Litern, täglich.
+  const shower = optionValues("bath-shower", "bath-normal", {}, { "bath-shower": 1 });
+  closeTo(shower.waterL, 3 * 10 * 365);
+});
+
 test("Reglerwerte werden in Berechnung und Zustand sicher begrenzt", () => {
   const shower = availableRooms.flatMap((room) => room.questions).find((question) => question.id === "bath-shower")!;
   assert.equal(quantityFor(shower, "bath-eco", { "bath-shower": -10 }), 0);
-  assert.equal(quantityFor(shower, "bath-eco", { "bath-shower": 1e9 }), 25);
+  assert.equal(quantityFor(shower, "bath-eco", { "bath-shower": 1e9 }), 8);
 
   const restored = tourReducer(initialTourState, {
     type: "RESTORE",
@@ -87,8 +97,8 @@ test("Reglerwerte werden in Berechnung und Zustand sicher begrenzt", () => {
 
 test("Mengenregler verändern den Wirkungsindex in derselben Richtung wie die Bilanz", () => {
   const answers = { "bath-shower": "bath-eco" };
-  const short = calculateScores(answers, { "bath-shower": 4 });
-  const long = calculateScores(answers, { "bath-shower": 25 });
+  const short = calculateScores(answers, { "bath-shower": 1 });
+  const long = calculateScores(answers, { "bath-shower": 8 });
   assert.ok(long.carbon < short.carbon);
   assert.ok(long.water < short.water);
   assert.ok(long.resources < short.resources);

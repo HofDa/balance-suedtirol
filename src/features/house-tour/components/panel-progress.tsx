@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState } from "react";
 import { animate, motion, useReducedMotion } from "framer-motion";
-import { cn } from "@/lib/utils";
 import { formatMetric, hasValues, metrics } from "../model/calculator";
 import type { AnnualValues, MetricId, TourRoom } from "../model/types";
 
@@ -75,7 +74,7 @@ export function ProgressSummary({
   const hasRunningTotals = hasValues(totals);
 
   return (
-    <div className={cn("border-b border-[var(--color-line)] bg-[var(--color-paper)]/65", !hasRunningTotals && "max-md:hidden")}>
+    <div className="border-b border-[var(--color-line)] bg-[var(--color-paper)]/65 max-md:hidden">
       {/* Mobil steht der Raum samt Zähler schon über der Frage. */}
       <div className="hidden px-6 pt-3 md:block">
         <div className="mb-1.5 flex items-center justify-between gap-2 text-[11px] md:text-xs">
@@ -88,8 +87,10 @@ export function ProgressSummary({
         <ProgressBar value={roomHandled} total={room.questions.length} />
       </div>
 
+      {/* Mobil nicht: dort zeigt die Szene die Reaktion auf jede Antwort, und
+          die laufende Bilanz steht einen Tipp entfernt hinter „Bilanz“. */}
       {hasRunningTotals && (
-        <dl className="grid grid-cols-3 gap-2 px-3 py-2 md:mt-2 md:gap-3 md:border-t md:border-[var(--color-line)] md:px-6 md:py-2.5">
+        <dl className="hidden grid-cols-3 gap-2 px-3 py-2 md:mt-2 md:grid md:gap-3 md:border-t md:border-[var(--color-line)] md:px-6 md:py-2.5">
           {metrics.map((metric) => {
             const raw = totals[metric.key];
             return (

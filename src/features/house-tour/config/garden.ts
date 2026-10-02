@@ -23,7 +23,7 @@ export const gardenRoom: TourRoom = {
         max: 400,
         step: 10,
         defaults: { gravel: 60, lawn: 80, "natural-bed": 80 },
-        hint: "Nur die Fläche, die du tatsächlich gießt."
+        hint: "Nur die Fläche, die du tatsächlich gießt. Ein Autoparkplatz hat rund 12 m²."
       },
       options: [
         {

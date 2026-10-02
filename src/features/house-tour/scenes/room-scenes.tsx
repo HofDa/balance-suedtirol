@@ -9,11 +9,12 @@ interface SceneProps {
   roomId: RoomId;
   questionIndex: number;
   answers: Record<string, string>;
+  adjustments: Record<string, number>;
   skippedQuestions: Record<string, boolean>;
   onSelectObject: (questionIndex: number) => void;
 }
 
-export const RoomScene = memo(function RoomScene({ roomId, questionIndex, answers, skippedQuestions, onSelectObject }: SceneProps) {
+export const RoomScene = memo(function RoomScene({ roomId, questionIndex, answers, adjustments, skippedQuestions, onSelectObject }: SceneProps) {
   return (
     <motion.div
       layoutId={`room-frame-${roomId}`}
@@ -24,6 +25,7 @@ export const RoomScene = memo(function RoomScene({ roomId, questionIndex, answer
         roomId={roomId}
         questionIndex={questionIndex}
         answers={answers}
+        adjustments={adjustments}
         skippedQuestions={skippedQuestions}
         onSelectObject={onSelectObject}
       />

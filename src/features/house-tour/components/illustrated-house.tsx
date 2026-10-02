@@ -109,8 +109,8 @@ export function IllustratedHouse({ answers, skippedQuestions, onRoom, celebrated
   );
 }
 
-export function IllustratedRoom({ roomId, questionIndex, answers, skippedQuestions, onSelectObject }: {
-  roomId: RoomId; questionIndex: number; answers: Record<string, string>; skippedQuestions: Record<string, boolean>; onSelectObject: (index: number) => void;
+export function IllustratedRoom({ roomId, questionIndex, answers, adjustments, skippedQuestions, onSelectObject }: {
+  roomId: RoomId; questionIndex: number; answers: Record<string, string>; adjustments: Record<string, number>; skippedQuestions: Record<string, boolean>; onSelectObject: (index: number) => void;
 }) {
   const room = getRoom(roomId);
   if (!room) return null;
@@ -122,7 +122,7 @@ export function IllustratedRoom({ roomId, questionIndex, answers, skippedQuestio
         <p className="text-xs font-semibold text-[var(--color-forest)]">{room.title}</p>
         <p className="text-[10px] text-[var(--color-muted)] md:text-xs">Wähle einen Gegenstand</p>
       </div>
-      <InteractiveRoom room={room} questionIndex={questionIndex} answers={answers} skippedQuestions={skippedQuestions} onSelectObject={onSelectObject} />
+      <InteractiveRoom room={room} questionIndex={questionIndex} answers={answers} adjustments={adjustments} skippedQuestions={skippedQuestions} onSelectObject={onSelectObject} />
       {/* Mobil folgt das Bild dem aktiven Objekt, die anderen liegen dann
           außerhalb. Diese Leiste hält alle drei erreichbar, ohne Höhe zu kosten. */}
       <nav aria-label="Gegenstände im Raum" className="pointer-events-none absolute inset-x-2 bottom-2 z-10 flex justify-center gap-1.5 md:hidden">

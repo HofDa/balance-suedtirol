@@ -48,6 +48,12 @@ export type QuestionAdjust = {
   /** Vorgabemenge je Option-ID. */
   defaults: Record<string, number>;
   hint?: string;
+  /**
+   * Gefragt wird in einer Alltagsgröße (Songs, Portionen), gerechnet in der
+   * Basiseinheit des Rechners (Minuten, Kilogramm). `factor` rechnet um; der
+   * Regler zeigt die Basismenge als Gegenprobe darunter an.
+   */
+  base?: { factor: number; unit: string };
 };
 
 export type TourQuestion = {

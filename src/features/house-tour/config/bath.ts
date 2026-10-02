@@ -16,14 +16,17 @@ export const bathRoom: TourRoom = {
       impactText:
         "Eine Sparbrause halbiert den Durchfluss, ohne dass die Dusche schwächer wirkt. Zusammen mit ein paar Minuten weniger spart das mehrere tausend Liter Trinkwasser und einige hundert Kilowattstunden im Jahr.",
       tip: "Miss einmal nach: Duschkopf in einen 10-Liter-Eimer halten. Ist er in unter 50 Sekunden voll, lohnt sich eine Sparbrause.",
+      // In Songs statt Minuten: die Länge einer Dusche schätzt kaum jemand in
+      // Minuten, aber fast jeder weiß, wie viele Lieder dabei laufen.
       adjust: {
-        label: "Duschminuten pro Tag",
-        unit: "Min.",
+        label: "Wie viele Songs läuft deine Dusche?",
+        unit: "Songs",
         min: 0,
-        max: 25,
-        step: 1,
-        defaults: { "bath-long": 9, "bath-normal": 6, "bath-eco": 4 },
-        hint: "Im Schnitt über die Woche gerechnet, Vollbäder mitgezählt."
+        max: 8,
+        step: 0.5,
+        defaults: { "bath-long": 3, "bath-normal": 2, "bath-eco": 1.5 },
+        hint: "Ein Song dauert rund drei Minuten. Gerechnet mit einer Dusche am Tag; ein Vollbad zählt wie drei bis vier Songs.",
+        base: { factor: 3, unit: "Min." }
       },
       options: [
         {

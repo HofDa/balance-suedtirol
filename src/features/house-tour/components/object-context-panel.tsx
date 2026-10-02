@@ -6,21 +6,15 @@ import {
   ChevronRight,
   Leaf,
   MousePointer2,
-  SkipForward,
-  TrendingDown
+  SkipForward
 } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import type { Locale } from "@/config/site";
 import { focusRingTool } from "@/components/ui/focus";
 import { Label } from "@/components/ui/label";
-import {
-  hasValues,
-  isAdjusted,
-  quantityFor,
-  summarizeValues
-} from "../model/calculator";
-import { AdjustControl, InputImpactFeedback, ValueRow } from "./metric-readout";
+import { isAdjusted, quantityFor } from "../model/calculator";
+import { AdjustControl, EverydayFeedback } from "./metric-readout";
 import { ProgressSummary } from "./panel-progress";
 import { QuestionDetails } from "./question-details";
 import { RoomCompleteView } from "./room-complete-view";
@@ -82,7 +76,7 @@ export function ObjectContextPanel({
     direction, slide, advancing, choose, roomHandled, roomDone, moreObjectsOpen,
     selected, selectedOption, onTouchStart, onTouchEnd, cancelAdvance,
   } = useQuestionPanelInteraction({ room, question, questionIndex, objectOpen, answers, skippedQuestions, onAnswer, onContinue, onGoTo, reduceMotion });
-  const { optionResults, scale, selectedValues, saving } = useQuestionMetrics(question, answers, adjustments);
+  const { selectedValues, saving } = useQuestionMetrics(question, answers, adjustments);
 
   return (
     <section className="flex h-full min-h-0 flex-col overflow-hidden bg-white">
@@ -186,25 +180,22 @@ export function ObjectContextPanel({
                 {question.title}
               </h2>
 
-              {/* „pro Jahr“ einmal als Spaltenkopf statt implizit in jeder
-                  Zeile: die Zahlen rechts sind Jahreswerte, keine Preise. */}
-              <p className="mt-3 flex items-baseline justify-between gap-3 text-[11px] text-[var(--color-muted)] md:mt-5">
-                <span className="hidden md:inline">
-                  Tasten <kbd className="font-semibold tabular-nums">1</kbd>–
-                  <kbd className="font-semibold tabular-nums">{question.options.length}</kbd> wählen,{" "}
-                  <kbd className="font-semibold">Enter</kbd> weiter
-                </span>
-                {hasValues(scale) && (
-                  <span className="ml-auto">{selected ? "Werte pro Jahr" : "Zahlen nach deiner Antwort"}</span>
-                )}
+              <p className="mt-5 hidden text-[11px] text-[var(--color-muted)] md:block">
+                Tasten <kbd className="font-semibold tabular-nums">1</kbd>–
+                <kbd className="font-semibold tabular-nums">{question.options.length}</kbd> wählen,{" "}
+                <kbd className="font-semibold">Enter</kbd> weiter
               </p>
 
+              {/* Antworten ohne Zahlen: wer sie vorher sieht, wählt leicht die
+                  „gute“ statt der zutreffenden Option, und drei Kennzahlen je
+                  Zeile machten aus einer Alltagsfrage eine Tabelle. Die Wirkung
+                  zeigt die Szene und ein einziger Satz darunter. */}
               <div
-                className="mt-1.5 grid gap-1.5 md:gap-2.5"
+                className="mt-3 grid gap-1.5 md:mt-1.5 md:gap-2.5"
                 role="radiogroup"
                 aria-labelledby="question-title"
               >
-                {optionResults.map(({ option, values }) => {
+                {question.options.map((option) => {
                   const active = selected === option.id;
                   return (
                     <div
@@ -246,39 +237,12 @@ export function ObjectContextPanel({
                           </motion.span>
                         )}
                       </span>
-                      {/* Mobil stehen die Werte unter der Antwort: nebeneinander
-                          blieb für den Antworttext kaum ein Drittel der Breite. */}
-                      <span className="flex min-w-0 flex-1 flex-col gap-0.5 md:flex-row md:items-center md:gap-3">
-                        <span className="min-w-0 md:flex-1">
-                          {option.label}
-                          {option.regionalAverage && (
-                            <span className="ml-2 inline-flex translate-y-[-1px] items-center rounded-full bg-[var(--color-sage)] px-2 py-0.5 align-middle text-[10px] font-semibold text-[var(--color-forest)]">
-                              Südtirol-Schnitt
-                            </span>
-                          )}
-                        </span>
-                        {/* Die Zahlen erst nach der Antwort: wer sie vorher sieht,
-                            wählt leicht die „gute“ statt der zutreffenden Option.
-                            Danach stehen alle zum Vergleich da. */}
-                        {selected && (
-                          <motion.span
-                            className="md:shrink-0"
-                            initial={reduceMotion ? false : { opacity: 0, y: -2 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.3, ease: "easeOut" }}
-                          >
-                            {hasValues(values) ? (
-                              <ValueRow
-                                values={values}
-                                scale={scale}
-                                className="text-[11px] font-normal md:justify-end md:text-right md:text-xs"
-                              />
-                            ) : question.scopeNote ? null : (
-                              <span className="text-[11px] font-normal text-[var(--color-muted)]">
-                                keine direkten Emissionen
-                              </span>
-                            )}
-                          </motion.span>
+                      <span className="min-w-0 flex-1">
+                        {option.label}
+                        {option.regionalAverage && (
+                          <span className="ml-2 inline-flex translate-y-[-1px] items-center rounded-full bg-[var(--color-sage)] px-2 py-0.5 align-middle text-[10px] font-semibold text-[var(--color-forest)]">
+                            Südtirol-Schnitt
+                          </span>
                         )}
                       </span>
                     </motion.button>
@@ -304,34 +268,16 @@ export function ObjectContextPanel({
                 })}
               </div>
 
-              {selectedOption && selectedValues && (
-                <>
-                  <InputImpactFeedback
-                    values={selectedValues}
-                    scale={scale}
-                    impact={selectedOption.impact}
-                    totals={totals}
-                  />
-                  <p className="mt-3 text-xs leading-5 text-[var(--color-ink)] md:text-sm md:leading-6">
-                    {question.impactText}
-                  </p>
-                </>
+              {selectedOption && (
+                <EverydayFeedback
+                  questionId={question.id}
+                  values={selectedValues}
+                  saving={saving}
+                  impact={selectedOption.impact}
+                />
               )}
 
-              {/* Was die beste Antwort auf genau diese Frage noch einsparen würde. */}
-              {saving && hasValues(saving) && (
-                <div className="mt-3 flex items-start gap-2.5 rounded-[var(--radius-md)] border border-[var(--color-line)] px-3 py-2.5 md:px-4">
-                  <TrendingDown className="mt-0.5 size-4 shrink-0 text-[var(--color-forest)]" aria-hidden />
-                  <p className="text-xs leading-5">
-                    <span className="font-semibold">Noch möglich: </span>
-                    <span className="text-[var(--color-muted)]">
-                      {summarizeValues(saving, scale)} weniger im Jahr mit der sparsamsten Antwort auf diese Frage.
-                    </span>
-                  </p>
-                </div>
-              )}
-
-              <QuestionDetails question={question} locale={locale} />
+              <QuestionDetails question={question} locale={locale} values={selectedValues} />
 
               {/* Vorwärts, zurück und überspringen an einem Ort: der Weg durch
                   den Raum darf nicht davon abhängen, ob man die Szene trifft. */}

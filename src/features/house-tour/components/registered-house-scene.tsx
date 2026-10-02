@@ -17,6 +17,8 @@ type SceneProps = {
   roomId?: RoomId;
   questionIndex?: number;
   answers: Record<string, string>;
+  /** Reglerwerte: die Szene reagiert auf die Menge, nicht nur auf die Antwort. */
+  adjustments?: Record<string, number>;
   skippedQuestions: Record<string, boolean>;
   onSelectObject: (room: RoomId, index: number) => void;
   onHoverObject?: (index: number | null) => void;
@@ -24,7 +26,7 @@ type SceneProps = {
 };
 
 /** All positions use pixels in the original house. A room is only a camera crop. */
-export function RegisteredHouseScene({ roomId, questionIndex, answers, skippedQuestions, onSelectObject, onHoverObject, children }: SceneProps) {
+export function RegisteredHouseScene({ roomId, questionIndex, answers, adjustments = {}, skippedQuestions, onSelectObject, onHoverObject, children }: SceneProps) {
   const crop = roomId && roomId in layout.rooms
     ? layout.rooms[roomId as keyof typeof layout.rooms]
     : [0, 0, ...layout.size];
@@ -82,7 +84,9 @@ export function RegisteredHouseScene({ roomId, questionIndex, answers, skippedQu
               <img src={withBasePath(`/images/house-tour/full-house/objects/${item.id}.webp`)} alt="" draggable={false}
                 className={cn(styles.sprite, "pointer-events-none block h-full w-full max-w-none select-none")} />
               {/* Nur am gefragten Gegenstand: die Bewegung zeigt, worum es geht. */}
-              {roomId && active && <ObjectEffect id={item.id} answer={answers[question.id]} />}
+              {roomId && active && (
+                <ObjectEffect id={item.id} question={question} answer={answers[question.id]} adjustments={adjustments} />
+              )}
               {/* Neu gemountet bei jedem Zustandswechsel, damit das Abzeichen aufspringt. */}
               {roomId && <span key={answered ? "answered" : skipped ? "skipped" : "open"}
                 // Ragt ein Objekt über den Raumausschnitt hinaus (die Baumkrone),

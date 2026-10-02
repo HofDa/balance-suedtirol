@@ -114,6 +114,23 @@ export function everydayLine(
   };
 }
 
+/**
+ * Das ganze Jahr in denselben Bildern wie die einzelnen Antworten: Wasser in
+ * Badewannen, CO₂ in Tonnen und als Autofahrt. Leere Werte bleiben leer,
+ * statt „0 Badewannen“ zu behaupten.
+ */
+export function yearInPictures(values: AnnualValues, locale: Locale = "de") {
+  const w = tourUi[locale].everyday;
+  const f = formatters(locale);
+  const bath = values.waterL > 0 ? water(values.waterL, w, f) : null;
+  const car = values.co2Kg >= 1 ? carKm(values.co2Kg, w, f) : null;
+  return {
+    water: bath && bath.count > 0 ? bath.text(bath.count) : null,
+    co2: values.co2Kg >= 1 ? tonnes(values.co2Kg, w, f) : null,
+    car: car && car.count > 0 ? car.text(car.count) : null
+  };
+}
+
 /** Für Fragen ohne Mengenbeitrag: die Richtung in Worten statt Punkten. */
 function qualitative(impact: ScoreImpact, w: Words) {
   const nature = impact.biodiversity ?? 0;

@@ -20,7 +20,7 @@ export const kitchenRoom: TourRoom = {
         "Zählt nur auf CO₂ ein. Das Wasser hinter der Ernährung ist virtuelles Wasser aus den Anbauregionen und liegt außerhalb der Bilanzgrenze.",
       adjust: {
         label: "Fleischmahlzeiten pro Woche",
-        unit: "Mahlz.",
+        unit: "× pro Woche",
         min: 0,
         max: 21,
         step: 1,

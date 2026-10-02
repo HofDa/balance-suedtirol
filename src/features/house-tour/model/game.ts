@@ -63,6 +63,25 @@ export function discovery(state: Pick<TourState, "answers" | "cardsRead">): Disc
   return result;
 }
 
+/**
+ * Wo das CO₂ des eigenen Jahres entsteht: die beantworteten Gegenstände nach
+ * ihrem Beitrag, mit Anteil an der Summe. Nur was mindestens ein Kilogramm
+ * beiträgt; Gegenstände ohne Mengenbeitrag gehören nicht in diese Rangliste.
+ */
+export function co2Contributions(answers: Record<string, string>, adjustments: Record<string, number>) {
+  const rows = allQuestions
+    .filter((question) => answers[question.id])
+    .map((question) => ({
+      questionId: question.id,
+      co2Kg: optionValues(question.id, answers[question.id], answers, adjustments).co2Kg
+    }))
+    .filter((row) => row.co2Kg >= 1);
+  const total = rows.reduce((sum, row) => sum + row.co2Kg, 0);
+  return rows
+    .map((row) => ({ ...row, share: total > 0 ? row.co2Kg / total : 0 }))
+    .sort((a, b) => b.co2Kg - a.co2Kg);
+}
+
 // ---------------------------------------------------------------------------
 // Hebel und Was-wäre-wenn
 // ---------------------------------------------------------------------------

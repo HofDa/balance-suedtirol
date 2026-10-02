@@ -13,7 +13,8 @@ import { getProjects } from "@/data/projects";
 import { withBasePath } from "@/lib/public-path";
 import { baseScores, scoreDimensions } from "../model/scoring";
 import { formatMetric, metrics, referenceValues } from "../model/calculator";
-import { MAX_GOALS, levers as findLevers, toUnit, whatIfTotals, type Discovery, type Lever, type LeverTheme } from "../model/game";
+import { MAX_GOALS, co2Contributions, levers as findLevers, toUnit, whatIfTotals, type Discovery, type Lever, type LeverTheme } from "../model/game";
+import { round2, yearInPictures } from "../model/everyday";
 import { everydayUnits, type EverydayUnit } from "../config/game-copy";
 import { useTourI18n } from "../i18n/context";
 import type { Rich } from "../i18n/ui";
@@ -268,6 +269,7 @@ export function TourResults({
 }) {
   const i18n = useTourI18n();
   const { t, rooms } = i18n;
+  const reduceMotion = useReducedMotion();
   const r = t.results;
   const sorted = [...scoreDimensions].sort((a, b) => scores[b.id] - scores[a.id]);
   const hasAnswers = answeredCount > 0;
@@ -295,14 +297,84 @@ export function TourResults({
   const de = new Intl.NumberFormat(tag, { maximumFractionDigits: 0 });
   const de1 = new Intl.NumberFormat(tag, { maximumFractionDigits: 1 });
   const co2Text = (kg: number) => (kg >= 1000 ? `${de1.format(kg / 1000)} t` : `${de.format(kg)} kg`);
+  const year = yearInPictures(totals, locale);
+  const top = co2Contributions(answers, adjustments).slice(0, 5);
 
   return (
     <div className="mx-auto w-full max-w-4xl px-5 py-8 sm:px-8 sm:py-12">
-      {/* ① Was entdeckt wurde. Die Spielbilanz zuerst, als Satz statt als Kennzahlenwand. */}
+      {/* ① Das eigene Jahr: was die Eingaben zusammen ergeben, in denselben
+          Bildern wie unterwegs. Die Entdeckerpunkte stehen danach in einem
+          Satz — sie sind die Spur durchs Haus, nicht das Ergebnis. */}
       <h1 className="font-display text-[length:var(--text-display)] leading-[var(--leading-display)] [text-wrap:balance]">
-        {isComplete ? r.allFound : r.someFound(progress.found, progress.total)}
+        {r.yearTitle}
       </h1>
-      <p className="mt-4 max-w-[58ch] text-base leading-7 text-[var(--color-muted)]">
+      {hasAnswers && !isComplete && (
+        <p className="mt-3 max-w-[58ch] text-sm leading-6 text-[var(--color-muted)]">
+          {r.yearInterim(progress.found, progress.total)}
+        </p>
+      )}
+      {hasAnswers && (year.water || year.co2) && (
+        <dl className="mt-6 grid gap-3 sm:grid-cols-2">
+          {year.water && (
+            <div className="rounded-[var(--radius-xl)] border border-[var(--color-line)] bg-white p-5">
+              <dt className="text-sm font-semibold text-[var(--color-muted)]">{r.yearWater}</dt>
+              <dd className="mt-2">
+                <span className="block text-2xl font-semibold leading-tight tracking-[-0.02em] md:text-3xl">{year.water}</span>
+                <span className="mt-1.5 block text-sm leading-5 text-[var(--color-muted)]">
+                  {r.waterExact(de.format(round2(totals.waterL)))}
+                </span>
+              </dd>
+            </div>
+          )}
+          {year.co2 && (
+            <div className="rounded-[var(--radius-xl)] border border-[var(--color-line)] bg-white p-5">
+              <dt className="text-sm font-semibold text-[var(--color-muted)]">{r.yearCo2}</dt>
+              <dd className="mt-2">
+                <span className="block text-2xl font-semibold leading-tight tracking-[-0.02em] md:text-3xl">{year.co2}</span>
+                {year.car && (
+                  <span className="mt-1.5 block text-sm leading-5 text-[var(--color-muted)]">{r.co2Compare(year.car)}</span>
+                )}
+              </dd>
+            </div>
+          )}
+        </dl>
+      )}
+
+      {top.length > 1 && (
+        <section className="mt-8" aria-labelledby="results-top">
+          <h2 id="results-top" className="text-base font-semibold md:text-lg">{r.topTitle}</h2>
+          <p className="mt-1 max-w-[58ch] text-sm leading-6 text-[var(--color-muted)]">{r.topLead}</p>
+          {/* Die Balken zeigen den Anteil an der ganzen Summe, nicht am größten
+              Posten: ein Drittel soll aussehen wie ein Drittel. */}
+          <ol className="mt-4 grid gap-3.5">
+            {top.map((row, index) => {
+              const label = t.topics[row.questionId] ?? i18nLabel(row.questionId);
+              const percent = Math.round(row.share * 100);
+              return (
+                <li key={row.questionId}>
+                  <span className="sr-only">{r.topRowAria(label, co2Text(row.co2Kg), percent)}</span>
+                  <div className="flex items-baseline justify-between gap-3 text-sm" aria-hidden>
+                    <span className="min-w-0 truncate font-semibold">{label}</span>
+                    <span className="shrink-0 tabular-nums text-[var(--color-muted)]">
+                      {co2Text(row.co2Kg)} · {percent} %
+                    </span>
+                  </div>
+                  <div className="mt-1.5 h-2 overflow-hidden rounded-full bg-[var(--color-ink)]/8" aria-hidden>
+                    <motion.div
+                      className="h-full rounded-[4px] bg-[var(--color-forest)]"
+                      initial={reduceMotion ? false : { width: 0 }}
+                      animate={{ width: `${Math.max(1, row.share * 100)}%` }}
+                      transition={{ duration: reduceMotion ? 0 : 0.6, ease: [0.16, 1, 0.3, 1], delay: reduceMotion ? 0 : 0.1 + index * 0.06 }}
+                    />
+                  </div>
+                </li>
+              );
+            })}
+          </ol>
+        </section>
+      )}
+
+      <p className="mt-8 max-w-[58ch] text-sm leading-6 text-[var(--color-muted)]">
         <RichText parts={r.summary({ points: progress.points, cards: progress.cardsRead, total: progress.total })} />
       </p>
       <div className="mt-5 flex flex-wrap gap-2">

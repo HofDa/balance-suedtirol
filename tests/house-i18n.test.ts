@@ -52,6 +52,7 @@ test("Rechenwege decken jede Frage in allen Sprachen ab", () => {
   for (const locale of ["de", ...locales] as const) {
     const t = tourUi[locale];
     assert.deepEqual(Object.keys(t.basis).sort(), Object.keys(questionBasis).sort(), `${locale} basis`);
+    assert.deepEqual(Object.keys(t.topics).sort(), availableRooms.flatMap((room) => room.questions.map((q) => q.id)).sort(), `${locale} topics`);
   }
 });
 

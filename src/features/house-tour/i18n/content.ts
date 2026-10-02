@@ -301,7 +301,7 @@ const it: Record<RoomId, RoomText> = {
           "Conta solo sulla CO₂. L’acqua dietro l’alimentazione è acqua virtuale delle regioni di coltivazione e resta fuori dal confine di bilancio.",
         adjust: {
           label: "Pasti con carne a settimana",
-          unit: "pasti"
+          unit: "× a settimana"
         },
         options: {
           "diet-meat": { label: "Carne quasi ogni giorno" },
@@ -717,7 +717,7 @@ const en: Record<RoomId, RoomText> = {
           "Counts only towards CO₂. The water behind food is virtual water from the growing regions and lies outside the boundary.",
         adjust: {
           label: "Meat meals per week",
-          unit: "meals"
+          unit: "× a week"
         },
         options: {
           "diet-meat": { label: "Meat almost every day" },

@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { BookOpen, Check, ChevronLeft, ChevronRight, MousePointer2, SkipForward } from "lucide-react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { BookOpen, Check, ChevronLeft, ChevronRight, MousePointer2, Pencil, SkipForward } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import type { Locale } from "@/config/site";
@@ -10,7 +10,7 @@ import { Label } from "@/components/ui/label";
 import { POINTS } from "../model/game";
 import { useTourI18n } from "../i18n/context";
 import { EverydayFeedback } from "./metric-readout";
-import { AnswerInput, keepsScrollStill } from "./answer-input";
+import { AmountStep, KindStep, answerSummary, iconFor, stepsFor, type Step } from "./answer-input";
 import { ProgressSummary } from "./panel-progress";
 import { RoomCompleteView } from "./room-complete-view";
 import { RoomNavigation } from "./room-navigation";
@@ -36,6 +36,40 @@ function CardButton({ read, onOpen }: { read: boolean; onOpen: () => void }) {
       <span className="flex-1">{t.card.open}</span>
       {!read && <span className="text-xs font-semibold tabular-nums text-[var(--color-forest)]">+{POINTS.card}</span>}
     </button>
+  );
+}
+
+/** Die gewählte Art im Rückverweis, im selben Symbol wie in der Auswahl. */
+function KindIcon({ questionId, optionId }: { questionId: string; optionId: string }) {
+  const Icon = iconFor(questionId, optionId);
+  return (
+    <span className="grid size-7 shrink-0 place-items-center rounded-[var(--radius-md)] bg-[var(--color-forest)] text-white" aria-hidden>
+      <Icon className="size-4" strokeWidth={1.75} />
+    </span>
+  );
+}
+
+/** Wo der Gegenstand steht: die Schritte als Striche, der aktuelle benannt. */
+function StepTrack({ steps, current }: { steps: Step[]; current: number }) {
+  const { t } = useTourI18n();
+  return (
+    <span className="flex items-center gap-2 text-[11px] font-semibold text-[var(--color-forest)]">
+      <span className="flex gap-1" aria-hidden>
+        {steps.map((item, index) => (
+          <span
+            key={item}
+            className={cn(
+              "h-1.5 rounded-[var(--radius-sm)] transition-all duration-300",
+              index === current ? "w-6 bg-[var(--color-forest)]" : index < current ? "w-2 bg-[var(--color-forest)]/55" : "w-2 bg-[var(--color-ink)]/15"
+            )}
+          />
+        ))}
+      </span>
+      <span>
+        <span className="sr-only">{t.steps.of(current + 1, steps.length)}: </span>
+        {t.steps[steps[current]]}
+      </span>
+    </span>
   );
 }
 
@@ -105,44 +139,75 @@ export function ObjectContextPanel({
   const { t } = useTourI18n();
   const [cardOpen, setCardOpen] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    scrollRef.current?.scrollTo({ top: 0 });
-  }, [question.id]);
+
+  // Ein Gegenstand in Schritten, einer pro Bildschirm: Art, Menge, Ergebnis.
+  // Wer zu einem beantworteten Gegenstand zurückkehrt, landet beim Ergebnis.
+  const steps = useMemo(() => stepsFor(question), [question]);
+  const initialStep: Step = answers[question.id] ? "result" : steps[0];
+  const [stepFor, setStepFor] = useState<{ id: string; step: Step }>({ id: question.id, step: initialStep });
+  if (stepFor.id !== question.id) setStepFor({ id: question.id, step: initialStep });
+  const step = stepFor.id === question.id ? stepFor.step : initialStep;
+  const stepIndex = steps.indexOf(step);
+  const goStep = useCallback((next: Step) => setStepFor({ id: question.id, step: next }), [question.id]);
+
+  // Die Art ist mit einem Tipp beantwortet; kurz danach geht es zur Menge,
+  // damit der gewählte Zustand noch zu sehen ist.
+  const advanceTimer = useRef<number | undefined>(undefined);
+  useEffect(() => () => window.clearTimeout(advanceTimer.current), []);
+  const answerAndAdvance = useCallback((questionId: string, optionId: string) => {
+    onAnswer(questionId, optionId);
+    if (step !== "kind") return;
+    const next = steps[steps.indexOf("kind") + 1];
+    window.clearTimeout(advanceTimer.current);
+    advanceTimer.current = window.setTimeout(
+      () => setStepFor((current) => (current.id === questionId ? { id: questionId, step: next } : current)),
+      reduceMotion ? 0 : 240
+    );
+  }, [onAnswer, step, steps, reduceMotion]);
+
+  const nextStep = () => {
+    const next = steps[stepIndex + 1];
+    if (next) goStep(next);
+    else onContinue();
+  };
+  const previousStep = () => {
+    if (stepIndex > 0) goStep(steps[stepIndex - 1]);
+    else onBack();
+  };
 
   const {
     direction, slide, choose, roomHandled, roomDone, moreObjectsOpen,
     selected, selectedOption, onTouchStart, onTouchEnd
   } = useQuestionPanelInteraction({
-    room, question, questionIndex, objectOpen, answers, skippedQuestions, onAnswer, onContinue, onGoTo, reduceMotion
+    room, question, questionIndex, objectOpen, answers, skippedQuestions,
+    onAnswer: answerAndAdvance,
+    onContinue: nextStep,
+    onGoTo,
+    reduceMotion,
+    // Ziffern wählen dort, wo Antworten zur Wahl stehen: bei der Art und bei
+    // den Vorlagen einer reinen Mengenfrage.
+    allowDigits: step === "kind" || (step === "amount" && !steps.includes("kind"))
   });
   const { selectedValues, saving } = useQuestionMetrics(question, answers, adjustments);
-  const firstEver = Object.keys(answers).length === 0;
-
-  // Nach der ersten Antwort rückt ins Bild, was als Nächstes zu tun ist: bei
-  // einer Menge die gewählte Option mit ihrer Eingabe, sonst die Wirkung
-  // darunter. In der Essenswoche ist die Eingabe schon da; dort würde jeder
-  // Sprung mitten im Tippen stören. Wer zurückkehrt, beginnt oben.
-  const feedbackRef = useRef<HTMLDivElement>(null);
-  const activeOptionRef = useRef<HTMLDivElement>(null);
-  const shownAnswer = useRef({ id: question.id, selected });
+  // Jeder Schritt und der Raumabschluss beginnen oben. Der Abschluss folgt
+  // auf den letzten Gegenstand derselben Frage und erbte sonst dessen
+  // Scrollposition: die Überschrift stand abgeschnitten über dem Rand.
+  const showingComplete = roomDone && !objectOpen;
   useEffect(() => {
-    const previous = shownAnswer.current;
-    shownAnswer.current = { id: question.id, selected };
-    if (!selected || previous.id !== question.id || previous.selected) return;
-    if (keepsScrollStill(question.id)) return;
-    const target = question.adjust ? activeOptionRef.current : feedbackRef.current;
-    target?.scrollIntoView({ block: "nearest", behavior: reduceMotion ? "auto" : "smooth" });
-  }, [question.id, question.adjust, selected, reduceMotion]);
+    scrollRef.current?.scrollTo({ top: 0 });
+  }, [question.id, step, showingComplete]);
+  const firstEver = Object.keys(answers).length === 0;
+  const hasKind = steps.includes("kind");
 
   const openCard = () => {
     setCardOpen(true);
     onReadCard(question.id);
   };
 
-  const back = questionIndex > 0 && (
+  const back = (questionIndex > 0 || stepIndex > 0) && (
     <button
       type="button"
-      onClick={onBack}
+      onClick={previousStep}
       className={quietButton}
     >
       <ChevronLeft className="size-4" aria-hidden />
@@ -177,6 +242,7 @@ export function ObjectContextPanel({
               key={`${room.id}-complete`}
               room={room}
               answers={answers}
+              adjustments={adjustments}
               cardsRead={cardsRead}
               nextRoom={nextRoom}
               allComplete={allComplete}
@@ -210,7 +276,7 @@ export function ObjectContextPanel({
             </motion.div>
           ) : (
             <motion.div
-              key={question.id}
+              key={`${question.id}-${step}`}
               custom={direction}
               variants={slide}
               initial={reduceMotion ? false : "enter"}
@@ -218,51 +284,100 @@ export function ObjectContextPanel({
               exit={reduceMotion ? undefined : "exit"}
               className="mx-auto max-w-xl"
             >
-              <Label size="dense" className="mb-2">
-                {room.title} · {questionIndex + 1}/{room.questions.length}
-              </Label>
+              <div className="mb-3 flex min-w-0 items-center justify-between gap-3">
+                <Label size="dense" className="shrink-0">
+                  {room.title} · {questionIndex + 1}/{room.questions.length}
+                </Label>
+                <StepTrack steps={steps} current={stepIndex} />
+              </div>
 
-              <h2 id="question-title" className="text-lg font-semibold leading-tight tracking-[-0.025em] md:text-2xl md:leading-snug">
-                {question.title}
-              </h2>
-              {firstEver && (
-                <p className="mt-1.5 text-xs leading-5 text-[var(--color-muted)]">{t.answerHint}</p>
+              {step === "kind" && (
+                <>
+                  <h2 id="step-title" className="text-lg font-semibold leading-tight tracking-[-0.025em] md:text-2xl md:leading-snug">
+                    {question.title}
+                  </h2>
+                  {firstEver && <p className="mt-1.5 text-xs leading-5 text-[var(--color-muted)]">{t.answerHint}</p>}
+                  <KindStep question={question} selected={selected} onChoose={choose} />
+                  <p className="mt-4 hidden text-[11px] text-[var(--color-muted)] md:block">
+                    {t.panel.keys.keys} <kbd className="font-semibold tabular-nums">1</kbd>–
+                    <kbd className="font-semibold tabular-nums">{question.options.length}</kbd> {t.panel.keys.choose}{" "}
+                    <kbd className="font-semibold">Enter</kbd> {t.panel.keys.next}
+                  </p>
+                </>
               )}
-              <p className="mt-5 hidden text-[11px] text-[var(--color-muted)] md:block">
-                {t.panel.keys.keys} <kbd className="font-semibold tabular-nums">1</kbd>–
-                <kbd className="font-semibold tabular-nums">{question.options.length}</kbd> {t.panel.keys.choose}{" "}
-                <kbd className="font-semibold">Enter</kbd> {t.panel.keys.next}
-              </p>
 
-              <AnswerInput
-                question={question}
-                selected={selected}
-                adjustments={adjustments}
-                activeOptionRef={activeOptionRef}
-                onChoose={choose}
-                onAnswer={onAnswer}
-                onAdjust={onAdjust}
-                onClearAdjust={onClearAdjust}
-              />
+              {step === "amount" && question.adjust && (
+                <>
+                  {hasKind && selectedOption && (
+                    <button
+                      type="button"
+                      onClick={() => goStep("kind")}
+                      className={cn(
+                        "mb-2 inline-flex min-h-11 max-w-full items-center gap-2 rounded-[var(--radius-md)] text-sm font-semibold text-[var(--color-forest)] hover:text-[var(--color-ink)]",
+                        focusRingTool
+                      )}
+                    >
+                      <KindIcon questionId={question.id} optionId={selectedOption.id} />
+                      <span className="truncate">{selectedOption.label}</span>
+                      <span className="shrink-0 text-xs font-medium text-[var(--color-muted)] underline underline-offset-2">{t.steps.edit}</span>
+                    </button>
+                  )}
+                  <h2 id="step-title" className="text-lg font-semibold leading-tight tracking-[-0.025em] md:text-2xl md:leading-snug">
+                    {hasKind ? question.adjust.label : question.title}
+                  </h2>
+                  {firstEver && !hasKind && <p className="mt-1.5 text-xs leading-5 text-[var(--color-muted)]">{t.answerHint}</p>}
+                  <AmountStep
+                    question={question}
+                    selected={selected}
+                    adjustments={adjustments}
+                    hideLabel={hasKind}
+                    onChoose={choose}
+                    onAnswer={onAnswer}
+                    onAdjust={onAdjust}
+                    onClearAdjust={onClearAdjust}
+                  />
+                </>
+              )}
 
-              {selectedOption && (
-                <div ref={feedbackRef} className="scroll-mb-24 md:scroll-mb-4">
+              {step === "result" && selectedOption && (
+                <>
+                  <h2 id="step-title" className="sr-only">{question.title}: {t.steps.result}</h2>
+                  <div className="flex items-center justify-between gap-3">
+                    <p className="min-w-0 text-sm leading-6">
+                      <span className="text-[var(--color-muted)]">{t.steps.yourAnswer}: </span>
+                      <span className="font-semibold">{answerSummary(question, selectedOption.id, adjustments, locale)}</span>
+                    </p>
+                    <button
+                      type="button"
+                      onClick={() => goStep(steps[0])}
+                      className={cn("-mr-2 inline-flex min-h-11 shrink-0 items-center gap-1.5 rounded-[var(--radius-md)] px-2 text-xs font-semibold text-[var(--color-forest)] hover:bg-[var(--color-ink)]/5", focusRingTool)}
+                    >
+                      <Pencil className="size-3.5" aria-hidden />
+                      {t.steps.edit}
+                    </button>
+                  </div>
                   <EverydayFeedback
                     questionId={question.id}
                     values={selectedValues}
                     saving={saving}
                     impact={selectedOption.impact}
                     locale={locale}
+                    size="lg"
                   />
                   <CardButton read={Boolean(cardsRead[question.id])} onOpen={openCard} />
-                </div>
+                </>
               )}
 
               <div className={footerClass}>
                 {back}
-                {selected ? (
-                  <button type="button" onClick={onContinue} className={primaryButton}>
+                {step === "result" ? (
+                  <button type="button" autoFocus onClick={onContinue} className={primaryButton}>
                     {moreObjectsOpen ? t.continue : t.finishRoom}
+                    <ChevronRight className="size-4" aria-hidden />
+                  </button>
+                ) : selected ? (
+                  <button type="button" onClick={nextStep} className={primaryButton}>
+                    {t.continue}
                     <ChevronRight className="size-4" aria-hidden />
                   </button>
                 ) : (

@@ -7,17 +7,21 @@ import { focusRingTool } from "@/components/ui/focus";
 import { useTourI18n } from "../i18n/context";
 import type { LocalizedRoom } from "../i18n/localize";
 import { POINTS } from "../model/game";
+import { optionValues } from "../model/calculator";
+import { everydayLine } from "../model/everyday";
 import type { TourRoom } from "../model/types";
 import { objectImage } from "./game/knowledge-card";
 
 /**
- * Raumabschluss als Runde im Rückblick: was entdeckt wurde und welche
+ * Raumabschluss als Runde im Rückblick: je Gegenstand die eigene Antwort in
+ * dem Satz aus dem Alltag, den man beim Eingeben gesehen hat, und welche
  * Karten gesammelt sind. Die Bilanz steht hier bewusst nicht
  * mehr; sie kommt am Ende mit den Hebeln, wo man mit ihr etwas anfangen kann.
  */
 export function RoomCompleteView({
   room,
   answers,
+  adjustments,
   cardsRead,
   nextRoom,
   allComplete,
@@ -28,6 +32,7 @@ export function RoomCompleteView({
 }: {
   room: TourRoom | LocalizedRoom;
   answers: Record<string, string>;
+  adjustments: Record<string, number>;
   cardsRead: Record<string, true>;
   nextRoom?: TourRoom;
   allComplete: boolean;
@@ -36,13 +41,18 @@ export function RoomCompleteView({
   onNextRoom: () => void;
   onHouse: () => void;
 }) {
-  const { t } = useTourI18n();
+  const { t, locale } = useTourI18n();
   const completion = "completion" in room ? room.completion : room.description;
   const rows = room.questions.map((question) => {
-    const answered = Boolean(answers[question.id]);
+    const answerId = answers[question.id];
+    const answered = Boolean(answerId);
     const read = Boolean(cardsRead[question.id]);
     const points = (answered ? POINTS.found : 0) + (read ? POINTS.card : 0);
-    return { question, answered, read, points };
+    const option = question.options.find((item) => item.id === answerId);
+    const line = option
+      ? everydayLine(question.id, optionValues(question.id, option.id, answers, adjustments), null, option.impact, locale).headline
+      : null;
+    return { question, answered, read, points, line };
   });
   const roomPoints = rows.reduce((sum, row) => sum + row.points, 0);
 
@@ -66,7 +76,7 @@ export function RoomCompleteView({
       <p className="mt-2 text-sm leading-6 text-[var(--color-muted)]">{completion}</p>
 
       <ul className="mt-5 grid gap-1.5">
-        {rows.map(({ question, answered, read }, index) => (
+        {rows.map(({ question, answered, read, line }, index) => (
           <motion.li
             key={question.id}
             initial={reduceMotion ? false : { opacity: 0, x: -8 }}
@@ -76,7 +86,10 @@ export function RoomCompleteView({
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={objectImage(question.id)} alt="" className="size-10 shrink-0 object-contain" />
-            <span className="min-w-0 flex-1 truncate text-sm font-semibold">{question.sceneLabel}</span>
+            <span className="min-w-0 flex-1">
+              <span className="block truncate text-sm font-semibold">{question.sceneLabel}</span>
+              {line && <span className="mt-0.5 block text-xs leading-4 text-[var(--color-muted)]">{line}</span>}
+            </span>
             {!answered ? (
               <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-[var(--color-muted)]">
                 <SkipForward className="size-3" aria-hidden />

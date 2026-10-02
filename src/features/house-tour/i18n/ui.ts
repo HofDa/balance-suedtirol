@@ -106,7 +106,18 @@ export type TourUi = {
   landmarks: Record<LandmarkKey, (n: string, one: boolean) => string>;
   /** Heizung in der Einheit der Rechnung, Strom gegen den Südtiroler Durchschnitt. */
   bill: { gas: (n: string) => string; oil: (n: string) => string; electricity: (n: string) => string };
+  /** Wovon ein Gegenstand handelt, für Ranglisten: „Autofahrten“ statt „Jahreswege ansehen“. */
+  topics: Record<string, string>;
   presets: string;
+  /** Die Schritte eines Gegenstands: Art, Menge, Ergebnis. */
+  steps: {
+    kind: string;
+    amount: string;
+    result: string;
+    of: (index: number, total: number) => string;
+    yourAnswer: string;
+    edit: string;
+  };
   mealWeek: {
     days: string[];
     meals: string[];
@@ -150,8 +161,15 @@ export type TourUi = {
     viewHouse: string;
   };
   results: {
-    allFound: string;
-    someFound: (found: number, total: number) => string;
+    yearTitle: string;
+    yearInterim: (found: number, total: number) => string;
+    yearWater: string;
+    waterExact: (liters: string) => string;
+    yearCo2: string;
+    co2Compare: (phrase: string) => string;
+    topTitle: string;
+    topLead: string;
+    topRowAria: (label: string, value: string, percent: number) => string;
     summary: (p: { points: number; cards: number; total: number }) => Rich;
     openFolder: string;
     continueRoom: (room: string) => string;
@@ -452,7 +470,35 @@ const de: TourUi = {
     oil: (n) => `≈ ${n} Liter Heizöl`,
     electricity: (n) => `≈ ${n}× der Südtiroler Durchschnitt pro Kopf`
   },
+  topics: {
+    "bedroom-heating": "Heizung",
+    "bedroom-textiles": "Kleidung",
+    "bedroom-standby": "Standby",
+    "bath-shower": "Duschen",
+    "bath-water-heating": "Übriges Warmwasser",
+    "bath-toilet": "Toilettenspülung",
+    "living-tv-streaming": "Haushaltsstrom",
+    "living-lighting": "Beleuchtung",
+    "living-plants": "Zimmerpflanzen",
+    "mobility-long": "Fernreisen",
+    "kitchen-diet": "Ernährung",
+    "kitchen-origin": "Herkunft der Lebensmittel",
+    "kitchen-waste": "Lebensmittelabfall",
+    "mobility-short": "Kurze Wege",
+    "mobility-km": "Autofahrten",
+    "garden-ground": "Gartenfläche",
+    "garden-plants": "Gartenpflanzen",
+    "garden-structures": "Lebensräume im Garten"
+  },
   presets: "Schnell ausfüllen",
+  steps: {
+    kind: "Art",
+    amount: "Menge",
+    result: "Ergebnis",
+    of: (index, total) => `Schritt ${index} von ${total}`,
+    yourAnswer: "Deine Angabe",
+    edit: "Ändern"
+  },
   mealWeek: {
     days: ["Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"],
     meals: ["Früh", "Mittag", "Abend"],
@@ -496,8 +542,15 @@ const de: TourUi = {
     viewHouse: "Haus ansehen"
   },
   results: {
-    allFound: "Das ganze Haus ist entdeckt.",
-    someFound: (found, total) => `${found} von ${total} Gegenständen entdeckt.`,
+    yearTitle: "Dein Jahr zu Hause",
+    yearInterim: (found, total) => `Zwischenstand aus ${found} von ${total} Gegenständen — mit jedem weiteren wird das Bild vollständiger.`,
+    yearWater: "Leitungswasser",
+    waterExact: (liters) => `${liters} Liter im Jahr`,
+    yearCo2: "Klimawirkung",
+    co2Compare: (phrase) => `so viel wie ${phrase}`,
+    topTitle: "Wo das meiste CO₂ entsteht",
+    topLead: "Deine Gegenstände mit dem größten Anteil an deiner erfassten Klimawirkung.",
+    topRowAria: (label, value, percent) => `${label}: ${value} CO₂ im Jahr, ${percent} % deiner erfassten Klimawirkung`,
     summary: ({ points, cards, total }) => [
       { b: `${points} Entdeckerpunkte` },
       " — und ",
@@ -684,7 +737,35 @@ const it: TourUi = {
     oil: (n) => `≈ ${n} litri di gasolio da riscaldamento`,
     electricity: (n) => `≈ ${n}× la media altoatesina pro capite`
   },
+  topics: {
+    "bedroom-heating": "Riscaldamento",
+    "bedroom-textiles": "Abbigliamento",
+    "bedroom-standby": "Standby",
+    "bath-shower": "Doccia",
+    "bath-water-heating": "Altra acqua calda",
+    "bath-toilet": "Sciacquone",
+    "living-tv-streaming": "Elettricità domestica",
+    "living-lighting": "Illuminazione",
+    "living-plants": "Piante d’appartamento",
+    "mobility-long": "Viaggi lunghi",
+    "kitchen-diet": "Alimentazione",
+    "kitchen-origin": "Provenienza del cibo",
+    "kitchen-waste": "Spreco alimentare",
+    "mobility-short": "Tragitti brevi",
+    "mobility-km": "Viaggi in auto",
+    "garden-ground": "Superficie del giardino",
+    "garden-plants": "Piante del giardino",
+    "garden-structures": "Habitat in giardino"
+  },
   presets: "Compila in fretta",
+  steps: {
+    kind: "Tipo",
+    amount: "Quantità",
+    result: "Risultato",
+    of: (index, total) => `Passo ${index} di ${total}`,
+    yourAnswer: "La tua risposta",
+    edit: "Modifica"
+  },
   mealWeek: {
     days: ["Lu", "Ma", "Me", "Gi", "Ve", "Sa", "Do"],
     meals: ["Colaz.", "Pranzo", "Cena"],
@@ -728,8 +809,15 @@ const it: TourUi = {
     viewHouse: "Guarda la casa"
   },
   results: {
-    allFound: "Hai scoperto tutta la casa.",
-    someFound: (found, total) => `${found} di ${total} oggetti scoperti.`,
+    yearTitle: "Il tuo anno a casa",
+    yearInterim: (found, total) => `Risultato parziale da ${found} di ${total} oggetti — ogni oggetto in più completa il quadro.`,
+    yearWater: "Acqua del rubinetto",
+    waterExact: (liters) => `${liters} litri all’anno`,
+    yearCo2: "Impatto sul clima",
+    co2Compare: (phrase) => `quanto ${phrase}`,
+    topTitle: "Dove nasce più CO₂",
+    topLead: "I tuoi oggetti con la quota maggiore del tuo impatto sul clima rilevato.",
+    topRowAria: (label, value, percent) => `${label}: ${value} di CO₂ all’anno, ${percent} % del tuo impatto sul clima rilevato`,
     summary: ({ points, cards, total }) => [
       { b: `${points} punti scoperta` },
       " — e ",
@@ -916,7 +1004,35 @@ const en: TourUi = {
     oil: (n) => `≈ ${n} litres of heating oil`,
     electricity: (n) => `≈ ${n}× the South Tyrol average per person`
   },
+  topics: {
+    "bedroom-heating": "Heating",
+    "bedroom-textiles": "Clothing",
+    "bedroom-standby": "Standby",
+    "bath-shower": "Showering",
+    "bath-water-heating": "Other hot water",
+    "bath-toilet": "Toilet flushing",
+    "living-tv-streaming": "Household electricity",
+    "living-lighting": "Lighting",
+    "living-plants": "Houseplants",
+    "mobility-long": "Long-distance travel",
+    "kitchen-diet": "Diet",
+    "kitchen-origin": "Food origin",
+    "kitchen-waste": "Food waste",
+    "mobility-short": "Short trips",
+    "mobility-km": "Car journeys",
+    "garden-ground": "Garden area",
+    "garden-plants": "Garden plants",
+    "garden-structures": "Garden habitats"
+  },
   presets: "Quick fill",
+  steps: {
+    kind: "Kind",
+    amount: "Amount",
+    result: "Result",
+    of: (index, total) => `Step ${index} of ${total}`,
+    yourAnswer: "Your answer",
+    edit: "Change"
+  },
   mealWeek: {
     days: ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"],
     meals: ["Breakf.", "Lunch", "Dinner"],
@@ -960,8 +1076,15 @@ const en: TourUi = {
     viewHouse: "View house"
   },
   results: {
-    allFound: "You’ve discovered the whole house.",
-    someFound: (found, total) => `${found} of ${total} objects discovered.`,
+    yearTitle: "Your year at home",
+    yearInterim: (found, total) => `Interim result from ${found} of ${total} objects — every further one completes the picture.`,
+    yearWater: "Tap water",
+    waterExact: (liters) => `${liters} litres a year`,
+    yearCo2: "Climate impact",
+    co2Compare: (phrase) => `as much as ${phrase}`,
+    topTitle: "Where most of the CO₂ comes from",
+    topLead: "Your objects with the largest share of your recorded climate impact.",
+    topRowAria: (label, value, percent) => `${label}: ${value} CO₂ a year, ${percent} % of your recorded climate impact`,
     summary: ({ points, cards, total }) => [
       { b: `${points} discovery points` },
       " — and ",

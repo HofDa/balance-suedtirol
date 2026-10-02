@@ -22,13 +22,16 @@ export function EverydayFeedback({
   values,
   saving,
   impact,
-  locale = "de"
+  locale = "de",
+  size = "md"
 }: {
   questionId: string;
   values: AnnualValues | null;
   saving: AnnualValues | null;
   impact: ScoreImpact;
   locale?: Locale;
+  /** `lg` ist der Ergebnisschritt: der Satz ist dort die Hauptsache. */
+  size?: "md" | "lg";
 }) {
   const reduceMotion = useReducedMotion();
   const line = everydayLine(questionId, values, saving, impact, locale);
@@ -38,17 +41,25 @@ export function EverydayFeedback({
       initial={reduceMotion ? false : { opacity: 0, y: 4 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3, ease: "easeOut" }}
-      className="mt-3 rounded-[var(--radius-lg)] bg-[var(--color-sage)]/45 px-3 py-3 md:mt-4 md:px-4"
+      className={cn(
+        "rounded-[var(--radius-lg)] bg-[var(--color-sage)]/45",
+        size === "lg" ? "mt-4 px-4 py-5 md:px-5 md:py-6" : "mt-3 px-3 py-3 md:mt-4 md:px-4"
+      )}
       aria-live="polite"
     >
-      <p className="text-sm font-semibold leading-5 text-[var(--color-forest)] md:text-base md:leading-6">
+      <p
+        className={cn(
+          "font-semibold text-[var(--color-forest)] [text-wrap:balance]",
+          size === "lg" ? "text-xl leading-7 tracking-[-0.02em] md:text-2xl md:leading-8" : "text-sm leading-5 md:text-base md:leading-6"
+        )}
+      >
         {line.headline}
       </p>
       {line.detail && (
-        <p className="mt-1 text-xs leading-5 text-[var(--color-ink)]/80">{line.detail}</p>
+        <p className={cn("text-[var(--color-ink)]/80", size === "lg" ? "mt-2 text-sm leading-6" : "mt-1 text-xs leading-5")}>{line.detail}</p>
       )}
       {line.saving && (
-        <p className="mt-1 text-xs leading-5 text-[var(--color-muted)]">{line.saving}</p>
+        <p className={cn("text-[var(--color-muted)]", size === "lg" ? "mt-1 text-sm leading-6" : "mt-1 text-xs leading-5")}>{line.saving}</p>
       )}
     </motion.section>
   );
@@ -67,7 +78,9 @@ export function AdjustControl({
   isCustom,
   onChange,
   onReset,
-  note
+  note,
+  unset = false,
+  hideLabel = false
 }: {
   adjust: QuestionAdjust;
   questionId: string;
@@ -77,6 +90,13 @@ export function AdjustControl({
   onReset?: () => void;
   /** Ein Vergleich zur eingestellten Menge, etwa „≈ 8× Bozen–Rom und zurück“. */
   note?: string | null;
+  /**
+   * Noch nichts eingegeben. Der Regler steht dann am Anfang, aber „0 kWh“
+   * daneben sähe aus wie eine Antwort; deshalb ein Strich und ein blasser Griff.
+   */
+  unset?: boolean;
+  /** Die Überschrift des Schritts nennt die Größe schon; dann nur für Screenreader. */
+  hideLabel?: boolean;
 }) {
   const sliderId = `adjust-${questionId}`;
   const decimals = adjust.step < 1 ? 1 : 0;
@@ -99,7 +119,7 @@ export function AdjustControl({
   return (
     <div className="px-3 pb-3 pt-1 md:px-4">
       <div className="flex items-baseline justify-between gap-3">
-        <label htmlFor={sliderId} className="text-xs font-semibold text-[var(--color-ink)] md:text-sm">
+        <label htmlFor={sliderId} className={cn("text-xs font-semibold text-[var(--color-ink)] md:text-sm", hideLabel && "sr-only")}>
           {adjust.label}
         </label>
         {isCustom && onReset && (
@@ -133,6 +153,7 @@ export function AdjustControl({
           onChange={(event) => onChange(Number(event.target.value))}
           className={cn(
             "h-10 min-w-0 flex-1 cursor-pointer appearance-none bg-transparent",
+            unset && "opacity-45",
             // Spur und Griff explizit, sonst erbt jeder Browser sein eigenes Blau.
             "[&::-webkit-slider-runnable-track]:h-1.5 [&::-webkit-slider-runnable-track]:rounded-full [&::-webkit-slider-runnable-track]:bg-[var(--color-ink)]/12",
             "[&::-webkit-slider-thumb]:mt-[-9px] [&::-webkit-slider-thumb]:size-6 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-white [&::-webkit-slider-thumb]:bg-[var(--color-forest)] [&::-webkit-slider-thumb]:shadow-md",
@@ -146,7 +167,7 @@ export function AdjustControl({
           <Plus className="size-4" aria-hidden />
         </button>
         <output htmlFor={sliderId} className="min-w-[4.5rem] shrink-0 text-right text-base font-semibold tabular-nums">
-          {display}{" "}
+          {unset ? "–" : display}{" "}
           <span className="text-[11px] font-medium text-[var(--color-muted)]">{adjust.unit}</span>
         </output>
       </div>
@@ -157,7 +178,7 @@ export function AdjustControl({
           ≈ {(quantity * adjust.base.factor).toLocaleString(localeTags[locale], { maximumFractionDigits: 1 })} {adjust.base.unit}
         </p>
       )}
-      {note && (
+      {note && !unset && (
         <p className="mt-1 text-[11px] font-semibold tabular-nums text-[var(--color-forest)]">{note}</p>
       )}
       {adjust.hint && (

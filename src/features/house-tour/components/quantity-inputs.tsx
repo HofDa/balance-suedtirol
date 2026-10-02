@@ -41,6 +41,7 @@ export function TapCounter({
   columns,
   perTile = 1,
   grow = false,
+  hideLabel = false,
   onChange,
   onReset
 }: {
@@ -53,6 +54,8 @@ export function TapCounter({
   columns: number;
   perTile?: number;
   grow?: boolean;
+  /** Die Überschrift des Schritts nennt die Größe schon; dann nur für Screenreader. */
+  hideLabel?: boolean;
   onChange: (quantity: number) => void;
   onReset?: () => void;
 }) {
@@ -76,7 +79,7 @@ export function TapCounter({
   return (
     <div className="px-3 pb-3 pt-1 md:px-4">
       <div className="flex items-baseline justify-between gap-3">
-        <span id={labelId} className="text-xs font-semibold text-[var(--color-ink)] md:text-sm">
+        <span id={labelId} className={cn("text-xs font-semibold text-[var(--color-ink)] md:text-sm", hideLabel && "sr-only")}>
           {adjust.label}
         </span>
         {isCustom && onReset && (
@@ -185,11 +188,13 @@ export function MealWeek({
   adjust,
   questionId,
   quantity,
+  hideLabel = false,
   onCount
 }: {
   adjust: QuestionAdjust;
   questionId: string;
   quantity: number;
+  hideLabel?: boolean;
   onCount: (count: number) => void;
 }) {
   const reduce = useReducedMotion();
@@ -211,9 +216,9 @@ export function MealWeek({
   return (
     <div className="p-3 md:p-4">
       <div className="flex items-baseline justify-between gap-3">
-        <span id={labelId} className="text-xs font-semibold md:text-sm">{adjust.label}</span>
+        <span id={labelId} className={cn("text-xs font-semibold md:text-sm", hideLabel && "sr-only")}>{adjust.label}</span>
         <output aria-live="polite" className="shrink-0 text-xl font-semibold tabular-nums">
-          {quantity} <span className="text-[11px] font-medium text-[var(--color-muted)]">{adjust.unit}</span>
+          {quantity}
         </output>
       </div>
 
@@ -225,7 +230,7 @@ export function MealWeek({
       >
         <span aria-hidden />
         {copy.days.map((day) => (
-          <span key={day} aria-hidden className="text-center text-[10px] font-semibold text-[var(--color-muted)]">
+          <span key={day} aria-hidden className="text-center text-[11px] font-semibold text-[var(--color-muted)]">
             {day}
           </span>
         ))}
@@ -264,7 +269,7 @@ function MealRow({
 }) {
   return (
     <>
-      <span aria-hidden className="pr-1.5 text-[10px] font-semibold text-[var(--color-muted)]">{meal}</span>
+      <span aria-hidden className="pr-1.5 text-[11px] font-semibold text-[var(--color-muted)]">{meal}</span>
       {cells.map((meat, day) => (
         <motion.button
           key={day}

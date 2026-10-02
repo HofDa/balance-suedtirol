@@ -2,9 +2,11 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import { availableRooms } from "../src/features/house-tour/config/rooms";
 import { everydayUnits } from "../src/features/house-tour/config/game-copy";
+import { optionIcons } from "../src/features/house-tour/config/option-icons";
+import { presetsOnly } from "../src/features/house-tour/model/calculator";
 import { SOUTH_TYROL_HOUSEHOLD_KWH_PER_PERSON, bestCaseSaving, optionValues, presetFor, totalValues } from "../src/features/house-tour/model/calculator";
-import { POINTS, discovery, levers, whatIfTotals } from "../src/features/house-tour/model/game";
-import { electricityShare, heatingBillUnit, landmark } from "../src/features/house-tour/model/everyday";
+import { POINTS, co2Contributions, discovery, levers, whatIfTotals } from "../src/features/house-tour/model/game";
+import { electricityShare, heatingBillUnit, landmark, yearInPictures } from "../src/features/house-tour/model/everyday";
 import { initialTourState, restoreTourState, tourReducer } from "../src/features/house-tour/model/reducer";
 import type { TourState } from "../src/features/house-tour/model/types";
 
@@ -159,4 +161,32 @@ test("Heizung erscheint in der Einheit der Rechnung, Strom gegen den Südtiroler
   assert.equal(electricityShare(946), 1);
   assert.equal(electricityShare(1500), 1.6);
   assert.equal(electricityShare(0), null);
+});
+
+test("die CO₂-Rangliste ist absteigend, summiert sich zu 100 % und lässt Nullposten weg", () => {
+  const answers = { "kitchen-diet": "diet-meat", "bath-shower": "bath-long", "living-plants": "some-plants", "mobility-km": "car-none" };
+  const rows = co2Contributions(answers, {});
+  assert.deepEqual(rows.map((row) => row.questionId), ["kitchen-diet", "bath-shower"]);
+  assert.ok(Math.abs(rows.reduce((sum, row) => sum + row.share, 0) - 1) < 1e-9);
+  assert.ok(Math.abs(rows.reduce((sum, row) => sum + row.co2Kg, 0) - totalValues(answers, {}).co2Kg) < 1e-9);
+});
+
+test("das Jahr in Bildern behauptet nichts für leere Werte", () => {
+  assert.deepEqual(yearInPictures({ co2Kg: 0, waterL: 0, energyKwh: 0 }), { water: null, co2: null, car: null });
+  const year = yearInPictures({ co2Kg: 4200, waterL: 27000, energyKwh: 0 });
+  assert.equal(year.water, "180 volle Badewannen");
+  assert.equal(year.co2, "4,2 Tonnen CO₂");
+  assert.equal(year.car, "14-mal mit dem Auto nach Rom und zurück");
+});
+
+test("jede Antwort im Schritt „Art“ hat ein Symbol, und keins ist übrig", () => {
+  const withKind = allQuestions.filter((item) => !(item.adjust && presetsOnly(item)));
+  assert.deepEqual(Object.keys(optionIcons).sort(), withKind.map((item) => item.id).sort());
+  for (const item of withKind) {
+    assert.deepEqual(Object.keys(optionIcons[item.id]).sort(), item.options.map((option) => option.id).sort(), item.id);
+    // „Weiß ich nicht“ sieht überall gleich aus.
+    for (const option of item.options) {
+      if (option.regionalAverage) assert.equal(optionIcons[item.id][option.id], "circle-help", option.id);
+    }
+  }
 });

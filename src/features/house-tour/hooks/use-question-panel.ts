@@ -7,7 +7,7 @@ import { alternativeValues, bestCaseSavingFromValues } from "../model/calculator
 
 export function useQuestionPanelInteraction({
   room, question, questionIndex, objectOpen, answers, skippedQuestions,
-  onAnswer, onContinue, onGoTo, reduceMotion,
+  onAnswer, onContinue, onGoTo, reduceMotion, allowDigits = true,
 }: {
   room: TourRoom;
   question: TourQuestion;
@@ -19,6 +19,8 @@ export function useQuestionPanelInteraction({
   onContinue: () => void;
   onGoTo: (index: number) => void;
   reduceMotion: boolean | null;
+  /** Ziffern wählen nur, wo Antworten zur Wahl stehen. */
+  allowDigits?: boolean;
 }) {
   // Weiter schiebt die nächste Frage von rechts herein, Zurück von links:
   // die Bewegung sagt, in welche Richtung man durch den Raum geht.
@@ -90,7 +92,7 @@ export function useQuestionPanelInteraction({
       }
 
       const choice = Number(event.key);
-      if (Number.isInteger(choice) && choice >= 1 && choice <= question.options.length) {
+      if (allowDigits && Number.isInteger(choice) && choice >= 1 && choice <= question.options.length) {
         event.preventDefault();
         choose(question.options[choice - 1].id);
         return;
@@ -106,7 +108,7 @@ export function useQuestionPanelInteraction({
 
     window.addEventListener("keydown", handleKey);
     return () => window.removeEventListener("keydown", handleKey);
-  }, [objectOpen, roomDone, question, selected, choose, onContinue]);
+  }, [objectOpen, roomDone, question, selected, choose, onContinue, allowDigits]);
 
   return {
     direction, slide, choose, roomHandled, roomDone, moreObjectsOpen,

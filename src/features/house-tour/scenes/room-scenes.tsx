@@ -13,10 +13,9 @@ interface SceneProps {
   adjustments: Record<string, number>;
   skippedQuestions: Record<string, boolean>;
   onSelectObject: (questionIndex: number) => void;
-  zoom?: boolean;
 }
 
-export const RoomScene = memo(function RoomScene({ roomId, questionIndex, answers, adjustments, skippedQuestions, onSelectObject, zoom = false }: SceneProps) {
+export const RoomScene = memo(function RoomScene({ roomId, questionIndex, answers, adjustments, skippedQuestions, onSelectObject }: SceneProps) {
   const { t, room } = useTourI18n();
   return (
     <motion.div
@@ -31,7 +30,6 @@ export const RoomScene = memo(function RoomScene({ roomId, questionIndex, answer
         adjustments={adjustments}
         skippedQuestions={skippedQuestions}
         onSelectObject={onSelectObject}
-        zoom={zoom}
       />
     </motion.div>
   );

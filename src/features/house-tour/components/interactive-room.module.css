@@ -17,12 +17,13 @@
   filter: drop-shadow(0 0 1px rgb(255 255 255 / 0.75)) drop-shadow(0 0 4px rgb(255 255 255 / 0.25));
 }
 
-.scene:has(.object:hover, .object:focus-visible, .object[data-active="true"]) .dim {
+/* Ein Gegenstand, der den halben Raum füllt (der Apfelbaum im Garten), bekommt
+   keinen Spot: abgedunkelt wäre nur der Rand, und der weiße Saum um tausend
+   Blattkanten lag als goldener Schleier über dem ganzen Baum. */
+.scene:has(.object:not([data-large="true"]):is(:hover, :focus-visible, [data-active="true"])) .dim {
   opacity: 1;
 }
-.object[data-active="true"] .sprite,
-.object:hover .sprite,
-.object:focus-visible .sprite {
+.object:not([data-large="true"]):is([data-active="true"], :hover, :focus-visible) .sprite {
   opacity: 1;
 }
 /* Pointing at another object moves the spotlight there. */
@@ -258,8 +259,7 @@
     width: 100cqw !important;
     flex-shrink: 0;
     transform: translateY(min(0px, max(calc(100cqh - var(--scene-h)), calc(50cqh - var(--focus-y) * var(--scene-h)))));
-    /* Die Kamera fährt heran und wieder heraus: ruhig auslaufen, nicht federn. */
-    transition: transform 480ms cubic-bezier(0.16, 1, 0.3, 1);
+    transition: transform 320ms ease;
   }
   /* Das quadratische Haus füllt mobil die Breite statt seitlicher Balken;
      oben und unten fallen nur Himmel und Wiese weg, die Schilder bleiben drin. */

@@ -11,7 +11,7 @@
 export type OptionIcon =
   | "bath" | "ban" | "battery-charging" | "bike" | "brick-wall" | "car" | "car-front" | "circle-help"
   | "circle-off" | "cloud-sun" | "droplet" | "droplets" | "factory" | "fan" | "flame" | "flower"
-  | "flower-2" | "fuel" | "hotel" | "lamp-ceiling" | "lamp-desk" | "leafy-green" | "lightbulb" | "logs"
+  | "flower-2" | "fuel" | "hotel" | "lamp-ceiling" | "lamp-desk" | "leafy-green" | "lightbulb" | "snail"
   | "plane" | "plug-zap" | "power" | "recycle" | "shirt" | "shopping-bag" | "shower-head" | "sofa"
   | "sprout" | "square-split-horizontal" | "sun" | "timer" | "train-front" | "unplug" | "zap";
 
@@ -92,6 +92,6 @@ export const optionIcons: Record<string, Record<string, OptionIcon>> = {
   "garden-structures": {
     none: "circle-off",
     hotel: "hotel",
-    diverse: "logs"
+    diverse: "snail"
   }
 };

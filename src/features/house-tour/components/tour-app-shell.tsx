@@ -38,9 +38,9 @@ const houseFrameVariants = {
 function sceneRow(roomId: RoomId | null, answering: boolean, panelNeed: number | null) {
   const crop = roomId ? layout.rooms[roomId as keyof typeof layout.rooms] : undefined;
   const ratio = crop ? crop[3] / crop[2] : 1;
-  // Beim Beantworten wird die Szene zum Band, und die Kamera fährt an den
-  // Gegenstand heran (`registered-house-scene.tsx`): so passen Frage und
-  // Eingabe auch auf ein 640-px-Telefon, ohne dass der Gegenstand kleiner wird.
+  // Beim Beantworten wird die Szene zum Band, das dem aktiven Gegenstand
+  // folgt (`.pan` in `interactive-room.module.css`): so passen Frage und
+  // Eingabe auch auf ein 640-px-Telefon.
   // Zusätzlich nie mehr, als der Schritt darunter übrig lässt; unter 7rem
   // geht die Szene nicht, dann darf der Schritt scrollen.
   const share = answering ? 0.38 : 0.55;
@@ -351,7 +351,6 @@ function TourApp({ locale }: { locale: Locale }) {
                 adjustments={state.adjustments}
                 skippedQuestions={state.skippedQuestions}
                 onSelectObject={selectObject}
-                zoom={state.objectOpen}
               />
             </motion.div>
           ) : null}

@@ -403,7 +403,7 @@ const de: TourUi = {
     objectOf: (room, index, total) => `${room} · Gegenstand ${index} von ${total}`,
     openObject: (label) => `${label} öffnen`,
     keys: { keys: "Tasten", choose: "wählen,", next: "weiter" },
-    southTyrol: "Südtirol-Schnitt"
+    southTyrol: "Südtirol-Durchschnitt"
   },
   answerHint: "Es gibt hier kein Richtig oder Falsch. Punkte gibt es fürs Entdecken, nicht für die Antwort.",
   points: (n) => `${n} Entdeckerpunkte`,

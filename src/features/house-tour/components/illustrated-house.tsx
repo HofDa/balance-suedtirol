@@ -80,7 +80,10 @@ export function IllustratedHouse({ answers, skippedQuestions, onRoom, celebrated
             warmem Licht. Die Ebenen liegen im Kamerabild und fahren mit. */}
         {progressByRoom.map(({ room, progress }) => {
           const crop = layout.rooms[room.id as keyof typeof layout.rooms];
-          if (!crop) return null;
+          // Der Garten hat keine Wände: über Bäumen und Himmel wurde das Licht
+          // zu einem harten, gelblich-blassen Rechteck, besonders beim
+          // Hineinfahren. Sein Fortschritt steht auf dem Schild.
+          if (!crop || room.id === "garden") return null;
           const [left, top, width, height] = crop;
           const state = progress.isComplete ? "complete" : progress.isStarted ? "started" : "open";
           return (

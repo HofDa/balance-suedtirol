@@ -78,16 +78,6 @@ export type TourRoom = {
   questions: TourQuestion[];
 };
 
-/**
- * Was beim Schätzen passiert ist. `actual` hält den Wert zum Zeitpunkt des
- * Tipps fest: ändert jemand später seine Antwort, bleibt die Wertung ehrlich
- * an dem Wert, gegen den geschätzt wurde.
- */
-export type GuessRecord =
-  | { kind: "estimate"; guess: number; actual: number }
-  | { kind: "quiz"; choice: boolean }
-  | { kind: "skipped" };
-
 export type TourState = {
   view: TourView;
   activeRoom: RoomId | null;
@@ -97,8 +87,6 @@ export type TourState = {
   skippedQuestions: Record<string, boolean>;
   /** Selbst gesetzte Reglerwerte je Frage-ID; fehlt ein Eintrag, gilt die Vorgabe der Option. */
   adjustments: Record<string, number>;
-  /** Spielebene: Tipps je Frage. Berührt Antworten und Bilanz nie. */
-  guesses: Record<string, GuessRecord>;
   /** Gelesene Wissenskarten je Frage-ID. */
   cardsRead: Record<string, true>;
   /** Was-wäre-wenn: hypothetische Option je Frage-ID, getrennt von den echten Antworten. */
@@ -118,7 +106,6 @@ export type TourAction =
   /** `open` hält das Objekt geöffnet, damit der Weiter-Weg ohne Szenenklick trägt. */
   | { type: "SET_QUESTION"; index: number; open?: boolean }
   | { type: "SHOW_RESULTS" }
-  | { type: "RECORD_GUESS"; questionId: string; record: GuessRecord }
   | { type: "READ_CARD"; questionId: string }
   | { type: "SET_WHAT_IF"; questionId: string; optionId: string | null }
   | { type: "TOGGLE_GOAL"; questionId: string }

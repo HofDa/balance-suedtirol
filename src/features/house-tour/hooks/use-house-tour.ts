@@ -34,7 +34,6 @@ export function useHouseTour() {
       answers: state.answers,
       skippedQuestions: state.skippedQuestions,
       adjustments: state.adjustments,
-      guesses: state.guesses,
       cardsRead: state.cardsRead,
       whatIf: state.whatIf,
       goals: state.goals
@@ -53,7 +52,6 @@ export function useHouseTour() {
     state.answers,
     state.skippedQuestions,
     state.adjustments,
-    state.guesses,
     state.cardsRead,
     state.whatIf,
     state.goals
@@ -72,8 +70,8 @@ export function useHouseTour() {
     [state.answers, state.skippedQuestions]
   );
   const progress = useMemo(
-    () => discovery({ answers: state.answers, guesses: state.guesses, cardsRead: state.cardsRead }),
-    [state.answers, state.guesses, state.cardsRead]
+    () => discovery({ answers: state.answers, cardsRead: state.cardsRead }),
+    [state.answers, state.cardsRead]
   );
   return { state, dispatch, scores, totals, completedRooms, celebratedRooms, progress };
 }

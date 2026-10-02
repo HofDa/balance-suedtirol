@@ -13,7 +13,6 @@ import { HouseDiscoveryIntro } from "./house-discovery-intro";
 import { ObjectContextPanel } from "./object-context-panel";
 import { TourToolbar } from "./tour-toolbar";
 import { KnowledgeFolder } from "./game/knowledge-folder";
-import type { GuessRecord } from "../model/types";
 import { RoomScene } from "../scenes/room-scenes";
 import type { Locale } from "@/config/site";
 import { getTourProgress } from "../model/scoring";
@@ -187,9 +186,6 @@ function TourApp({ locale }: { locale: Locale }) {
     dispatch({ type: "SHOW_RESULTS" });
   }, [dispatch]);
   const openFolder = useCallback(() => setFolderOpen(true), []);
-  const recordGuess = useCallback((questionId: string, record: GuessRecord) => {
-    dispatch({ type: "RECORD_GUESS", questionId, record });
-  }, [dispatch]);
   const readCard = useCallback((questionId: string) => {
     dispatch({ type: "READ_CARD", questionId });
   }, [dispatch]);
@@ -375,9 +371,7 @@ function TourApp({ locale }: { locale: Locale }) {
             answers={state.answers}
             adjustments={state.adjustments}
             skippedQuestions={state.skippedQuestions}
-            guesses={state.guesses}
             cardsRead={state.cardsRead}
-            onGuess={recordGuess}
             onReadCard={readCard}
             nextRoom={nextRoom}
             locale={locale}

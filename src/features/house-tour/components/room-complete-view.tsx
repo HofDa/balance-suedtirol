@@ -6,27 +6,18 @@ import { cn } from "@/lib/utils";
 import { focusRingTool } from "@/components/ui/focus";
 import { useTourI18n } from "../i18n/context";
 import type { LocalizedRoom } from "../i18n/localize";
-import { POINTS, pointsFor, ratingOf, type Rating } from "../model/game";
-import type { GuessRecord, TourRoom } from "../model/types";
+import { POINTS } from "../model/game";
+import type { TourRoom } from "../model/types";
 import { objectImage } from "./game/knowledge-card";
 
-const chipTone: Record<Rating, string> = {
-  spot: "bg-[var(--color-forest)] text-white",
-  quizRight: "bg-[var(--color-forest)] text-white",
-  close: "bg-[var(--color-sage)] text-[var(--color-forest)]",
-  off: "bg-[var(--color-stone)] text-[var(--color-ink)]",
-  quizWrong: "bg-[var(--color-stone)] text-[var(--color-ink)]"
-};
-
 /**
- * Raumabschluss als Runde im Rückblick: was entdeckt wurde, wie die Tipps
- * saßen, welche Karten gesammelt sind. Die Bilanz steht hier bewusst nicht
+ * Raumabschluss als Runde im Rückblick: was entdeckt wurde und welche
+ * Karten gesammelt sind. Die Bilanz steht hier bewusst nicht
  * mehr; sie kommt am Ende mit den Hebeln, wo man mit ihr etwas anfangen kann.
  */
 export function RoomCompleteView({
   room,
   answers,
-  guesses,
   cardsRead,
   nextRoom,
   allComplete,
@@ -37,7 +28,6 @@ export function RoomCompleteView({
 }: {
   room: TourRoom | LocalizedRoom;
   answers: Record<string, string>;
-  guesses: Record<string, GuessRecord>;
   cardsRead: Record<string, true>;
   nextRoom?: TourRoom;
   allComplete: boolean;
@@ -50,10 +40,9 @@ export function RoomCompleteView({
   const completion = "completion" in room ? room.completion : room.description;
   const rows = room.questions.map((question) => {
     const answered = Boolean(answers[question.id]);
-    const rating = ratingOf(guesses[question.id], question.id);
     const read = Boolean(cardsRead[question.id]);
-    const points = (answered ? POINTS.found : 0) + pointsFor(rating) + (read ? POINTS.card : 0);
-    return { question, answered, rating, read, points };
+    const points = (answered ? POINTS.found : 0) + (read ? POINTS.card : 0);
+    return { question, answered, read, points };
   });
   const roomPoints = rows.reduce((sum, row) => sum + row.points, 0);
 
@@ -77,7 +66,7 @@ export function RoomCompleteView({
       <p className="mt-2 text-sm leading-6 text-[var(--color-muted)]">{completion}</p>
 
       <ul className="mt-5 grid gap-1.5">
-        {rows.map(({ question, answered, rating, read }, index) => (
+        {rows.map(({ question, answered, read }, index) => (
           <motion.li
             key={question.id}
             initial={reduceMotion ? false : { opacity: 0, x: -8 }}
@@ -92,10 +81,6 @@ export function RoomCompleteView({
               <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-[var(--color-muted)]">
                 <SkipForward className="size-3" aria-hidden />
                 {t.roomComplete.skipped}
-              </span>
-            ) : rating ? (
-              <span className={cn("rounded-[var(--radius-sm)] px-2 py-0.5 text-[11px] font-semibold", chipTone[rating])}>
-                {t.ratings[rating]}
               </span>
             ) : null}
             <BookOpen

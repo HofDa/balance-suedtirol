@@ -1,51 +1,41 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
-import { Check, ChevronLeft, ChevronRight, MousePointer2, Pencil, SkipForward } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { BookOpen, Check, ChevronLeft, ChevronRight, MousePointer2, SkipForward } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import type { Locale } from "@/config/site";
 import { focusRingTool } from "@/components/ui/focus";
 import { Label } from "@/components/ui/label";
 import { isAdjusted, quantityFor } from "../model/calculator";
-import { challengeFor, estimateSpec } from "../model/game";
+import { POINTS } from "../model/game";
 import { useTourI18n } from "../i18n/context";
-import { AdjustControl } from "./metric-readout";
+import { AdjustControl, EverydayFeedback } from "./metric-readout";
 import { ProgressSummary } from "./panel-progress";
 import { RoomCompleteView } from "./room-complete-view";
 import { RoomNavigation } from "./room-navigation";
-import { EstimateChallenge, QuizChallenge } from "./game/challenge-stage";
-import { RevealStage } from "./game/reveal-stage";
 import { KnowledgeCardContent, KnowledgeSheet } from "./game/knowledge-card";
-import type { GuessRecord, RoomId, TourQuestion, TourRoom } from "../model/types";
-import { AUTO_ADVANCE_MS, useQuestionMetrics, useQuestionPanelInteraction } from "../hooks/use-question-panel";
+import type { RoomId, TourQuestion, TourRoom } from "../model/types";
+import { useQuestionMetrics, useQuestionPanelInteraction } from "../hooks/use-question-panel";
 
-type Stage = "answer" | "challenge" | "reveal";
-const stages: Stage[] = ["answer", "challenge", "reveal"];
-
-/** Wo die Runde steht: drei Schritte, der aktuelle benannt. */
-function StageTrack({ stage }: { stage: Stage }) {
+/** Die Wissenskarte zum Gegenstand: das Warum hinter der eigenen Zahl. */
+function CardButton({ read, onOpen }: { read: boolean; onOpen: () => void }) {
   const { t } = useTourI18n();
-  const index = stages.indexOf(stage);
-  const stageLabel: Record<Stage, string> = { answer: t.stage.answer, challenge: t.stage.guess, reveal: t.stage.reveal };
   return (
-    <span className="flex items-center gap-2 text-[11px] font-semibold text-[var(--color-forest)]">
-      <span className="flex gap-1" aria-hidden>
-        {stages.map((item, position) => (
-          <span
-            key={item}
-            className={cn(
-              "h-1.5 rounded-full transition-all duration-300",
-              position === index ? "w-5 bg-[var(--color-forest)]" : position < index ? "w-1.5 bg-[var(--color-forest)]/60" : "w-1.5 bg-[var(--color-ink)]/15"
-            )}
-          />
-        ))}
+    <button
+      type="button"
+      onClick={onOpen}
+      className={cn(
+        "mt-3 flex min-h-12 w-full items-center gap-3 rounded-[var(--radius-lg)] border border-[var(--color-line)] bg-white px-3 text-left text-sm font-semibold transition-colors hover:border-[var(--color-forest)]/45 hover:bg-[var(--color-paper)]",
+        focusRingTool
+      )}
+    >
+      <span className="grid size-8 shrink-0 place-items-center rounded-full bg-[var(--color-sage)] text-[var(--color-forest)]">
+        {read ? <Check className="size-4" aria-hidden /> : <BookOpen className="size-4" aria-hidden />}
       </span>
-      <span>
-        <span className="sr-only">{t.panel.stepOf(index + 1)}</span>
-        {stageLabel[stage]}
-      </span>
-    </span>
+      <span className="flex-1">{t.card.open}</span>
+      {!read && <span className="text-xs font-semibold tabular-nums text-[var(--color-forest)]">+{POINTS.card}</span>}
+    </button>
   );
 }
 
@@ -68,7 +58,6 @@ export function ObjectContextPanel({
   answers,
   adjustments,
   skippedQuestions,
-  guesses,
   cardsRead,
   nextRoom,
   allComplete,
@@ -76,7 +65,6 @@ export function ObjectContextPanel({
   onAnswer,
   onAdjust,
   onClearAdjust,
-  onGuess,
   onReadCard,
   onContinue,
   onSkip,
@@ -95,7 +83,6 @@ export function ObjectContextPanel({
   answers: Record<string, string>;
   adjustments: Record<string, number>;
   skippedQuestions: Record<string, boolean>;
-  guesses: Record<string, GuessRecord>;
   cardsRead: Record<string, true>;
   nextRoom?: TourRoom;
   allComplete: boolean;
@@ -103,7 +90,6 @@ export function ObjectContextPanel({
   onAnswer: (questionId: string, optionId: string) => void;
   onAdjust: (questionId: string, quantity: number) => void;
   onClearAdjust: (questionId: string) => void;
-  onGuess: (questionId: string, record: GuessRecord) => void;
   onReadCard: (questionId: string) => void;
   onContinue: () => void;
   onSkip: () => void;
@@ -117,72 +103,42 @@ export function ObjectContextPanel({
 }) {
   const reduceMotion = useReducedMotion();
   const { t } = useTourI18n();
-  const selected = answers[question.id];
-  const record = guesses[question.id];
-  const challenge = useMemo(
-    () => (selected ? challengeFor(question.id, answers, adjustments) : null),
-    [question.id, selected, answers, adjustments]
-  );
-
-  // Die Runde eines Gegenstands: Antwort, Herausforderung, Auflösung. Wer
-  // zurückkommt, landet dort, wo er war — ein beantworteter Gegenstand mit
-  // Tipp zeigt direkt die Auflösung.
-  // Der Schritt wird beim Öffnen eines Gegenstands einmal festgelegt und
-  // danach nur noch bewusst gewechselt; sonst sprang die Runde schon beim
-  // Antippen einer Option zur Schätzung, bevor der Regler gesetzt war.
-  const initialStage: Stage = !selected ? "answer" : record || !challenge ? "reveal" : "challenge";
-  const [stageFor, setStageFor] = useState<{ id: string; stage: Stage }>({ id: question.id, stage: initialStage });
-  if (stageFor.id !== question.id) setStageFor({ id: question.id, stage: initialStage });
-  const stage = stageFor.id === question.id ? stageFor.stage : initialStage;
-  const goStage = (next: Stage) => setStageFor({ id: question.id, stage: next });
   const [cardOpen, setCardOpen] = useState(false);
-  // Jeder Schritt beginnt oben; sonst stand die neue Frage halb abgeschnitten
-  // unter der Scrollposition des vorigen Schritts.
   const scrollRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: 0 });
-  }, [question.id, stage]);
-
-  const proceedFromAnswer = () => {
-    if (!answers[question.id]) return;
-    goStage(challenge && !record ? "challenge" : "reveal");
-  };
+  }, [question.id]);
 
   const {
-    direction, slide, advancing, choose, roomHandled, roomDone, moreObjectsOpen,
-    selectedOption, onTouchStart, onTouchEnd, cancelAdvance,
+    direction, slide, choose, roomHandled, roomDone, moreObjectsOpen,
+    selected, selectedOption, onTouchStart, onTouchEnd
   } = useQuestionPanelInteraction({
-    room, question, questionIndex,
-    // Ziffern und Enter wählen nur im Antwortschritt.
-    objectOpen: objectOpen && stage === "answer",
-    answers, skippedQuestions, onAnswer, onContinue: proceedFromAnswer, onGoTo, reduceMotion
+    room, question, questionIndex, objectOpen, answers, skippedQuestions, onAnswer, onContinue, onGoTo, reduceMotion
   });
   const { selectedValues, saving } = useQuestionMetrics(question, answers, adjustments);
   const firstEver = Object.keys(answers).length === 0;
 
-  const recordGuess = (next: GuessRecord) => {
-    onGuess(question.id, next);
-    goStage("reveal");
-  };
+  // Die Wirkung erscheint unter den Antworten. Auf dem Telefon läge sie nach
+  // dem Antippen oft unter dem Rand. Nur ein neues Antippen holt sie ins Bild;
+  // wer zu einem beantworteten Gegenstand zurückkehrt, beginnt oben.
+  const feedbackRef = useRef<HTMLDivElement>(null);
+  const shownAnswer = useRef({ id: question.id, selected });
+  useEffect(() => {
+    const previous = shownAnswer.current;
+    shownAnswer.current = { id: question.id, selected };
+    if (!selected || previous.id !== question.id || previous.selected === selected) return;
+    feedbackRef.current?.scrollIntoView({ block: "nearest", behavior: reduceMotion ? "auto" : "smooth" });
+  }, [question.id, selected, reduceMotion]);
+
   const openCard = () => {
     setCardOpen(true);
     onReadCard(question.id);
   };
 
-  // Ein Tipp, der zu einer inzwischen geänderten Antwort gehört, behält seine
-  // Wertung, aber die Skala würde zwei verschiedene Fragen vergleichen.
-  const estimateIsCurrent =
-    record?.kind !== "estimate" ||
-    (challenge?.kind === "estimate" && Math.abs(record.actual - challenge.actual) / challenge.actual < 0.01);
-  const revealSpec = challenge?.kind === "estimate" ? challenge.spec : estimateSpec(question.id, answers);
-
   const back = questionIndex > 0 && (
     <button
       type="button"
-      onClick={() => {
-        cancelAdvance();
-        onBack();
-      }}
+      onClick={onBack}
       className={quietButton}
     >
       <ChevronLeft className="size-4" aria-hidden />
@@ -217,7 +173,6 @@ export function ObjectContextPanel({
               key={`${room.id}-complete`}
               room={room}
               answers={answers}
-              guesses={guesses}
               cardsRead={cardsRead}
               nextRoom={nextRoom}
               allComplete={allComplete}
@@ -251,7 +206,7 @@ export function ObjectContextPanel({
             </motion.div>
           ) : (
             <motion.div
-              key={`${question.id}-${stage}`}
+              key={question.id}
               custom={direction}
               variants={slide}
               initial={reduceMotion ? false : "enter"}
@@ -259,15 +214,10 @@ export function ObjectContextPanel({
               exit={reduceMotion ? undefined : "exit"}
               className="mx-auto max-w-xl"
             >
-              <div className="mb-2 flex min-w-0 items-center justify-between gap-3">
-                <Label size="dense" className="shrink-0">
-                  {room.title} · {questionIndex + 1}/{room.questions.length}
-                </Label>
-                <StageTrack stage={stage} />
-              </div>
+              <Label size="dense" className="mb-2">
+                {room.title} · {questionIndex + 1}/{room.questions.length}
+              </Label>
 
-              {stage === "answer" && (
-                <>
                   <h2 id="question-title" className="text-lg font-semibold leading-tight tracking-[-0.025em] md:text-2xl md:leading-snug">
                     {question.title}
                   </h2>
@@ -347,28 +297,24 @@ export function ObjectContextPanel({
                     })}
                   </div>
 
+                  {selectedOption && (
+                    <div ref={feedbackRef} className="scroll-mb-24 md:scroll-mb-4">
+                      <EverydayFeedback
+                        questionId={question.id}
+                        values={selectedValues}
+                        saving={saving}
+                        impact={selectedOption.impact}
+                        locale={locale}
+                      />
+                      <CardButton read={Boolean(cardsRead[question.id])} onOpen={openCard} />
+                    </div>
+                  )}
+
                   <div className={footerClass}>
                     {back}
                     {selected ? (
-                      <button
-                        type="button"
-                        onClick={() => {
-                          cancelAdvance();
-                          proceedFromAnswer();
-                        }}
-                        className={primaryButton}
-                      >
-                        {/* Die Füllung zeigt, dass es gleich von selbst weitergeht. */}
-                        {advancing && (
-                          <motion.span
-                            aria-hidden
-                            className="absolute inset-y-0 left-0 -z-10 bg-white/20"
-                            initial={{ width: "0%" }}
-                            animate={{ width: "100%" }}
-                            transition={{ duration: AUTO_ADVANCE_MS / 1000, ease: "linear" }}
-                          />
-                        )}
-                        {challenge && !record ? t.stage.guess : t.continue}
+                      <button type="button" onClick={onContinue} className={primaryButton}>
+                        {moreObjectsOpen ? t.continue : t.finishRoom}
                         <ChevronRight className="size-4" aria-hidden />
                       </button>
                     ) : (
@@ -378,77 +324,6 @@ export function ObjectContextPanel({
                       </button>
                     )}
                   </div>
-                </>
-              )}
-
-              {stage === "challenge" && challenge?.kind === "estimate" && (
-                <EstimateChallenge
-                  questionId={question.id}
-                  spec={challenge.spec}
-                  onSubmit={(guess) => recordGuess({ kind: "estimate", guess, actual: challenge.actual })}
-                  footer={(submit) => (
-                    <div className={footerClass}>
-                      <button type="button" onClick={() => recordGuess({ kind: "skipped" })} className={quietButton}>
-                        {t.guessSkip}
-                      </button>
-                      <button type="button" onClick={submit} className={primaryButton}>
-                        {t.guessSubmit}
-                        <ChevronRight className="size-4" aria-hidden />
-                      </button>
-                    </div>
-                  )}
-                />
-              )}
-
-              {stage === "challenge" && challenge?.kind === "quiz" && (
-                <QuizChallenge
-                  questionId={question.id}
-                  onChoose={(choice) => recordGuess({ kind: "quiz", choice })}
-                  footer={
-                    <div className={footerClass}>
-                      <button type="button" onClick={() => recordGuess({ kind: "skipped" })} className={cn(quietButton, "ml-auto")}>
-                        {t.guessSkip}
-                      </button>
-                    </div>
-                  }
-                />
-              )}
-
-              {(stage === "reveal" || (stage === "challenge" && !challenge)) && selectedOption && (
-                <>
-                  <h2 className="sr-only">{question.title}: {t.stage.reveal}</h2>
-                  <RevealStage
-                    questionId={question.id}
-                    record={estimateIsCurrent ? record : undefined}
-                    spec={revealSpec}
-                    values={selectedValues}
-                    saving={saving}
-                    impact={selectedOption.impact}
-                    cardRead={Boolean(cardsRead[question.id])}
-                    onOpenCard={openCard}
-                    footer={
-                      <div className={footerClass}>
-                        <button type="button" onClick={() => goStage("answer")} className={quietButton}>
-                          <Pencil className="size-3.5" aria-hidden />
-                          {t.changeAnswer}
-                        </button>
-                        <button
-                          type="button"
-                          autoFocus
-                          onClick={() => {
-                            cancelAdvance();
-                            onContinue();
-                          }}
-                          className={primaryButton}
-                        >
-                          {moreObjectsOpen ? t.continue : t.finishRoom}
-                          <ChevronRight className="size-4" aria-hidden />
-                        </button>
-                      </div>
-                    }
-                  />
-                </>
-              )}
             </motion.div>
           )}
         </AnimatePresence>

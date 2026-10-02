@@ -1,7 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import { availableRooms } from "../src/features/house-tour/config/rooms";
-import { estimateUnits, quizAnswers } from "../src/features/house-tour/config/game-copy";
 import { roomContent } from "../src/features/house-tour/i18n/content";
 import { localizedRooms } from "../src/features/house-tour/i18n/localize";
 import { tourUi } from "../src/features/house-tour/i18n/ui";
@@ -49,11 +48,9 @@ test("übersetzte Räume ändern keine Zahl: Faktoren, Vorgaben und Reihenfolge 
   for (const locale of locales) assert.deepEqual(strip(localizedRooms(locale)), strip(localizedRooms("de")), locale);
 });
 
-test("Oberflächentexte, Schätzfragen, Aussagen und Rechenwege decken jede Frage in allen Sprachen ab", () => {
+test("Rechenwege decken jede Frage in allen Sprachen ab", () => {
   for (const locale of ["de", ...locales] as const) {
     const t = tourUi[locale];
-    assert.deepEqual(Object.keys(t.estimatePrompts).sort(), Object.keys(estimateUnits).sort(), `${locale} prompts`);
-    assert.deepEqual(Object.keys(t.quiz).sort(), Object.keys(quizAnswers).sort(), `${locale} quiz`);
     assert.deepEqual(Object.keys(t.basis).sort(), Object.keys(questionBasis).sort(), `${locale} basis`);
   }
 });

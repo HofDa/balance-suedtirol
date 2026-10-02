@@ -19,9 +19,9 @@ function ProgressBar({ value, total }: { value: number; total: number }) {
 
 /**
  * Kopfzeile mit dem Raumfortschritt, nur auf dem Desktop. Die laufende
- * Jahresbilanz stand hier früher als drei Zahlen; in der Spielfassung zeigt
- * jede Runde ihre Wirkung in der Auflösung, und die ganze Bilanz kommt am
- * Ende mit den Hebeln.
+ * Jahresbilanz stand hier früher als drei Zahlen; jetzt zeigt jede Antwort
+ * ihre Wirkung direkt darunter, und die ganze Bilanz kommt am Ende mit den
+ * Hebeln.
  */
 export function ProgressSummary({ room, roomHandled }: { room: TourRoom; roomHandled: number }) {
   const { t } = useTourI18n();

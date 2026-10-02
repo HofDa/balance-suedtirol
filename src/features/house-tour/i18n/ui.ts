@@ -78,20 +78,8 @@ export type TourUi = {
     openObject: (label: string) => string;
     keys: { keys: string; choose: string; next: string };
     southTyrol: string;
-    stepOf: (index: number) => string;
   };
-  stage: { answer: string; guess: string; reveal: string };
   answerHint: string;
-  guessSubmit: string;
-  guessSkip: string;
-  guessYours: string;
-  guessActual: string;
-  quizQuestion: string;
-  quizTrue: string;
-  quizFalse: string;
-  quizVerdict: { true: string; false: string };
-  ratings: { spot: string; close: string; off: string; quizRight: string; quizWrong: string };
-  offHint: (factor: number) => string;
   points: (n: number) => string;
   pointsShort: string;
   folder: string;
@@ -109,17 +97,13 @@ export type TourUi = {
   };
   continue: string;
   finishRoom: string;
-  changeAnswer: string;
   adjust: { reset: string; less: (label: string) => string; more: (label: string) => string };
   units: {
     bathtubs: (n: number) => string;
     carKm: string;
     co2Kg: string;
     co2T: string;
-    anchors: { bathtubs: string; carKm: string; co2: (kg: string) => string };
   };
-  estimatePrompts: Record<string, string>;
-  quiz: Record<string, { statement: string; explanation: string }>;
   everyday: {
     bathtubs: (n: string) => string;
     bucketOne: string;
@@ -153,7 +137,7 @@ export type TourUi = {
   results: {
     allFound: string;
     someFound: (found: number, total: number) => string;
-    summary: (p: { points: number; spot: number; quizRight: number; cards: number; total: number }) => Rich;
+    summary: (p: { points: number; cards: number; total: number }) => Rich;
     openFolder: string;
     continueRoom: (room: string) => string;
     stillOpen: (rooms: string) => string;
@@ -376,12 +360,12 @@ const de: TourUi = {
     headline: "Hinter jedem Gegenstand steckt eine Verbindung zur Natur.",
     lead: "18 Gegenstände in sechs Räumen, zu jedem eine kurze Runde:",
     loop: [
-      { title: "Antworten", copy: "ehrlich — es gibt kein Richtig oder Falsch" },
-      { title: "Schätzen", copy: "wie viele Badewannen, wie viele Kilometer?" },
-      { title: "Entdecken", copy: "die Auflösung und eine Karte für deine Mappe" }
+      { title: "Einstellen", copy: "antippen, Regler schieben — so, wie es bei dir ist" },
+      { title: "Sehen", copy: "was das im Jahr ausmacht: Badewannen, Kilometer" },
+      { title: "Entdecken", copy: "das Warum dahinter, als Karte für deine Mappe" }
     ],
     loopAria: "Eine Runde",
-    honesty: "Punkte gibt es fürs Entdecken und für gute Tipps — nie für die Antwort selbst.",
+    honesty: "Es gibt kein Richtig oder Falsch. Punkte gibt es fürs Entdecken — nie für die Antwort selbst.",
     start: "Im Schlafzimmer beginnen",
     resumeTitle: "Weiter, wo du aufgehört hast.",
     doneTitle: "Das ganze Haus ist entdeckt.",
@@ -419,21 +403,9 @@ const de: TourUi = {
     objectOf: (room, index, total) => `${room} · Gegenstand ${index} von ${total}`,
     openObject: (label) => `${label} öffnen`,
     keys: { keys: "Tasten", choose: "wählen,", next: "weiter" },
-    southTyrol: "Südtirol-Schnitt",
-    stepOf: (index) => `Schritt ${index} von 3: `
+    southTyrol: "Südtirol-Schnitt"
   },
-  stage: { answer: "Deine Antwort", guess: "Schätz mal", reveal: "Auflösung" },
   answerHint: "Es gibt hier kein Richtig oder Falsch. Punkte gibt es fürs Entdecken, nicht für die Antwort.",
-  guessSubmit: "Tipp abgeben",
-  guessSkip: "Ohne Tipp weiter",
-  guessYours: "Dein Tipp",
-  guessActual: "Deine Antwort ergibt",
-  quizQuestion: "Stimmt das?",
-  quizTrue: "Stimmt",
-  quizFalse: "Stimmt nicht",
-  quizVerdict: { true: "stimmt.", false: "stimmt nicht." },
-  ratings: { spot: "Volltreffer", close: "Nah dran", off: "Daneben", quizRight: "Richtig", quizWrong: "Nicht ganz" },
-  offHint: (factor) => `Um rund das ${factor}-Fache verschätzt — gut, dass du es jetzt weißt.`,
   points: (n) => `${n} Entdeckerpunkte`,
   pointsShort: "Punkte",
   folder: "Wissensmappe",
@@ -451,55 +423,12 @@ const de: TourUi = {
   },
   continue: "Weiter",
   finishRoom: "Raum abschließen",
-  changeAnswer: "Antwort ändern",
   adjust: { reset: "Vorgabe", less: (label) => `${label}: weniger`, more: (label) => `${label}: mehr` },
   units: {
     bathtubs: (n) => (n === 1 ? "Badewanne" : "Badewannen"),
     carKm: "km Autofahrt",
     co2Kg: "kg CO₂",
-    co2T: "t CO₂",
-    anchors: {
-      bathtubs: "Eine volle Badewanne fasst rund 150 Liter.",
-      carKm: "Zum Vergleich: Bozen–Rom und zurück sind rund 1.400 km.",
-      co2: (kg) => `Zum Vergleich: Ein Jahr lang täglich zwei Songs duschen ergibt im Check rund ${kg} kg CO₂.`
-    }
-  },
-  estimatePrompts: {
-    "bath-shower": "Wie viele volle Badewannen Wasser läuft deine Dusche im Jahr durch?",
-    "bath-toilet": "Wie viele volle Badewannen spült deine Toilette im Jahr weg?",
-    "garden-ground": "Wie viele volle Badewannen gießt du im Jahr in den Garten?",
-    "bath-water-heating": "Dein übriges Warmwasser: so viel CO₂ wie wie viele Kilometer Autofahrt im Jahr?",
-    "bedroom-heating": "Deine Heizung: so viel CO₂ wie wie viele Kilometer Autofahrt im Jahr?",
-    "bedroom-textiles": "Deine neue Kleidung: so viel CO₂ wie wie viele Kilometer Autofahrt im Jahr?",
-    "living-tv-streaming": "Dein Haushaltsstrom: so viel CO₂ wie wie viele Kilometer Autofahrt im Jahr?",
-    "kitchen-diet": "Deine Ernährung: so viel CO₂ wie wie viele Kilometer Autofahrt im Jahr?",
-    "kitchen-origin": "Der Aufschlag für Importware: so viel CO₂ wie wie viele Kilometer Autofahrt im Jahr?",
-    "kitchen-waste": "Dein weggeworfenes Essen: so viel CO₂ wie wie viele Kilometer Autofahrt im Jahr?",
-    "mobility-short": "Wie viel CO₂ verursachen deine kurzen Wege im Jahr?",
-    "mobility-km": "Wie viel CO₂ verursachen deine übrigen Autokilometer im Jahr?",
-    "mobility-long": "Wie viel CO₂ verursachen deine Fernreisen im Jahr?"
-  },
-  quiz: {
-    "bedroom-standby": {
-      statement: "Geräte im Standby machen in vielen Haushalten fast ein Zehntel des Stromverbrauchs aus.",
-      explanation: "Stimmt — für Geräte, die dabei nichts tun. Rund um die Uhr, das ganze Jahr."
-    },
-    "living-lighting": {
-      statement: "Eine LED braucht für dieselbe Helligkeit etwa halb so viel Strom wie eine Glühlampe.",
-      explanation: "Noch weniger: Eine LED kommt mit rund einem Achtel der Leistung einer Glühlampe aus."
-    },
-    "living-plants": {
-      statement: "Zimmerpflanzen fördern messbar die Artenvielfalt vor deiner Haustür.",
-      explanation: "Sie können die Aufenthaltsqualität stärken, aber ein belastbarer Beitrag zur lokalen Artenvielfalt lässt sich daraus nicht ableiten. Für wildlebende Arten zählen Außenflächen und heimische Pflanzen."
-    },
-    "garden-plants": {
-      statement: "Viele Wildbienenarten können mit gefüllten Zierblüten nichts anfangen.",
-      explanation: "Stimmt. Heimische Blühpflanzen sind auf lokale Insekten abgestimmt; mit gefüllten Zierblüten können viele Wildbienenarten überhaupt nichts anfangen."
-    },
-    "garden-structures": {
-      statement: "Die meisten Wildbienen nisten in Insektenhotels.",
-      explanation: "Die meisten Wildbienen nisten im Boden, nicht in Bohrlöchern. Schon ein sonniger, unbewachsener Bodenstreifen ist für sie wertvoll."
-    }
+    co2T: "t CO₂"
   },
   everyday: {
     bathtubs: (n) => `${n} volle Badewannen`,
@@ -534,12 +463,9 @@ const de: TourUi = {
   results: {
     allFound: "Das ganze Haus ist entdeckt.",
     someFound: (found, total) => `${found} von ${total} Gegenständen entdeckt.`,
-    summary: ({ points, spot, quizRight, cards, total }) => [
+    summary: ({ points, cards, total }) => [
       { b: `${points} Entdeckerpunkte` },
-      " — davon ",
-      ...(spot > 0 ? [{ b: `${spot} Volltreffer` }, " beim Schätzen"] : ["noch kein Volltreffer beim Schätzen"]),
-      ...(quizRight > 0 ? [", ", { b: `${quizRight}` }, quizRight === 1 ? " richtig eingeschätzte Aussage" : " richtig eingeschätzte Aussagen"] : []),
-      " und ",
+      " — und ",
       { b: `${cards} von ${total}` },
       " Wissenskarten gelesen."
     ],
@@ -646,12 +572,12 @@ const it: TourUi = {
     headline: "Ogni oggetto racchiude un legame con la natura.",
     lead: "18 oggetti in sei stanze, per ognuno un breve turno:",
     loop: [
-      { title: "Rispondere", copy: "con sincerità — non c’è giusto o sbagliato" },
-      { title: "Stimare", copy: "quante vasche da bagno, quanti chilometri?" },
-      { title: "Scoprire", copy: "la soluzione e una scheda per la tua cartella" }
+      { title: "Impostare", copy: "tocca, sposta il cursore — come è davvero da te" },
+      { title: "Vedere", copy: "quanto fa in un anno: vasche da bagno, chilometri" },
+      { title: "Scoprire", copy: "il perché, su una scheda per la tua cartella" }
     ],
     loopAria: "Un turno",
-    honesty: "I punti si guadagnano scoprendo e con buone stime — mai per la risposta stessa.",
+    honesty: "Non c’è giusto o sbagliato. I punti si guadagnano scoprendo — mai per la risposta stessa.",
     start: "Inizia dalla camera da letto",
     resumeTitle: "Riprendi da dove avevi lasciato.",
     doneTitle: "Hai scoperto tutta la casa.",
@@ -689,21 +615,9 @@ const it: TourUi = {
     objectOf: (room, index, total) => `${room} · oggetto ${index} di ${total}`,
     openObject: (label) => `Apri ${label}`,
     keys: { keys: "Tasti", choose: "per scegliere,", next: "avanti" },
-    southTyrol: "Media Alto Adige",
-    stepOf: (index) => `Passo ${index} di 3: `
+    southTyrol: "Media Alto Adige"
   },
-  stage: { answer: "La tua risposta", guess: "Prova a stimare", reveal: "Soluzione" },
   answerHint: "Qui non c’è giusto o sbagliato. I punti si guadagnano scoprendo, non con la risposta.",
-  guessSubmit: "Dai la tua stima",
-  guessSkip: "Avanti senza stima",
-  guessYours: "La tua stima",
-  guessActual: "La tua risposta dà",
-  quizQuestion: "È vero?",
-  quizTrue: "Vero",
-  quizFalse: "Falso",
-  quizVerdict: { true: "è vero.", false: "non è vero." },
-  ratings: { spot: "Centrato", close: "Quasi", off: "Fuori bersaglio", quizRight: "Giusto", quizWrong: "Non proprio" },
-  offHint: (factor) => `Sbagliato di circa ${factor} volte — bene che adesso lo sai.`,
   points: (n) => `${n} punti scoperta`,
   pointsShort: "punti",
   folder: "Cartella delle conoscenze",
@@ -721,55 +635,12 @@ const it: TourUi = {
   },
   continue: "Avanti",
   finishRoom: "Concludi la stanza",
-  changeAnswer: "Cambia risposta",
   adjust: { reset: "Valore predefinito", less: (label) => `${label}: meno`, more: (label) => `${label}: più` },
   units: {
     bathtubs: (n) => (n === 1 ? "vasca da bagno" : "vasche da bagno"),
     carKm: "km in auto",
     co2Kg: "kg CO₂",
-    co2T: "t CO₂",
-    anchors: {
-      bathtubs: "Una vasca da bagno piena contiene circa 150 litri.",
-      carKm: "Per confronto: Bolzano–Roma andata e ritorno sono circa 1.400 km.",
-      co2: (kg) => `Per confronto: fare la doccia per due canzoni al giorno per un anno dà nel check circa ${kg} kg di CO₂.`
-    }
-  },
-  estimatePrompts: {
-    "bath-shower": "Quante vasche da bagno piene d’acqua passano dalla tua doccia in un anno?",
-    "bath-toilet": "Quante vasche da bagno piene scarica il tuo WC in un anno?",
-    "garden-ground": "Quante vasche da bagno piene versi in giardino in un anno?",
-    "bath-water-heating": "Il resto della tua acqua calda: tanta CO₂ quanto quanti chilometri in auto all’anno?",
-    "bedroom-heating": "Il tuo riscaldamento: tanta CO₂ quanto quanti chilometri in auto all’anno?",
-    "bedroom-textiles": "I tuoi vestiti nuovi: tanta CO₂ quanto quanti chilometri in auto all’anno?",
-    "living-tv-streaming": "La tua elettricità domestica: tanta CO₂ quanto quanti chilometri in auto all’anno?",
-    "kitchen-diet": "La tua alimentazione: tanta CO₂ quanto quanti chilometri in auto all’anno?",
-    "kitchen-origin": "Il supplemento per la merce importata: tanta CO₂ quanto quanti chilometri in auto all’anno?",
-    "kitchen-waste": "Il tuo cibo buttato: tanta CO₂ quanto quanti chilometri in auto all’anno?",
-    "mobility-short": "Quanta CO₂ causano i tuoi tragitti brevi in un anno?",
-    "mobility-km": "Quanta CO₂ causano gli altri tuoi chilometri in auto in un anno?",
-    "mobility-long": "Quanta CO₂ causano i tuoi viaggi lunghi in un anno?"
-  },
-  quiz: {
-    "bedroom-standby": {
-      statement: "In molte case gli apparecchi in standby valgono quasi un decimo del consumo elettrico.",
-      explanation: "È vero — per apparecchi che intanto non fanno nulla. Giorno e notte, tutto l’anno."
-    },
-    "living-lighting": {
-      statement: "Per la stessa luminosità un LED consuma circa la metà di una lampadina a incandescenza.",
-      explanation: "Ancora meno: a un LED basta circa un ottavo della potenza di una lampadina a incandescenza."
-    },
-    "living-plants": {
-      statement: "Le piante d’appartamento favoriscono in modo misurabile la biodiversità davanti a casa.",
-      explanation: "Possono migliorare la qualità dello stare, ma un contributo affidabile alla biodiversità locale non se ne può dedurre. Per le specie selvatiche contano gli spazi esterni e le piante autoctone."
-    },
-    "garden-plants": {
-      statement: "Molte specie di api selvatiche non sanno che farsene dei fiori ornamentali doppi.",
-      explanation: "È vero. Le piante da fiore autoctone sono adatte agli insetti locali; dei fiori ornamentali doppi molte specie di api selvatiche non sanno proprio che farsene."
-    },
-    "garden-structures": {
-      statement: "La maggior parte delle api selvatiche nidifica negli hotel per insetti.",
-      explanation: "La maggior parte delle api selvatiche nidifica nel suolo, non nei fori. Già una striscia di terreno soleggiata e senza vegetazione è preziosa per loro."
-    }
+    co2T: "t CO₂"
   },
   everyday: {
     bathtubs: (n) => `${n} vasche da bagno piene`,
@@ -804,12 +675,9 @@ const it: TourUi = {
   results: {
     allFound: "Hai scoperto tutta la casa.",
     someFound: (found, total) => `${found} di ${total} oggetti scoperti.`,
-    summary: ({ points, spot, quizRight, cards, total }) => [
+    summary: ({ points, cards, total }) => [
       { b: `${points} punti scoperta` },
-      " — di cui ",
-      ...(spot > 0 ? [{ b: spot === 1 ? "1 stima centrata" : `${spot} stime centrate` }] : ["ancora nessuna stima centrata"]),
-      ...(quizRight > 0 ? [", ", { b: `${quizRight}` }, quizRight === 1 ? " affermazione valutata giusta" : " affermazioni valutate giuste"] : []),
-      " e ",
+      " — e ",
       { b: `${cards} di ${total}` },
       " schede lette."
     ],
@@ -916,12 +784,12 @@ const en: TourUi = {
     headline: "Every object has a connection to nature.",
     lead: "18 objects in six rooms, each with a short round:",
     loop: [
-      { title: "Answer", copy: "honestly — there’s no right or wrong" },
-      { title: "Guess", copy: "how many bathtubs, how many kilometres?" },
-      { title: "Discover", copy: "the reveal and a card for your folder" }
+      { title: "Set", copy: "tap, slide — just as it is at your place" },
+      { title: "See", copy: "what that adds up to in a year: bathtubs, kilometres" },
+      { title: "Discover", copy: "the why behind it, as a card for your folder" }
     ],
     loopAria: "One round",
-    honesty: "Points come from discovering and good guesses — never from the answer itself.",
+    honesty: "There’s no right or wrong. Points come from discovering — never from the answer itself.",
     start: "Start in the bedroom",
     resumeTitle: "Carry on where you left off.",
     doneTitle: "You’ve discovered the whole house.",
@@ -959,21 +827,9 @@ const en: TourUi = {
     objectOf: (room, index, total) => `${room} · object ${index} of ${total}`,
     openObject: (label) => `Open ${label}`,
     keys: { keys: "Keys", choose: "to choose,", next: "next" },
-    southTyrol: "South Tyrol average",
-    stepOf: (index) => `Step ${index} of 3: `
+    southTyrol: "South Tyrol average"
   },
-  stage: { answer: "Your answer", guess: "Take a guess", reveal: "Reveal" },
   answerHint: "There’s no right or wrong here. Points come from discovering, not from the answer.",
-  guessSubmit: "Submit guess",
-  guessSkip: "Continue without guessing",
-  guessYours: "Your guess",
-  guessActual: "Your answer gives",
-  quizQuestion: "True or not?",
-  quizTrue: "True",
-  quizFalse: "Not true",
-  quizVerdict: { true: "true.", false: "not true." },
-  ratings: { spot: "Spot on", close: "Close", off: "Way off", quizRight: "Right", quizWrong: "Not quite" },
-  offHint: (factor) => `Off by about ${factor} times — good that you know now.`,
   points: (n) => `${n} discovery points`,
   pointsShort: "points",
   folder: "Knowledge folder",
@@ -991,55 +847,12 @@ const en: TourUi = {
   },
   continue: "Next",
   finishRoom: "Finish room",
-  changeAnswer: "Change answer",
   adjust: { reset: "Default", less: (label) => `${label}: less`, more: (label) => `${label}: more` },
   units: {
     bathtubs: (n) => (n === 1 ? "bathtub" : "bathtubs"),
     carKm: "km by car",
     co2Kg: "kg CO₂",
-    co2T: "t CO₂",
-    anchors: {
-      bathtubs: "A full bathtub holds about 150 litres.",
-      carKm: "For comparison: Bolzano to Rome and back is about 1,400 km.",
-      co2: (kg) => `For comparison: showering for two songs a day for a year comes to about ${kg} kg CO₂ in the check.`
-    }
-  },
-  estimatePrompts: {
-    "bath-shower": "How many full bathtubs of water run through your shower in a year?",
-    "bath-toilet": "How many full bathtubs does your toilet flush away in a year?",
-    "garden-ground": "How many full bathtubs do you pour onto the garden in a year?",
-    "bath-water-heating": "The rest of your hot water: as much CO₂ as how many kilometres by car a year?",
-    "bedroom-heating": "Your heating: as much CO₂ as how many kilometres by car a year?",
-    "bedroom-textiles": "Your new clothes: as much CO₂ as how many kilometres by car a year?",
-    "living-tv-streaming": "Your household electricity: as much CO₂ as how many kilometres by car a year?",
-    "kitchen-diet": "Your diet: as much CO₂ as how many kilometres by car a year?",
-    "kitchen-origin": "The surcharge for imported food: as much CO₂ as how many kilometres by car a year?",
-    "kitchen-waste": "Your wasted food: as much CO₂ as how many kilometres by car a year?",
-    "mobility-short": "How much CO₂ do your short trips cause in a year?",
-    "mobility-km": "How much CO₂ do your other car kilometres cause in a year?",
-    "mobility-long": "How much CO₂ does your long-distance travel cause in a year?"
-  },
-  quiz: {
-    "bedroom-standby": {
-      statement: "In many households, devices on standby account for almost a tenth of electricity use.",
-      explanation: "True — for devices doing nothing at all. Around the clock, all year."
-    },
-    "living-lighting": {
-      statement: "For the same brightness, an LED uses about half as much electricity as an incandescent bulb.",
-      explanation: "Even less: an LED manages with about an eighth of an incandescent bulb’s power."
-    },
-    "living-plants": {
-      statement: "House plants measurably support the biodiversity outside your door.",
-      explanation: "They can improve how a room feels, but a reliable contribution to local biodiversity can’t be derived from them. For wild species, outdoor spaces and native plants are what count."
-    },
-    "garden-plants": {
-      statement: "Many wild bee species can do nothing with double ornamental flowers.",
-      explanation: "True. Native flowering plants are matched to local insects; many wild bee species can do nothing at all with double ornamental flowers."
-    },
-    "garden-structures": {
-      statement: "Most wild bees nest in insect hotels.",
-      explanation: "Most wild bees nest in the ground, not in drilled holes. Even a sunny strip of bare soil is valuable to them."
-    }
+    co2T: "t CO₂"
   },
   everyday: {
     bathtubs: (n) => `${n} full bathtubs`,
@@ -1074,12 +887,9 @@ const en: TourUi = {
   results: {
     allFound: "You’ve discovered the whole house.",
     someFound: (found, total) => `${found} of ${total} objects discovered.`,
-    summary: ({ points, spot, quizRight, cards, total }) => [
+    summary: ({ points, cards, total }) => [
       { b: `${points} discovery points` },
-      " — including ",
-      ...(spot > 0 ? [{ b: `${spot} spot-on` }, spot === 1 ? " guess" : " guesses"] : ["no spot-on guess yet"]),
-      ...(quizRight > 0 ? [", ", { b: `${quizRight}` }, quizRight === 1 ? " statement judged right" : " statements judged right"] : []),
-      " and ",
+      " — and ",
       { b: `${cards} of ${total}` },
       " knowledge cards read."
     ],

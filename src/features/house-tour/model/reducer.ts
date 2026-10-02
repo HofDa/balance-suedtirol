@@ -1,4 +1,4 @@
-import type { GuessRecord, TourAction, TourState } from "./types";
+import type { TourAction, TourState } from "./types";
 import { availableRooms } from "../config/rooms";
 
 const recordOrEmpty = <T>(value: unknown): Record<string, T> =>
@@ -45,26 +45,6 @@ function sanitizeSkipped(value: unknown, answers: Record<string, string>) {
   ) as Record<string, boolean>;
 }
 
-function sanitizeGuesses(value: unknown) {
-  const source = recordOrEmpty<unknown>(value);
-  const clean: Record<string, GuessRecord> = {};
-  for (const [questionId, record] of Object.entries(source)) {
-    if (!questions.has(questionId) || !record || typeof record !== "object") continue;
-    const entry = record as Record<string, unknown>;
-    if (entry.kind === "skipped") clean[questionId] = { kind: "skipped" };
-    else if (entry.kind === "quiz" && typeof entry.choice === "boolean") {
-      clean[questionId] = { kind: "quiz", choice: entry.choice };
-    } else if (
-      entry.kind === "estimate" &&
-      typeof entry.guess === "number" && Number.isFinite(entry.guess) && entry.guess > 0 &&
-      typeof entry.actual === "number" && Number.isFinite(entry.actual) && entry.actual > 0
-    ) {
-      clean[questionId] = { kind: "estimate", guess: entry.guess, actual: entry.actual };
-    }
-  }
-  return clean;
-}
-
 function sanitizeCards(value: unknown) {
   const source = recordOrEmpty<unknown>(value);
   return Object.fromEntries(
@@ -96,7 +76,6 @@ export const initialTourState: TourState = {
   answers: {},
   skippedQuestions: {},
   adjustments: {},
-  guesses: {},
   cardsRead: {},
   whatIf: {},
   goals: []
@@ -169,11 +148,6 @@ export function tourReducer(state: TourState, action: TourAction): TourState {
         activeQuestionIndex: action.index,
         objectOpen: action.open ?? false
       };
-    case "RECORD_GUESS":
-      // Ein Tipp gilt einmal. Wer die Auflösung kennt, schätzt nicht noch einmal
-      // für Punkte.
-      if (state.guesses[action.questionId] || !questions.has(action.questionId)) return state;
-      return { ...state, guesses: { ...state.guesses, [action.questionId]: action.record } };
     case "READ_CARD":
       if (state.cardsRead[action.questionId] || !questions.has(action.questionId)) return state;
       return { ...state, cardsRead: { ...state.cardsRead, [action.questionId]: true } };
@@ -215,7 +189,6 @@ export function restoreTourState(input: unknown): TourState {
     answers,
     skippedQuestions: sanitizeSkipped(source.skippedQuestions, answers),
     adjustments: sanitizeAdjustments(source.adjustments),
-    guesses: sanitizeGuesses(source.guesses),
     cardsRead: sanitizeCards(source.cardsRead),
     whatIf: sanitizeWhatIf(source.whatIf, answers),
     goals: sanitizeGoals(source.goals, answers)

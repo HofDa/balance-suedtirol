@@ -1,108 +1,37 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import { availableRooms } from "../src/features/house-tour/config/rooms";
-import { estimateUnits as estimatePrompts, quizAnswers as quizStatements } from "../src/features/house-tour/config/game-copy";
+import { everydayUnits } from "../src/features/house-tour/config/game-copy";
 import { optionValues, totalValues } from "../src/features/house-tour/model/calculator";
-import {
-  POINTS,
-  challengeFor,
-  discovery,
-  estimateSpec,
-  fromSlider,
-  levers,
-  rateEstimate,
-  toSlider,
-  whatIfTotals
-} from "../src/features/house-tour/model/game";
+import { POINTS, discovery, levers, whatIfTotals } from "../src/features/house-tour/model/game";
 import { initialTourState, restoreTourState, tourReducer } from "../src/features/house-tour/model/reducer";
 import type { TourState } from "../src/features/house-tour/model/types";
 
 const allQuestions = availableRooms.flatMap((room) => room.questions);
 const question = (id: string) => allQuestions.find((item) => item.id === id)!;
 
-test("jede Frage hat genau eine Herausforderung: Schätzen oder Wahr-oder-falsch", () => {
-  for (const item of allQuestions) {
-    const hasEstimate = Boolean(estimatePrompts[item.id]);
-    const hasQuiz = item.id in quizStatements;
-    assert.ok(hasEstimate !== hasQuiz, `${item.id}: ${hasEstimate ? "beides" : "keins"}`);
-  }
-});
-
-test("geschätzt wird nur, wo der Rechner einen Wert liefert, und Quizfragen haben keinen", () => {
+test("eine Alltagsgröße gibt es genau dort, wo der Rechner einen Wert liefert", () => {
   for (const item of allQuestions) {
     const values = item.options.map((option) => optionValues(item.id, option.id, {}, {}));
     const measurable = values.some((value) => value.co2Kg > 0 || value.waterL > 0);
-    assert.equal(measurable, Boolean(estimatePrompts[item.id]), item.id);
+    assert.equal(measurable, Boolean(everydayUnits[item.id]), item.id);
   }
-});
-
-test("Volltreffer und Daneben sind symmetrisch im Verhältnis", () => {
-  assert.equal(rateEstimate(100, 100), "spot");
-  assert.equal(rateEstimate(124, 100), "spot");
-  assert.equal(rateEstimate(100, 124), "spot");
-  assert.equal(rateEstimate(140, 100), "close");
-  assert.equal(rateEstimate(100, 140), "close");
-  assert.equal(rateEstimate(200, 100), "off");
-  assert.equal(rateEstimate(50, 100), "off");
-  assert.equal(rateEstimate(0, 100), "off");
-});
-
-test("der Schätzbereich hängt nicht von der eigenen Menge ab und enthält jeden möglichen Wert", () => {
-  for (const item of allQuestions) {
-    if (!estimatePrompts[item.id]) continue;
-    const spec = estimateSpec(item.id, {})!;
-    assert.ok(spec && spec.min > 0 && spec.max > spec.min, item.id);
-    for (const option of item.options) {
-      const quantities = item.adjust ? [item.adjust.min, item.adjust.defaults[option.id], item.adjust.max] : [undefined];
-      for (const quantity of quantities) {
-        const answers = { [item.id]: option.id };
-        const adjustments: Record<string, number> = quantity === undefined ? {} : { [item.id]: quantity };
-        const challenge = challengeFor(item.id, answers, adjustments);
-        if (!challenge) continue;
-        assert.equal(challenge.kind, "estimate");
-        if (challenge.kind !== "estimate") continue;
-        // Der Bereich bleibt derselbe, egal welche Menge jemand eingestellt hat.
-        assert.deepEqual(challenge.spec, spec, item.id);
-        assert.ok(challenge.actual >= spec.min && challenge.actual <= spec.max, `${item.id} ${option.id} ${quantity}`);
-      }
-    }
-  }
-});
-
-test("wer null verbraucht, muss nichts schätzen", () => {
-  assert.equal(challengeFor("garden-ground", { "garden-ground": "gravel" }, {}), null);
-  assert.equal(challengeFor("mobility-km", { "mobility-km": "car-none" }, {}), null);
-});
-
-test("der logarithmische Regler trifft beide Enden und kehrt sich um", () => {
-  assert.equal(fromSlider(0, 5, 500), 5);
-  assert.equal(fromSlider(1, 5, 500), 500);
-  for (const value of [5, 50, 500]) assert.ok(Math.abs(fromSlider(toSlider(value, 5, 500), 5, 500) - value) / value < 0.06);
 });
 
 test("Punkte gibt es fürs Entdecken, nie für eine sparsamere Antwort", () => {
-  const thrifty = discovery({ answers: { "bath-shower": "bath-eco" }, guesses: {}, cardsRead: {} });
-  const lavish = discovery({ answers: { "bath-shower": "bath-long" }, guesses: {}, cardsRead: {} });
+  const thrifty = discovery({ answers: { "bath-shower": "bath-eco" }, cardsRead: {} });
+  const lavish = discovery({ answers: { "bath-shower": "bath-long" }, cardsRead: {} });
   assert.equal(thrifty.points, lavish.points);
 
-  const played = discovery({
+  const explored = discovery({
     answers: { "bath-shower": "bath-long", "garden-structures": "none" },
-    guesses: {
-      "bath-shower": { kind: "estimate", guess: 100, actual: 105 },
-      "garden-structures": { kind: "quiz", choice: false }
-    },
     cardsRead: { "bath-shower": true }
   });
-  assert.equal(played.points, 2 * POINTS.found + POINTS.spot + POINTS.quizRight + POINTS.card);
-  assert.equal(played.spot, 1);
-  assert.equal(played.quizRight, 1);
+  assert.equal(explored.points, 2 * POINTS.found + POINTS.card);
 });
 
-test("ein Tipp zählt einmal, die Karte einmal", () => {
+test("eine Karte zählt einmal", () => {
   let state = tourReducer(initialTourState, { type: "SELECT_ANSWER", questionId: "bath-shower", optionId: "bath-long" });
-  state = tourReducer(state, { type: "RECORD_GUESS", questionId: "bath-shower", record: { kind: "estimate", guess: 300, actual: 100 } });
-  state = tourReducer(state, { type: "RECORD_GUESS", questionId: "bath-shower", record: { kind: "estimate", guess: 100, actual: 100 } });
-  assert.deepEqual(state.guesses["bath-shower"], { kind: "estimate", guess: 300, actual: 100 });
   state = tourReducer(state, { type: "READ_CARD", questionId: "bath-shower" });
   state = tourReducer(state, { type: "READ_CARD", questionId: "bath-shower" });
   assert.equal(discovery(state).cardsRead, 1);
@@ -149,24 +78,18 @@ test("höchstens drei Vorhaben, nur aus beantworteten Fragen", () => {
 test("gespeicherte Spielstände werden bereinigt", () => {
   const restored = restoreTourState({
     answers: { "bath-shower": "bath-eco" },
-    guesses: {
-      "bath-shower": { kind: "estimate", guess: 10, actual: 12 },
-      "bath-toilet": { kind: "estimate", guess: -1, actual: 12 },
-      "garden-structures": { kind: "quiz", choice: "yes" },
-      invented: { kind: "skipped" }
-    },
+    // Tipps aus der früheren Schätzrunde fallen beim Laden still weg.
+    guesses: { "bath-shower": { kind: "estimate", guess: 10, actual: 12 } },
     cardsRead: { "bath-shower": true, invented: true, "bath-toilet": "yes" },
     whatIf: { "bath-shower": "bath-long", "bath-toilet": "flush-saving" },
     goals: ["bath-shower", "bath-toilet", 7]
   });
-  assert.deepEqual(restored.guesses, { "bath-shower": { kind: "estimate", guess: 10, actual: 12 } });
+  assert.ok(!("guesses" in restored));
   assert.deepEqual(restored.cardsRead, { "bath-shower": true });
   assert.deepEqual(restored.whatIf, { "bath-shower": "bath-long" });
   assert.deepEqual(restored.goals, ["bath-shower"]);
 });
 
-test("Quizaussagen und Schätzfragen betreffen existierende Fragen", () => {
-  for (const id of [...Object.keys(estimatePrompts), ...Object.keys(quizStatements)]) {
-    assert.ok(question(id), id);
-  }
+test("Alltagsgrößen betreffen existierende Fragen", () => {
+  for (const id of Object.keys(everydayUnits)) assert.ok(question(id), id);
 });

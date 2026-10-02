@@ -1,11 +1,9 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef } from "react";
 import type { AnnualValues, TourQuestion, TourRoom } from "../model/types";
 import { getRoomProgress } from "../model/scoring";
 import { bestCaseSavingFromValues, optionValues } from "../model/calculator";
-
-export const AUTO_ADVANCE_MS = 900;
 
 export function useQuestionPanelInteraction({
   room, question, questionIndex, objectOpen, answers, skippedQuestions,
@@ -48,10 +46,7 @@ export function useQuestionPanelInteraction({
     const dy = event.changedTouches[0].clientY - start.y;
     if (Math.abs(dx) < 60 || Math.abs(dx) < Math.abs(dy) * 1.5) return;
     const next = questionIndex + (dx < 0 ? 1 : -1);
-    if (next >= 0 && next < room.questions.length) {
-      setAdvancingFor(null);
-      onGoTo(next);
-    }
+    if (next >= 0 && next < room.questions.length) onGoTo(next);
   };
   const slide = reduceMotion
     ? undefined
@@ -60,25 +55,11 @@ export function useQuestionPanelInteraction({
         center: { opacity: 1, x: 0, transition: { duration: 0.24, ease: "easeOut" as const } },
         exit: (dir: number) => ({ opacity: 0, x: dir * -28, transition: { duration: 0.16, ease: "easeIn" as const } })
       };
-  // Fragen ohne Regler gehen nach der Wahl von selbst weiter: kurz genug, um
-  // flüssig zu wirken, lang genug, um die Wirkung der Antwort zu sehen.
-  // Mit Regler bleibt der Weiter-Knopf, denn die Menge folgt erst noch.
-  const [advancingFor, setAdvancingFor] = useState<string | null>(null);
-  const advancing = advancingFor === question.id;
-  const continueRef = useRef(onContinue);
-  continueRef.current = onContinue;
-  useEffect(() => {
-    if (!advancing) return;
-    const timer = window.setTimeout(() => {
-      setAdvancingFor(null);
-      continueRef.current();
-    }, AUTO_ADVANCE_MS);
-    return () => window.clearTimeout(timer);
-  }, [advancing]);
+  // Kein automatisches Weiter: die Wirkung der Antwort steht direkt darunter
+  // und ist der Moment, für den man antwortet. Weiter geht es per Knopf.
   const choose = useCallback((optionId: string) => {
     onAnswer(question.id, optionId);
-    setAdvancingFor(question.adjust ? null : question.id);
-  }, [question, onAnswer]);
+  }, [question.id, onAnswer]);
   const roomProgress = getRoomProgress(room, answers, skippedQuestions);
   const roomHandled = roomProgress.handled;
   const roomDone = roomProgress.isComplete;
@@ -128,9 +109,8 @@ export function useQuestionPanelInteraction({
   }, [objectOpen, roomDone, question, selected, choose, onContinue]);
 
   return {
-    direction, slide, advancing, choose, roomHandled, roomDone, moreObjectsOpen,
+    direction, slide, choose, roomHandled, roomDone, moreObjectsOpen,
     selected, selectedOption, onTouchStart, onTouchEnd,
-    cancelAdvance: () => setAdvancingFor(null),
   };
 }
 

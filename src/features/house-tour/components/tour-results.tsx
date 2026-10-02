@@ -14,7 +14,7 @@ import { withBasePath } from "@/lib/public-path";
 import { baseScores, scoreDimensions } from "../model/scoring";
 import { formatMetric, metrics, referenceValues } from "../model/calculator";
 import { MAX_GOALS, levers as findLevers, toUnit, whatIfTotals, type Discovery, type Lever, type LeverTheme } from "../model/game";
-import { estimateUnits, type GuessUnit } from "../config/game-copy";
+import { everydayUnits, type EverydayUnit } from "../config/game-copy";
 import { useTourI18n } from "../i18n/context";
 import type { Rich } from "../i18n/ui";
 import { localeTags } from "@/lib/i18n";
@@ -127,9 +127,9 @@ function MeasuredMetric({
   );
 }
 
-/** Die Ersparnis eines Hebels in der Größe, in der auch geschätzt wurde. */
-function leverUnit(questionId: string): GuessUnit {
-  return estimateUnits[questionId] ?? "carKm";
+/** Die Ersparnis eines Hebels in derselben Alltagsgröße wie beim Gegenstand. */
+function leverUnit(questionId: string): EverydayUnit {
+  return everydayUnits[questionId] ?? "carKm";
 }
 
 function LeverCard({
@@ -303,7 +303,7 @@ export function TourResults({
         {isComplete ? r.allFound : r.someFound(progress.found, progress.total)}
       </h1>
       <p className="mt-4 max-w-[58ch] text-base leading-7 text-[var(--color-muted)]">
-        <RichText parts={r.summary({ points: progress.points, spot: progress.spot, quizRight: progress.quizRight, cards: progress.cardsRead, total: progress.total })} />
+        <RichText parts={r.summary({ points: progress.points, cards: progress.cardsRead, total: progress.total })} />
       </p>
       <div className="mt-5 flex flex-wrap gap-2">
         <button

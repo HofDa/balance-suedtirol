@@ -344,6 +344,15 @@ export function ProjectDetail({ project, otherProjects, locale }: ProjectDetailP
                   <span className="mt-1 block text-sm text-[var(--color-muted)]">{project.organizationAddress}</span>
                 ) : <> · {project.municipality}</>}
               </p>
+              {/* Öffentliche Unterstützung gilt je Projekt, nicht für die Plattform:
+                  deshalb beim Träger dieses Projekts, nicht am Seitenende, wo sie
+                  wie ein Vermerk für die ganze Seite wirkte. Kein Hauptinvestor,
+                  keine Kachel. */}
+              {project.supportedBy && (
+                <p className="mt-4 border-t border-[var(--color-line)] pt-4 text-sm text-[var(--color-muted)]">
+                  {copy.supportedBy}: <span className="font-semibold text-[var(--color-ink)]">{project.supportedBy}</span>
+                </p>
+              )}
               <p className="mt-3 max-w-[58ch] text-sm leading-6 text-[var(--color-muted)]">{copy.transparencyCopy}</p>
             </Surface>
           </section>
@@ -405,13 +414,6 @@ export function ProjectDetail({ project, otherProjects, locale }: ProjectDetailP
             </div>
           </section>
 
-          {/* Öffentliche Unterstützung steht hier und nur hier: kein
-              Hauptinvestor, keine Kachel, sondern eine Zeile am Schluss. */}
-          {project.supportedBy && (
-            <p className="mt-10 text-sm text-[var(--color-muted)]">
-              {copy.supportedBy}: <span className="font-semibold text-[var(--color-ink)]">{project.supportedBy}</span>
-            </p>
-          )}
         </Container>
       </section>
 

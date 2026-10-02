@@ -1,4 +1,4 @@
-import Link from "next/link";
+import Link from "@/components/ui/site-link";
 import { Mail } from "lucide-react";
 import { Container } from "@/components/ui/container";
 import { siteConfig, type Locale } from "@/config/site";

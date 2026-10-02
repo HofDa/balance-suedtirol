@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import Link from "next/link";
+import Link from "@/components/ui/site-link";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { ChevronRight, Info, Lightbulb, X } from "lucide-react";
 import { cn } from "@/lib/utils";

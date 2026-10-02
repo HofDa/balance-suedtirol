@@ -108,7 +108,8 @@ export function ObjectContextPanel({
   onHouse,
   onSelectRoom,
   onNextRoom,
-  onResults
+  onResults,
+  onNeedHeight
 }: {
   room: TourRoom;
   question: TourQuestion;
@@ -134,6 +135,8 @@ export function ObjectContextPanel({
   onSelectRoom: (id: RoomId) => void;
   onNextRoom: () => void;
   onResults: () => void;
+  /** Wie hoch der aktuelle Schritt ist, damit die Szene darüber Platz macht. */
+  onNeedHeight?: (pixels: number | null) => void;
 }) {
   const reduceMotion = useReducedMotion();
   const { t } = useTourI18n();
@@ -199,6 +202,24 @@ export function ObjectContextPanel({
   const firstEver = Object.keys(answers).length === 0;
   const hasKind = steps.includes("kind");
 
+  // Die Höhe des Schritts, gemessen am Inhalt, nicht am Rahmen. Die Szene
+  // nimmt sich mobil nur, was übrig bleibt: ein kurzer Schritt lässt ihr das
+  // volle Band, die Essenswoche ein schmaleres — gescrollt wird nicht.
+  const contentRef = useRef<HTMLDivElement>(null);
+  const answering = objectOpen && !showingComplete;
+  useEffect(() => {
+    const element = contentRef.current;
+    if (!onNeedHeight) return;
+    if (!element || !answering || typeof ResizeObserver === "undefined") {
+      onNeedHeight(null);
+      return;
+    }
+    const padding = parseFloat(getComputedStyle(scrollRef.current ?? element).paddingTop) || 0;
+    const observer = new ResizeObserver(() => onNeedHeight(Math.ceil(element.offsetHeight + padding)));
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, [answering, onNeedHeight]);
+
   const openCard = () => {
     setCardOpen(true);
     onReadCard(question.id);
@@ -232,10 +253,11 @@ export function ObjectContextPanel({
 
       <div
         ref={scrollRef}
-        className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden px-4 pt-4 md:px-6 md:py-6"
+        className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden px-4 pt-3 md:px-6 md:py-6"
         onTouchStart={onTouchStart}
         onTouchEnd={onTouchEnd}
       >
+        <div ref={contentRef}>
         <AnimatePresence mode="wait" initial={false} custom={direction}>
           {roomDone && !objectOpen ? (
             <RoomCompleteView
@@ -284,7 +306,9 @@ export function ObjectContextPanel({
               exit={reduceMotion ? undefined : "exit"}
               className="mx-auto max-w-xl"
             >
-              <div className="mb-3 flex min-w-0 items-center justify-between gap-3">
+              {/* Mobil steht der Schritt in der Fußleiste; Raum und Gegenstand
+                  zeigt dort schon die Szene darüber. */}
+              <div className="mb-3 hidden min-w-0 items-center justify-between gap-3 md:flex">
                 <Label size="dense" className="shrink-0">
                   {room.title} · {questionIndex + 1}/{room.questions.length}
                 </Label>
@@ -370,6 +394,9 @@ export function ObjectContextPanel({
 
               <div className={footerClass}>
                 {back}
+                <span className="mx-auto md:hidden">
+                  <StepTrack steps={steps} current={stepIndex} />
+                </span>
                 {step === "result" ? (
                   <button type="button" autoFocus onClick={onContinue} className={primaryButton}>
                     {moreObjectsOpen ? t.continue : t.finishRoom}
@@ -390,6 +417,7 @@ export function ObjectContextPanel({
             </motion.div>
           )}
         </AnimatePresence>
+        </div>
       </div>
 
       <KnowledgeSheet open={cardOpen} onClose={() => setCardOpen(false)} title={question.sceneLabel} imageId={question.id}>

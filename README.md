@@ -58,6 +58,12 @@ Der Pages-Workflow baut genau diese Anwendung aus `main`, ohne separaten
 Legacy-Build oder Branch-Checkout für eine Vorschau. Die Änderungen müssen
 zum Veröffentlichen nach `main` übernommen werden.
 
+Im Pages-Build verwendet `SiteLink` normale HTML-Navigation. Damit bleiben
+offene Tabs nach einem Deployment nutzbar: Der Next.js-15-Export-Router kann
+bei unterschiedlichen Build-Versionen sonst die interne `index.txt`-Datei
+als Seite öffnen. Im Next.js-Serverbetrieb bleiben die clientseitigen
+Seitenwechsel erhalten.
+
 Frühere `/neu/`-Links führen zu den entsprechenden regulären Seiten. Bei
 GitHub Pages erzeugt `npm run build:pages` dafür kleine HTML-Weiterleitungen,
 auch für lokalisierte Unterseiten; Suchparameter und Anker bleiben erhalten.

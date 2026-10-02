@@ -1,7 +1,7 @@
 "use client";
 
 import { Fragment } from "react";
-import Link from "next/link";
+import Link from "@/components/ui/site-link";
 import { usePathname } from "next/navigation";
 import { locales, type Locale } from "@/config/site";
 import { focusRing } from "@/components/ui/focus";

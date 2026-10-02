@@ -1,5 +1,5 @@
 import { localizedAlternates } from "@/lib/site-metadata";
-import Link from "next/link";
+import Link from "@/components/ui/site-link";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import {

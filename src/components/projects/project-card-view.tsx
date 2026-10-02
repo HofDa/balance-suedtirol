@@ -1,5 +1,5 @@
 import Image from "next/image";
-import Link from "next/link";
+import Link from "@/components/ui/site-link";
 import { MapPin } from "lucide-react";
 import type { ProjectCardData } from "@/types/project";
 import type { Locale } from "@/config/site";

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import Link from "next/link";
+import Link from "@/components/ui/site-link";
 import { ArrowRight, Bookmark, BookmarkCheck, BookOpen, ChevronRight, Home, Plus } from "lucide-react";
 import { animate, motion, useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/utils";

@@ -1,4 +1,4 @@
-import Link from "next/link";
+import Link from "@/components/ui/site-link";
 import { Container } from "@/components/ui/container";
 import type { Locale } from "@/config/site";
 import { getHomeStory } from "@/config/home-story";

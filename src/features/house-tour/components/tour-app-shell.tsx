@@ -35,10 +35,18 @@ const houseFrameVariants = {
  * 44–48 % eines quadratischen Raums und 28 % des Gartens; jetzt rund 87 % und
  * 52 %, und der Fragenbereich behält gut 270 px.
  */
-function sceneRow(roomId: RoomId | null) {
+function sceneRow(roomId: RoomId | null, answering: boolean, panelNeed: number | null) {
   const crop = roomId ? layout.rooms[roomId as keyof typeof layout.rooms] : undefined;
   const ratio = crop ? crop[3] / crop[2] : 1;
-  return `minmax(7rem,min(calc(100vw*${ratio.toFixed(3)}),calc((100dvh - 3.5rem - env(safe-area-inset-top) - env(safe-area-inset-bottom))*0.55)))`;
+  // Beim Beantworten wird die Szene zum Band, und die Kamera fährt an den
+  // Gegenstand heran (`registered-house-scene.tsx`): so passen Frage und
+  // Eingabe auch auf ein 640-px-Telefon, ohne dass der Gegenstand kleiner wird.
+  // Zusätzlich nie mehr, als der Schritt darunter übrig lässt; unter 7rem
+  // geht die Szene nicht, dann darf der Schritt scrollen.
+  const share = answering ? 0.38 : 0.55;
+  const available = "(100dvh - 3.5rem - env(safe-area-inset-top) - env(safe-area-inset-bottom))";
+  const fit = answering && panelNeed ? `,calc(${available} - ${panelNeed}px)` : "";
+  return `minmax(7rem,min(calc(100vw*${ratio.toFixed(3)}),calc(${available}*${share})${fit}))`;
 }
 
 const TourResults = dynamic(
@@ -58,6 +66,7 @@ function TourApp({ locale }: { locale: Locale }) {
   const i18n = useTourI18n();
   const { state, dispatch, scores, totals, completedRooms, celebratedRooms, progress: discoveryState } = useHouseTour();
   const [folderOpen, setFolderOpen] = useState(false);
+  const [panelNeed, setPanelNeed] = useState<number | null>(null);
   const reduce = useReducedMotion();
   // Die Kamera braucht den Raum, in den sie fährt oder aus dem sie kommt; beim
   // Wechsel zur Hausübersicht ist `activeRoom` schon leer.
@@ -278,10 +287,10 @@ function TourApp({ locale }: { locale: Locale }) {
         // Nur noch eine Steuerungsebene über dem Inhalt statt Kopfzeile plus Raumleiste.
         "grid h-full min-h-0 min-w-0 grid-cols-[minmax(0,1fr)] overflow-hidden bg-[var(--color-paper)] md:grid-cols-[minmax(0,1.3fr)_minmax(23rem,1fr)] md:grid-rows-[3.5rem_minmax(0,1fr)]",
         state.view === "room"
-          ? "grid-rows-[3.5rem_var(--scene-row)_minmax(0,1fr)]"
+          ? "grid-rows-[3.5rem_var(--scene-row)_minmax(0,1fr)] transition-[grid-template-rows] duration-500 ease-out motion-reduce:transition-none"
           : "grid-rows-[3.5rem_minmax(10rem,42dvh)_minmax(0,1fr)]"
       )}
-      style={{ ["--scene-row" as string]: sceneRow(state.activeRoom) }}
+      style={{ ["--scene-row" as string]: sceneRow(state.activeRoom, state.view === "room" && state.objectOpen, panelNeed) }}
     >
       <div className="min-w-0 md:col-start-2">
         <TourToolbar
@@ -342,6 +351,7 @@ function TourApp({ locale }: { locale: Locale }) {
                 adjustments={state.adjustments}
                 skippedQuestions={state.skippedQuestions}
                 onSelectObject={selectObject}
+                zoom={state.objectOpen}
               />
             </motion.div>
           ) : null}
@@ -387,6 +397,7 @@ function TourApp({ locale }: { locale: Locale }) {
             onSelectRoom={(id) => openRoom(id)}
             onNextRoom={openNextRoom}
             onResults={showResults}
+            onNeedHeight={setPanelNeed}
             allComplete={completedRooms.length === availableRooms.length}
           />
         ) : null}

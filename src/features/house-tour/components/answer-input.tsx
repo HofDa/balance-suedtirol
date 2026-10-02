@@ -125,10 +125,14 @@ function PresetChips({
   const { t } = useTourI18n();
   return (
     <>
-      <p className="mt-4 text-[11px] font-semibold text-[var(--color-muted)]" aria-hidden>
+      <p className="mt-4 hidden text-[11px] font-semibold text-[var(--color-muted)] md:block" aria-hidden>
         {t.presets}
       </p>
-      <div className="mt-1.5 grid grid-cols-2 gap-1.5" role="radiogroup" aria-label={t.presets}>
+      <div
+        className={cn("mt-3 grid gap-1.5 md:mt-1.5", question.options.length === 3 ? "grid-cols-3" : "grid-cols-2")}
+        role="radiogroup"
+        aria-label={t.presets}
+      >
         {question.options.map((option) => {
           const active = selected === option.id;
           return (
@@ -268,8 +272,12 @@ export function KindStep({
 }) {
   const reduceMotion = useReducedMotion();
   const { t } = useTourI18n();
+  // Ab vier Antworten dichter: mobil schmalere Zeilen in einer Spalte — zwei
+  // Spalten brachen „Durchlauferhitzer“ mitten im Wort —, auf dem Desktop
+  // Kacheln in zwei Spalten.
+  const tiles = question.options.length >= 4;
   return (
-    <div className="mt-4 grid gap-2" role="radiogroup" aria-labelledby="step-title">
+    <div className={cn("mt-3 grid md:mt-4", tiles ? "gap-1.5 md:grid-cols-2 md:gap-2" : "gap-2")} role="radiogroup" aria-labelledby="step-title">
       {question.options.map((option, index) => {
         const active = selected === option.id;
         const Icon = iconFor(question.id, option.id);
@@ -282,7 +290,10 @@ export function KindStep({
             whileTap={reduceMotion ? undefined : { scale: 0.985 }}
             onClick={() => onChoose(option.id)}
             className={cn(
-              "group flex min-h-14 w-full items-center gap-3 rounded-[var(--radius-lg)] border px-4 py-3 text-left transition-colors duration-200",
+              "group relative w-full rounded-[var(--radius-lg)] border text-left transition-colors duration-200",
+              tiles
+                ? "flex min-h-12 items-center gap-2.5 py-1.5 pl-2 pr-3 md:min-h-14 md:py-2 md:pl-2.5"
+                : "flex min-h-14 items-center gap-3 px-4 py-3",
               active
                 ? "border-[var(--color-forest)] bg-[var(--color-sage)]/55"
                 : "border-[var(--color-line)] bg-white hover:border-[var(--color-forest)]/45 hover:bg-[var(--color-paper)]",
@@ -291,14 +302,15 @@ export function KindStep({
           >
             <span
               className={cn(
-                "grid size-10 shrink-0 place-items-center rounded-[var(--radius-md)] transition-colors duration-200",
+                "grid shrink-0 place-items-center rounded-[var(--radius-md)] transition-colors duration-200",
+                tiles ? "size-8 md:size-9" : "size-10",
                 active ? "bg-[var(--color-forest)] text-white" : "bg-[var(--color-sage)]/70 text-[var(--color-forest)]"
               )}
               aria-hidden
             >
               <Icon className="size-5" strokeWidth={1.75} />
             </span>
-            <span className="min-w-0 flex-1 text-base font-semibold leading-5">
+            <span className={cn("min-w-0 flex-1 break-words font-semibold", tiles ? "text-sm leading-5" : "text-base leading-5")}>
               {option.label}
               {option.regionalAverage && (
                 <span className="ml-2 inline-flex translate-y-[-1px] items-center rounded-[var(--radius-sm)] bg-[var(--color-sage)] px-2 py-0.5 align-middle text-[11px] font-semibold text-[var(--color-forest)]">

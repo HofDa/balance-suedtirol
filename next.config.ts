@@ -10,6 +10,9 @@ export default function nextConfig(phase: string): NextConfig {
     // while `next dev` is open would otherwise remove temporary dev files.
     distDir: phase === PHASE_DEVELOPMENT_SERVER ? ".next-dev" : ".next",
     output: isGitHubPages ? "export" : undefined,
+    env: {
+      NEXT_PUBLIC_STATIC_EXPORT: String(isGitHubPages),
+    },
     basePath: pagesBasePath,
     trailingSlash: isGitHubPages,
     poweredByHeader: false,

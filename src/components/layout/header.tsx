@@ -1,4 +1,4 @@
-import Link from "next/link";
+import Link from "@/components/ui/site-link";
 import Image from "next/image";
 import { withBasePath } from "@/lib/public-path";
 import { Menu } from "lucide-react";

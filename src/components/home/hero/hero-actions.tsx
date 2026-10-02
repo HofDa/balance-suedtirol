@@ -1,4 +1,4 @@
-import Link from "next/link";
+import Link from "@/components/ui/site-link";
 import { ArrowDown } from "lucide-react";
 import { getTranslations } from "@/config/translations";
 import type { Locale } from "@/config/site";

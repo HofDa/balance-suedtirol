@@ -258,7 +258,8 @@
     width: 100cqw !important;
     flex-shrink: 0;
     transform: translateY(min(0px, max(calc(100cqh - var(--scene-h)), calc(50cqh - var(--focus-y) * var(--scene-h)))));
-    transition: transform 320ms ease;
+    /* Die Kamera fährt heran und wieder heraus: ruhig auslaufen, nicht federn. */
+    transition: transform 480ms cubic-bezier(0.16, 1, 0.3, 1);
   }
   /* Das quadratische Haus füllt mobil die Breite statt seitlicher Balken;
      oben und unten fallen nur Himmel und Wiese weg, die Schilder bleiben drin. */

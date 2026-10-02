@@ -9,3 +9,13 @@ export function withBasePath(path: string) {
   if (path === basePath || path.startsWith(`${basePath}/`)) return path;
   return `${basePath}${path}`;
 }
+
+/** Static page directories need a trailing slash before query/hash suffixes. */
+export function staticPageHref(href: string) {
+  if (!href.startsWith("/") || href.startsWith("//")) return href;
+  const [, pathname, suffix] = href.match(/^([^?#]*)(.*)$/)!;
+  const pagePath = pathname.endsWith("/") || /\.[^/]+$/.test(pathname)
+    ? pathname
+    : `${pathname}/`;
+  return withBasePath(pagePath) + suffix;
+}

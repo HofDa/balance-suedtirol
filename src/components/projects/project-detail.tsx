@@ -1,6 +1,6 @@
 import { localeTags } from "@/lib/i18n";
 import Image from "next/image";
-import Link from "next/link";
+import Link from "@/components/ui/site-link";
 import {
   ArrowLeft,
   ArrowRight,

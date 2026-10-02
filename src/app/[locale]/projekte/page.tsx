@@ -1,6 +1,6 @@
 import { localizedAlternates } from "@/lib/site-metadata";
 import { Suspense } from "react";
-import Link from "next/link";
+import Link from "@/components/ui/site-link";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ArrowRight } from "lucide-react";

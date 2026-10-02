@@ -7,6 +7,7 @@ import { Container } from "@/components/ui/container";
 import { getTranslations } from "@/config/translations";
 import { LanguageSwitcher } from "./language-switcher";
 import { NavLink } from "./nav-link";
+import { MobileMenu } from "./mobile-menu";
 import { Label } from "@/components/ui/label";
 import { focusRing, focusRingTool } from "@/components/ui/focus";
 
@@ -66,7 +67,7 @@ export function Header({ locale }: { locale: Locale }) {
             {t.headerCta}
           </Link>
 
-          <details className="group">
+          <MobileMenu className="group">
             <summary
               className="grid size-10 cursor-pointer list-none place-items-center rounded-full border border-[var(--color-line)] bg-white [&::-webkit-details-marker]:hidden"
               aria-label={t.menu}
@@ -113,7 +114,7 @@ export function Header({ locale }: { locale: Locale }) {
                 <LanguageSwitcher locale={locale} />
               </div>
             </nav>
-          </details>
+          </MobileMenu>
         </div>
       </Container>
     </header>

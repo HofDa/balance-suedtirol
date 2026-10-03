@@ -12,18 +12,33 @@ import { cn } from "@/lib/utils";
 import { CountUp } from "./count-up";
 import { RichnessProfile, richnessProfileSpots as spots } from "./richness-profile";
 import { SceneNumber, spotStyle } from "./scene-number";
+import { LegendCarousel, LegendMarker } from "./legend-carousel";
 
-/** Marken in der Grafik, eine je Faktor, in der Reihenfolge der Legende. */
+/** Marken in der Grafik, eine je Faktor, in der Reihenfolge der Legende (von links nach rechts). */
 const markers: ReadonlyArray<{ key: keyof typeof spots.markers; factor: number }> = [
-  { key: "altitude", factor: 0 },
-  { key: "geology", factor: 1 },
-  { key: "climate", factor: 2 },
-  { key: "culture", factor: 3 }
+  { key: "climate", factor: 0 },
+  { key: "culture", factor: 1 },
+  { key: "geology", factor: 2 },
+  { key: "altitude", factor: 3 }
 ];
 
 const zoneKeys = ["valley", "forest", "alpine", "rock"] as const;
 
 const levelKeys = ["1000", "2000", "3000"] as const;
+
+/**
+ * Lage einer Nummer: im Himmel über ihrem Motiv; ab `lg` genau über der
+ * Nummer ihrer Legendenspalte (vier Spalten, `gap-x-10`, Nummer 1.5rem
+ * breit). Die Motive im Skript stehen so, dass beides zusammenfällt.
+ */
+function markerStyle(spot: { left: string; top: string }, column: number, delay: number) {
+  return {
+    top: spot.top,
+    "--spot-left": spot.left,
+    "--col": column,
+    "--habitat-delay": `${delay}ms`
+  } as CSSProperties;
+}
 
 /**
  * Der erste Abschnitt nach dem Hero: Was Südtirol besitzt. Statt Foto und
@@ -53,14 +68,16 @@ export function BiodiversityRichness({ locale }: { locale: Locale }) {
           <p className={cn(hiddenWhenCollapsed, textLead, "lg:pb-2")}>{t.lead}</p>
         </div>
 
-        <figure className={cn(hiddenWhenCollapsed, "mt-10 sm:mt-16")}>
+        <div data-legend-scope className={hiddenWhenCollapsed}>
+        <figure className="mt-10 sm:mt-16">
           {/* Auf dem Telefon randlos, damit die Zeichnung nicht noch kleiner wird. */}
           <div data-home-reveal="grow" className="relative -mx-5 text-[var(--color-ink)] sm:mx-0">
             <RichnessProfile className="block h-auto w-full" />
-            <div aria-hidden className="text-[11px] font-bold uppercase tracking-[0.14em]">
+            <div className="text-[11px] font-bold uppercase tracking-[0.14em]">
               {levelKeys.map((key) => (
                 <span
                   key={key}
+                  aria-hidden
                   className="absolute hidden -translate-y-full pb-1 normal-case tracking-normal text-[var(--color-muted)] sm:block"
                   style={spots.levels[key]}
                 >
@@ -70,6 +87,7 @@ export function BiodiversityRichness({ locale }: { locale: Locale }) {
               {zoneKeys.map((key) => (
                 <span
                   key={key}
+                  aria-hidden
                   className="habitat-fade absolute hidden -translate-x-1/2 -translate-y-full whitespace-nowrap text-[var(--color-ink)] md:block"
                   style={spotStyle(spots.zones[key], 1200)}
                 >
@@ -79,16 +97,26 @@ export function BiodiversityRichness({ locale }: { locale: Locale }) {
               {markers.map(({ key, factor }) => (
                 <span
                   key={key}
-                  className="habitat-fade absolute flex -translate-x-1/2 -translate-y-1/2 items-center gap-2"
-                  style={spotStyle(spots.markers[key], 1300 + factor * 120)}
+                  className={cn(
+                    "habitat-fade absolute flex -translate-x-1/2 -translate-y-1/2 items-center gap-2",
+                    "left-[var(--spot-left)]",
+                    // 1 bleibt unter der Sonne; 2 bis 4 rücken über ihre Legendenspalte.
+                    factor > 0 && "lg:left-[calc(var(--col)*(100%_-_7.5rem)/4_+_var(--col)*2.5rem_+_0.75rem)]",
+                    // 4 und 2 etwas höher, sonst sitzen sie auf Grat und Baumkronen.
+                    (key === "altitude" || key === "culture") && "-mt-2.5 sm:-mt-4"
+                  )}
+                  style={markerStyle(spots.markers[key], factor, 1300 + factor * 120)}
                 >
-                  <SceneNumber
-                    n={factor + 1}
-                    className="profile-marker relative shadow-[var(--shadow-on-photo)]"
-                    style={{ "--marker-delay": `${factor * 1.1}s` } as CSSProperties}
-                  />
+                  <LegendMarker index={factor} label={`${factor + 1}: ${t.factors[factor][0]}`}>
+                    <SceneNumber
+                      n={factor + 1}
+                      marker
+                      className="profile-marker relative shadow-[var(--shadow-on-photo)] max-sm:size-[18px] max-sm:text-[10px] max-sm:ring-1"
+                      style={{ "--marker-delay": `${factor * 1.1}s` } as CSSProperties}
+                    />
+                  </LegendMarker>
                   {key === "altitude" ? (
-                    <span className="absolute left-full ml-2 hidden whitespace-nowrap normal-case tracking-normal text-[var(--color-ink)] sm:block">
+                    <span aria-hidden className="absolute left-full ml-2 hidden whitespace-nowrap normal-case tracking-normal text-[var(--color-ink)] sm:block">
                       {t.profile.peak}
                     </span>
                   ) : null}
@@ -99,7 +127,9 @@ export function BiodiversityRichness({ locale }: { locale: Locale }) {
           <figcaption className="mt-3 text-xs leading-5 text-[var(--color-muted)]">{t.profile.note}</figcaption>
         </figure>
 
-        <ol className={cn(hiddenWhenCollapsed, "mt-8 grid gap-x-10 gap-y-6 sm:mt-10 sm:grid-cols-2 lg:grid-cols-4")}>
+        {/* Telefon: wischbare Kartenreihe, damit die Grafik im Bild bleibt. */}
+        <LegendCarousel className="mt-6 sm:hidden" items={t.factors} tone="light" pagerLabel={story.legendPager} stagger />
+        <ol className="mt-10 hidden gap-x-10 gap-y-6 sm:grid sm:grid-cols-2 lg:grid-cols-4">
           {t.factors.map(([term, description], index) => (
             <li
               key={term}
@@ -115,6 +145,7 @@ export function BiodiversityRichness({ locale }: { locale: Locale }) {
             </li>
           ))}
         </ol>
+        </div>
 
         {/* Die Zahlenebene: groß gesetzt, durch Haarlinien getrennt, ohne Rahmen. */}
         <div data-home-reveal="rise" className={cn(hiddenWhenCollapsed, "mt-16 sm:mt-32")}>

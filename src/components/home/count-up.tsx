@@ -11,7 +11,8 @@ const DURATION = 1600;
  * Endzahl hält die Breite fest, damit Zusätze wie „von 36“ nicht mitwandern.
  * Das Tausendertrennzeichen wird aus dem Wert übernommen („2.500“, „2,500“).
  */
-export function CountUp({ value }: { value: string }) {
+/** `delay` (ms) wartet nach dem Erscheinen, etwa bis eine Grafik daneben fertig ist. */
+export function CountUp({ value, delay = 0 }: { value: string; delay?: number }) {
   const match = value.match(/^(\d{1,3}(?:[.,]\d{3})*)(.*)$/);
   const separator = match?.[1].match(/[.,]/)?.[0] ?? "";
   const target = match ? Number(match[1].replace(/[.,]/g, "")) : 0;
@@ -26,17 +27,20 @@ export function CountUp({ value }: { value: string }) {
 
     setCurrent(0);
     let frame = 0;
+    let timer = 0;
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (!entry.isIntersecting) return;
         observer.disconnect();
-        const start = performance.now();
-        const tick = (now: number) => {
-          const t = Math.min(1, (now - start) / DURATION);
-          setCurrent(Math.round(target * (1 - Math.pow(1 - t, 4))));
-          if (t < 1) frame = requestAnimationFrame(tick);
-        };
-        frame = requestAnimationFrame(tick);
+        timer = window.setTimeout(() => {
+          const start = performance.now();
+          const tick = (now: number) => {
+            const t = Math.min(1, (now - start) / DURATION);
+            setCurrent(Math.round(target * (1 - Math.pow(1 - t, 4))));
+            if (t < 1) frame = requestAnimationFrame(tick);
+          };
+          frame = requestAnimationFrame(tick);
+        }, delay);
       },
       { threshold: 0.6 }
     );
@@ -44,6 +48,7 @@ export function CountUp({ value }: { value: string }) {
 
     return () => {
       observer.disconnect();
+      window.clearTimeout(timer);
       cancelAnimationFrame(frame);
     };
     // `value` bestimmt alle abgeleiteten Größen.

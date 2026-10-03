@@ -316,7 +316,9 @@ while x < W + 10:
     x += rng.uniform(10, 14)
 
 # Klima: Sonne im Süden, Regen am Alpenhauptkamm. Zuletzt die Vögel.
-add(1000, sun(112, 104, 24), "fade")
+# Sonne nah am linken Rand: Ab `lg` steht ihre Nummer über der ersten
+# Legendenspalte, also ganz links.
+add(1000, sun(62, 104, 24), "fade")
 add(1080, cloud(1316, 118, 1.15), "fade")
 add(1160, bird(560, 96, 1) + bird(586, 110, 0.75, -1.7) + bird(540, 116, 0.6, -3.1), "fade")
 
@@ -324,7 +326,7 @@ add(1160, bird(560, 96, 1) + bird(586, 110, 0.75, -1.7) + bird(540, 116, 0.6, -3
 levels = {"1000": y(1000), "2000": y(2000), "3000": y(3000)}
 level_lines = "".join(f"M0 {f(v)}H{W}" for v in levels.values())
 
-# Hinweislinien von den Zonenetiketten zur Oberfläche.
+# Hinweislinien von den Zonenetiketten zur Oberfläche. Wie die Etiketten erst ab `md`.
 zones = {"valley": (196, 418), "forest": (642, 230), "alpine": (872, 196), "rock": (1000, 128)}
 zone_surface = {"valley": g(196) - 18, "forest": g(642) - 40, "alpine": g(872) - 14, "rock": g(1000) - 4}
 leaders = "".join(f"M{f(zx)} {f(zy + 8)}V{f(zone_surface[k])}" for k, (zx, zy) in zones.items())
@@ -336,10 +338,12 @@ def pct(px, py):
 
 spots = {
     "markers": {
+        # Alle Nummern im Himmel über der Landschaft. Ab `lg` stehen 2 bis 4
+        # über ihrer Legendenspalte (x 387, 759, 1131 bei voller Breite).
+        "climate": pct(78, 180),  # unter der Sonne
+        "culture": pct(387, g(387) - 58),  # über den Bäumen der Terrassen
+        "geology": pct(759, y(3200) - 20),  # über den Felstürmen
         "altitude": pct(1130, y(3905) - 22),
-        "geology": pct(612, y(2900)),
-        "climate": pct(112, 104),
-        "culture": pct(340, y(560) + 26),
     },
     "levels": {k: pct(0, v) for k, v in levels.items()},
     "zones": {k: pct(zx, zy) for k, (zx, zy) in zones.items()},
@@ -385,7 +389,7 @@ export function RichnessProfile({{ className }}: {{ className?: string }}) {{
       </defs>
       <path d="{level_lines}" fill="none" stroke="currentColor" strokeWidth="1" strokeDasharray="3 6" opacity="0.22" vectorEffect="non-scaling-stroke" />
 {chr(10).join(lines)}
-      <path className="habitat-fade" style={{{{ "--habitat-delay": "1200ms" }} as CSSProperties}} d="{leaders}" fill="none" stroke="currentColor" strokeWidth="1" opacity="0.45" vectorEffect="non-scaling-stroke" />
+      <path className="habitat-fade max-md:hidden" style={{{{ "--habitat-delay": "1200ms" }} as CSSProperties}} d="{leaders}" fill="none" stroke="currentColor" strokeWidth="1" opacity="0.45" vectorEffect="non-scaling-stroke" />
     </svg>
   );
 }}

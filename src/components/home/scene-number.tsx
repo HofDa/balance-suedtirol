@@ -10,16 +10,20 @@ export function SceneNumber({
   n,
   tone = "light",
   className,
-  style
+  style,
+  marker = false
 }: {
   n: number;
   tone?: "light" | "dark";
   className?: string;
   style?: CSSProperties;
+  /** Marke in der Grafik: die Legenden-Karte auf dem Telefon hebt sie hervor. */
+  marker?: boolean;
 }) {
   return (
     <span
       style={style}
+      data-factor={marker ? n : undefined}
       className={cn(
         "grid size-6 shrink-0 place-items-center rounded-full text-xs font-bold tabular-nums ring-2",
         tone === "light"

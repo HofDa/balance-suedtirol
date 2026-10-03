@@ -1,0 +1,42 @@
+.scene {
+  position: relative;
+}
+
+.scene > svg {
+  transform: scaleX(-1);
+}
+
+.marker {
+  position: absolute;
+  left: calc(100% - var(--marker-left));
+  top: var(--marker-top);
+  transform: translate(-50%, -50%);
+}
+
+@media (max-width: 639px) {
+  .viewport {
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+  }
+
+  .canvas {
+    min-width: 800px;
+  }
+
+  .scene {
+    margin-bottom: 56px;
+  }
+
+  .marker {
+    top: calc(100% + 28px);
+  }
+
+  .leader {
+    position: absolute;
+    left: calc(100% - var(--marker-left));
+    top: var(--marker-top);
+    height: calc(100% - var(--marker-top) + 14px);
+    border-left: 1px solid var(--color-moss);
+    opacity: 0.45;
+  }
+}

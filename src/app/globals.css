@@ -391,6 +391,11 @@ button {
     transform: translateY(12px) scale(0.985);
   }
 
+  [data-home-page].home-motion-ready [data-home-reveal="focus"] {
+    transform: translateY(28px) scale(0.96);
+    transition-duration: 900ms, 1100ms;
+  }
+
   [data-home-page].home-motion-ready [data-home-reveal="slide"] {
     transform: translateX(14px);
   }
@@ -486,6 +491,67 @@ button {
     transform: translateY(14px);
   }
 
+  /* Europa-Silhouette und 1-Euro-Münzen. Die Übergänge hängen nur am
+     sichtbaren Zustand: Verborgen wird sofort, aufgedeckt wird animiert –
+     sonst liefe die Füllung beim Laden erst unsichtbar nach unten. */
+  [data-home-page].home-motion-ready [data-home-reveal] .europe-fill {
+    clip-path: inset(100% 0 0 0);
+  }
+
+  [data-home-page].home-motion-ready [data-home-reveal][data-home-visible="true"] .europe-fill {
+    clip-path: inset(var(--fill-top) 0 0 0);
+    transition: clip-path 1600ms cubic-bezier(0.33, 1, 0.68, 1) 300ms;
+  }
+
+  /* Abschluss: Der Satz liegt schief, bis der Schmetterling landet. */
+  [data-home-page].home-motion-ready [data-home-reveal] .balance-beam {
+    transform: rotate(-2.5deg);
+    transform-origin: 0% 60%;
+  }
+
+  [data-home-page].home-motion-ready [data-home-reveal] .balance-butterfly {
+    opacity: 0;
+  }
+
+  [data-home-page].home-motion-ready [data-home-reveal][data-home-visible="true"] .balance-beam {
+    animation: balance-settle 1100ms cubic-bezier(0.33, 1, 0.68, 1) 2600ms both;
+  }
+
+  [data-home-page].home-motion-ready [data-home-reveal][data-home-visible="true"] .balance-butterfly {
+    animation: balance-fly 2000ms cubic-bezier(0.45, 0, 0.3, 1) 600ms both;
+  }
+
+  [data-home-page].home-motion-ready [data-home-reveal][data-home-visible="true"] .balance-wings {
+    transform-origin: 45% 50%;
+    animation:
+      balance-flap 160ms ease-in-out 600ms 12 alternate,
+      balance-rest 5s ease-in-out 3200ms infinite;
+  }
+
+  /* Text zu jeder Zahl erst nach ihrer Grafik (`--text-delay` am Eintrag). */
+  [data-home-page].home-motion-ready [data-home-reveal] .economy-text {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  [data-home-page].home-motion-ready [data-home-reveal][data-home-visible="true"] .economy-text {
+    opacity: 1;
+    transform: none;
+    transition:
+      opacity 600ms ease-out var(--text-delay, 0ms),
+      transform 600ms cubic-bezier(0.16, 1, 0.3, 1) var(--text-delay, 0ms);
+  }
+
+  /* Münzen fallen nacheinander herein, federn auf und drehen sich einmal. */
+  [data-home-page].home-motion-ready [data-home-reveal] .euro-coin {
+    opacity: 0;
+    transform: translateY(-40px) rotateY(180deg);
+  }
+
+  [data-home-page].home-motion-ready [data-home-reveal][data-home-visible="true"] .euro-coin {
+    animation: euro-coin-drop 900ms cubic-bezier(0.34, 1.56, 0.64, 1) var(--coin-delay, 0ms) both;
+  }
+
   /* Talboden früher | heute: Wasser fließt, ein Auto fährt durch, Falter. */
   [data-home-page].home-motion-ready [data-home-visible="true"] .profile-flow {
     animation: profile-flow 1.6s linear infinite;
@@ -503,6 +569,88 @@ button {
 }
 
 /* 14 = Strich plus Lücke an der Wasserlinie. */
+.europe-fill {
+  clip-path: inset(var(--fill-top) 0 0 0);
+}
+
+/* Anflug in em, damit er mit der Schrift skaliert; endet auf dem Landeplatz. */
+@keyframes balance-fly {
+  0% {
+    opacity: 0;
+    transform: translate(6em, -4em) rotate(18deg);
+  }
+  12% {
+    opacity: 1;
+  }
+  35% {
+    transform: translate(3.6em, -1.3em) rotate(-8deg);
+  }
+  62% {
+    transform: translate(1.9em, -2.5em) rotate(10deg);
+  }
+  86% {
+    transform: translate(0.4em, -0.6em) rotate(-4deg);
+  }
+  100% {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Gewicht rechts: der Satz pendelt aus, einmal leicht über die Waagrechte. */
+@keyframes balance-settle {
+  0% {
+    transform: rotate(-2.5deg);
+  }
+  60% {
+    transform: rotate(0.5deg);
+  }
+  82% {
+    transform: rotate(-0.15deg);
+  }
+  100% {
+    transform: none;
+  }
+}
+
+@keyframes balance-flap {
+  to {
+    transform: scaleX(0.35);
+  }
+}
+
+/* Im Sitzen klappt er ab und zu die Flügel. */
+@keyframes balance-rest {
+  0%,
+  78%,
+  100% {
+    transform: none;
+  }
+  84% {
+    transform: scaleX(0.55);
+  }
+  90% {
+    transform: none;
+  }
+  95% {
+    transform: scaleX(0.7);
+  }
+}
+
+@keyframes euro-coin-drop {
+  0% {
+    opacity: 0;
+    transform: translateY(-40px) rotateY(180deg);
+  }
+  40% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+    transform: none;
+  }
+}
+
 @keyframes profile-flow {
   from {
     stroke-dashoffset: 14;
@@ -541,6 +689,19 @@ button {
   35%,
   100% {
     box-shadow: 0 0 0 10px rgba(189, 213, 169, 0);
+  }
+}
+
+/* Telefon: die Legenden-Karte vorn hebt ihre Nummer in der Grafik hervor
+   (legend-carousel.tsx). */
+@media (max-width: 639px) {
+  [data-factor] {
+    transition: transform 300ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  [data-factor][data-active="true"] {
+    transform: scale(1.35);
+    z-index: 1;
   }
 }
 

@@ -16,11 +16,13 @@ import type { Localized } from "../lib/i18n";
 export type ServiceId = "pollination" | "water" | "cooling" | "soil" | "carbon" | "erosion";
 
 export type HomeStoryCopy = {
+  /** Punkte unter den Legenden-Karten auf dem Telefon, `{n}` wird ersetzt. */
+  legendPager: string;
   richness: {
     eyebrow: string;
     title: string;
     lead: string;
-    /** Höhe, Geologie, Klima, Kulturlandschaft – in dieser Reihenfolge, die Grafik nummeriert so. */
+    /** Klima, Kulturlandschaft, Geologie, Höhenstufen – in der Reihenfolge der Legende (von links nach rechts). */
     factors: [string, string][];
     /** Beschriftung des Höhenschnitts. */
     profile: {
@@ -57,6 +59,7 @@ export type HomeStoryCopy = {
     facts: [string, string][];
     factsSource: string;
     closing: string;
+    projectsBridge: string;
   };
   /** Steht als Begründung im Abschnitt „Was ist b*alance?“. */
   economy: {
@@ -95,21 +98,22 @@ function services(items: [string, string][]) {
 
 const homeStory: Localized<HomeStoryCopy> = {
   de: {
+    legendPager: "Eintrag {n}",
     richness: {
       eyebrow: "Biodiversität in Südtirol",
       title: "Warum Südtirol so artenreich ist",
       lead: "Kaum eine Region Europas vereint auf so engem Raum so viele Lebensräume. Vier Gründe verstärken sich gegenseitig.",
       factors: [
-        ["Höhe", "Von 200 m im Unterland bis 3.905 m am Ortler: Flaumeichen im Tal, Polsterpflanzen am Gipfel."],
-        ["Geologie", "Kalk und Dolomit neben Granit, Porphyr und Schiefer – saure und basische Böden, verschiedene Pflanzen."],
         ["Klima", "Submediterran im Süden, trocken im Vinschgau, feucht am Alpenhauptkamm."],
-        ["Kulturlandschaft", "Mähwiesen, Weiden, Hecken, Trockenmauern und Kastanienhaine gibt es nur, weil sie bewirtschaftet werden."]
+        ["Kulturlandschaft", "Mähwiesen, Weiden, Hecken, Trockenmauern und Kastanienhaine gibt es nur, weil sie bewirtschaftet werden."],
+        ["Geologie", "Kalk und Dolomit neben Granit, Porphyr und Schiefer – saure und basische Böden, verschiedene Pflanzen."],
+        ["Höhenstufen", "Von 200 m im Unterland bis 3.905 m am Ortler: Flaumeichen im Tal, Polsterpflanzen am Gipfel."]
       ],
       profile: {
         zones: { valley: "Talboden", forest: "Bergwald", alpine: "Almen", rock: "Fels & Gletscher" },
         levels: { "1000": "1.000 m", "2000": "2.000 m", "3000": "3.000 m" },
         peak: "3.905 m",
-        note: "Schematischer Höhenschnitt: links der Süden, rechts der Alpenhauptkamm. Höhen maßstäblich, Breiten nicht."
+        note: "Vom Talboden mit Weinbergen, Obstwiesen und Trockenmauern über den Bergwald aus Laubbäumen, Fichten und Lärchen und die Almen oberhalb der Waldgrenze bis zu Fels und Gletscher in der Gipfelregion."
       }
     },
     figures: {
@@ -161,14 +165,15 @@ const homeStory: Localized<HomeStoryCopy> = {
         ["6", "Heu- und Fangschreckenarten sind in Südtirol in den letzten 100 Jahren ausgestorben."]
       ],
       factsSource: "Quelle: Biodiversitätsmonitoring Südtirol (Eurac Research), Artengruppen Tagfalter und Heuschrecken.",
-      closing: "Verlorene Lebensräume lassen sich nicht überall zurückholen. Aber an vielen Orten lassen sie sich erhalten, vergrößern und wieder verbinden."
+      closing: "Verlorene Lebensräume lassen sich nicht überall zurückholen. Aber wir können erhalten, vergrößern und wieder verbinden, was noch da ist.",
+      projectsBridge: "Hier setzen die b*alance-Projekte an."
     },
     economy: {
       eyebrow: "Natur und Wirtschaft",
       title: "Warum Biodiversitätsverlust auch wirtschaftlich zählt",
       figures: [
         ["75 %", "der Unternehmenskredite in der Eurozone hängen stark von Ökosystemleistungen ab"],
-        ["2/3", "der Wertschöpfung in der EU hängen stark oder mittel von der Natur ab"]
+        ["2/3", "der Wertschöpfung in der EU sind in hohem oder mittlerem Maß von der Natur abhängig"]
       ],
       source: "Quellen: Europäische Zentralbank (2023); Gemeinsame Forschungsstelle der EU-Kommission (2025).",
       detailsLabel: "Mehr zu den Zahlen und Quellen",
@@ -201,28 +206,29 @@ const homeStory: Localized<HomeStoryCopy> = {
       more: "Mehr über b*alance"
     },
     closing: {
-      title: "Investiere in unsere Zukunft.",
+      title: "Investiere in unsere Zukunft und bring die Natur ins Gleichgewicht.",
       copy: "Unterstütze ein Projekt in Südtirol, das Lebensräume erhält oder wiederherstellt, und verfolge über Jahre, was daraus wird. Wer selbst eine Fläche betreut, kann ein Projekt einreichen.",
       cta: "Unsere Projekte entdecken",
       submit: "Projekt einreichen"
     }
   },
   it: {
+    legendPager: "Voce {n}",
     richness: {
       eyebrow: "Biodiversità in Alto Adige",
       title: "Perché l’Alto Adige è così ricco di specie",
       lead: "Poche regioni d’Europa riuniscono così tanti habitat in uno spazio così ridotto. Quattro ragioni si rafforzano a vicenda.",
       factors: [
-        ["Altitudine", "Dai 200 m della Bassa Atesina ai 3.905 m dell’Ortles: roverelle nel fondovalle, piante a cuscinetto in vetta."],
-        ["Geologia", "Calcare e dolomia accanto a granito, porfido e scisti – suoli acidi e basici, piante diverse."],
         ["Clima", "Submediterraneo al sud, arido in Val Venosta, umido lungo la cresta principale delle Alpi."],
-        ["Paesaggio culturale", "Prati da sfalcio, pascoli, siepi, muretti a secco e castagneti esistono solo perché vengono coltivati."]
+        ["Paesaggio culturale", "Prati da sfalcio, pascoli, siepi, muretti a secco e castagneti esistono solo perché vengono coltivati."],
+        ["Geologia", "Calcare e dolomia accanto a granito, porfido e scisti – suoli acidi e basici, piante diverse."],
+        ["Fasce altitudinali", "Dai 200 m della Bassa Atesina ai 3.905 m dell’Ortles: roverelle nel fondovalle, piante a cuscinetto in vetta."]
       ],
       profile: {
         zones: { valley: "Fondovalle", forest: "Bosco montano", alpine: "Alpeggi", rock: "Roccia e ghiaccio" },
         levels: { "1000": "1.000 m", "2000": "2.000 m", "3000": "3.000 m" },
         peak: "3.905 m",
-        note: "Sezione altimetrica schematica: a sinistra il sud, a destra la cresta principale delle Alpi. Altitudini in scala, distanze no."
+        note: "Dal fondovalle con vigneti, frutteti e muretti a secco, attraverso il bosco montano di latifoglie, abeti rossi e larici e gli alpeggi sopra il limite del bosco, fino a roccia e ghiaccio nella zona delle vette."
       }
     },
     figures: {
@@ -274,7 +280,8 @@ const homeStory: Localized<HomeStoryCopy> = {
         ["6", "specie di ortotteri e mantidi si sono estinte in Alto Adige negli ultimi 100 anni."]
       ],
       factsSource: "Fonte: Monitoraggio della biodiversità Alto Adige (Eurac Research), gruppi farfalle diurne e ortotteri.",
-      closing: "Non ovunque gli habitat perduti si possono recuperare. Ma in molti luoghi si possono conservare, ampliare e ricollegare."
+      closing: "Non ovunque gli habitat perduti si possono recuperare. Ma possiamo conservare, ampliare e ricollegare quelli che ci sono ancora.",
+      projectsBridge: "È qui che intervengono i progetti b*alance."
     },
     economy: {
       eyebrow: "Natura ed economia",
@@ -314,28 +321,29 @@ const homeStory: Localized<HomeStoryCopy> = {
       more: "Scopri di più su b*alance"
     },
     closing: {
-      title: "Investi nel nostro futuro.",
+      title: "Investi nel nostro futuro e riporta la natura in equilibrio.",
       copy: "Sostieni un progetto in Alto Adige che conserva o ripristina habitat e segui per anni che cosa ne nasce. Chi cura una superficie può proporre un progetto.",
       cta: "Scopri i nostri progetti",
       submit: "Proponi un progetto"
     }
   },
   en: {
+    legendPager: "Item {n}",
     richness: {
       eyebrow: "Biodiversity in South Tyrol",
       title: "Why South Tyrol is so rich in species",
       lead: "Few regions in Europe bring together so many habitats in so little space. Four reasons reinforce one another.",
       factors: [
-        ["Altitude", "From 200 m in the Unterland to 3,905 m on the Ortler: downy oak in the valley, cushion plants on the summit."],
-        ["Geology", "Limestone and dolomite next to granite, porphyry and schist – acidic and alkaline soils, different plants."],
         ["Climate", "Sub-Mediterranean in the south, dry in the Vinschgau, damp along the main Alpine ridge."],
-        ["Cultural landscape", "Hay meadows, pastures, hedgerows, dry-stone walls and chestnut groves exist only because they are farmed."]
+        ["Cultural landscape", "Hay meadows, pastures, hedgerows, dry-stone walls and chestnut groves exist only because they are farmed."],
+        ["Geology", "Limestone and dolomite next to granite, porphyry and schist – acidic and alkaline soils, different plants."],
+        ["Altitude zones", "From 200 m in the Unterland to 3,905 m on the Ortler: downy oak in the valley, cushion plants on the summit."]
       ],
       profile: {
         zones: { valley: "Valley floor", forest: "Mountain forest", alpine: "High pastures", rock: "Rock & glacier" },
         levels: { "1000": "1,000 m", "2000": "2,000 m", "3000": "3,000 m" },
         peak: "3,905 m",
-        note: "Schematic cross-section: south on the left, main Alpine ridge on the right. Heights to scale, distances not."
+        note: "From the valley floor with vineyards, orchards and dry-stone walls, through the mountain forest of broadleaves, spruce and larch and the high pastures above the treeline, up to rock and glacier around the summits."
       }
     },
     figures: {
@@ -387,7 +395,8 @@ const homeStory: Localized<HomeStoryCopy> = {
         ["6", "grasshopper and mantis species have died out in South Tyrol over the past 100 years."]
       ],
       factsSource: "Source: Biodiversity Monitoring South Tyrol (Eurac Research), groups butterflies and grasshoppers.",
-      closing: "Lost habitats cannot be brought back everywhere. But in many places they can be preserved, enlarged and reconnected."
+      closing: "Lost habitats cannot be brought back everywhere. But we can preserve, enlarge and reconnect what is still here.",
+      projectsBridge: "This is where b*alance projects come in."
     },
     economy: {
       eyebrow: "Nature and the economy",
@@ -427,7 +436,7 @@ const homeStory: Localized<HomeStoryCopy> = {
       more: "More about b*alance"
     },
     closing: {
-      title: "Invest in our future.",
+      title: "Invest in our future and help tip the balance.",
       copy: "Support a project in South Tyrol that preserves or restores habitats, and follow what grows from it over the years. If you look after a site yourself, you can submit a project.",
       cta: "Discover our projects",
       submit: "Submit a project"

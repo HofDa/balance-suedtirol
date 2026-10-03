@@ -72,6 +72,7 @@ def built(elements, opacity=0.82):
 CHANNEL = (530, 590, 386)  # heute: begradigter Bach, links, rechts, Sohle
 STREAM = (560, 48, 26)  # früher: natürlicher Bach, Mitte, halbe Breite, Tiefe
 SLOPE = 320  # links davon steigt der Hang zum Berg
+SOLITARY_TREE_HEIGHT, SOLITARY_TREE_RADIUS = 82, 26
 SCENE = "before"  # wird beim Zeichnen umgeschaltet; gy() liest es
 
 
@@ -326,13 +327,13 @@ def before_scene():
     # 7 Berg: Waldgrenze tiefer, darüber Rasen
     x = 196.0
     while x < 268:
-        add(d(x), sway(spruce(x, rng.uniform(30, 40), rng.uniform(13, 16)), x))
+        add(d(x), sway(spruce(x, rng.uniform(50, 64), rng.uniform(17, 21)), x))
         x += rng.uniform(9, 12)
     add(d(60), tufts(0, 190, 4, 8, (6, 10)))
     for x in range(274, 326, 13):
         add(d(x), flower(x, rng.uniform(9, 15)))
     # 6 Einzelbaum und Hecke
-    add(d(370), sway(round_tree(370, 118, 36), 370))
+    add(d(370), sway(round_tree(370, SOLITARY_TREE_HEIGHT, SOLITARY_TREE_RADIUS), 370))
     for x, w, h in ((420, 30, 36), (448, 34, 44), (478, 26, 32)):
         add(d(x), sway(shrub_shape(x, w, h), x))
     # 5 Bach mit Röhricht
@@ -370,19 +371,34 @@ def after_scene():
     # 7 Berg: Wald steigt bergauf, Sonne, Pfeil nach oben
     x = 96.0
     while x < 268:
-        add(d(x), sway(spruce(x, rng.uniform(30, 40), rng.uniform(13, 16)), x))
+        add(d(x), sway(spruce(x, rng.uniform(50, 64), rng.uniform(17, 21)), x))
         x += rng.uniform(9, 12)
     for x in (56, 76):
-        add(d(x), sway(spruce(x, 18, 9), x))
+        add(d(x), sway(spruce(x, 28, 12), x))
     add(d(20), tufts(0, 44, 4, 8, (6, 10)))
     for x in (290, 306):
         add(d(x), flower(x, rng.uniform(9, 15)))
-    arrow = f"M154 {f(gy(154) - 46)}Q104 {f(gy(104) - 62)} 52 {f(gy(52) - 40)}"
+    tip_x, tip_y = 51, gy(52) - 40
+    control_x, control_y = 104, gy(104) - 62
+    end_x, end_y = 154, gy(154) - 46
+    # Die Spitze folgt der Tangente der Kurve; ein kurzer, durchgehender
+    # Abschluss verbindet den gepunkteten Schaft sichtbar mit ihrem Scheitel.
+    dx, dy = control_x - tip_x, control_y - tip_y
+    length = math.hypot(dx, dy)
+    ux, uy = dx / length, dy / length
+    wings = [(tip_x + 12 * ux - side * 6 * uy,
+              tip_y + 12 * uy + side * 6 * ux) for side in (-1, 1)]
+    arrow = f"M{f(tip_x)} {f(tip_y)}Q{f(control_x)} {f(control_y)} {f(end_x)} {f(end_y)}"
+    t = 0.1
+    join_x = (1 - t) ** 2 * tip_x + 2 * (1 - t) * t * control_x + t ** 2 * end_x
+    join_y = (1 - t) ** 2 * tip_y + 2 * (1 - t) * t * control_y + t ** 2 * end_y
+    join = f"M{f(tip_x)} {f(tip_y)}Q{f(tip_x + t * dx)} {f(tip_y + t * dy)} {f(join_x)} {f(join_y)}"
+    head = f"M{f(wings[0][0])} {f(wings[0][1])}L{f(tip_x)} {f(tip_y)}L{f(wings[1][0])} {f(wings[1][1])}"
     add(1220, [stroke(arrow, 1.8, ' strokeDasharray="0.1 4.2"'),
-               stroke(f"M60 {f(gy(52) - 48)}L51 {f(gy(52) - 40)}L62 {f(gy(52) - 36)}", 1.8)], "fade")
+               stroke(join, 1.8), stroke(head, 1.8)], "fade")
     add(1000, sun(250, 186, 17), "fade")
     # 6 Gerodet: Baum und Hecke nur noch als Umriss
-    add(d(370), ghost_tree(370, 118, 36))
+    add(d(370), ghost_tree(370, SOLITARY_TREE_HEIGHT, SOLITARY_TREE_RADIUS))
     for x, w, h in ((420, 30, 36), (450, 34, 42), (480, 28, 34)):
         add(d(x), ghost_shrub(x, w, h))
     add(d(320), tufts(320, 510, 4, 9, (7, 12)))

@@ -14,7 +14,7 @@ export function FeaturedProjects({ locale }: { locale: Locale }) {
   const t = getTranslations(locale).featured;
   const localizedProjects = getProjects(locale);
   return (
-    <section className="bg-[var(--color-sage)]/35 py-16 sm:py-32">
+    <section id="projekte" className="scroll-mt-20 bg-[var(--color-sage)]/35 pb-16 pt-10 sm:pb-32 sm:pt-16">
       <Container>
         <div
           data-home-reveal="rise"

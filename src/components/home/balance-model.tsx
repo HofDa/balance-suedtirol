@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import Link from "@/components/ui/site-link";
 import { ArrowUpRight, ChevronDown } from "lucide-react";
 import { Container } from "@/components/ui/container";
@@ -7,6 +8,8 @@ import type { Locale } from "@/config/site";
 import { getHomeStory } from "@/config/home-story";
 import { textHeadline, textLead, textTitleTight } from "@/components/ui/typography";
 import { cn } from "@/lib/utils";
+import { EuroCoins, EuropeFill } from "./europe-fill";
+import { CountUp } from "./count-up";
 import { ArrowIcon } from "@/components/ui/arrow-icon";
 import { MobileCollapseSection, MobileCollapseToggle } from "./mobile-collapse";
 import { collapsibleHeading, hiddenWhenCollapsed } from "./mobile-collapse-classes";
@@ -81,11 +84,23 @@ export function BalanceModel({ locale }: { locale: Locale }) {
           </div>
           <div>
             <dl className="grid grid-cols-2 gap-6 sm:gap-10">
-              {economy.figures.map(([value, label]) => (
-                <div key={value} className="flex flex-col-reverse justify-end border-t border-white/15 pt-5">
-                  <dt className="mt-3 max-w-[30ch] text-sm leading-6 text-white/75">{label}</dt>
-                  <dd className="font-display text-[length:var(--text-display)] leading-none tracking-[-0.035em] tabular-nums text-[var(--color-moss)]">
-                    {value}
+              {/* 75 %: Euroraum als Silhouette, flächentreu gefüllt. 2/3: zwei von drei 1-Euro-Münzen. */}
+              {economy.figures.map(([value, label], index) => (
+                <div
+                  key={value}
+                  className="flex flex-col border-t border-white/15 pt-5"
+                  // Erst die Grafik, dann ihr Text: Karte fertig nach 1.9 s, Münzen nach 4 s.
+                  style={{ "--text-delay": index === 0 ? "1900ms" : "4000ms" } as CSSProperties}
+                >
+                  {index === 0 ? (
+                    <EuropeFill region="eurozone" className="order-1 mb-5 w-full max-w-[15rem]" />
+                  ) : (
+                    <EuroCoins filled={2} total={3} className="order-1 mb-5 w-full max-w-[15rem]" />
+                  )}
+                  <dt className="economy-text order-3 mt-3 max-w-[30ch] text-sm leading-6 text-white/75">{label}</dt>
+                  <dd className="economy-text order-2 font-display text-[length:var(--text-display)] leading-none tracking-[-0.035em] tabular-nums text-[var(--color-moss)]">
+                    {/* 75 % zählt hoch, sobald es erscheint; „2/3“ bleibt stehen. */}
+                    {index === 0 ? <CountUp value={value} delay={1900} /> : value}
                   </dd>
                 </div>
               ))}

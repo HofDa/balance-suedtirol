@@ -5,12 +5,20 @@ import { getHomeStory } from "@/config/home-story";
 import { getTranslations } from "@/config/translations";
 import { focusRingOnDark } from "@/components/ui/focus";
 import { ArrowIcon } from "@/components/ui/arrow-icon";
+import { BalanceHeadline } from "./balance-headline";
 
 /**
  * Der Abschluss nimmt die Leitzeile des Heros wieder auf. Eine Aktion mit
  * Gewicht, eine als Textlink – keine Box in der Box. Darunter, durch eine
  * Haarlinie getrennt, die CO₂-Haltung als eine Zeile: Sie hat ihre eigene
  * Seite und braucht auf der Startseite keinen eigenen Abschnitt mehr.
+ *
+ * Der Leitsatz ist eine Waage: Er erscheint leicht schief, rechts angehoben.
+ * Der Schmetterling aus dem Logo fliegt herein, landet am Ende der ersten
+ * Zeile (siehe balance-headline.tsx), und unter seinem Gewicht pendelt der
+ * Satz in die Waagrechte – b*alance. Ohne
+ * Bewegung sitzt er von Anfang an dort, und der Satz liegt gerade
+ * (globals.css: `balance-beam`, `balance-butterfly`).
  */
 export function ImpactBridge({ locale }: { locale: Locale }) {
   const t = getHomeStory(locale).closing;
@@ -18,15 +26,13 @@ export function ImpactBridge({ locale }: { locale: Locale }) {
   const stance = translations.carbonStance;
 
   return (
-    <section id="about-balance" aria-labelledby="closing-title" className="scroll-mt-24 bg-[var(--color-ink)] py-28 text-white sm:py-40">
+    <section id="about-balance" aria-labelledby="closing-title" className="scroll-mt-24 overflow-x-clip bg-[var(--color-ink)] py-28 text-white sm:py-40">
       <Container>
         <div data-home-reveal="rise" className="max-w-4xl">
-          <h2
-            id="closing-title"
-            className="font-display text-balance text-[clamp(2.5rem,6.5vw,5.5rem)] leading-[1.02] tracking-[-0.035em]"
-          >
-            {t.title}
-          </h2>
+          <BalanceHeadline
+            title={t.title}
+            className="balance-beam font-display text-balance text-[clamp(2.5rem,6.5vw,5.5rem)] leading-[1.02] tracking-[-0.035em]"
+          />
           <p className="mt-6 max-w-[56ch] text-[length:var(--text-body-lg)] leading-[var(--leading-body)] text-white/80">
             {t.copy}
           </p>

@@ -1,135 +1,120 @@
-import Image from "next/image";
+import type { CSSProperties } from "react";
 import { ArrowUpRight } from "lucide-react";
 import { Container } from "@/components/ui/container";
 import { Label } from "@/components/ui/label";
 import { focusRing } from "@/components/ui/focus";
 import type { Locale } from "@/config/site";
-import { getHomeStory, richnessImage } from "@/config/home-story";
-import { getTranslations } from "@/config/translations";
-import { withBasePath } from "@/lib/public-path";
-import { MobileDisclosureList } from "./mobile-disclosure-list";
+import { getHomeStory } from "@/config/home-story";
 import { MobileCollapseSection, MobileCollapseToggle } from "./mobile-collapse";
 import { collapsibleHeading, hiddenWhenCollapsed } from "./mobile-collapse-classes";
 import { textDisplay, textHeadline, textLead } from "@/components/ui/typography";
 import { cn } from "@/lib/utils";
 import { CountUp } from "./count-up";
+import { RichnessProfile, richnessProfileSpots as spots } from "./richness-profile";
+import { SceneNumber, spotStyle } from "./scene-number";
 
-/**
- * Höhenstufen im Foto, von oben nach unten. Die Punkte sitzen auf dem Motiv
- * (Prozent der Bildfläche) und erklären, was der Text behauptet: viele
- * Lebensräume in einem Blick. Unter `sm` stehen sie nur in der Bildunterschrift.
- * Etiketten mit `flip` stehen links vom Punkt: am rechten Bildrand, damit sie
- * nicht über den Rand laufen, und beim Wald, damit er den Almen Platz lässt.
- */
-const annotationSpots: ReadonlyArray<{
-  key: "peaks" | "alpine" | "forest" | "pastures" | "valley";
-  left: string;
-  top: string;
-  flip?: boolean;
-}> = [
-  { key: "peaks", left: "27%", top: "31%" },
-  { key: "alpine", left: "88%", top: "33%", flip: true },
-  { key: "forest", left: "38%", top: "54%", flip: true },
-  { key: "pastures", left: "79%", top: "48%", flip: true },
-  { key: "valley", left: "66%", top: "67%", flip: true }
+/** Marken in der Grafik, eine je Faktor, in der Reihenfolge der Legende. */
+const markers: ReadonlyArray<{ key: keyof typeof spots.markers; factor: number }> = [
+  { key: "altitude", factor: 0 },
+  { key: "geology", factor: 1 },
+  { key: "climate", factor: 2 },
+  { key: "culture", factor: 3 }
 ];
 
+const zoneKeys = ["valley", "forest", "alpine", "rock"] as const;
+
+const levelKeys = ["1000", "2000", "3000"] as const;
+
 /**
- * Der erste Abschnitt nach dem Hero: Was Südtirol besitzt. Text und Foto
- * nebeneinander, darunter die Zahlen als typografische Zeile – keine Karten –
- * und der Weg zum Monitoringbericht als eigene, breite Zeile statt als
- * Fußnote.
+ * Der erste Abschnitt nach dem Hero: Was Südtirol besitzt. Statt Foto und
+ * Fließtext ein Höhenschnitt aus Silhouetten, auf dem vier Nummern die Gründe
+ * zeigen; darunter die Legende in je einem Satz. Dann die Zahlen als
+ * typografische Zeile und der Weg zum Monitoringbericht als eigene Zeile.
  */
 export function BiodiversityRichness({ locale }: { locale: Locale }) {
   const story = getHomeStory(locale);
   const t = story.richness;
   const figures = story.figures;
-  const photo = getTranslations(locale).hero.photo;
 
   return (
     <MobileCollapseSection id="vielfalt" aria-labelledby="vielfalt-title" className="scroll-mt-20 py-16 sm:py-32">
       <Container>
-        <div className="grid gap-8 sm:gap-12 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] lg:gap-16">
-          <div data-home-reveal="rise">
-            <div className="relative">
-              <Label size="section">{t.eyebrow}</Label>
-              <h2
-                id="vielfalt-title"
-                className={cn(textDisplay, "mt-4 text-[var(--color-ink)]", collapsibleHeading)}
-              >
-                {t.title}
-              </h2>
-              <MobileCollapseToggle labelledBy="vielfalt-title" />
-            </div>
-            <div className={hiddenWhenCollapsed}>
-            <p className="mt-6 max-w-[52ch] text-[length:var(--text-body-lg)] leading-[var(--leading-body)] text-[var(--color-muted)]">
-              {t.lead}
-            </p>
+        <div data-home-reveal="rise" className="grid gap-6 lg:grid-cols-2 lg:items-end lg:gap-16">
+          <div className="relative">
+            <Label size="section">{t.eyebrow}</Label>
+            <h2
+              id="vielfalt-title"
+              className={cn(textDisplay, "mt-4 text-[var(--color-ink)]", collapsibleHeading)}
+            >
+              {t.title}
+            </h2>
+            <MobileCollapseToggle labelledBy="vielfalt-title" />
+          </div>
+          <p className={cn(hiddenWhenCollapsed, textLead, "lg:pb-2")}>{t.lead}</p>
+        </div>
 
-            <MobileDisclosureList
-              className="mt-8"
-              items={t.factors.map(([term, description]) => ({ key: term, summary: term, body: description }))}
-            />
-            <dl className="mt-10 hidden sm:block">
-              {t.factors.map(([term, description]) => (
-                <div
-                  key={term}
-                  className="grid gap-1 border-t border-[var(--color-line)] py-5 sm:grid-cols-[9.5rem_minmax(0,1fr)] sm:gap-6"
+        <figure className={cn(hiddenWhenCollapsed, "mt-10 sm:mt-16")}>
+          {/* Auf dem Telefon randlos, damit die Zeichnung nicht noch kleiner wird. */}
+          <div data-home-reveal="grow" className="relative -mx-5 text-[var(--color-ink)] sm:mx-0">
+            <RichnessProfile className="block h-auto w-full" />
+            <div aria-hidden className="text-[11px] font-bold uppercase tracking-[0.14em]">
+              {levelKeys.map((key) => (
+                <span
+                  key={key}
+                  className="absolute hidden -translate-y-full pb-1 normal-case tracking-normal text-[var(--color-muted)] sm:block"
+                  style={spots.levels[key]}
                 >
-                  <dt className="font-semibold tracking-[-0.01em] text-[var(--color-ink)]">{term}</dt>
-                  <dd className="max-w-[52ch] leading-7 text-[var(--color-muted)]">{description}</dd>
-                </div>
+                  {t.profile.levels[key]}
+                </span>
               ))}
-            </dl>
+              {zoneKeys.map((key) => (
+                <span
+                  key={key}
+                  className="habitat-fade absolute hidden -translate-x-1/2 -translate-y-full whitespace-nowrap text-[var(--color-ink)] md:block"
+                  style={spotStyle(spots.zones[key], 1200)}
+                >
+                  {t.profile.zones[key]}
+                </span>
+              ))}
+              {markers.map(({ key, factor }) => (
+                <span
+                  key={key}
+                  className="habitat-fade absolute flex -translate-x-1/2 -translate-y-1/2 items-center gap-2"
+                  style={spotStyle(spots.markers[key], 1300 + factor * 120)}
+                >
+                  <SceneNumber
+                    n={factor + 1}
+                    className="profile-marker relative shadow-[var(--shadow-on-photo)]"
+                    style={{ "--marker-delay": `${factor * 1.1}s` } as CSSProperties}
+                  />
+                  {key === "altitude" ? (
+                    <span className="absolute left-full ml-2 hidden whitespace-nowrap normal-case tracking-normal text-[var(--color-ink)] sm:block">
+                      {t.profile.peak}
+                    </span>
+                  ) : null}
+                </span>
+              ))}
             </div>
           </div>
+          <figcaption className="mt-3 text-xs leading-5 text-[var(--color-muted)]">{t.profile.note}</figcaption>
+        </figure>
 
-          <figure data-home-reveal="scale" className={cn(hiddenWhenCollapsed, "lg:sticky lg:top-24 lg:self-start")}>
-            <div className="relative overflow-hidden rounded-[var(--radius-lg)] bg-[var(--color-stone)]">
-              <Image
-                src={withBasePath(richnessImage.src)}
-                alt={t.imageAlt}
-                width={richnessImage.width}
-                height={richnessImage.height}
-                placeholder="blur"
-                blurDataURL={richnessImage.blurDataURL}
-                sizes="(min-width: 1240px) 680px, (min-width: 1024px) 55vw, 100vw"
-                className="h-auto w-full"
-              />
-              <ul className="hidden sm:block" aria-hidden>
-                {annotationSpots.map((spot) => (
-                  <li
-                    key={spot.key}
-                    className={cn(
-                      "absolute flex -translate-y-1/2 items-center gap-2",
-                      spot.flip && "-translate-x-full flex-row-reverse"
-                    )}
-                    style={{ left: spot.left, top: spot.top }}
-                  >
-                    <span className={cn(spot.flip ? "-mr-1.5" : "-ml-1.5", "size-3 shrink-0 rounded-full border-2 border-white bg-[var(--color-forest)] shadow-[var(--shadow-on-photo)]")} />
-                    <span className="whitespace-nowrap rounded-[var(--radius-sm)] bg-[var(--color-ink)]/78 px-2 py-1 text-[11px] font-bold uppercase tracking-[0.14em] text-white backdrop-blur-sm">
-                      {t.annotations[spot.key]}
-                    </span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-            <figcaption className="mt-3 flex flex-col gap-1 text-xs leading-5 text-[var(--color-muted)] sm:flex-row sm:justify-between sm:gap-6">
-              <span>{t.imageCaption}</span>
-              <span className="shrink-0">
-                {photo}: {richnessImage.photographer} ·{" "}
-                <a
-                  href={richnessImage.sourceUrl}
-                  target="_blank"
-                  rel="noreferrer"
-                  className={`underline underline-offset-2 hover:text-[var(--color-forest)] ${focusRing}`}
-                >
-                  {richnessImage.license}
-                </a>
-              </span>
-            </figcaption>
-          </figure>
-        </div>
+        <ol className={cn(hiddenWhenCollapsed, "mt-8 grid gap-x-10 gap-y-6 sm:mt-10 sm:grid-cols-2 lg:grid-cols-4")}>
+          {t.factors.map(([term, description], index) => (
+            <li
+              key={term}
+              data-home-reveal="rise"
+              style={{ "--home-reveal-delay": `${index * 80}ms` } as CSSProperties}
+              className="grid grid-cols-[1.5rem_minmax(0,1fr)] gap-x-3 border-t border-[var(--color-line)] pt-5"
+            >
+              <SceneNumber n={index + 1} className="mt-px ring-0" />
+              <div>
+                <h3 className="font-semibold tracking-[-0.01em] text-[var(--color-ink)]">{term}</h3>
+                <p className="mt-1 max-w-[40ch] leading-7 text-[var(--color-muted)]">{description}</p>
+              </div>
+            </li>
+          ))}
+        </ol>
 
         {/* Die Zahlenebene: groß gesetzt, durch Haarlinien getrennt, ohne Rahmen. */}
         <div data-home-reveal="rise" className={cn(hiddenWhenCollapsed, "mt-16 sm:mt-32")}>

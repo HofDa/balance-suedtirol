@@ -276,31 +276,23 @@ def sheep(x, base, facing=1, grazing=False, s=1.0):
     return [f'<g transform="translate({f(x)} {f(base)}) scale({f(facing * s)} {f(s)})">{"".join(out)}</g>']
 
 
-def goat(x, base, facing=-1, s=1.0, reach=0.0):
-    """Ziege: schlank und hochbeinig, glattes Fell, Hörner nach hinten
-    gebogen, Bart, kurzer hochstehender Schwanz. `reach` hebt den Kopf
-    (zum Knabbern am Strauch)."""
-    L = m(1.05) * s
-    cy = base - m(0.62) * s
+def goat(x, base, facing=-1, s=1.0):
+    """Ziege im selben Piktogrammstil wie das Schaf: glatter, schlanker Rumpf
+    statt Wolle, höhere gerade Beine, Hals schräg nach oben zum Strauch,
+    keilförmiger Kopf mit abstehendem Ohr, Bart und nach hinten gebogenen
+    Hörnern, kurzer aufgestellter Schwanz. Gezeichnet nach rechts blickend um
+    den Ursprung, dann gespiegelt und verschoben."""
     out = []
-    w = 2.1 * s
-    # Beine mit leichtem Knick
-    for dx, k in ((0.32, 1), (0.22, -1), (-0.27, 1), (-0.36, -1)):
-        lx = x + facing * L * dx
-        out.append(stroke(f"M{f(lx)} {f(cy)}L{f(lx + k * 1.2 * s)} {f(base - m(0.25) * s)}L{f(lx)} {f(base - 0.4)}", w))
-    out.append(ellipse(x, cy, L * 0.42, m(0.15) * s))
-    out.append(ellipse(x + facing * L * 0.05, cy + m(0.04) * s, L * 0.34, m(0.14) * s))
-    # Hals und Kopf
-    nx, ny = x + facing * L * 0.36, cy - m(0.06) * s
-    hx, hy = x + facing * (L * 0.55 + 3 * s), cy - m(0.36 + reach) * s
-    out.append(p(poly([(nx - facing * 4 * s, ny - 3 * s), (hx - facing * 1.5 * s, hy - 2 * s), (hx + facing * 1.5 * s, hy + 2 * s), (nx + facing * 3 * s, ny + 4 * s)])))
-    out.append(ellipse(hx + facing * 2.5 * s, hy + 1.2 * s, 4.6 * s, 2.1 * s, facing * 35))
-    out.append(p(poly([(hx + facing * 3 * s, hy + 3 * s), (hx + facing * 4.5 * s, hy + 3.5 * s), (hx + facing * 3 * s, hy + 7 * s)])))  # Bart
-    out.append(ellipse(hx - facing * 1.8 * s, hy - 0.2 * s, 2.4 * s, 0.85 * s, facing * 10))  # Ohr
-    out.append(stroke(f"M{f(hx)} {f(hy - 1.5 * s)}Q{f(hx - facing * 1 * s)} {f(hy - 7 * s)} {f(hx - facing * 5.5 * s)} {f(hy - 6 * s)}", 1.5 * s))  # Horn
-    tx, ty = x - facing * L * 0.42, cy - m(0.06) * s
-    out.append(p(poly([(tx, ty - 1 * s), (tx - facing * 3 * s, ty - 4.5 * s), (tx - facing * 1 * s, ty + 1.5 * s)])))
-    return out
+    for lx in (-10.5, -6.5, 7, 10.5):
+        out.append(stroke(f"M{f(lx)} -17L{f(lx)} -0.3", 1.7))
+    out.append(p("M-13 -21.5Q-13 -27 -6 -27.5L8 -27.5Q14 -27 14 -21.5Q14 -16.5 8 -16L-6 -16Q-13 -16.5 -13 -21.5Z"))
+    out.append(p("M-12 -25L-16.5 -30.5L-15 -31.2L-10.5 -26.5Z"))  # Schwanz
+    out.append(p("M8 -26L15 -37L19.5 -34L13.5 -20Z"))  # Hals
+    out.append(p("M14.5 -37.5Q17 -41 20.5 -39L26.5 -31.5Q27 -29.6 25 -29.8L18.5 -32Z"))  # Kopf
+    out.append(p("M22 -31L23 -26.5L20 -30.5Z"))  # Bart
+    out.append(ellipse(14.6, -35.6, 3.4, 1.1, -20))  # Ohr
+    out.append(stroke("M16.5 -39.5Q14.5 -45.5 9.5 -45", 1.8))  # Horn
+    return [f'<g transform="translate({f(x)} {f(base)}) scale({f(facing * s)} {f(s)})">{"".join(out)}</g>']
 
 
 def grasshopper(x, y, facing=1, s=1.0, jumping=False):
@@ -494,7 +486,7 @@ add(1180, bird(250, 52, 0.5) + bird(276, 66, 0.38) + bird(230, 72, 0.32), "fade"
 add(1120, songbird(357, g(360) - 44, 1, 1.0), "fade")
 
 # Weidetiere: eine Ziege knabbert am Strauch, Schafe mit Lamm in der Wiese.
-add(900, goat(422, g(422), -1, 1.0, reach=0.12))
+add(900, goat(422, g(422), -1, 0.92))
 add(920, sheep(768, g(768), 1, grazing=True))
 add(950, sheep(811, g(811), 1, s=0.62))
 add(980, sheep(872, g(872), -1))

@@ -48,7 +48,7 @@ export function EcosystemServices({ locale }: { locale: Locale }) {
                   style={{ "--home-reveal-delay": `${(index % 2) * 90}ms` } as CSSProperties}
                   className="grid grid-cols-[3.5rem_minmax(0,1fr)] gap-x-4 border-t border-[var(--color-forest)]/25 pt-5 sm:block sm:pt-6"
                 >
-                  <ServiceIllustration id={item.id} className="row-span-2 size-14 text-[var(--color-forest)] sm:size-24" />
+                  <ServiceIllustration id={item.id} className="row-span-2 size-14 text-[var(--color-ink)] sm:size-24" />
                   <h3 className={cn(textTitleTight, "text-[var(--color-ink)] max-sm:text-lg sm:mt-5")}>
                     {item.title}
                   </h3>

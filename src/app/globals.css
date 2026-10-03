@@ -428,6 +428,175 @@ button {
   [data-home-page].home-motion-ready [data-home-reveal="grow"][data-home-visible="true"] .habitat-fade {
     opacity: 1;
   }
+
+  /* Der Höhenschnitt lebt leise weiter, sobald er gewachsen ist: Wind im
+     Wald, Sonne, ziehende Wolke mit Regen, Vögel, ein Puls an den Nummern. */
+  [data-home-page].home-motion-ready [data-home-visible="true"] .profile-sway {
+    transform-box: fill-box;
+    transform-origin: 50% 100%;
+    animation: profile-sway 6s ease-in-out var(--sway-delay, 0s) infinite;
+  }
+
+  [data-home-page].home-motion-ready [data-home-visible="true"] .profile-rays {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: profile-rays 14s linear infinite;
+  }
+
+  [data-home-page].home-motion-ready [data-home-visible="true"] .profile-cloud {
+    animation: profile-cloud 11s ease-in-out infinite alternate;
+  }
+
+  [data-home-page].home-motion-ready [data-home-visible="true"] .profile-rain {
+    animation: profile-rain 0.9s linear infinite;
+  }
+
+  [data-home-page].home-motion-ready [data-home-visible="true"] .profile-bird {
+    animation: profile-bird 8s ease-in-out var(--bird-delay, 0s) infinite alternate;
+  }
+
+  [data-home-page].home-motion-ready [data-home-visible="true"] .profile-wing {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: profile-wing 0.7s ease-in-out var(--bird-delay, 0s) infinite alternate;
+  }
+
+  [data-home-page].home-motion-ready [data-home-visible="true"] .profile-marker::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 9999px;
+    animation: profile-marker 5s ease-out calc(2.2s + var(--marker-delay, 0s)) infinite;
+  }
+
+  [data-home-page].home-motion-ready [data-home-visible="true"] .profile-marker-dark::after {
+    animation-name: profile-marker-dark;
+  }
+
+  /* Legende zum Talboden: Ein Eintrag erscheint, wenn der Regler seine
+     Nummer aufdeckt (loss-comparison.tsx). */
+  [data-home-page].home-motion-ready [data-sweep-item] {
+    transition:
+      opacity 600ms cubic-bezier(0.16, 1, 0.3, 1),
+      transform 600ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  [data-home-page].home-motion-ready [data-sweep-item]:not([data-sweep-shown="true"]) {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+
+  /* Talboden früher | heute: Wasser fließt, ein Auto fährt durch, Falter. */
+  [data-home-page].home-motion-ready [data-home-visible="true"] .profile-flow {
+    animation: profile-flow 1.6s linear infinite;
+  }
+
+  [data-home-page].home-motion-ready [data-home-visible="true"] .profile-car {
+    animation: profile-car 7s linear 1.6s infinite both;
+  }
+
+  [data-home-page].home-motion-ready [data-home-visible="true"] .profile-flutter {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: profile-flutter 0.5s ease-in-out infinite alternate;
+  }
+}
+
+/* 14 = Strich plus Lücke an der Wasserlinie. */
+@keyframes profile-flow {
+  from {
+    stroke-dashoffset: 14;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* Das Auto fährt über die Straße und taucht vor dem Zaun wieder auf. */
+@keyframes profile-car {
+  0% {
+    opacity: 0;
+    transform: translateX(28px);
+  }
+  15%,
+  80% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(-28px);
+  }
+}
+
+@keyframes profile-flutter {
+  to {
+    transform: scaleX(0.45);
+  }
+}
+
+@keyframes profile-marker-dark {
+  0% {
+    box-shadow: 0 0 0 0 rgba(189, 213, 169, 0.5);
+  }
+  35%,
+  100% {
+    box-shadow: 0 0 0 10px rgba(189, 213, 169, 0);
+  }
+}
+
+@keyframes profile-sway {
+  0%,
+  100% {
+    transform: skewX(0.6deg);
+  }
+  50% {
+    transform: skewX(-1.4deg);
+  }
+}
+
+/* 30° ist der Abstand zweier Strahlen: Die Schleife springt nicht. */
+@keyframes profile-rays {
+  to {
+    transform: rotate(30deg);
+  }
+}
+
+@keyframes profile-cloud {
+  to {
+    transform: translateX(-14px);
+  }
+}
+
+/* 11 = Strich plus Lücke im Regen, so fällt er nahtlos. */
+@keyframes profile-rain {
+  from {
+    stroke-dashoffset: 11;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes profile-bird {
+  to {
+    transform: translate(22px, -7px);
+  }
+}
+
+@keyframes profile-wing {
+  to {
+    transform: scaleY(0.55);
+  }
+}
+
+@keyframes profile-marker {
+  0% {
+    box-shadow: 0 0 0 0 rgba(40, 87, 68, 0.45);
+  }
+  35%,
+  100% {
+    box-shadow: 0 0 0 10px rgba(40, 87, 68, 0);
+  }
 }
 
 @media print {

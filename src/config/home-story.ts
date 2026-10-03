@@ -20,11 +20,15 @@ export type HomeStoryCopy = {
     eyebrow: string;
     title: string;
     lead: string;
+    /** Höhe, Geologie, Klima, Kulturlandschaft – in dieser Reihenfolge, die Grafik nummeriert so. */
     factors: [string, string][];
-    imageAlt: string;
-    imageCaption: string;
-    /** Beschriftung der Höhenstufen im Foto, von oben nach unten. */
-    annotations: { peaks: string; alpine: string; pastures: string; forest: string; valley: string };
+    /** Beschriftung des Höhenschnitts. */
+    profile: {
+      zones: { valley: string; forest: string; alpine: string; rock: string };
+      levels: { "1000": string; "2000": string; "3000": string };
+      peak: string;
+      note: string;
+    };
   };
   figures: {
     title: string;
@@ -46,7 +50,10 @@ export type HomeStoryCopy = {
     eyebrow: string;
     title: string;
     lead: string;
+    /** Sieben Ursachen; die Szene nummeriert in dieser Reihenfolge. */
     pressures: [string, string][];
+    /** Beschriftung der Szene „früher | heute“. */
+    scene: { before: string; after: string; slider: string; note: string };
     facts: [string, string][];
     factsSource: string;
     closing: string;
@@ -80,18 +87,6 @@ export type HomeStoryCopy = {
   };
 };
 
-/** Foto im Vielfalt-Abschnitt. Lizenz verlangt Namensnennung und Lizenzangabe. */
-export const richnessImage = {
-  src: "/assets/landscape/vinschgau-ganglegg.webp",
-  width: 1800,
-  height: 1350,
-  blurDataURL:
-    "data:image/webp;base64,UklGRqwAAABXRUJQVlA4IKAAAAAwBACdASoUAA8APrVInkmnJCKhMAgA4BaJbACdMoGv/gMRhuWzDGID5+AA/qscOp/7Q1yXP3jNsLfYLi/dZm8EQWw07t3CnszOgHifCJFw1XpPiGsko46GbENl9/7Hq+gPoh7a2msP+2ZkHEDuNwp/c1m/7TPnGQcCXbUfXuFzt+cMTYaBlZ3dKtvyC/M1/CyyMTP+Fg64wMf0PNEO43AA",
-  photographer: "Armin S Kowalski",
-  license: "CC BY-SA 2.0",
-  sourceUrl: "https://commons.wikimedia.org/wiki/File:Panorama_vom_Ganglegg_-_Schluderns_-_Vinschgau_-_20160622_(28187381764).jpg"
-} as const;
-
 const serviceIds: ServiceId[] = ["pollination", "water", "cooling", "soil", "carbon", "erosion"];
 
 function services(items: [string, string][]) {
@@ -103,16 +98,19 @@ const homeStory: Localized<HomeStoryCopy> = {
     richness: {
       eyebrow: "Biodiversität in Südtirol",
       title: "Warum Südtirol so artenreich ist",
-      lead: "Kaum eine Region Europas vereint auf so engem Raum so viele Lebensräume. Dafür gibt es vier Gründe, und sie verstärken sich gegenseitig.",
+      lead: "Kaum eine Region Europas vereint auf so engem Raum so viele Lebensräume. Vier Gründe verstärken sich gegenseitig.",
       factors: [
-        ["Höhe", "Von gut 200 Metern im Unterland bis 3.905 Metern am Ortler: Flaumeichen und Trockenrasen im Tal, Polsterpflanzen im Hochgebirge."],
-        ["Geologie", "Kalk und Dolomit neben Granit, Porphyr und Schiefer. Saure und basische Böden tragen ganz unterschiedliche Pflanzen."],
-        ["Klima", "Submediterrane Wärme im Süden, trockene inneralpine Täler wie der Vinschgau, feuchte Lagen am Alpenhauptkamm."],
-        ["Kulturlandschaft", "Jahrhundertelange Nutzung hat Mähwiesen, Weiden, Hecken, Trockenmauern und Kastanienhaine geschaffen – Lebensräume, die es ohne Bewirtschaftung nicht gäbe."]
+        ["Höhe", "Von 200 m im Unterland bis 3.905 m am Ortler: Flaumeichen im Tal, Polsterpflanzen am Gipfel."],
+        ["Geologie", "Kalk und Dolomit neben Granit, Porphyr und Schiefer – saure und basische Böden, verschiedene Pflanzen."],
+        ["Klima", "Submediterran im Süden, trocken im Vinschgau, feucht am Alpenhauptkamm."],
+        ["Kulturlandschaft", "Mähwiesen, Weiden, Hecken, Trockenmauern und Kastanienhaine gibt es nur, weil sie bewirtschaftet werden."]
       ],
-      imageAlt: "Blick über den Vinschgau bei Schluderns: Dorf und Felder im Talboden, bewaldete Hänge, Wiesen, Weiden, Almen und vergletscherte Gipfel im Hintergrund",
-      imageCaption: "Vinschgau bei Schluderns: Talboden, Kulturlandschaft, Wald, Wiesen, Weiden, Almen und Hochgebirge in einem Blick.",
-      annotations: { peaks: "Hochgebirge", alpine: "Almen", pastures: "Wiesen und Weiden", forest: "Wald", valley: "Talboden & Kulturland" }
+      profile: {
+        zones: { valley: "Talboden", forest: "Bergwald", alpine: "Almen", rock: "Fels & Gletscher" },
+        levels: { "1000": "1.000 m", "2000": "2.000 m", "3000": "3.000 m" },
+        peak: "3.905 m",
+        note: "Schematischer Höhenschnitt: links der Süden, rechts der Alpenhauptkamm. Höhen maßstäblich, Breiten nicht."
+      }
     },
     figures: {
       title: "Kleine Fläche, große Vielfalt.",
@@ -147,16 +145,17 @@ const homeStory: Localized<HomeStoryCopy> = {
     loss: {
       eyebrow: "Unter Druck",
       title: "In Südtirol gehen Lebensräume verloren",
-      lead: "Der Verlust ist selten spektakulär. Er geschieht Fläche für Fläche: Eine Wiese wird häufiger gemäht, ein Graben verrohrt, eine Hecke gerodet. Das Biodiversitätsmonitoring Südtirol nennt intensive Nutzung und Klimawandel als die großen Belastungen.",
+      lead: "Der Verlust ist selten spektakulär. Er geschieht Fläche für Fläche – vor allem durch intensive Nutzung und den Klimawandel.",
       pressures: [
-        ["Intensivierung", "Mehr Dünger, frühere und häufigere Mahd: Aus artenreichen Wiesen werden grasreiche Bestände mit wenigen Arten."],
-        ["Versiegelung", "Siedlungen, Gewerbe und Straßen wachsen auf dem knappen, ebenen Talboden – dort, wo früher die Auen lagen."],
-        ["Zerschneidung", "Straßen, Zäune und verbaute Ufer trennen Lebensräume. Kleine, isolierte Bestände verschwinden leichter."],
-        ["Verlust extensiver Wiesen", "Magerwiesen und Trockenrasen werden intensiver genutzt oder aufgegeben – dann wachsen sie zu."],
-        ["Entwässerung", "Feuchtwiesen, Moore und Auen wurden trockengelegt, Bäche begradigt. Oft sind nur kleine Reste geblieben."],
-        ["Strukturverlust", "Hecken, Einzelbäume, Trockenmauern und Säume verschwinden – und mit ihnen Brutplätze, Verstecke und Nahrung."],
-        ["Klimawandel", "Wärmere, trockenere Sommer verschieben Lebensräume bergauf. Arten der Hochlagen können nicht beliebig ausweichen."]
+        ["Intensivierung", "Mehr Dünger, häufigere Mahd: Aus artenreichen Wiesen werden artenarme."],
+        ["Versiegelung", "Siedlungen, Gewerbe und Straßen wachsen auf dem knappen Talboden, wo früher Auen lagen."],
+        ["Zerschneidung", "Straßen, Zäune und verbaute Ufer trennen Lebensräume; kleine Bestände verschwinden leichter."],
+        ["Verlust extensiver Wiesen", "Magerwiesen und Trockenrasen werden intensiver genutzt oder aufgegeben und wachsen zu."],
+        ["Entwässerung", "Feuchtwiesen, Moore und Auen trockengelegt, Bäche begradigt – oft bleiben nur Reste."],
+        ["Strukturverlust", "Mit Hecken, Einzelbäumen und Trockenmauern verschwinden Brutplätze, Verstecke und Nahrung."],
+        ["Klimawandel", "Wärmere, trockenere Sommer schieben Lebensräume bergauf – Arten der Hochlagen können nicht beliebig ausweichen."]
       ],
+      scene: { before: "Früher", after: "Heute", slider: "Früher und heute vergleichen", note: "Schematisch: derselbe Talboden früher und wie er heute oft aussieht. Regler ziehen zum Vergleichen." },
       facts: [
         ["46 %", "der Tagfalterarten Südtirols gelten als regional gefährdet."],
         ["6", "Heu- und Fangschreckenarten sind in Südtirol in den letzten 100 Jahren ausgestorben."]
@@ -212,16 +211,19 @@ const homeStory: Localized<HomeStoryCopy> = {
     richness: {
       eyebrow: "Biodiversità in Alto Adige",
       title: "Perché l’Alto Adige è così ricco di specie",
-      lead: "Poche regioni d’Europa riuniscono così tanti habitat in uno spazio così ridotto. Le ragioni sono quattro e si rafforzano a vicenda.",
+      lead: "Poche regioni d’Europa riuniscono così tanti habitat in uno spazio così ridotto. Quattro ragioni si rafforzano a vicenda.",
       factors: [
-        ["Altitudine", "Da poco più di 200 metri nella Bassa Atesina ai 3.905 metri dell’Ortles: roverelle e prati aridi nel fondovalle, piante a cuscinetto in alta montagna."],
-        ["Geologia", "Calcare e dolomia accanto a granito, porfido e scisti. Suoli acidi e basici ospitano piante molto diverse."],
-        ["Clima", "Il calore submediterraneo del sud, valli interne aride come la Val Venosta, versanti umidi lungo la cresta principale delle Alpi."],
-        ["Paesaggio culturale", "Secoli di utilizzo hanno creato prati da sfalcio, pascoli, siepi, muretti a secco e castagneti – habitat che senza coltivazione non esisterebbero."]
+        ["Altitudine", "Dai 200 m della Bassa Atesina ai 3.905 m dell’Ortles: roverelle nel fondovalle, piante a cuscinetto in vetta."],
+        ["Geologia", "Calcare e dolomia accanto a granito, porfido e scisti – suoli acidi e basici, piante diverse."],
+        ["Clima", "Submediterraneo al sud, arido in Val Venosta, umido lungo la cresta principale delle Alpi."],
+        ["Paesaggio culturale", "Prati da sfalcio, pascoli, siepi, muretti a secco e castagneti esistono solo perché vengono coltivati."]
       ],
-      imageAlt: "Vista sulla Val Venosta presso Sluderno: paese e campi nel fondovalle, versanti boscosi, prati, pascoli, alpeggi e vette con ghiacciai sullo sfondo",
-      imageCaption: "Val Venosta presso Sluderno: fondovalle, paesaggio coltivato, bosco, prati, pascoli, alpeggi e alta montagna in un solo sguardo.",
-      annotations: { peaks: "Alta montagna", alpine: "Alpeggi", pastures: "Prati e pascoli", forest: "Bosco", valley: "Fondovalle e colture" }
+      profile: {
+        zones: { valley: "Fondovalle", forest: "Bosco montano", alpine: "Alpeggi", rock: "Roccia e ghiaccio" },
+        levels: { "1000": "1.000 m", "2000": "2.000 m", "3000": "3.000 m" },
+        peak: "3.905 m",
+        note: "Sezione altimetrica schematica: a sinistra il sud, a destra la cresta principale delle Alpi. Altitudini in scala, distanze no."
+      }
     },
     figures: {
       title: "Piccola superficie, grande varietà.",
@@ -256,16 +258,17 @@ const homeStory: Localized<HomeStoryCopy> = {
     loss: {
       eyebrow: "Sotto pressione",
       title: "In Alto Adige gli habitat stanno scomparendo",
-      lead: "La perdita è raramente spettacolare. Avviene superficie dopo superficie: un prato falciato più spesso, un fosso intubato, una siepe estirpata. Il Monitoraggio della biodiversità Alto Adige indica l’uso intensivo e il cambiamento climatico come le grandi pressioni.",
+      lead: "La perdita è raramente spettacolare. Avviene superficie dopo superficie – soprattutto per l’uso intensivo e il cambiamento climatico.",
       pressures: [
-        ["Intensificazione", "Più concime, sfalci più precoci e frequenti: i prati ricchi di specie diventano prati con poche specie."],
-        ["Impermeabilizzazione", "Insediamenti, aree produttive e strade crescono sullo scarso fondovalle pianeggiante – dove un tempo c’erano le golene."],
-        ["Frammentazione", "Strade, recinzioni e sponde artificiali separano gli habitat. Popolazioni piccole e isolate scompaiono più facilmente."],
-        ["Perdita dei prati estensivi", "Prati magri e prati aridi vengono sfruttati in modo più intensivo oppure abbandonati – e allora si imboschiscono."],
-        ["Drenaggio", "Prati umidi, torbiere e golene sono stati prosciugati, i torrenti rettificati. Spesso ne restano solo piccoli frammenti."],
-        ["Perdita di strutture", "Siepi, alberi isolati, muretti a secco e fasce erbose scompaiono – e con loro siti di nidificazione, rifugi e cibo."],
-        ["Cambiamento climatico", "Estati più calde e secche spostano gli habitat verso l’alto. Le specie d’alta quota non possono spostarsi all’infinito."]
+        ["Intensificazione", "Più concime, sfalci più frequenti: i prati ricchi di specie diventano poveri."],
+        ["Impermeabilizzazione", "Insediamenti, aree produttive e strade crescono sullo scarso fondovalle, dove un tempo c’erano le golene."],
+        ["Frammentazione", "Strade, recinzioni e sponde artificiali separano gli habitat; le popolazioni piccole scompaiono più facilmente."],
+        ["Perdita dei prati estensivi", "Prati magri e aridi vengono sfruttati di più oppure abbandonati e si imboschiscono."],
+        ["Drenaggio", "Prati umidi, torbiere e golene prosciugati, torrenti rettificati – spesso restano solo frammenti."],
+        ["Perdita di strutture", "Con siepi, alberi isolati e muretti a secco scompaiono siti di nidificazione, rifugi e cibo."],
+        ["Cambiamento climatico", "Estati più calde e secche spingono gli habitat verso l’alto – le specie d’alta quota non possono salire all’infinito."]
       ],
+      scene: { before: "Prima", after: "Oggi", slider: "Confronta prima e oggi", note: "Schema: lo stesso fondovalle com’era un tempo e come appare spesso oggi. Trascina il cursore per confrontare." },
       facts: [
         ["46 %", "delle specie di farfalle diurne dell’Alto Adige sono considerate minacciate a livello regionale."],
         ["6", "specie di ortotteri e mantidi si sono estinte in Alto Adige negli ultimi 100 anni."]
@@ -321,16 +324,19 @@ const homeStory: Localized<HomeStoryCopy> = {
     richness: {
       eyebrow: "Biodiversity in South Tyrol",
       title: "Why South Tyrol is so rich in species",
-      lead: "Few regions in Europe bring together so many habitats in so little space. There are four reasons, and they reinforce one another.",
+      lead: "Few regions in Europe bring together so many habitats in so little space. Four reasons reinforce one another.",
       factors: [
-        ["Altitude", "From just over 200 metres in the Unterland to 3,905 metres on the Ortler: downy oak and dry grassland in the valley, cushion plants in the high mountains."],
-        ["Geology", "Limestone and dolomite next to granite, porphyry and schist. Acidic and alkaline soils carry very different plants."],
-        ["Climate", "Sub-Mediterranean warmth in the south, dry inner-Alpine valleys such as the Vinschgau, damp slopes along the main Alpine ridge."],
-        ["Cultural landscape", "Centuries of use have created hay meadows, pastures, hedgerows, dry-stone walls and chestnut groves – habitats that would not exist without farming."]
+        ["Altitude", "From 200 m in the Unterland to 3,905 m on the Ortler: downy oak in the valley, cushion plants on the summit."],
+        ["Geology", "Limestone and dolomite next to granite, porphyry and schist – acidic and alkaline soils, different plants."],
+        ["Climate", "Sub-Mediterranean in the south, dry in the Vinschgau, damp along the main Alpine ridge."],
+        ["Cultural landscape", "Hay meadows, pastures, hedgerows, dry-stone walls and chestnut groves exist only because they are farmed."]
       ],
-      imageAlt: "View over the Vinschgau near Schluderns: village and fields on the valley floor, forested slopes, meadows, pastures, high pastures and glaciated peaks behind",
-      imageCaption: "Vinschgau near Schluderns: valley floor, farmland, forest, meadows, pastures, high pastures and high peaks in a single view.",
-      annotations: { peaks: "High mountains", alpine: "High pastures", pastures: "Meadows and pastures", forest: "Forest", valley: "Valley floor & farmland" }
+      profile: {
+        zones: { valley: "Valley floor", forest: "Mountain forest", alpine: "High pastures", rock: "Rock & glacier" },
+        levels: { "1000": "1,000 m", "2000": "2,000 m", "3000": "3,000 m" },
+        peak: "3,905 m",
+        note: "Schematic cross-section: south on the left, main Alpine ridge on the right. Heights to scale, distances not."
+      }
     },
     figures: {
       title: "Small in area, big in diversity.",
@@ -365,16 +371,17 @@ const homeStory: Localized<HomeStoryCopy> = {
     loss: {
       eyebrow: "Under pressure",
       title: "Habitats are being lost in South Tyrol",
-      lead: "The loss is rarely spectacular. It happens plot by plot: a meadow mown more often, a ditch piped, a hedgerow grubbed out. Biodiversity Monitoring South Tyrol names intensive land use and climate change as the major pressures.",
+      lead: "The loss is rarely spectacular. It happens plot by plot – above all through intensive land use and climate change.",
       pressures: [
-        ["Intensification", "More fertiliser, earlier and more frequent mowing: species-rich meadows turn into grassy swards with few species."],
-        ["Soil sealing", "Settlements, business parks and roads grow on the scarce, flat valley floor – where the floodplains used to be."],
-        ["Fragmentation", "Roads, fences and hardened riverbanks cut habitats apart. Small, isolated populations disappear more easily."],
-        ["Loss of extensive meadows", "Nutrient-poor meadows and dry grasslands are either farmed more intensively or abandoned – and then they scrub over."],
-        ["Drainage", "Wet meadows, peatlands and floodplains were drained, streams straightened. Often only small remnants are left."],
-        ["Loss of structure", "Hedgerows, solitary trees, dry-stone walls and field margins disappear – and with them nesting sites, shelter and food."],
-        ["Climate change", "Warmer, drier summers push habitats uphill. High-altitude species cannot keep moving up forever."]
+        ["Intensification", "More fertiliser, more frequent mowing: species-rich meadows become species-poor."],
+        ["Soil sealing", "Settlements, business parks and roads grow on the scarce valley floor, where floodplains used to be."],
+        ["Fragmentation", "Roads, fences and hardened banks cut habitats apart; small populations disappear more easily."],
+        ["Loss of extensive meadows", "Nutrient-poor meadows and dry grasslands are farmed harder or abandoned and scrub over."],
+        ["Drainage", "Wet meadows, peatlands and floodplains drained, streams straightened – often only remnants are left."],
+        ["Loss of structure", "With hedgerows, solitary trees and dry-stone walls go nesting sites, shelter and food."],
+        ["Climate change", "Warmer, drier summers push habitats uphill – high-altitude species cannot keep moving up forever."]
       ],
+      scene: { before: "Then", after: "Now", slider: "Compare then and now", note: "Schematic: the same valley floor as it used to be and as it often looks today. Drag the slider to compare." },
       facts: [
         ["46 %", "of South Tyrol’s butterfly species are considered regionally threatened."],
         ["6", "grasshopper and mantis species have died out in South Tyrol over the past 100 years."]

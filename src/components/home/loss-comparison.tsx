@@ -1,0 +1,177 @@
+"use client";
+
+import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
+import { BeforeAfterSlider } from "./before-after-slider";
+import { SceneNumber } from "./scene-number";
+
+type Marker = { key: string; left: string; top: string; split: number };
+
+const SWEEP_DELAY = 1400; // erst wachsen lassen, dann aufdecken
+const SWEEP_DURATION = 8000;
+
+function ease(t: number) {
+  return t < 0.5 ? 2 * t * t : 1 - (-2 * t + 2) ** 2 / 2;
+}
+
+/**
+ * Talboden früher | heute mit Legende. Sobald die Szene im Bild ist, fährt
+ * der Regler einmal von rechts nach links und deckt „heute“ auf; jede Nummer
+ * erscheint, wenn er sie überquert, und mit ihr ihr Eintrag in der Legende.
+ * Wer selbst zieht, übernimmt sofort, und alle Einträge stehen da. Ohne
+ * Bewegung (prefers-reduced-motion) gibt es keine Fahrt: Regler in der Mitte,
+ * Legende vollständig. Das Ausblenden der Legende hängt in globals.css an
+ * `.home-motion-ready`, damit sie ohne JavaScript nie verborgen bleibt.
+ */
+export function LossComparison({
+  before,
+  after,
+  markers,
+  items,
+  aside,
+  caption,
+  beforeLabel,
+  afterLabel,
+  sliderLabel
+}: {
+  before: ReactNode;
+  after: ReactNode;
+  markers: ReadonlyArray<Marker>;
+  items: ReadonlyArray<readonly [string, string]>;
+  aside: ReactNode;
+  caption: string;
+  beforeLabel: string;
+  afterLabel: string;
+  sliderLabel: string;
+}) {
+  const [position, setPosition] = useState(100);
+  const [revealed, setRevealed] = useState(0);
+  const stageRef = useRef<HTMLDivElement>(null);
+  const frame = useRef<number | null>(null);
+
+  const stopSweep = () => {
+    if (frame.current !== null) cancelAnimationFrame(frame.current);
+    frame.current = null;
+  };
+
+  useEffect(() => {
+    const stage = stageRef.current;
+    if (!stage) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      setPosition(50);
+      setRevealed(markers.length);
+      return;
+    }
+
+    let timer: number | undefined;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return;
+        observer.disconnect();
+        timer = window.setTimeout(() => {
+          const start = performance.now();
+          const step = (now: number) => {
+            const t = Math.min(1, (now - start) / SWEEP_DURATION);
+            const next = 100 * (1 - ease(t));
+            setPosition(next);
+            setRevealed((count) => Math.max(count, markers.filter((m) => next < m.split).length));
+            frame.current = t < 1 ? requestAnimationFrame(step) : null;
+          };
+          frame.current = requestAnimationFrame(step);
+        }, SWEEP_DELAY);
+      },
+      { threshold: 0.4 }
+    );
+    observer.observe(stage);
+
+    return () => {
+      observer.disconnect();
+      window.clearTimeout(timer);
+      stopSweep();
+    };
+  }, [markers]);
+
+  const takeOver = (next: number) => {
+    stopSweep();
+    setPosition(next);
+    setRevealed(markers.length);
+  };
+
+  return (
+    <>
+      <figure className="mt-10 sm:mt-16">
+        {/* Auf dem Telefon randlos, damit die Zeichnung nicht noch kleiner wird. */}
+        <div
+          ref={stageRef}
+          onPointerDown={stopSweep}
+          data-home-reveal="grow"
+          className="-mx-5 text-[var(--color-moss)] sm:mx-0"
+        >
+          <BeforeAfterSlider
+            before={before}
+            position={position}
+            onPositionChange={takeOver}
+            beforeLabel={beforeLabel}
+            afterLabel={afterLabel}
+            sliderLabel={sliderLabel}
+            afterClassName="bg-[var(--color-ink)]"
+            after={
+              <>
+                {after}
+                <div aria-hidden>
+                  {markers.map((marker, index) => (
+                    <span
+                      key={marker.key}
+                      className="absolute -translate-x-1/2 -translate-y-1/2"
+                      style={{ left: marker.left, top: marker.top }}
+                    >
+                      <SceneNumber
+                        n={index + 1}
+                        tone="dark"
+                        className="profile-marker profile-marker-dark relative max-sm:size-[18px] max-sm:text-[10px] max-sm:ring-1"
+                        style={{ "--marker-delay": `${index * 0.7}s` } as CSSProperties}
+                      />
+                    </span>
+                  ))}
+                </div>
+              </>
+            }
+          />
+        </div>
+        <figcaption className="mt-3 text-xs leading-5 text-white/60">{caption}</figcaption>
+      </figure>
+      <LegendGrid items={items} revealed={revealed} aside={aside} />
+    </>
+  );
+}
+
+function LegendGrid({
+  items,
+  revealed,
+  aside
+}: {
+  items: ReadonlyArray<readonly [string, string]>;
+  revealed: number;
+  aside: ReactNode;
+}) {
+  return (
+    <div className="mt-8 grid gap-10 sm:mt-10 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)] lg:gap-16">
+      <ol className="grid gap-x-10 gap-y-5 sm:grid-cols-2">
+        {items.map(([title, copy], index) => (
+          <li
+            key={title}
+            data-sweep-item
+            data-sweep-shown={index < revealed}
+            className="grid grid-cols-[1.5rem_minmax(0,1fr)] gap-x-3 border-t border-white/15 pt-5"
+          >
+            <SceneNumber n={index + 1} tone="dark" className="mt-px ring-0" />
+            <div>
+              <h3 className="font-semibold tracking-[-0.01em]">{title}</h3>
+              <p className="mt-1 max-w-[44ch] leading-7 text-white/70">{copy}</p>
+            </div>
+          </li>
+        ))}
+      </ol>
+      {aside}
+    </div>
+  );
+}

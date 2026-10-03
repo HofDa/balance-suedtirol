@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { animateNumber } from "@/lib/animate-number";
 
 const DURATION = 1600;
 
@@ -26,21 +27,12 @@ export function CountUp({ value, delay = 0 }: { value: string; delay?: number })
     if (!match || !element || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
     setCurrent(0);
-    let frame = 0;
-    let timer = 0;
+    let stop: (() => void) | undefined;
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (!entry.isIntersecting) return;
         observer.disconnect();
-        timer = window.setTimeout(() => {
-          const start = performance.now();
-          const tick = (now: number) => {
-            const t = Math.min(1, (now - start) / DURATION);
-            setCurrent(Math.round(target * (1 - Math.pow(1 - t, 4))));
-            if (t < 1) frame = requestAnimationFrame(tick);
-          };
-          frame = requestAnimationFrame(tick);
-        }, delay);
+        stop = animateNumber({ from: 0, to: target, duration: DURATION, delay, onUpdate: (next) => setCurrent(Math.round(next)) });
       },
       { threshold: 0.6 }
     );
@@ -48,12 +40,11 @@ export function CountUp({ value, delay = 0 }: { value: string; delay?: number })
 
     return () => {
       observer.disconnect();
-      window.clearTimeout(timer);
-      cancelAnimationFrame(frame);
+      stop?.();
     };
     // `value` bestimmt alle abgeleiteten Größen.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [value]);
+  }, [value, delay]);
 
   if (!match || current === null) return <span ref={ref}>{value}</span>;
 

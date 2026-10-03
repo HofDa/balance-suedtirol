@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState, type ReactNode } from "react"
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { focusRing } from "@/components/ui/focus";
 import { cn } from "@/lib/utils";
+import { useAnimationActive } from "@/hooks/use-animation-active";
 
 /**
  * Die Projektspur der Startseite.
@@ -43,7 +44,7 @@ export function ProjectCarousel({
   const [atStart, setAtStart] = useState(true);
   const [atEnd, setAtEnd] = useState(false);
   const [paused, setPaused] = useState(false);
-  const [inView, setInView] = useState(false);
+  const active = useAnimationActive(trackRef);
 
   const sync = useCallback(() => {
     const track = trackRef.current;
@@ -79,21 +80,7 @@ export function ProjectCarousel({
   }, []);
 
   useEffect(() => {
-    const track = trackRef.current;
-    if (!track) return;
-    const observer = new IntersectionObserver(([entry]) => setInView(entry.isIntersecting), { threshold: 0.5 });
-    observer.observe(track);
-    const onVisibility = () => setPaused(document.hidden);
-    document.addEventListener("visibilitychange", onVisibility);
-    return () => {
-      observer.disconnect();
-      document.removeEventListener("visibilitychange", onVisibility);
-    };
-  }, []);
-
-  useEffect(() => {
-    if (!canScroll || paused || !inView) return;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (!canScroll || paused || !active) return;
     const timer = window.setTimeout(() => {
       const track = trackRef.current;
       if (!track) return;
@@ -103,7 +90,7 @@ export function ProjectCarousel({
     return () => window.clearTimeout(timer);
     // `atStart` gehört dazu: Nach dem Rücksprung ändert sich sonst kein Wert
     // und die Uhr würde nicht neu gestellt.
-  }, [canScroll, paused, inView, atEnd, atStart, scrollByCard]);
+  }, [canScroll, paused, active, atEnd, atStart, scrollByCard]);
 
   return (
     /* `overflow-x` klemmt auch die Senkrechte ab. Die Spur braucht deshalb

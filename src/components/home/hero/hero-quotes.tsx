@@ -5,6 +5,7 @@ import { heroQuotes, heroQuotesAreMockup } from "@/config/hero";
 import type { Locale } from "@/config/site";
 import { heroCopy } from "@/config/translations/hero";
 import { focusRingOnDark } from "@/components/ui/focus";
+import { useAnimationActive } from "@/hooks/use-animation-active";
 
 const DWELL_MS = 7000;
 
@@ -28,24 +29,17 @@ export function HeroQuotes({ locale }: { locale: Locale }) {
   const [index, setIndex] = useState(0);
   const [paused, setPaused] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
+  const active = useAnimationActive(containerRef, ROTATE_QUERY);
 
   useEffect(() => {
-    if (paused) return;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    if (!window.matchMedia(ROTATE_QUERY).matches) return;
+    if (paused || !active) return;
 
     const timer = window.setTimeout(() => {
       setIndex((current) => (current + 1) % heroQuotes.length);
     }, DWELL_MS);
 
     return () => window.clearTimeout(timer);
-  }, [index, paused]);
-
-  useEffect(() => {
-    const onVisibility = () => setPaused(document.hidden);
-    document.addEventListener("visibilitychange", onVisibility);
-    return () => document.removeEventListener("visibilitychange", onVisibility);
-  }, []);
+  }, [index, paused, active]);
 
   const quote = heroQuotes[index];
 

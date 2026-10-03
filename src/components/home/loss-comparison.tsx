@@ -1,9 +1,10 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
+import { memo, useCallback, useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
 import { BeforeAfterSlider } from "./before-after-slider";
 import { SceneNumber } from "./scene-number";
 import { LegendCarousel } from "./legend-carousel";
+import { focusRingOnDark } from "@/components/ui/focus";
 import styles from "./loss-comparison.module.css";
 
 type Marker = { key: string; left: string; top: string; split: number };
@@ -50,6 +51,8 @@ export function LossComparison({
   const [position, setPosition] = useState(0);
   const [revealed, setRevealed] = useState(0);
   const [sweeping, setSweeping] = useState(false);
+  const [selectedLegend, setSelectedLegend] = useState<number | null>(null);
+  const scopeRef = useRef<HTMLDivElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
   const viewportRef = useRef<HTMLDivElement>(null);
   const frame = useRef<number | null>(null);
@@ -123,8 +126,21 @@ export function LossComparison({
     setRevealed(markers.length);
   };
 
+  const showLegend = (index: number) => {
+    stopSweep();
+    setRevealed(markers.length);
+    setSelectedLegend(index);
+    if (window.matchMedia("(max-width: 639px)").matches) {
+      scopeRef.current?.dispatchEvent(new CustomEvent("legend:show", { detail: index }));
+    } else {
+      const entry = scopeRef.current?.querySelector<HTMLElement>(`[data-loss-legend-index="${index}"]`);
+      entry?.focus({ preventScroll: true });
+      entry?.scrollIntoView({ block: "nearest", behavior: "instant" });
+    }
+  };
+
   return (
-    <div data-legend-scope>
+    <div ref={scopeRef} data-legend-scope className={styles.comparison}>
       <figure className="mt-10 sm:mt-16">
         {/* Mobil: breite, wischbare Szene; der Vergleichsregler steht separat darunter. */}
         <div
@@ -142,18 +158,24 @@ export function LossComparison({
                 beforeLabel={beforeLabel}
                 afterLabel={afterLabel}
                 sliderLabel={sliderLabel}
-                afterClassName="bg-[var(--color-ink)]"
+                afterClassName="pointer-events-none z-20 bg-[var(--color-ink)]"
                 after={
                   <div className={styles.scene}>
                     {after}
-                    <div aria-hidden>
+                    <div>
                       {markers.map((marker, index) => (
                         <div
                           key={marker.key}
                           style={{ "--marker-left": marker.left, "--marker-top": marker.top } as CSSProperties}
                         >
-                          <span className={styles.leader} />
-                          <span className={styles.marker}>
+                          <span aria-hidden className={styles.leader} />
+                          <button
+                            type="button"
+                            aria-label={`${index + 1}: ${items[index][0]}`}
+                            tabIndex={position > 100 - marker.split ? 0 : -1}
+                            onClick={() => showLegend(index)}
+                            className={`${styles.marker} pointer-events-auto grid size-11 cursor-pointer place-items-center rounded-full ${focusRingOnDark}`}
+                          >
                             <SceneNumber
                               n={index + 1}
                               tone="dark"
@@ -161,7 +183,7 @@ export function LossComparison({
                               className="profile-marker profile-marker-dark relative"
                               style={{ "--marker-delay": `${index * 0.7}s` } as CSSProperties}
                             />
-                          </span>
+                          </button>
                         </div>
                       ))}
                     </div>
@@ -191,18 +213,19 @@ export function LossComparison({
         </div>
         <figcaption className="mt-3 text-xs leading-5 text-white/60">{caption}</figcaption>
       </figure>
-      <LegendGrid items={items} revealed={revealed} aside={aside} pagerLabel={pagerLabel} follow={sweeping} onActiveChange={showMarker} />
+      <LegendGrid items={items} revealed={revealed} aside={aside} pagerLabel={pagerLabel} follow={sweeping} onActiveChange={showMarker} selected={selectedLegend} />
     </div>
   );
 }
 
-function LegendGrid({
+const LegendGrid = memo(function LegendGrid({
   items,
   revealed,
   aside,
   pagerLabel,
   follow,
-  onActiveChange
+  onActiveChange,
+  selected
 }: {
   items: ReadonlyArray<readonly [string, string]>;
   revealed: number;
@@ -210,6 +233,7 @@ function LegendGrid({
   pagerLabel: string;
   follow: boolean;
   onActiveChange: (index: number) => void;
+  selected: number | null;
 }) {
   return (
     <div className="mt-8 grid grid-cols-1 gap-10 sm:mt-10 lg:gap-24">
@@ -229,7 +253,10 @@ function LegendGrid({
             key={title}
             data-sweep-item
             data-sweep-shown={index < revealed}
-            className="grid grid-cols-[1.5rem_minmax(0,1fr)] gap-x-3 border-t border-white/15 pt-5"
+            data-loss-legend-index={index}
+            data-selected={index === selected}
+            tabIndex={-1}
+            className={`grid grid-cols-[1.5rem_minmax(0,1fr)] gap-x-3 border-t border-white/15 pt-5 data-[selected=true]:border-[var(--color-moss)] ${focusRingOnDark}`}
           >
             <SceneNumber n={index + 1} tone="dark" className="mt-px ring-0" />
             <div>
@@ -242,4 +269,4 @@ function LegendGrid({
       {aside}
     </div>
   );
-}
+});

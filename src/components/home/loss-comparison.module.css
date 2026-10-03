@@ -14,6 +14,24 @@
 }
 
 @media (max-width: 639px) {
+  /* Die beiden breiten SVGs werden beim Ziehen neu beschnitten. Hunderte
+     gleichzeitig animierte Pflanzen belasten dabei mobile Compositoren. */
+  .comparison [data-home-reveal="grow"],
+  .scene *,
+  .scene *::after {
+    animation: none !important;
+    transition: none !important;
+    will-change: auto !important;
+  }
+
+  .scene :global(.habitat-grow) {
+    transform: none !important;
+  }
+
+  .scene :global(.habitat-fade) {
+    opacity: 1 !important;
+  }
+
   .viewport {
     overflow-x: auto;
     overscroll-behavior-x: contain;

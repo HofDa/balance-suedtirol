@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useId, useRef, useState } from "react";
-import { animate, useInView, useReducedMotion } from "framer-motion";
+import { animateNumber } from "@/lib/animate-number";
 import { withBasePath } from "@/lib/public-path";
 
 interface BeforeAfterSliderProps {
@@ -46,28 +46,31 @@ export function BeforeAfterSlider({
 }: BeforeAfterSliderProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [position, setPosition] = useState(100);
-  // Ref statt State: Der Effekt darf nicht neu laufen, sobald die Einführung
-  // beginnt – sonst stoppt sein Cleanup die eigene Animation nach dem ersten Frame.
+  // Die Einführung läuft einmal; danach übernimmt die manuelle Bedienung.
   const hasIntroduced = useRef(false);
-  const inView = useInView(containerRef, { once: true, amount: 0.5 });
-  const reduceMotion = useReducedMotion();
+  const stopIntro = useRef<(() => void) | undefined>(undefined);
   const inputId = useId();
 
   useEffect(() => {
-    if (!inView || hasIntroduced.current) return;
-    hasIntroduced.current = true;
-    if (reduceMotion) {
-      setPosition(REST_POSITION);
-      return;
-    }
-    const controls = animate(100, REST_POSITION, {
-      duration: 1.4,
-      delay: 0.3,
-      ease: [0.22, 1, 0.36, 1],
-      onUpdate: (value) => setPosition(value)
-    });
-    return () => controls.stop();
-  }, [inView, reduceMotion]);
+    const container = containerRef.current;
+    if (!container) return;
+    const observer = new IntersectionObserver(([entry]) => {
+      if (!entry.isIntersecting || entry.intersectionRatio < 0.5) return;
+      observer.disconnect();
+      if (hasIntroduced.current) return;
+      hasIntroduced.current = true;
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        setPosition(REST_POSITION);
+        return;
+      }
+      stopIntro.current = animateNumber({ from: 100, to: REST_POSITION, duration: 1400, delay: 300, onUpdate: setPosition });
+    }, { threshold: 0.5 });
+    observer.observe(container);
+    return () => {
+      observer.disconnect();
+      stopIntro.current?.();
+    };
+  }, []);
 
   const updateFromPointer = (clientX: number) => {
     const rect = containerRef.current?.getBoundingClientRect();
@@ -80,6 +83,7 @@ export function BeforeAfterSlider({
     // Ein Klick irgendwo aufs Bild springt dorthin, danach folgt der Griff dem Zeiger.
     event.currentTarget.setPointerCapture(event.pointerId);
     hasIntroduced.current = true;
+    stopIntro.current?.();
     updateFromPointer(event.clientX);
   };
 
@@ -179,6 +183,7 @@ export function BeforeAfterSlider({
           value={Math.round(position)}
           onChange={(event) => {
             hasIntroduced.current = true;
+            stopIntro.current?.();
             setPosition(Number(event.target.value));
           }}
           aria-label={labels.slider}

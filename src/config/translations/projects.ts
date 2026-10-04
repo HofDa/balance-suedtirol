@@ -8,7 +8,7 @@ export const projectsCopy = {
     },
     projectsPage: {
       eyebrow: "Projektplattform",
-      title: "Projekte in Südtirol.",
+      title: "Projekte in Südtirol",
       copy: "Wälder, Gewässer, Kulturlandschaften und andere Lebensräume – jedes Projekt mit Gemeinde, Trägerorganisation und aktuellem Stand.",
       filterTitle: "Nach Lebensraum filtern",
       filterCopy: "Lebensraum wählen oder nach Projekt und Ort suchen.",
@@ -67,7 +67,7 @@ export const projectsCopy = {
       galleryImage: "Bild",
       photo: "Foto",
       ecologicalImpact: "Ökologische Wirkung",
-      impactCopy: "Die Ziele sind vorab festgelegt und werden im Monitoring nachgehalten.",
+      impactCopy: "Die Ziele sind vorab festgelegt und werden im Monitoring überprüft.",
       timeline: "Projektverlauf",
       timelineCopy: "Der aktuelle Stand und die nächsten Schritte auf einen Blick.",
       steps: {
@@ -143,7 +143,7 @@ export const projectsCopy = {
     },
     projectsPage: {
       eyebrow: "Piattaforma dei progetti",
-      title: "Progetti in Alto Adige.",
+      title: "Progetti in Alto Adige",
       copy: "Boschi, acque, paesaggi rurali e altri habitat – ogni progetto con comune, ente promotore e stato attuale.",
       filterTitle: "Filtra per habitat",
       filterCopy: "Scegli un habitat o cerca un progetto o un luogo.",
@@ -278,7 +278,7 @@ export const projectsCopy = {
     },
     projectsPage: {
       eyebrow: "Project platform",
-      title: "Projects in South Tyrol.",
+      title: "Projects in South Tyrol",
       copy: "Forests, waters, cultural landscapes and other habitats – every project with its municipality, project organisation and current status.",
       filterTitle: "Filter by habitat",
       filterCopy: "Choose a habitat or search for a project or place.",

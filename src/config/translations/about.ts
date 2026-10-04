@@ -1,10 +1,10 @@
 export const aboutCopy = {
   de: {
     eyebrow: "Wer dahinter steht",
-    title: "Artenvielfalt dort erhalten, wo wir leben.",
+    title: "Artenvielfalt dort erhalten, wo wir leben",
     lead: "b*alance ist aus der Naturschutzarbeit in Südtirol entstanden – aus einer Frage, die sich dort seit Jahren stellt: Wie lässt sich die Artenvielfalt in der eigenen Gemeinde bewahren und fördern, auf der Wiese hinterm Hof und am Bach im Ort?",
     teamEyebrow: "Das Team",
-    teamTitle: "Ein Team aus Ökologie und Naturschutz in Südtirol.",
+    teamTitle: "Ein Team aus Ökologie und Naturschutz in Südtirol",
     teamBio: [
       "b*alance wird von einem Team mit Hintergrund in Ökologie und Naturschutz getragen, das in Südtirol draußen unterwegs ist: Es kartiert Trockenrasen, Feuchtgebiete, Hecken und Streuobstwiesen, plant Pflegemaßnahmen und setzt sie gemeinsam mit Gemeinden, Bäuerinnen und Bauern, Schulen und Naturschutzgruppen um.",
       "Gemeinsamer Ausgangspunkt: Biodiversität lässt sich nur dort erhalten, wo sie vorkommt. Deshalb geht es auf dieser Plattform um konkrete Flächen in Südtirol – mit Adresse, Trägerorganisation und Monitoring."
@@ -26,11 +26,11 @@ export const aboutCopy = {
       }
     ],
     principlesEyebrow: "Wie wir arbeiten",
-    principlesTitle: "Fünf Regeln, an denen wir uns messen lassen.",
+    principlesTitle: "Fünf Regeln, an denen wir uns messen lassen",
     principles: [
       ["Vor Ort", "Jedes Projekt liegt in Südtirol, hat eine Adresse und lässt sich besuchen."],
       ["Geprüft, bevor es online geht", "Ein Fachgremium aus Ökologie, Agrar- und Umweltwissenschaften prüft Ziele, Laufzeit und Budget jedes Projekts."],
-      ["Messbar", "Habitatfläche, Strukturvielfalt und Zielarten werden vorab festgelegt und im Monitoring nachgehalten."],
+      ["Messbar", "Habitatfläche, Strukturvielfalt und Zielarten werden vorab festgelegt und im Monitoring überprüft."],
       ["Verringern vor Ausgleichen", "Der Check zeigt, wo die eigenen Zahlen groß sind. Ein Kompensationsversprechen geben wir nicht."],
       ["Keine Aussage ohne Beleg", "Was wir nicht belegen können, streichen wir. Das gilt auch für diese Seite."]
     ],
@@ -42,10 +42,10 @@ export const aboutCopy = {
   },
   it: {
     eyebrow: "Chi c’è dietro",
-    title: "Conservare la biodiversità là dove viviamo.",
+    title: "Conservare la biodiversità là dove viviamo",
     lead: "b*alance nasce dal lavoro di tutela della natura in Alto Adige – da una domanda che lì si pone da anni: come conservare e favorire la varietà delle specie nel proprio comune, sul prato dietro il maso e lungo il torrente in paese?",
     teamEyebrow: "Il team",
-    teamTitle: "Un team di ecologia e tutela della natura in Alto Adige.",
+    teamTitle: "Un team di ecologia e tutela della natura in Alto Adige",
     teamBio: [
       "b*alance è portata avanti da un team con background in ecologia e tutela della natura che lavora sul territorio altoatesino: mappa prati aridi, zone umide, siepi e frutteti tradizionali, pianifica interventi di cura e li realizza insieme a comuni, contadine e contadini, scuole e gruppi di tutela della natura.",
       "Punto di partenza comune: la biodiversità si conserva solo dove si trova. Per questo su questa piattaforma si parla di aree concrete in Alto Adige – con indirizzo, ente promotore e monitoraggio."
@@ -67,7 +67,7 @@ export const aboutCopy = {
       }
     ],
     principlesEyebrow: "Come lavoriamo",
-    principlesTitle: "Cinque regole su cui ci facciamo misurare.",
+    principlesTitle: "Cinque regole su cui ci facciamo misurare",
     principles: [
       ["Sul posto", "Ogni progetto è in Alto Adige, ha un indirizzo e si può visitare."],
       ["Verificato prima di andare online", "Un comitato di esperti in ecologia, scienze agrarie e ambientali verifica obiettivi, durata e budget di ogni progetto."],
@@ -83,10 +83,10 @@ export const aboutCopy = {
   },
   en: {
     eyebrow: "Who is behind it",
-    title: "Preserving biodiversity where we live.",
+    title: "Preserving biodiversity where we live",
     lead: "b*alance grew out of nature conservation work in South Tyrol – out of a question that has been asked there for years: how can the variety of species be preserved and enhanced in their own municipality, on the meadow behind the farm and along the stream in the village?",
     teamEyebrow: "The team",
-    teamTitle: "A team in ecology and nature conservation in South Tyrol.",
+    teamTitle: "A team in ecology and nature conservation in South Tyrol",
     teamBio: [
       "b*alance is run by a team with a background in ecology and nature conservation that works outdoors across South Tyrol: it maps dry grasslands, wetlands, hedges and traditional orchards, plans management measures and carries them out together with municipalities, farmers, schools and conservation groups.",
       "Shared starting point: biodiversity can only be preserved where it occurs. That is why this platform is about specific sites in South Tyrol – with an address, a project organisation and monitoring."
@@ -108,7 +108,7 @@ export const aboutCopy = {
       }
     ],
     principlesEyebrow: "How we work",
-    principlesTitle: "Five rules we can be measured against.",
+    principlesTitle: "Five rules we can be measured against",
     principles: [
       ["Local", "Every project is in South Tyrol, has an address and can be visited."],
       ["Reviewed before it goes online", "A panel from ecology, agricultural and environmental science reviews each project’s goals, duration and budget."],

@@ -29,7 +29,7 @@ export function SectionHeading({
         <Label size="section" className="mb-3">
           {eyebrow}
         </Label>
-        <h2 id={id} className={cn(textHeadline, "text-[var(--color-ink)]", toggle && "max-sm:pr-14 max-sm:hyphens-auto break-words")}>
+        <h2 id={id} className={cn(textHeadline, "text-[var(--color-ink)]", toggle && "max-sm:pr-14 max-sm:hyphens-auto [hyphenate-limit-chars:12_5_5] break-words")}>
           {title}
         </h2>
         {toggle}

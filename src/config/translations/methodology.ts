@@ -49,7 +49,7 @@ export const methodologyCopy = {
     metaTitle: "Methodik & Quellen",
     metaDescription: "Bilanzgrenzen, Rechenweg, Datenquellen und Unsicherheiten des Lebensraum-Checks für CO₂, Wasser, Energie und Biodiversität.",
     eyebrow: "Methodik · Modell 0.3",
-    title: "So entstehen die Werte im Lebensraum-Check.",
+    title: "So entstehen die Werte im Lebensraum-Check",
     lead: "Jede angezeigte Zahl folgt aus deiner Eingabe, einem offen gelegten Faktor und einer klaren Bilanzgrenze. Diese Seite zeigt, welche Werte amtlich oder wissenschaftlich verankert sind — und wo der Rechner bewusst mit einer vereinfachten Annahme arbeitet.",
     status: "Quellenstand: Oktober 2026 · Ergebnisse gerundet · keine geprüfte Individualbilanz",
     principles: [
@@ -59,7 +59,7 @@ export const methodologyCopy = {
       ["Keine Scheingenauigkeit", "Ergebnisse werden gerundet. Regionale Pauschalen und Nutzungsannahmen sind ausdrücklich als Modellannahmen markiert."]
     ],
     boundariesEyebrow: "Bilanzgrenzen",
-    boundariesTitle: "Drei Zahlen, drei bewusst verschiedene Grenzen.",
+    boundariesTitle: "Drei Zahlen, drei bewusst verschiedene Grenzen",
     boundariesCopy: "Eine Grenze entscheidet, was eine Kennzahl aussagt. CO₂e, Leitungswasser und zugeordneter Energieeinsatz werden deshalb nicht zu einem einzigen Umweltscore verrechnet.",
     notIncluded: "Nicht enthalten",
     boundaries: [
@@ -68,7 +68,7 @@ export const methodologyCopy = {
       { metric: "Energieeinsatz", unit: "kWh pro Jahr", scope: "Den abgefragten Aktivitäten zugeordneter Strom, Wärme- und Kraftstoffeinsatz sowie Energie für Wasserbereitstellung.", excluded: "Graue Energie von Gebäuden und Produkten wird nicht addiert; ihre Klimawirkung kann teilweise im CO₂e-Faktor stecken." }
     ],
     evidenceEyebrow: "Evidenz je Rechenbereich",
-    evidenceTitle: "Vom Datenanker zur Zahl im Rechner.",
+    evidenceTitle: "Vom Datenanker zur Zahl im Rechner",
     evidenceCopy: "Datenanker stammen direkt aus amtlichen Daten oder Publikationen. Abgeleitete Werte folgen einer physikalischen Rechnung. Modellannahmen verdichten eine Bandbreite zu einem handhabbaren Faktor.",
     statusLabels: { anchor: "Datenanker", derived: "Abgeleitet", assumption: "Modellannahme" },
     evidence: [
@@ -220,7 +220,7 @@ export const methodologyCopy = {
       }
     ],
     comparisonEyebrow: "Vergleichswerte",
-    comparisonTitle: "Ein Vergleichswert ist kein Naturgesetz.",
+    comparisonTitle: "Ein Vergleichswert ist kein Naturgesetz",
     comparisonCopy: "Die internen Vergleichswerte von {co2} kg CO₂e, {water} Litern und {energy} kWh sind auf den abgefragten Ausschnitt kalibrierte Modellwerte. Sie entsprechen einer fest definierten mittleren Antwortkombination im Check — nicht einem amtlichen Durchschnittshaushalt.",
     comparisonNoTarget: "Der Check zeigt bewusst keine persönliche „Paris-Zielmarke“. Globale Lebensstilpfade lassen sich nicht seriös auf den unvollständigen Ausschnitt dieses Rechners übertragen. Ein Ergebnis wird nur dann gegen den internen Vergleich eingeordnet, wenn alle Fragen beantwortet wurden.",
     comparisonSources: [
@@ -228,7 +228,7 @@ export const methodologyCopy = {
       { label: "JRC: Consumption Footprint – Lebenszyklusbasierte EU-Vergleichsdaten", href: sources.jrc }
     ],
     standardsEyebrow: "Standards",
-    standardsTitle: "Der methodische Rahmen hinter der vereinfachten Rechnung.",
+    standardsTitle: "Der methodische Rahmen hinter der vereinfachten Rechnung",
     standardsCopy: "Der Lebensraum-Check orientiert sich an diesen Standards, ist aber nicht nach ihnen zertifiziert. Eine normkonforme Ökobilanz würde Primärdaten, Sensitivitätsanalysen und eine fachliche Prüfung verlangen.",
     standards: [
       { title: "ISO 14040 und ISO 14044", copy: "Rahmen, Ziel und Untersuchungsgrenze, Sachbilanz, Wirkungsauswertung, Interpretation und transparente Berichterstattung einer Ökobilanz.", href: sources.iso14040 },
@@ -237,7 +237,7 @@ export const methodologyCopy = {
       { title: "ISO 14046", copy: "Rahmen für Wasserfußabdrücke. Er erklärt auch, warum direkt entnommenes Leitungswasser und virtuelles Wasser nicht dieselbe Kennzahl sind.", href: sources.iso14046 }
     ],
     biodiversityEyebrow: "Biodiversität",
-    biodiversityTitle: "Ein Wirkungsprofil, keine erfundene Artenzahl.",
+    biodiversityTitle: "Ein Wirkungsprofil, keine erfundene Artenzahl",
     biodiversityCopy: "Garten, Ernährung, Mobilität und Konsum wirken auf Lebensräume. Der Check zeigt diese Richtung qualitativ; er behauptet nicht, aus einer Haushaltsantwort eine Zahl geretteter Arten berechnen zu können.",
     biodiversityDetail: "Das Profil gewichtet beobachtbare Merkmale wie Versiegelung, heimische Pflanzen, Blühkontinuität und Niststrukturen. Die ökologische Literatur stützt die Richtung dieser Wirkungen, nicht die exakte Punktzahl. Deshalb bleibt das Profil getrennt von CO₂e, Wasser und Energie.",
     biodiversitySources: [
@@ -256,7 +256,7 @@ export const methodologyCopy = {
     metaTitle: "Metodologia e fonti",
     metaDescription: "Limiti di bilancio, metodo di calcolo, fonti di dati e incertezze del check degli habitat per CO₂, acqua, energia e biodiversità.",
     eyebrow: "Metodologia · Modello 0.3",
-    title: "Come nascono i valori del Check degli habitat.",
+    title: "Come nascono i valori del Check degli habitat",
     lead: "Ogni numero mostrato deriva dal tuo dato, da un fattore dichiarato e da un confine di bilancio chiaro. Questa pagina mostra quali valori poggiano su dati ufficiali o scientifici — e dove il calcolatore lavora di proposito con un’ipotesi semplificata.",
     status: "Fonti aggiornate a: ottobre 2026 · risultati arrotondati · nessun bilancio individuale certificato",
     principles: [
@@ -266,7 +266,7 @@ export const methodologyCopy = {
       ["Nessuna falsa precisione", "I risultati sono arrotondati. Valori forfettari regionali e ipotesi d’uso sono indicati esplicitamente come ipotesi di modello."]
     ],
     boundariesEyebrow: "Confini di bilancio",
-    boundariesTitle: "Tre numeri, tre confini volutamente diversi.",
+    boundariesTitle: "Tre numeri, tre confini volutamente diversi",
     boundariesCopy: "Un confine decide che cosa dice un indicatore. Per questo CO₂e, acqua del rubinetto ed energia attribuita non vengono fusi in un unico punteggio ambientale.",
     notIncluded: "Non incluso",
     boundaries: [
@@ -275,7 +275,7 @@ export const methodologyCopy = {
       { metric: "Uso di energia", unit: "kWh all’anno", scope: "Elettricità, calore e carburante attribuiti alle attività richieste, più l’energia per la fornitura d’acqua.", excluded: "L’energia grigia di edifici e prodotti non viene sommata; il suo effetto sul clima può essere in parte compreso nel fattore di CO₂e." }
     ],
     evidenceEyebrow: "Evidenze per ambito di calcolo",
-    evidenceTitle: "Dal dato di riferimento al numero nel calcolatore.",
+    evidenceTitle: "Dal dato di riferimento al numero nel calcolatore",
     evidenceCopy: "I dati di riferimento provengono direttamente da dati ufficiali o pubblicazioni. I valori derivati seguono un calcolo fisico. Le ipotesi di modello condensano un intervallo in un fattore utilizzabile.",
     statusLabels: { anchor: "Dato di riferimento", derived: "Derivato", assumption: "Ipotesi di modello" },
     evidence: [
@@ -427,7 +427,7 @@ export const methodologyCopy = {
       }
     ],
     comparisonEyebrow: "Valori di confronto",
-    comparisonTitle: "Un valore di confronto non è una legge di natura.",
+    comparisonTitle: "Un valore di confronto non è una legge di natura",
     comparisonCopy: "I valori di confronto interni di {co2} kg CO₂e, {water} litri e {energy} kWh sono valori di modello calibrati sugli ambiti richiesti. Corrispondono a una combinazione media di risposte definita nel check — non a una famiglia media ufficiale.",
     comparisonNoTarget: "Il check volutamente non mostra un “obiettivo di Parigi” personale. I percorsi globali sugli stili di vita non si trasferiscono in modo serio sull’estratto incompleto di questo calcolatore. Un risultato viene confrontato con il riferimento interno solo se tutte le domande hanno una risposta.",
     comparisonSources: [
@@ -435,7 +435,7 @@ export const methodologyCopy = {
       { label: "JRC: Consumption Footprint – dati di confronto UE basati sul ciclo di vita", href: sources.jrc }
     ],
     standardsEyebrow: "Standard",
-    standardsTitle: "Il quadro metodologico dietro il calcolo semplificato.",
+    standardsTitle: "Il quadro metodologico dietro il calcolo semplificato",
     standardsCopy: "Il Check degli habitat si orienta a questi standard, ma non è certificato secondo essi. Un’analisi del ciclo di vita conforme alle norme richiederebbe dati primari, analisi di sensibilità e una revisione specialistica.",
     standards: [
       { title: "ISO 14040 e ISO 14044", copy: "Quadro, obiettivo e campo di applicazione, inventario, valutazione degli impatti, interpretazione e rendicontazione trasparente di un’analisi del ciclo di vita.", href: sources.iso14040 },
@@ -444,7 +444,7 @@ export const methodologyCopy = {
       { title: "ISO 14046", copy: "Quadro per l’impronta idrica. Spiega anche perché l’acqua del rubinetto prelevata direttamente e l’acqua virtuale non sono lo stesso indicatore.", href: sources.iso14046 }
     ],
     biodiversityEyebrow: "Biodiversità",
-    biodiversityTitle: "Un profilo d’impatto, non un numero di specie inventato.",
+    biodiversityTitle: "Un profilo d’impatto, non un numero di specie inventato",
     biodiversityCopy: "Giardino, alimentazione, mobilità e consumi agiscono sugli habitat. Il check mostra questa direzione in modo qualitativo; non pretende di calcolare da una risposta domestica un numero di specie salvate.",
     biodiversityDetail: "Il profilo pondera caratteristiche osservabili come impermeabilizzazione, piante autoctone, continuità delle fioriture e strutture per la nidificazione. La letteratura ecologica sostiene la direzione di questi effetti, non il punteggio esatto. Per questo il profilo resta separato da CO₂e, acqua ed energia.",
     biodiversitySources: [
@@ -463,7 +463,7 @@ export const methodologyCopy = {
     metaTitle: "Methodology & Sources",
     metaDescription: "Accounting boundaries, calculation method, data sources and uncertainties of the habitat check for CO₂, water, energy and biodiversity.",
     eyebrow: "Methodology · Model 0.3",
-    title: "How the values in the Habitat Check come about.",
+    title: "How the values in the Habitat Check come about",
     lead: "Every number shown follows from your input, a disclosed factor and a clear accounting boundary. This page shows which values are anchored in official or scientific data — and where the calculator deliberately works with a simplified assumption.",
     status: "Sources as of: October 2026 · results rounded · not a verified individual footprint",
     principles: [
@@ -473,7 +473,7 @@ export const methodologyCopy = {
       ["No false precision", "Results are rounded. Regional flat rates and usage assumptions are explicitly marked as model assumptions."]
     ],
     boundariesEyebrow: "Accounting boundaries",
-    boundariesTitle: "Three numbers, three deliberately different boundaries.",
+    boundariesTitle: "Three numbers, three deliberately different boundaries",
     boundariesCopy: "A boundary decides what an indicator says. That is why CO₂e, tap water and attributed energy use are not merged into a single environmental score.",
     notIncluded: "Not included",
     boundaries: [
@@ -482,7 +482,7 @@ export const methodologyCopy = {
       { metric: "Energy use", unit: "kWh per year", scope: "Electricity, heat and fuel attributed to the activities asked about, plus energy for water supply.", excluded: "Embodied energy of buildings and products is not added; its climate impact may partly be contained in the CO₂e factor." }
     ],
     evidenceEyebrow: "Evidence by calculation area",
-    evidenceTitle: "From data anchor to the number in the calculator.",
+    evidenceTitle: "From data anchor to the number in the calculator",
     evidenceCopy: "Data anchors come directly from official data or publications. Derived values follow a physical calculation. Model assumptions condense a range into a workable factor.",
     statusLabels: { anchor: "Data anchor", derived: "Derived", assumption: "Model assumption" },
     evidence: [
@@ -634,7 +634,7 @@ export const methodologyCopy = {
       }
     ],
     comparisonEyebrow: "Reference values",
-    comparisonTitle: "A reference value is not a law of nature.",
+    comparisonTitle: "A reference value is not a law of nature",
     comparisonCopy: "The internal reference values of {co2} kg CO₂e, {water} litres and {energy} kWh are model values calibrated to the areas asked about. They correspond to a fixed, medium combination of answers in the check — not to an official average household.",
     comparisonNoTarget: "The check deliberately shows no personal “Paris target”. Global lifestyle pathways cannot be credibly transferred to the incomplete slice this calculator covers. A result is only compared against the internal reference once all questions are answered.",
     comparisonSources: [
@@ -642,7 +642,7 @@ export const methodologyCopy = {
       { label: "JRC: Consumption Footprint – life-cycle-based EU reference data", href: sources.jrc }
     ],
     standardsEyebrow: "Standards",
-    standardsTitle: "The methodological framework behind the simplified calculation.",
+    standardsTitle: "The methodological framework behind the simplified calculation",
     standardsCopy: "The Habitat Check follows these standards but is not certified against them. A standard-compliant life-cycle assessment would require primary data, sensitivity analyses and an expert review.",
     standards: [
       { title: "ISO 14040 and ISO 14044", copy: "Framework, goal and scope, inventory analysis, impact assessment, interpretation and transparent reporting of a life-cycle assessment.", href: sources.iso14040 },
@@ -651,7 +651,7 @@ export const methodologyCopy = {
       { title: "ISO 14046", copy: "Framework for water footprints. It also explains why directly abstracted tap water and virtual water are not the same indicator.", href: sources.iso14046 }
     ],
     biodiversityEyebrow: "Biodiversity",
-    biodiversityTitle: "An impact profile, not an invented species count.",
+    biodiversityTitle: "An impact profile, not an invented species count",
     biodiversityCopy: "Garden, diet, mobility and consumption affect habitats. The check shows this direction qualitatively; it does not claim to calculate a number of species saved from a household answer.",
     biodiversityDetail: "The profile weights observable features such as sealed surfaces, native plants, continuous flowering and nesting structures. Ecological literature supports the direction of these effects, not the exact score. That is why the profile stays separate from CO₂e, water and energy.",
     biodiversitySources: [

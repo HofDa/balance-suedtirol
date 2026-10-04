@@ -1,7 +1,7 @@
 export const featuredCopy = {
   de: {
     eyebrow: "Lokale Projekte",
-    title: "Projekte in Südtirol.",
+    title: "Projekte in Südtirol",
     copy: "Jedes Projekt hat eine Gemeinde, eine Trägerorganisation und einen dokumentierten Stand. Alle lassen sich besuchen.",
     all: "Alle Projekte",
     previous: "Vorheriges Projekt",
@@ -13,7 +13,7 @@ export const featuredCopy = {
   },
   it: {
     eyebrow: "Progetti locali",
-    title: "Progetti in Alto Adige.",
+    title: "Progetti in Alto Adige",
     copy: "Ogni progetto ha un comune, un ente promotore e uno stato documentato. Tutti si possono visitare.",
     all: "Tutti i progetti",
     previous: "Progetto precedente",
@@ -25,7 +25,7 @@ export const featuredCopy = {
   },
   en: {
     eyebrow: "Local projects",
-    title: "Projects in South Tyrol.",
+    title: "Projects in South Tyrol",
     copy: "Every project has a municipality, a project organisation and a documented status. All of them can be visited.",
     all: "All projects",
     previous: "Previous project",

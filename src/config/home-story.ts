@@ -117,7 +117,7 @@ const homeStory: Localized<HomeStoryCopy> = {
       }
     },
     figures: {
-      title: "Kleine Fläche, große Vielfalt.",
+      title: "Kleine Fläche, große Vielfalt",
       copy: "Südtirol umfasst rund 7.400 km², weniger als 2,5 % der Fläche Italiens. Und doch leben hier:",
       items: [
         { value: "2.500+", label: "Gefäßpflanzenarten" },
@@ -195,18 +195,18 @@ const homeStory: Localized<HomeStoryCopy> = {
     },
     model: {
       eyebrow: "Was ist b*alance?",
-      title: "Eine Plattform für Investitionen in Südtiroler Lebensräume.",
+      title: "Eine Plattform für Investitionen in Südtiroler Lebensräume",
       lead: "b*alance verbindet drei Seiten: Organisationen, die Lebensräume in Südtirol pflegen und wiederherstellen; Unternehmen und Menschen, die das finanzieren wollen; und eine offene Dokumentation, die zeigt, was mit dem Geld geschieht.",
       steps: [
         ["Einreichen", "Vereine, Stiftungen und Netzwerke reichen Projekte mit Ort, Maßnahmenplan, Laufzeit und Budget ein."],
         ["Prüfen", "Ein Fachgremium aus Ökologie, Agrar- und Umweltwissenschaften prüft Ziele, Laufzeit und Budget vor der Veröffentlichung."],
         ["Unterstützen", "Unternehmen und Privatpersonen unterstützen ein Projekt direkt – und können es besuchen."],
-        ["Nachhalten", "Zielwerte werden vorab festgelegt. Maßnahmen, Monitoring und Finanzierungsstand stehen auf der Projektseite."]
+        ["Nachverfolgen", "Zielwerte werden vorab festgelegt. Maßnahmen, Monitoring und Finanzierungsstand stehen auf der Projektseite."]
       ],
       more: "Mehr über b*alance"
     },
     closing: {
-      title: "Investiere in unsere Zukunft und bring die Natur ins Gleichgewicht.",
+      title: "Investiere in unsere Zukunft und bring die Natur ins Gleichgewicht",
       copy: "Unterstütze ein Projekt in Südtirol, das Lebensräume erhält oder wiederherstellt, und verfolge über Jahre, was daraus wird. Wer selbst eine Fläche betreut, kann ein Projekt einreichen.",
       cta: "Unsere Projekte entdecken",
       submit: "Projekt einreichen"
@@ -232,7 +232,7 @@ const homeStory: Localized<HomeStoryCopy> = {
       }
     },
     figures: {
-      title: "Piccola superficie, grande varietà.",
+      title: "Piccola superficie, grande varietà",
       copy: "L’Alto Adige misura circa 7.400 km², meno del 2,5 % della superficie italiana. Eppure qui vivono:",
       items: [
         { value: "2.500+", label: "specie di piante vascolari" },
@@ -310,7 +310,7 @@ const homeStory: Localized<HomeStoryCopy> = {
     },
     model: {
       eyebrow: "Cos’è b*alance?",
-      title: "Una piattaforma per investire negli habitat dell’Alto Adige.",
+      title: "Una piattaforma per investire negli habitat dell’Alto Adige",
       lead: "b*alance mette in contatto tre parti: le organizzazioni che curano e ripristinano habitat in Alto Adige; le imprese e le persone che vogliono finanziarle; e una documentazione aperta che mostra che cosa succede con il denaro.",
       steps: [
         ["Proporre", "Associazioni, fondazioni e reti presentano progetti con luogo, piano degli interventi, durata e budget."],
@@ -321,7 +321,7 @@ const homeStory: Localized<HomeStoryCopy> = {
       more: "Scopri di più su b*alance"
     },
     closing: {
-      title: "Investi nel nostro futuro e riporta la natura in equilibrio.",
+      title: "Investi nel nostro futuro e riporta la natura in equilibrio",
       copy: "Sostieni un progetto in Alto Adige che conserva o ripristina habitat e segui per anni che cosa ne nasce. Chi cura una superficie può proporre un progetto.",
       cta: "Scopri i nostri progetti",
       submit: "Proponi un progetto"
@@ -347,7 +347,7 @@ const homeStory: Localized<HomeStoryCopy> = {
       }
     },
     figures: {
-      title: "Small in area, big in diversity.",
+      title: "Small in area, big in diversity",
       copy: "South Tyrol covers around 7,400 km², less than 2.5 % of Italy. And yet it is home to:",
       items: [
         { value: "2,500+", label: "vascular plant species" },
@@ -425,7 +425,7 @@ const homeStory: Localized<HomeStoryCopy> = {
     },
     model: {
       eyebrow: "What is b*alance?",
-      title: "A platform for investing in South Tyrol’s habitats.",
+      title: "A platform for investing in South Tyrol’s habitats",
       lead: "b*alance connects three sides: organisations that care for and restore habitats in South Tyrol; companies and people who want to fund that work; and open documentation that shows what happens with the money.",
       steps: [
         ["Submit", "Associations, foundations and networks submit projects with a location, action plan, duration and budget."],
@@ -436,7 +436,7 @@ const homeStory: Localized<HomeStoryCopy> = {
       more: "More about b*alance"
     },
     closing: {
-      title: "Invest in our future and help tip the balance.",
+      title: "Invest in our future and help tip the balance",
       copy: "Support a project in South Tyrol that preserves or restores habitats, and follow what grows from it over the years. If you look after a site yourself, you can submit a project.",
       cta: "Discover our projects",
       submit: "Submit a project"

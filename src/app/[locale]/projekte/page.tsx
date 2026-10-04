@@ -73,7 +73,7 @@ export default async function ProjectsPage({ params }: { params: Promise<{ local
           />
         </Suspense>
 
-        <aside className="mt-14 flex flex-col gap-6 rounded-[var(--radius-xl)] border border-[var(--color-line)] bg-[var(--color-sage)]/55 p-6 sm:flex-row sm:items-end sm:justify-between sm:p-8">
+        <aside className="mt-14 flex flex-col gap-6 rounded-[var(--radius-xl)] bg-[var(--color-sage)]/55 p-6 sm:flex-row sm:items-end sm:justify-between sm:p-8">
           <div className="max-w-2xl">
             <Label size="block">{submission.eyebrow}</Label>
             <h2 className={cn(textHeadline, "mt-3")}>{submission.title}</h2>
@@ -81,7 +81,7 @@ export default async function ProjectsPage({ params }: { params: Promise<{ local
           </div>
           <Link
             href={`/${locale}/projekt-einreichen`}
-            className={`inline-flex min-h-12 shrink-0 items-center justify-center gap-2 rounded-[var(--radius-md)] bg-[var(--color-ink)] px-5 text-sm font-bold text-white transition hover:bg-[var(--color-forest)] ${focusRing}`}
+            className={`inline-flex min-h-12 shrink-0 items-center justify-center gap-2 rounded-[var(--radius-md)] bg-[var(--color-forest)] px-5 text-sm font-bold text-white transition-colors hover:bg-[var(--color-ink)] ${focusRing}`}
           >
             {submission.cta}
             <ArrowRight className="size-4" aria-hidden />

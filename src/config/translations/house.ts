@@ -1,7 +1,7 @@
 export const houseCopy = {
   de: {
     eyebrow: "Von Räumen zu Lebensräumen",
-    title: "Raum für Raum: Was dein Alltag mit Biodiversität zu tun hat.",
+    title: "Raum für Raum: Was dein Alltag mit Biodiversität zu tun hat",
     copy: "Jeder Raum steht für einen Bereich deines Alltags. Der Check zeigt, welche Entscheidungen mit Artenvielfalt zusammenhängen und wo sie außerhalb deiner vier Wände wirken.",
     open: "Lebensraum-Check öffnen",
     rooms: [
@@ -15,7 +15,7 @@ export const houseCopy = {
   },
   it: {
     eyebrow: "Dagli ambienti agli habitat",
-    title: "Stanza per stanza: cosa c’entra la tua vita quotidiana con la biodiversità.",
+    title: "Stanza per stanza: cosa c’entra la tua vita quotidiana con la biodiversità",
     copy: "Ogni stanza rappresenta un ambito della tua vita quotidiana. Il check mostra quali scelte hanno a che fare con la varietà delle specie e dove agiscono fuori dalle tue quattro mura.",
     open: "Apri il check degli habitat",
     rooms: [
@@ -29,7 +29,7 @@ export const houseCopy = {
   },
   en: {
     eyebrow: "From rooms to habitats",
-    title: "Room by room: what your everyday life has to do with biodiversity.",
+    title: "Room by room: what your everyday life has to do with biodiversity",
     copy: "Each room stands for one part of your everyday life. The check shows which decisions relate to species diversity and where they take effect beyond your four walls.",
     open: "Open the Habitat Check",
     rooms: [

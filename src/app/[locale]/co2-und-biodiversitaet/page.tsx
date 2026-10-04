@@ -2,7 +2,7 @@ import { localizedAlternates } from "@/lib/site-metadata";
 import Link from "@/components/ui/site-link";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { ArrowRight, ArrowUpRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { Container } from "@/components/ui/container";
 import { Label } from "@/components/ui/label";
 import { Surface } from "@/components/ui/surface";
@@ -186,8 +186,8 @@ export default async function CarbonStancePage({
                 className={`group inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-white underline decoration-white/35 underline-offset-4 transition-colors hover:text-[var(--color-moss)] ${focusRingOnDark}`}
               >
                 {t.ctaMethod}
-                <ArrowUpRight
-                  className="size-4 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+                <ArrowRight
+                  className="size-4 transition-transform duration-300 group-hover:translate-x-1"
                   aria-hidden
                 />
               </Link>

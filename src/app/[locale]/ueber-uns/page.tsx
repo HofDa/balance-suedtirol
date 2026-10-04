@@ -2,7 +2,7 @@ import { localizedAlternates } from "@/lib/site-metadata";
 import Link from "@/components/ui/site-link";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { ArrowUpRight, Leaf, Sprout } from "lucide-react";
+import { ArrowRight, Leaf, Sprout } from "lucide-react";
 import { Container } from "@/components/ui/container";
 import { Label } from "@/components/ui/label";
 import { Surface } from "@/components/ui/surface";
@@ -98,7 +98,7 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
                     className={`group mt-6 inline-flex min-h-11 items-center gap-2 self-start text-sm font-bold text-[var(--color-forest)] hover:underline ${focusRing}`}
                   >
                     {org.cta}
-                    <ArrowUpRight className="size-4 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" aria-hidden />
+                    <ArrowRight className="size-4 transition-transform duration-300 group-hover:translate-x-1" aria-hidden />
                   </Link>
                 </Surface>
               );
@@ -152,7 +152,7 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
                 className={`group inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-white underline decoration-white/35 underline-offset-4 transition-colors hover:text-[var(--color-moss)] ${focusRingOnDark}`}
               >
                 {t.ctaMethod}
-                <ArrowUpRight className="size-4 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" aria-hidden />
+                <ArrowRight className="size-4 transition-transform duration-300 group-hover:translate-x-1" aria-hidden />
               </Link>
             </div>
           </div>

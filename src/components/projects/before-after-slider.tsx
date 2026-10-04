@@ -22,7 +22,7 @@ interface BeforeAfterSliderProps {
 const REST_POSITION = 50;
 
 const labelClass =
-  "whitespace-nowrap rounded-full bg-[var(--color-ink)]/75 px-3 py-1 text-xs font-bold uppercase tracking-wide text-white backdrop-blur-sm";
+  "whitespace-nowrap rounded-[var(--radius-sm)] bg-[var(--color-ink)]/75 px-3 py-1 text-xs font-bold uppercase tracking-wide text-white backdrop-blur-sm";
 
 /**
  * Zwei Fotos vom selben Standpunkt übereinander; links vom Griff liegt das

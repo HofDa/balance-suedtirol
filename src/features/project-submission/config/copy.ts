@@ -53,7 +53,7 @@ export type SubmissionCopy = {
 const copy: Localized<SubmissionCopy> = {
   de: {
     eyebrow: "Projekteinreichung",
-    title: "Ihr Projekt beschreiben.",
+    title: "Ihr Projekt beschreiben",
     lead: "Fünf Schritte von der Projektidee bis zur Einreichung. Sie können jederzeit zurückgehen und Angaben ändern.",
     backToOverview: "Zur Übersicht",
     stepOf: (current, total) => `Schritt ${current} von ${total}`,
@@ -99,7 +99,7 @@ const copy: Localized<SubmissionCopy> = {
   },
   it: {
     eyebrow: "Presentazione del progetto",
-    title: "Descrivere il vostro progetto.",
+    title: "Descrivere il vostro progetto",
     lead: "Cinque passaggi, dall’idea di progetto alla presentazione. Potete tornare indietro e modificare i dati in qualsiasi momento.",
     backToOverview: "Torna alla panoramica",
     stepOf: (current, total) => `Passaggio ${current} di ${total}`,
@@ -145,7 +145,7 @@ const copy: Localized<SubmissionCopy> = {
   },
   en: {
     eyebrow: "Project submission",
-    title: "Describe your project.",
+    title: "Describe your project",
     lead: "Five steps from project idea to submission. You can go back and change your entries at any time.",
     backToOverview: "Back to overview",
     stepOf: (current, total) => `Step ${current} of ${total}`,

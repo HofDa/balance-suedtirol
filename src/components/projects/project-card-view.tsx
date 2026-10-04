@@ -65,7 +65,7 @@ export function ProjectCardView({
               <ProjectCategoryBadge
                 categoryId={categoryId}
                 label={categoryLabels[categoryId]}
-                className="min-h-6 px-2 text-[10px]"
+                className="min-h-6 px-2 text-[11px]"
               />
             </li>
           ))}
@@ -106,13 +106,13 @@ export function ProjectCardView({
 
         <div className="mt-auto pt-5">
           <div className="flex items-end justify-between gap-3 border-t border-[var(--color-line)] pt-4">
-            <span className="text-xs text-[var(--color-muted)]">
+            <span className="min-w-0 text-xs text-[var(--color-muted)]">
               <span className="block">{copy.status}</span>
               <span className="mt-0.5 block font-bold text-[var(--color-ink)]">
                 {copy.statusValue}
               </span>
             </span>
-            <span className="inline-flex min-h-10 items-center gap-1.5 rounded-[var(--radius-sm)] bg-[var(--color-forest)] px-3.5 text-sm font-semibold text-white transition-colors group-hover:bg-[var(--color-ink)]" aria-hidden>
+            <span className="inline-flex min-h-10 shrink-0 items-center gap-1.5 whitespace-nowrap rounded-[var(--radius-md)] bg-[var(--color-forest)] px-3.5 text-sm font-semibold text-white transition-colors group-hover:bg-[var(--color-ink)]" aria-hidden>
               {copy.view}
               <ArrowIcon />
             </span>

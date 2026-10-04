@@ -4,12 +4,9 @@ import Link from "@/components/ui/site-link";
 import {
   ArrowLeft,
   ArrowRight,
-  ArrowUpRight,
   Building2,
   ExternalLink,
-  Leaf,
   MapPin,
-  Sprout,
   Users,
   ShieldCheck
 } from "lucide-react";
@@ -267,26 +264,31 @@ export function ProjectDetail({ project, otherProjects, locale }: ProjectDetailP
             </div>
           </section>
 
-          <section className="mt-20 rounded-[var(--radius-xl)] bg-[var(--color-sage)]/55 p-6 sm:p-10" aria-labelledby="ecological-impact">
+          {/* Kennzahlen als offene Zeile wie auf der Startseite: Haarlinie oben,
+              senkrechte Trennungen, Zahl in der Display-Schrift. Keine Kästen
+              in einem Kasten. */}
+          <section className="mt-20" aria-labelledby="ecological-impact">
             <div className="max-w-2xl">
               <h2 id="ecological-impact" className="font-display text-[length:var(--text-headline)] leading-[var(--leading-headline)]">
                 {copy.ecologicalImpact}
               </h2>
               <p className="mt-3 text-sm leading-6 text-[var(--color-muted)]">{copy.impactCopy}</p>
             </div>
-            <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            <dl className="mt-8 grid grid-cols-2 gap-x-6 gap-y-8 border-t border-[var(--color-line)] pt-8 sm:mt-10 lg:grid-cols-4 lg:gap-x-0">
               {project.impact.map((metric, index) => (
-                <div key={metric.label} className="rounded-[var(--radius-lg)] border border-[var(--color-line)] bg-white p-5">
-                  {index % 2 === 0 ? (
-                    <Leaf className="size-5 text-[var(--color-forest)]" aria-hidden />
-                  ) : (
-                    <Sprout className="size-5 text-[var(--color-forest)]" aria-hidden />
-                  )}
-                  <p className="mt-5 text-2xl font-bold tracking-[-0.03em] tabular-nums text-[var(--color-ink)]">{metric.value}</p>
-                  <p className="mt-1 text-sm font-semibold text-[var(--color-muted)]">{metric.label}</p>
+                <div
+                  key={metric.label}
+                  className={`flex flex-col-reverse justify-end ${index % 4 > 0 ? "lg:border-l lg:border-[var(--color-line)] lg:pl-10" : ""} ${
+                    index % 4 < 3 ? "lg:pr-10" : ""
+                  }`}
+                >
+                  <dt className="mt-3 max-w-[24ch] text-sm leading-6 text-[var(--color-muted)]">{metric.label}</dt>
+                  <dd className="whitespace-nowrap font-display text-[clamp(2rem,3.4vw,3rem)] leading-none tracking-[-0.035em] tabular-nums text-[var(--color-forest)]">
+                    {metric.value}
+                  </dd>
                 </div>
               ))}
-            </div>
+            </dl>
           </section>
 
           {project.gallery && project.gallery.length > 0 && (
@@ -378,10 +380,10 @@ export function ProjectDetail({ project, otherProjects, locale }: ProjectDetailP
                 </div>
                 <Link
                   href={`/${locale}/projekte`}
-                  className={`inline-flex min-h-11 items-center gap-1.5 text-sm font-bold text-[var(--color-forest)] hover:underline ${focusRing}`}
+                  className={`group inline-flex min-h-11 items-center gap-2 text-sm font-bold text-[var(--color-forest)] hover:underline ${focusRing}`}
                 >
                   <span>{copy.showAll}</span>
-                  <ArrowUpRight className="size-4" />
+                  <ArrowRight className="size-4 transition-transform duration-300 group-hover:translate-x-1" aria-hidden />
                 </Link>
               </div>
 

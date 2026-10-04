@@ -390,7 +390,7 @@ const de: TourUi = {
   },
   panelRegion: "Fragen, Werte und Steuerung",
   intro: {
-    headline: "Hinter jedem Gegenstand steckt eine Verbindung zur Natur.",
+    headline: "Hinter jedem Gegenstand steckt eine Verbindung zur Natur",
     lead: "18 Gegenstände in sechs Räumen, zu jedem eine kurze Runde:",
     loop: [
       { title: "Einstellen", copy: "antippen, Regler schieben — so, wie es bei dir ist" },
@@ -657,7 +657,7 @@ const it: TourUi = {
   },
   panelRegion: "Domande, valori e comandi",
   intro: {
-    headline: "Ogni oggetto racchiude un legame con la natura.",
+    headline: "Ogni oggetto racchiude un legame con la natura",
     lead: "18 oggetti in sei stanze, per ognuno un breve turno:",
     loop: [
       { title: "Impostare", copy: "tocca, sposta il cursore — come è davvero da te" },
@@ -924,7 +924,7 @@ const en: TourUi = {
   },
   panelRegion: "Questions, values and controls",
   intro: {
-    headline: "Every object has a connection to nature.",
+    headline: "Every object has a connection to nature",
     lead: "18 objects in six rooms, each with a short round:",
     loop: [
       { title: "Set", copy: "tap, slide — just as it is at your place" },

@@ -4,7 +4,7 @@ import type { Locale } from "../config/site";
 export const projects: Project[] = [
   {
     slug: "millander-au-erweiterung",
-    title: "Millander Au – Erweiterung",
+    title: "Millander Au – Erweiterung",
     summary:
       "Die Millander Au bei Brixen soll um eine ehemalige Apfelanlage wachsen: Teich, Feuchtwiese und Hecken für rund 130 Vogelarten im Jahr.",
     description:
@@ -157,7 +157,7 @@ export const projects: Project[] = [
 const projectTranslations: Record<Exclude<Locale, "de">, Record<string, Partial<Project>>> = {
   it: {
     "millander-au-erweiterung": {
-      title: "Millander Au – Ampliamento",
+      title: "Millander Au – Ampliamento",
       summary: "La Millander Au presso Bressanone deve crescere di un ex meleto: stagno, prato umido e siepi per circa 130 specie di uccelli all’anno.",
       description: "A nord del biotopo esistente di circa 4,5 ettari si trova un ex meleto a coltivazione intensiva. Diventerà un grande stagno con canneto, un prato umido inondato in caso di piena, fasce di siepi, isole di ontani e un corso d’acqua a meandri. Pareti ripide di argilla e sabbia offriranno cavità di nidificazione a gruccione, topino e martin pescatore; una torre panoramica sull’argine dell’Isarco, una parete di osservazione e un capanno renderanno il biotopo fruibile con discrezione. Altri proprietari hanno messo in prospettiva i loro terreni per l’ampliamento. L’acquisto dipende dalle donazioni.",
       whyItMatters: "La Millander Au è ciò che resta di un paesaggio golenale che un tempo occupava l’intera piana fluviale da Bressanone ad Albes. Nel 1988 è stata salvata all’ultimo momento dall’uso come discarica di macerie e posta sotto tutela. Con fronti di maltempo sulla cresta alpina principale è una sosta vitale per gli uccelli migratori: qui vengono rilevate circa 130 specie all’anno, di cui 30–35 nidificanti. La particella vicina rinaturalizzata nel 2026 mostra quanto rapidamente i nuovi habitat vengano colonizzati.",
@@ -271,7 +271,7 @@ const projectTranslations: Record<Exclude<Locale, "de">, Record<string, Partial<
   },
   en: {
     "millander-au-erweiterung": {
-      title: "Millander Au – Expansion",
+      title: "Millander Au – Expansion",
       summary: "The Millander Au near Brixen is to grow by a former apple orchard: pond, wet meadow and hedgerows for around 130 bird species a year.",
       description: "North of the existing 4.5-hectare reserve lies a former intensively farmed apple orchard. It is to become a large reed-fringed pond, a wet meadow that floods at high water, strips of hedgerow, alder islands and a meandering watercourse. Steep banks of clay and sand will give bee-eaters, sand martins and kingfishers nesting burrows; an observation tower on the Eisack embankment, a viewing screen and a hide will open the reserve to visitors without disturbing it. Further landowners have offered their plots for the expansion. Buying them depends on donations.",
       whyItMatters: "The Millander Au is what remains of a floodplain that once covered the entire river landscape from Brixen to Albeins. In 1988 it was saved at the last moment from becoming a rubble dump and placed under protection. When bad weather sits over the main Alpine ridge it is a vital stopover for migrating birds: around 130 species are recorded here each year, 30 to 35 of which breed in the reserve. The neighbouring plot restored in 2026 shows how quickly new habitats are taken up.",

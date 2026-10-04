@@ -74,7 +74,7 @@ export const projects: Project[] = [
     summary:
       "Die Biotope vor unserer Haustür entdecken und pflegen: Eine Schaf- und Ziegenherde hält Trockenrasen und Magerweiden im Eisacktal offen.",
     description:
-      "Wir bringen die Wichtigkeit dieser Lebensräume allen Alters- und Bevölkerungsgruppen näher und führen Pflegemaßnahmen zum Erhalt der Biodiversität in diesen Biotopen durch. Dabei arbeiten wir mit einem professionellen Hirten zusammen, der mit seiner Schaf- und Ziegenherde auf traditionelle Weise diese Lebensräume pflegt. Drei der vier Flächen liegen im Raier Moos, in Gufidaun und beim Kloster Säben; die vierte kommt noch dazu.",
+      "Wir bringen die Wichtigkeit dieser Lebensräume allen Alters- und Bevölkerungsgruppen näher und führen Pflegemaßnahmen zum Erhalt der Biodiversität in diesen Biotopen durch. Dabei arbeiten wir mit einem professionellen Hirten zusammen, der mit seiner Schaf- und Ziegenherde auf traditionelle Weise diese Lebensräume pflegt.",
     categoryIds: ["cultural-landscapes", "meadows-dry-grasslands"],
     status: "support-needed",
     municipality: "Klausen, Natz-Schabs",
@@ -225,7 +225,7 @@ const projectTranslations: Record<Exclude<Locale, "de">, Record<string, Partial<
         { src: "/projects/meine-gemeinde-meine-natur-haufen-baeume.webp", alt: "Erba tagliata accatastata sotto gli alberi", caption: "L’erba tagliata accatastata sotto gli alberi." }
       ],
       summary: "Scoprire e curare i biotopi dietro casa: un gregge di pecore e capre mantiene aperti prati aridi e pascoli magri in Valle Isarco.",
-      description: "Vogliamo far conoscere l’importanza di questi habitat a ogni fascia d’età e a tutta la popolazione, realizzando interventi di cura per conservare la biodiversità di questi biotopi. Collaboriamo con un pastore professionista che con il suo gregge di pecore e capre cura questi habitat secondo la tradizione. Tre delle quattro superfici si trovano al Raier Moos presso Rasa, a Gudon e al Monastero di Sabiona; la quarta si aggiungerà in seguito.",
+      description: "Vogliamo far conoscere l’importanza di questi habitat a ogni fascia d’età e a tutta la popolazione, realizzando interventi di cura per conservare la biodiversità di questi biotopi. Collaboriamo con un pastore professionista che con il suo gregge di pecore e capre cura questi habitat secondo la tradizione.",
       whyItMatters: "In quasi ogni località dell’Alto Adige si trovano habitat naturali e seminaturali che ospitano comunità rare e minacciate e sono perciò tutelati come biotopo o monumento naturale. Queste aree si trovano spesso nelle immediate vicinanze dei paesi e sono state create e mantenute dall’uomo, per lo più attraverso il pascolo guidato. Negli ultimi decenni il pascolo è però stato spesso abbandonato e questi habitat preziosi si stanno imboschendo. Un prato arido ricco di fiori e di insetti può così essere invaso da arbusti e alberi nel giro di pochi anni.",
       municipality: "Chiusa, Naz-Sciaves",
       sites: [
@@ -338,7 +338,7 @@ const projectTranslations: Record<Exclude<Locale, "de">, Record<string, Partial<
         { src: "/projects/meine-gemeinde-meine-natur-haufen-baeume.webp", alt: "Cuttings stacked beneath trees", caption: "The cuttings stacked beneath the trees." }
       ],
       summary: "Discovering and caring for the biotopes on our doorstep: a flock of sheep and goats keeps dry grasslands and poor pastures in the Eisack Valley open.",
-      description: "We want to bring the importance of these habitats home to every age group and part of the population, and carry out management work that preserves the biodiversity of these biotopes. We work with a professional shepherd who tends these habitats in the traditional way with his flock of sheep and goats. Three of the four sites are the Raier Moos, Gufidaun and Säben Abbey; the fourth will be added later.",
+      description: "We want to bring the importance of these habitats home to every age group and part of the population, and carry out management work that preserves the biodiversity of these biotopes. We work with a professional shepherd who tends these habitats in the traditional way with his flock of sheep and goats.",
       whyItMatters: "In almost every village in South Tyrol there are natural and semi-natural habitats that harbour rare and endangered communities and are therefore protected as biotopes or natural monuments. These areas often lie right next to the settlements and were mostly created and maintained by people through managed grazing. Over recent decades grazing has frequently been abandoned, and these valuable habitats are turning to scrub. A flower-rich dry grassland full of insects can be overgrown by shrubs and trees within a few years.",
       municipality: "Klausen, Natz-Schabs",
       sites: [

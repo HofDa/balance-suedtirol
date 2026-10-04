@@ -165,7 +165,7 @@ const homeStory: Localized<HomeStoryCopy> = {
         ["6", "Heu- und Fangschreckenarten sind in Südtirol in den letzten 100 Jahren ausgestorben."]
       ],
       factsSource: "Quelle: Biodiversitätsmonitoring Südtirol (Eurac Research), Artengruppen Tagfalter und Heuschrecken.",
-      closing: "Verlorene Lebensräume lassen sich nicht überall zurückholen. Aber wir können erhalten, vergrößern und wieder verbinden, was noch da ist.",
+      closing: "Verlorene Lebensräume lassen sich nicht überall zurückholen. Aber was noch da ist, können wir wiederherstellen, vergrößern und verbinden.",
       projectsBridge: "Hier setzen die b*alance-Projekte an."
     },
     economy: {
@@ -280,7 +280,7 @@ const homeStory: Localized<HomeStoryCopy> = {
         ["6", "specie di ortotteri e mantidi si sono estinte in Alto Adige negli ultimi 100 anni."]
       ],
       factsSource: "Fonte: Monitoraggio della biodiversità Alto Adige (Eurac Research), gruppi farfalle diurne e ortotteri.",
-      closing: "Non ovunque gli habitat perduti si possono recuperare. Ma possiamo conservare, ampliare e ricollegare quelli che ci sono ancora.",
+      closing: "Non ovunque gli habitat perduti si possono recuperare. Ma ciò che resta possiamo ripristinarlo, ampliarlo e ricollegarlo.",
       projectsBridge: "È qui che intervengono i progetti b*alance."
     },
     economy: {
@@ -395,7 +395,7 @@ const homeStory: Localized<HomeStoryCopy> = {
         ["6", "grasshopper and mantis species have died out in South Tyrol over the past 100 years."]
       ],
       factsSource: "Source: Biodiversity Monitoring South Tyrol (Eurac Research), groups butterflies and grasshoppers.",
-      closing: "Lost habitats cannot be brought back everywhere. But we can preserve, enlarge and reconnect what is still here.",
+      closing: "Lost habitats cannot be brought back everywhere. But what is still here, we can restore, enlarge and reconnect.",
       projectsBridge: "This is where b*alance projects come in."
     },
     economy: {

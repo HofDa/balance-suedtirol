@@ -1,6 +1,6 @@
 "use client";
 
-import type { CSSProperties, ReactNode } from "react";
+import type { ReactNode } from "react";
 import { ChevronsLeftRight } from "lucide-react";
 
 /** Etikett unten in der Ecke der jeweiligen Ebene. */
@@ -35,7 +35,7 @@ export function BeforeAfterSlider({
   afterClassName?: string;
 }) {
   return (
-    <div className="relative flow-root select-none" style={{ "--split": `${position}%` } as CSSProperties}>
+    <div className="relative flow-root select-none overflow-hidden">
       {/* Jedes Etikett gehört zu seiner Ebene: „Früher“ verschwindet unter
           „Heute“, „Heute“ wird mit seiner Ebene beschnitten. So steht nie ein
           Etikett über der falschen Szene. */}
@@ -43,11 +43,25 @@ export function BeforeAfterSlider({
       <span aria-hidden className={`${cornerLabel} right-3 sm:right-4`}>
         {beforeLabel}
       </span>
-      <div className={`absolute inset-0 [clip-path:inset(0_calc(100%_-_var(--split))_0_0)] ${afterClassName ?? ""}`}>
-        {after}
-        <span aria-hidden className={`${cornerLabel} left-3 sm:left-4`}>
-          {afterLabel}
-        </span>
+      {/* Aufdecken nur über Transforms: Die Hülle schiebt ihr Fenster nach
+          links, der Inhalt läuft um denselben Betrag zurück. Beide Ebenen
+          werden einmal gerastert und beim Ziehen nur noch verschoben. Breite
+          oder clip-path ließen die große SVG bei jedem Eingabeereignis neu
+          malen – schnelles Hin- und Herziehen brachte iOS Safari damit zum
+          Absturz. */}
+      <div
+        className="pointer-events-none absolute inset-0 z-20 overflow-hidden will-change-transform"
+        style={{ transform: `translateX(${position - 100}%)` }}
+      >
+        <div
+          className={`relative h-full will-change-transform ${afterClassName ?? ""}`}
+          style={{ transform: `translateX(${100 - position}%)` }}
+        >
+          {after}
+          <span aria-hidden className={`${cornerLabel} left-3 sm:left-4`}>
+            {afterLabel}
+          </span>
+        </div>
       </div>
 
       <input
@@ -64,13 +78,15 @@ export function BeforeAfterSlider({
 
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-y-0 w-0.5 -translate-x-1/2 bg-[var(--color-moss)]"
-        style={{ left: "var(--split)" }}
-      />
+        className="pointer-events-none absolute inset-0 z-20 will-change-transform"
+        style={{ transform: `translateX(${position}%)` }}
+      >
+        <div className="absolute inset-y-0 left-0 w-0.5 -translate-x-1/2 bg-[var(--color-moss)]" />
+      </div>
       <span
         aria-hidden
         className="pointer-events-none absolute top-1/2 z-20 hidden size-10 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full bg-[var(--color-moss)] text-[var(--color-ink)] shadow-[var(--shadow-on-photo)] ring-2 ring-[var(--color-ink)] transition-transform peer-hover:scale-105 peer-focus-visible:outline-2 peer-focus-visible:outline-offset-4 peer-focus-visible:outline-[var(--color-moss)] peer-active:scale-95 sm:grid"
-        style={{ left: "clamp(1.5rem, var(--split), calc(100% - 1.5rem))" }}
+        style={{ left: `clamp(1.5rem, ${position}%, calc(100% - 1.5rem))` }}
       >
         <ChevronsLeftRight className="size-4 sm:size-5" strokeWidth={2} />
       </span>

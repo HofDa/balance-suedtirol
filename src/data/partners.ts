@@ -52,28 +52,28 @@ export type SciencePartner = Partner & {
   field: string;
 };
 
-/** Fachliche Begleitung — gleiche Regel: erst nennen, wenn freigegeben. */
+/**
+ * Wissenschaftliche Partner. `field` trägt die Institution (steht als Kleinzeile
+ * über dem Namen), `role` ist der ausgeschriebene Institutsname für den Tooltip.
+ */
 export const sciencePartners: SciencePartner[] = [
   {
-    slug: "vegetationsoekologie",
-    name: "Forschungspartner Platzhalter",
-    field: "Vegetationsökologie",
-    role: "Prüft die Lebensraumtypologie und die Monitoringprotokolle der Projekte.",
-    isPlaceholder: true
+    slug: "it-u",
+    name: "Elisabeth Gsottbauer",
+    field: "IT:U Linz",
+    role: "Interdisciplinary Transformation University Austria, Linz"
   },
   {
-    slug: "artenschutz",
-    name: "Fachbeirat Platzhalter",
-    field: "Artenschutz",
-    role: "Begutachtet neue Projekte vor der Aufnahme in die Plattform.",
-    isPlaceholder: true
+    slug: "unibz",
+    name: "Camilla Wellstein",
+    field: "Universität Bozen",
+    role: "Freie Universität Bozen"
   },
   {
-    slug: "datengrundlagen",
-    name: "Datenpartner Platzhalter",
-    field: "Datengrundlagen",
-    role: "Ordnet die verwendeten Kennzahlen und Berechnungsfaktoren fachlich ein.",
-    isPlaceholder: true
+    slug: "eurac",
+    name: "Andreas Hilpold & Georg Niedrist",
+    field: "Eurac Research",
+    role: "Eurac Research, Institut für Alpine Umwelt, Bozen"
   }
 ];
 
@@ -97,21 +97,9 @@ const partnerTranslations: Record<Exclude<Locale, "de">, Record<string, PartnerT
       name: "Partner di comunicazione segnaposto",
       role: "Porta all’attenzione del pubblico appelli e risultati dei progetti."
     },
-    vegetationsoekologie: {
-      name: "Partner di ricerca segnaposto",
-      field: "Ecologia vegetale",
-      role: "Verifica la tipologia degli habitat e i protocolli di monitoraggio dei progetti."
-    },
-    artenschutz: {
-      name: "Comitato tecnico segnaposto",
-      field: "Tutela delle specie",
-      role: "Valuta i nuovi progetti prima dell’inserimento nella piattaforma."
-    },
-    datengrundlagen: {
-      name: "Partner dei dati segnaposto",
-      field: "Basi di dati",
-      role: "Inquadra dal punto di vista tecnico gli indicatori e i fattori di calcolo utilizzati."
-    }
+    "it-u": { field: "IT:U Linz", role: "Interdisciplinary Transformation University Austria, Linz" },
+    unibz: { field: "Università di Bolzano", role: "Libera Università di Bolzano" },
+    eurac: { role: "Eurac Research, Istituto per l’ambiente alpino, Bolzano" }
   },
   en: {
     hauptpartner: {
@@ -130,21 +118,9 @@ const partnerTranslations: Record<Exclude<Locale, "de">, Record<string, PartnerT
       name: "Communications partner placeholder",
       role: "Brings project appeals and results to a wider public."
     },
-    vegetationsoekologie: {
-      name: "Research partner placeholder",
-      field: "Vegetation ecology",
-      role: "Reviews the habitat typology and the monitoring protocols of the projects."
-    },
-    artenschutz: {
-      name: "Advisory board placeholder",
-      field: "Species conservation",
-      role: "Assesses new projects before they are admitted to the platform."
-    },
-    datengrundlagen: {
-      name: "Data partner placeholder",
-      field: "Data foundations",
-      role: "Puts the figures and calculation factors used into technical context."
-    }
+    "it-u": { field: "IT:U Linz", role: "Interdisciplinary Transformation University Austria, Linz" },
+    unibz: { field: "University of Bozen-Bolzano", role: "Free University of Bozen-Bolzano" },
+    eurac: { role: "Eurac Research, Institute for Alpine Environment, Bolzano" }
   }
 };
 

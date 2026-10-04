@@ -7,7 +7,7 @@ export const partnersCopy = {
       become: "Partner werden"
     },
     sciencePartners: {
-      eyebrow: "Fachliche Begleitung"
+      eyebrow: "Wissenschaftliche Partner"
     }
   },
   it: {
@@ -18,7 +18,7 @@ export const partnersCopy = {
       become: "Diventare partner"
     },
     sciencePartners: {
-      eyebrow: "Accompagnamento tecnico-scientifico"
+      eyebrow: "Partner scientifici"
     }
   },
   en: {
@@ -29,7 +29,7 @@ export const partnersCopy = {
       become: "Become a partner"
     },
     sciencePartners: {
-      eyebrow: "Scientific guidance"
+      eyebrow: "Scientific partners"
     }
   }
 } as const;

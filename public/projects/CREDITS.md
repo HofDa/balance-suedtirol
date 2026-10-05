@@ -63,7 +63,6 @@ all converted to WebP.
 | `meine-gemeinde-meine-natur-maehgut.webp` | Mown meadow with a pile of cuttings, 24 September 2026 | not yet clarified |
 | `meine-gemeinde-meine-natur-gemaehte-flaeche.webp` | Mown area at the end of the work day, 24 September 2026 | not yet clarified |
 | `meine-gemeinde-meine-natur-haufen-waldrand.webp` | Pile of cuttings at the edge of the woods, 24 September 2026 | not yet clarified |
-| `meine-gemeinde-meine-natur-haufen-baeume.webp` | Cuttings stacked beneath trees, 24 September 2026 | not yet clarified |
 
 Supplied by the project team (b*nature). Rotated per EXIF, resized to at most
 1500 px on the long side (the card image to 1600 × 1000, 8:5), stripped of

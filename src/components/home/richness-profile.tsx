@@ -2,7 +2,7 @@
 import type { CSSProperties } from "react";
 
 /**
- * Lage der HTML-Marken und -Etiketten über der Zeichnung, in Prozent der
+ * Lage der HTML-Marken und Höhenangaben über der Zeichnung, in Prozent der
  * Bildfläche. Kommt aus demselben Skript wie das SVG.
  */
 export const richnessProfileSpots = {
@@ -36,24 +36,6 @@ export const richnessProfileSpots = {
     "3000": {
       "left": "0.00%",
       "top": "31.57%"
-    }
-  },
-  "zones": {
-    "valley": {
-      "left": "13.61%",
-      "top": "77.41%"
-    },
-    "forest": {
-      "left": "44.58%",
-      "top": "42.59%"
-    },
-    "alpine": {
-      "left": "60.56%",
-      "top": "36.30%"
-    },
-    "rock": {
-      "left": "69.44%",
-      "top": "23.70%"
     }
   }
 } as const;
@@ -154,7 +136,6 @@ export function RichnessProfile({ className }: { className?: string }) {
       <g className="habitat-fade" style={{ "--habitat-delay": "1000ms" } as CSSProperties}><circle cx="62" cy="104" r="24"/><path d="M93 104L102 104M88.8 119.5L96.6 124M77.5 130.8L82 138.6M62 135L62 144M46.5 130.8L42 138.6M35.2 119.5L27.4 124M31 104L22 104M35.2 88.5L27.4 84M46.5 77.2L42 69.4M62 73L62 64M77.5 77.2L82 69.4M88.8 88.5L96.6 84" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" className="profile-rays"/></g>
       <g className="habitat-fade" style={{ "--habitat-delay": "1080ms" } as CSSProperties}><g className="profile-cloud"><ellipse cx="1316" cy="124.9" rx="52.9" ry="13.8"/><circle cx="1283.8" cy="120.3" r="16.1"/><circle cx="1304.5" cy="108.8" r="21.8"/><circle cx="1329.8" cy="106.5" r="25.3"/><circle cx="1352.8" cy="118" r="17.2"/><path d="M1276.9 147.9L1271.9 163.9M1289.6 153.9L1284.6 169.9M1302.2 147.9L1297.2 163.9M1314.9 153.9L1309.9 169.9M1327.5 147.9L1322.5 163.9M1340.2 153.9L1335.2 169.9M1352.8 147.9L1347.8 163.9" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" className="profile-rain" strokeDasharray="5 6" opacity="0.55"/></g></g>
       <g className="habitat-fade" style={{ "--habitat-delay": "1160ms" } as CSSProperties}><g className="profile-bird" style={{ "--bird-delay": "0.0s" } as CSSProperties}><g className="profile-wing"><path d="M551 96Q556 91 560 96.5Q564 91 569 96Q564 94 560 98.5Q556 94 551 96Z"/></g></g><g className="profile-bird" style={{ "--bird-delay": "-1.7s" } as CSSProperties}><g className="profile-wing"><path d="M579.2 110Q583 106.2 586 110.4Q589 106.2 592.8 110Q589 108.5 586 111.9Q583 108.5 579.2 110Z"/></g></g><g className="profile-bird" style={{ "--bird-delay": "-3.1s" } as CSSProperties}><g className="profile-wing"><path d="M534.6 116Q537.6 113 540 116.3Q542.4 113 545.4 116Q542.4 114.8 540 117.5Q537.6 114.8 534.6 116Z"/></g></g></g>
-      <path className="habitat-fade max-md:hidden" style={{ "--habitat-delay": "1200ms" } as CSSProperties} d="M196 426V480.1M642 238V306.7M872 204V254.1M1000 136V190.1" fill="none" stroke="currentColor" strokeWidth="1" opacity="0.45" vectorEffect="non-scaling-stroke" />
     </svg>
   );
 }

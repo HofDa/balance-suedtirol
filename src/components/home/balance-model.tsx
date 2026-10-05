@@ -93,7 +93,7 @@ export function BalanceModel({ locale }: { locale: Locale }) {
                   style={{ "--text-delay": index === 0 ? "1900ms" : "4000ms" } as CSSProperties}
                 >
                   {index === 0 ? (
-                    <EuropeFill region="eurozone" className="order-1 mb-5 w-full max-w-[15rem]" />
+                    <EuropeFill className="order-1 mb-5 w-full max-w-[15rem]" />
                   ) : (
                     <EuroCoins filled={2} total={3} className="order-1 mb-5 w-full max-w-[15rem]" />
                   )}

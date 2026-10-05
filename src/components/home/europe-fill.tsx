@@ -1,37 +1,30 @@
 import type { CSSProperties } from "react";
 import { cn } from "@/lib/utils";
-import { europeFillTop, europePaths, europeViewBox } from "./europe-map";
-
-type Region = "eurozone" | "eu";
+import { eurozoneFillTop, eurozonePath, eurozoneViewBox } from "./europe-map";
 
 /**
- * Europa als Silhouette, die betroffene Fläche (Euroraum oder EU) von unten
- * in Almmoos gefüllt – flächentreu bis zum Anteil der Zahl daneben. Das übrige
- * Europa bleibt leiser Grund. Rein dekorativ: Die Zahl steht als Text daneben.
+ * Der Euroraum als Silhouette, von unten in Almmoos gefüllt – flächentreu bis
+ * 75 % seiner Landfläche. Bewusst ohne das übrige Europa als Grund: Sonst
+ * liest man die Füllung als Anteil an ganz Europa, und grün wäre nur gut ein
+ * Drittel des Bildes. Rein dekorativ: Die Zahl steht als Text daneben.
  *
  * Die Füllung liegt als zweite Ebene darüber und wird per `clip-path` von
  * unten aufgedeckt; die Bewegung steht in globals.css (`europe-fill`).
  *
- * Jede Fläche trägt eine runde Kontur in ihrer eigenen Farbe: Die Länder sind
+ * Die Fläche trägt eine runde Kontur in ihrer eigenen Farbe: Die Länder sind
  * einzeln vereinfacht, die Kontur schließt die Spalten zwischen ihnen und
- * rundet die Küsten. Darum deckende Farben statt Transparenz – überlappende
- * Konturen gäben sonst hellere Nähte.
+ * rundet die Küsten.
  */
 const shape = { strokeWidth: 2.4, strokeLinejoin: "round", strokeLinecap: "round" } as const;
-export function EuropeFill({ region, className }: { region: Region; className?: string }) {
-  const top = region === "eurozone" ? europeFillTop.eurozone75 : europeFillTop.eu23;
-  const target = region === "eurozone" ? europePaths.eurozone : `${europePaths.eurozone}${europePaths.euOnly}`;
-  const rest = region === "eurozone" ? `${europePaths.euOnly}${europePaths.other}` : europePaths.other;
-
+export function EuropeFill({ className }: { className?: string }) {
   return (
     <div aria-hidden className={cn("relative", className)}>
-      <svg viewBox={europeViewBox} className="block h-auto w-full" fill="currentColor">
-        <path d={rest} {...shape} className="text-[color-mix(in_srgb,white_7%,var(--color-ink))]" stroke="currentColor" />
-        <path d={target} {...shape} className="text-[color-mix(in_srgb,white_16%,var(--color-ink))]" stroke="currentColor" />
+      <svg viewBox={eurozoneViewBox} className="block h-auto w-full" fill="currentColor">
+        <path d={eurozonePath} {...shape} className="text-[color-mix(in_srgb,white_16%,var(--color-ink))]" stroke="currentColor" />
       </svg>
-      <div className="europe-fill absolute inset-0" style={{ "--fill-top": `${top}%` } as CSSProperties}>
-        <svg viewBox={europeViewBox} className="block h-auto w-full text-[var(--color-moss)]" fill="currentColor">
-          <path d={target} {...shape} stroke="currentColor" />
+      <div className="europe-fill absolute inset-0" style={{ "--fill-top": `${eurozoneFillTop}%` } as CSSProperties}>
+        <svg viewBox={eurozoneViewBox} className="block h-auto w-full text-[var(--color-moss)]" fill="currentColor">
+          <path d={eurozonePath} {...shape} stroke="currentColor" />
         </svg>
       </div>
     </div>
@@ -46,7 +39,7 @@ export function EuropeFill({ region, className }: { region: Region; className?: 
  * darunter auf einer Linie stehen. Bewegung in globals.css (`euro-coin`).
  */
 export function EuroCoins({ filled, total, className }: { filled: number; total: number; className?: string }) {
-  const [, , w, h] = europeViewBox.split(" ");
+  const [, , w, h] = eurozoneViewBox.split(" ");
   return (
     <div
       aria-hidden

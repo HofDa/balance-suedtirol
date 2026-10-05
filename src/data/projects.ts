@@ -74,7 +74,7 @@ export const projects: Project[] = [
     summary:
       "Die Biotope vor unserer Haustür entdecken und pflegen: Eine Schaf- und Ziegenherde hält Trockenrasen und Magerweiden im Eisacktal offen.",
     description:
-      "Wir bringen die Wichtigkeit dieser Lebensräume allen Alters- und Bevölkerungsgruppen näher und führen Pflegemaßnahmen zum Erhalt der Biodiversität in diesen Biotopen durch. Dabei arbeiten wir mit einem professionellen Hirten zusammen, der mit seiner Schaf- und Ziegenherde auf traditionelle Weise diese Lebensräume pflegt.",
+      "Wir bringen die Wichtigkeit dieser Lebensräume allen Kindern und Erwachsenen mittels Aktionen, wo sie selber die Artenvielfalt des Lebensraumes entdecken, näher. Den Erhalt und die Förderung der Biodiversität erreichen wir durch die Zusammenarbeit mit professionellen Hirt:innen, die mit ihren Nutztieren auf traditionelle Weise diese Lebensräume beweiden. Wo notwendig führen wir händisch Pflegemaßnahmen wie das Entfernen von Sträuchern und Bäumen zur Rückgewinnung von artenreicher Kulturlandschaft durch.",
     categoryIds: ["cultural-landscapes", "meadows-dry-grasslands"],
     status: "support-needed",
     municipality: "Klausen, Natz-Schabs",
@@ -94,22 +94,21 @@ export const projects: Project[] = [
       { src: "/projects/meine-gemeinde-meine-natur-ziegen-weg.webp", alt: "Ziegen auf einem Weg zwischen Holzzäunen, dahinter der Hirte und die Berge", caption: "Unterwegs mit der Herde: Ziegen auf einem Weg zwischen Holzzäunen." },
       { src: "/projects/meine-gemeinde-meine-natur-herde-winter.webp", alt: "Ziegen und Schafe auf einem Weg neben gestapelten Baumstämmen, am Rand liegt Schnee", caption: "Auch im Winter ist die Herde unterwegs." },
       { src: "/projects/meine-gemeinde-meine-natur-hirte-schnee.webp", alt: "Der Hirte mit seinem Hütehund vor der Herde auf einer verschneiten Fläche", caption: "Der Hirte mit Hütehund und Herde im Schnee." },
-      { src: "/projects/meine-gemeinde-meine-natur-mahd.webp", alt: "Blick über ein Mähgerät auf eine hochgewachsene Fläche, im Hintergrund arbeitet eine weitere Person", caption: "Pflegeeinsatz im September 2026: Die hochgewachsene Fläche wird gemäht." },
+      { src: "/projects/meine-gemeinde-meine-natur-mahd.webp", alt: "Blick über ein Mähgerät auf eine hochgewachsene Fläche, im Hintergrund arbeitet eine weitere Person", caption: "Die artenreiche Riedwiese wird gemäht, um die Verbrachung zu verringern und den eindringenden Rohrkolben zurückzudrängen." },
       { src: "/projects/meine-gemeinde-meine-natur-rechen.webp", alt: "Eine Person recht auf einer gemähten Fläche das Schnittgut zusammen", caption: "Das Schnittgut wird zusammengerecht." },
       { src: "/projects/meine-gemeinde-meine-natur-maehgut.webp", alt: "Gemähte Wiese mit einem Haufen Schnittgut, dahinter Wald und eine Stromleitung", caption: "Nach der Mahd wird das Schnittgut auf Haufen gesammelt." },
       { src: "/projects/meine-gemeinde-meine-natur-gemaehte-flaeche.webp", alt: "Gemähte Fläche mit Reihen und Haufen aus Schnittgut vor Gehölzen", caption: "Die gemähte Fläche am Ende des Einsatztags." },
-      { src: "/projects/meine-gemeinde-meine-natur-haufen-waldrand.webp", alt: "Haufen aus Schnittgut am Waldrand", caption: "Schnittgut-Haufen am Rand der Fläche." },
-      { src: "/projects/meine-gemeinde-meine-natur-haufen-baeume.webp", alt: "Schnittgut unter Bäumen aufgeschichtet", caption: "Das Schnittgut liegt aufgeschichtet unter den Bäumen." }
+      { src: "/projects/meine-gemeinde-meine-natur-haufen-waldrand.webp", alt: "Haufen aus Schnittgut am Waldrand", caption: "Schnittgut-Haufen am Rand der Fläche." }
     ],
     supporters: 0,
     supportedBy: "Amt für Natur – Autonome Provinz Bozen",
     whyItMatters:
       "In fast jeder Ortschaft Südtirols finden wir natürliche und naturnahe Lebensräume, die seltene und gefährdete Lebensgemeinschaften vorweisen und daher als Biotop oder Naturdenkmal geschützt sind. Diese Gebiete befinden sich oft in unmittelbarer Nähe der Ortschaften und wurden meist durch geführte Beweidung von Menschen geschaffen und erhalten. Im Laufe der letzten Jahrzehnte wurde jedoch die Beweidung oft aufgegeben und diese wertvollen Lebensräume verbrachen und verbuschen. Ein vielblütiger Trockenrasen voller Insekten kann so in wenigen Jahren von Sträuchern und Bäumen überwachsen werden.",
     impact: [
-      { value: "4", label: "Biotopflächen" },
-      { value: "30 + 10", label: "Schafe und Ziegen in der Herde" },
-      { value: "Wiesen und Weiden", label: "artenreich, zentraler Lebensraum" },
-      { value: "Seltene Arten", label: "viele seltene Pflanzen- und Tierarten" }
+      { value: "4", label: "artenreiche Wiesen und Weiden" },
+      { value: "30 + 10", label: "Schafe und Ziegen" },
+      { value: "40+", label: "Pflanzenarten" },
+      { value: "Seltene Tiere", label: "viele seltene Tierarten" }
     ],
     monitoring: {
       species: "Noch festzulegen",
@@ -126,7 +125,7 @@ export const projects: Project[] = [
     summary:
       "Ein Projekt zu Schutz und Erforschung unseres wilden Nachbarn: Erhebungen zum Bestand, eine Sensibilisierungskampagne und vernetzte Igel-Straßen zwischen den Gärten.",
     description:
-      "Wir untersuchen, ob der Nördliche Weißbrustigel auch in Südtirol vorkommt und wo bei uns die eventuelle Verbreitungsgrenze verläuft. Außerdem starten wir eine Informations- und Sensibilisierungskampagne für den Igel und seinen Lebensraum. Dazu nutzen wir verschiedenste Medien, Kommunikationsmittel und kreative Ideen, um so viele Personen wie möglich zu erreichen: Citizen-Science-Aktivitäten, analoge und digitale Medien, Workshops und vieles mehr. Schließlich setzen wir konkrete Maßnahmen zum Schutz und zur Verbesserung seines Lebensraums um: sogenannte Igel-Straßen, in denen sich der Igel frei zwischen den Gärten und weiteren Lebensräumen bewegen kann. Denn mit dem Igel als Schirmart erreichen wir auch den Erhalt und die Förderung vieler weiterer Pflanzen- und Tierarten.",
+      "Wir klären, ob der Nördliche Weißbrustigel auch in Südtirol vorkommt und wo seine Verbreitungsgrenze verläuft. Gleichzeitig machen wir mit einer breit angelegten Kampagne auf den Igel und seinen Lebensraum aufmerksam: mit Citizen-Science-Aktionen, Workshops, analogen und digitalen Medien und kreativen Ideen, die möglichst viele Menschen erreichen. Und wir handeln konkret: Igel-Straßen verbinden Gärten und weitere Lebensräume, damit sich der Igel frei bewegen kann, und igelfreundliche Schulen schaffen ihm zusätzlichen Raum. Davon profitieren auch viele andere Arten, denn als Schirmart zieht der Igel zahlreiche weitere Pflanzen und Tiere mit.",
     categoryIds: ["settlement-areas", "cultural-landscapes", "forests"],
     status: "support-needed",
     municipality: "Südtirolweit",
@@ -138,12 +137,12 @@ export const projects: Project[] = [
     supporters: 0,
     supportedBy: "Amt für Natur – Autonome Provinz Bozen",
     whyItMatters:
-      "Der Igel ist ein sehr beliebtes Tier, das jedoch laut subjektiver Wahrnehmung immer seltener in Südtirol zu sichten ist. Es liegen bislang aber keine konkreten Daten zu den heimischen Igel-Beständen vor. Deshalb möchten wir gezielte, standardisierte Erhebungen zum aktuellen Bestand des Igels durchführen und dabei ein spannendes Rätsel lösen: Gibt es bei uns in Südtirol beide europäische Igelarten? Denn neben dem in Europa weit verbreiteten Braunbrustigel (Erinaceus europaeus) ist in Südtirol auch der Nördliche Weißbrustigel (Erinaceus roumanicus) zu erwarten, welcher in den östlichen Nachbarländern und -regionen nachgewiesen wurde.",
+      "Der Igel ist beliebt, scheint in Südtirol aber immer seltener zu werden. Belegen lässt sich das bisher nicht: Zu den heimischen Beständen gibt es keine konkreten Daten. Mit gezielten, standardisierten Erhebungen wollen wir diese Lücke schließen und dabei ein spannendes Rätsel lösen: Leben in Südtirol beide europäischen Igelarten? Neben dem in Europa weit verbreiteten Braunbrustigel (Erinaceus europaeus) ist hier auch der Nördliche Weißbrustigel (Erinaceus roumanicus) zu erwarten, denn er wurde in den östlichen Nachbarländern und -regionen bereits nachgewiesen.",
     impact: [
-      { value: "50+", label: "geplante Igel-Straßen" },
       { value: "1", label: "mögliche neue Säugetierart für Südtirol" },
-      { value: "Schirmart", label: "der Igel steht für viele weitere Arten" },
-      { value: "Südtirolweit", label: "Erhebungsgebiet" }
+      { value: "50+", label: "igelfreundliche Schulen" },
+      { value: "50+", label: "Igel-Straßen" },
+      { value: "Schirmart", label: "wer den Igel schützt, fördert viele weitere Arten" }
     ],
     monitoring: {
       species: "Braunbrustigel und Nördlicher Weißbrustigel; mitprofitierend Kleinsäuger, Insekten und Regenwürmer",
@@ -217,15 +216,14 @@ const projectTranslations: Record<Exclude<Locale, "de">, Record<string, Partial<
         { src: "/projects/meine-gemeinde-meine-natur-ziegen-weg.webp", alt: "Capre su un sentiero tra recinzioni di legno, dietro il pastore e le montagne", caption: "In cammino con il gregge: capre su un sentiero tra recinzioni di legno." },
         { src: "/projects/meine-gemeinde-meine-natur-herde-winter.webp", alt: "Capre e pecore su una strada accanto a cataste di tronchi, ai lati c’è neve", caption: "Il gregge è in cammino anche d’inverno." },
         { src: "/projects/meine-gemeinde-meine-natur-hirte-schnee.webp", alt: "Il pastore con il suo cane davanti al gregge su un terreno innevato", caption: "Il pastore con il cane e il gregge nella neve." },
-        { src: "/projects/meine-gemeinde-meine-natur-mahd.webp", alt: "Vista oltre una falciatrice su un’area con erba alta, sullo sfondo lavora un’altra persona", caption: "Intervento di cura a settembre 2026: l’area con erba alta viene falciata." },
+        { src: "/projects/meine-gemeinde-meine-natur-mahd.webp", alt: "Vista oltre una falciatrice su un’area con erba alta, sullo sfondo lavora un’altra persona", caption: "Il prato umido ricco di specie viene falciato per contrastarne l’abbandono e far arretrare la tifa che lo sta invadendo." },
         { src: "/projects/meine-gemeinde-meine-natur-rechen.webp", alt: "Una persona rastrella l’erba tagliata su un’area falciata", caption: "L’erba tagliata viene raccolta con il rastrello." },
         { src: "/projects/meine-gemeinde-meine-natur-maehgut.webp", alt: "Prato falciato con un cumulo di erba tagliata, dietro bosco e una linea elettrica", caption: "Dopo lo sfalcio l’erba tagliata viene raccolta in cumuli." },
         { src: "/projects/meine-gemeinde-meine-natur-gemaehte-flaeche.webp", alt: "Area falciata con file e cumuli di erba tagliata davanti a boschetti", caption: "L’area falciata alla fine della giornata di lavoro." },
-        { src: "/projects/meine-gemeinde-meine-natur-haufen-waldrand.webp", alt: "Cumulo di erba tagliata al margine del bosco", caption: "Cumulo di erba tagliata al margine dell’area." },
-        { src: "/projects/meine-gemeinde-meine-natur-haufen-baeume.webp", alt: "Erba tagliata accatastata sotto gli alberi", caption: "L’erba tagliata accatastata sotto gli alberi." }
+        { src: "/projects/meine-gemeinde-meine-natur-haufen-waldrand.webp", alt: "Cumulo di erba tagliata al margine del bosco", caption: "Cumulo di erba tagliata al margine dell’area." }
       ],
       summary: "Scoprire e curare i biotopi dietro casa: un gregge di pecore e capre mantiene aperti prati aridi e pascoli magri in Valle Isarco.",
-      description: "Vogliamo far conoscere l’importanza di questi habitat a ogni fascia d’età e a tutta la popolazione, realizzando interventi di cura per conservare la biodiversità di questi biotopi. Collaboriamo con un pastore professionista che con il suo gregge di pecore e capre cura questi habitat secondo la tradizione.",
+      description: "Avviciniamo bambini e adulti all’importanza di questi habitat con attività in cui scoprono di persona la biodiversità del luogo. Conserviamo e promuoviamo la biodiversità collaborando con pastori e pastore professionisti che pascolano questi habitat con i loro animali secondo la tradizione. Dove necessario interveniamo a mano, per esempio rimuovendo arbusti e alberi, per recuperare un paesaggio culturale ricco di specie.",
       whyItMatters: "In quasi ogni località dell’Alto Adige si trovano habitat naturali e seminaturali che ospitano comunità rare e minacciate e sono perciò tutelati come biotopo o monumento naturale. Queste aree si trovano spesso nelle immediate vicinanze dei paesi e sono state create e mantenute dall’uomo, per lo più attraverso il pascolo guidato. Negli ultimi decenni il pascolo è però stato spesso abbandonato e questi habitat preziosi si stanno imboschendo. Un prato arido ricco di fiori e di insetti può così essere invaso da arbusti e alberi nel giro di pochi anni.",
       municipality: "Chiusa, Naz-Sciaves",
       sites: [
@@ -234,10 +232,10 @@ const projectTranslations: Record<Exclude<Locale, "de">, Record<string, Partial<
         { name: "Monastero di Sabiona", municipality: "Chiusa" }
       ],
       impact: [
-        { value: "4", label: "superfici di biotopo" },
-        { value: "30 + 10", label: "pecore e capre nel gregge" },
-        { value: "Prati e pascoli", label: "ricchi di specie, habitat centrale" },
-        { value: "Specie rare", label: "molte specie rare di piante e animali" }
+        { value: "4", label: "prati e pascoli ricchi di specie" },
+        { value: "30 + 10", label: "pecore e capre" },
+        { value: "40+", label: "specie vegetali" },
+        { value: "Animali rari", label: "molte specie animali rare" }
       ],
       supportedBy: "Ufficio Natura – Provincia autonoma di Bolzano",
       monitoring: {
@@ -251,14 +249,14 @@ const projectTranslations: Record<Exclude<Locale, "de">, Record<string, Partial<
       title: "Precedenza al riccio",
       organizationAddress: "c/o b*coop, Via Vintler 34, 39042 Bressanone",
       summary: "Un progetto per la tutela e lo studio del nostro vicino selvatico: rilievi sulla popolazione, una campagna di sensibilizzazione e «strade dei ricci» che collegano i giardini.",
-      description: "Stiamo verificando se il riccio orientale sia presente anche in Alto Adige e dove passi l’eventuale limite del suo areale. Avviamo inoltre una campagna di informazione e sensibilizzazione sul riccio e sul suo habitat, usando i media e gli strumenti di comunicazione più diversi e molte idee creative per raggiungere il maggior numero di persone: attività di citizen science, media analogici e digitali, laboratori e molto altro. Infine realizziamo misure concrete per proteggere e migliorare il suo habitat: le cosiddette «strade dei ricci», che permettono all’animale di muoversi liberamente tra i giardini e gli altri habitat. Con il riccio come specie ombrello tuteliamo e favoriamo anche molte altre specie vegetali e animali.",
-      whyItMatters: "Il riccio è un animale molto amato che, secondo la percezione comune, si avvista sempre più raramente in Alto Adige. Finora però non esistono dati concreti sulle popolazioni locali. Per questo vogliamo condurre rilievi mirati e standardizzati sulla consistenza attuale del riccio e risolvere al tempo stesso un enigma affascinante: in Alto Adige sono presenti entrambe le specie europee di riccio? Accanto al riccio europeo occidentale (Erinaceus europaeus), diffuso in tutta Europa, in Alto Adige è infatti atteso anche il riccio orientale (Erinaceus roumanicus), documentato nei paesi e nelle regioni confinanti a est.",
+      description: "Verifichiamo se il riccio orientale è presente anche in Alto Adige e dove passa il limite del suo areale. Allo stesso tempo, con un’ampia campagna richiamiamo l’attenzione sul riccio e sul suo habitat: con attività di citizen science, laboratori, media analogici e digitali e idee creative per raggiungere quante più persone possibile. E agiamo in concreto: le «strade dei ricci» collegano giardini e altri habitat perché il riccio possa muoversi liberamente, e le scuole amiche del riccio gli offrono ulteriore spazio. Ne beneficiano anche molte altre specie: come specie ombrello, il riccio porta con sé numerose altre piante e animali.",
+      whyItMatters: "Il riccio è molto amato, ma in Alto Adige sembra diventare sempre più raro. Finora però non è possibile dimostrarlo: sulle popolazioni locali mancano dati concreti. Con rilevamenti mirati e standardizzati vogliamo colmare questa lacuna e risolvere un enigma affascinante: in Alto Adige vivono entrambe le specie europee di riccio? Oltre al riccio europeo (Erinaceus europaeus), diffuso in tutta Europa, qui è atteso anche il riccio orientale (Erinaceus roumanicus), già documentato nei Paesi e nelle regioni confinanti a est.",
       municipality: "In tutto l’Alto Adige",
       impact: [
-        { value: "50+", label: "«strade dei ricci» previste" },
         { value: "1", label: "possibile nuova specie di mammifero per l’Alto Adige" },
-        { value: "Specie ombrello", label: "il riccio rappresenta molte altre specie" },
-        { value: "Tutto l’Alto Adige", label: "area di rilevamento" }
+        { value: "50+", label: "scuole amiche del riccio" },
+        { value: "50+", label: "«strade dei ricci»" },
+        { value: "Specie ombrello", label: "chi protegge il riccio favorisce molte altre specie" }
       ],
       supportedBy: "Ufficio Natura – Provincia autonoma di Bolzano",
       monitoring: {
@@ -330,15 +328,14 @@ const projectTranslations: Record<Exclude<Locale, "de">, Record<string, Partial<
         { src: "/projects/meine-gemeinde-meine-natur-ziegen-weg.webp", alt: "Goats on a path between wooden fences, with the shepherd and mountains behind", caption: "On the move with the flock: goats on a path between wooden fences." },
         { src: "/projects/meine-gemeinde-meine-natur-herde-winter.webp", alt: "Goats and sheep on a track beside stacked logs, with snow at the edges", caption: "The flock is on the move in winter too." },
         { src: "/projects/meine-gemeinde-meine-natur-hirte-schnee.webp", alt: "The shepherd with his herding dog in front of the flock on snow-covered ground", caption: "The shepherd with dog and flock in the snow." },
-        { src: "/projects/meine-gemeinde-meine-natur-mahd.webp", alt: "View over a mower onto a patch of tall vegetation, with another person working in the background", caption: "Management work in September 2026: the overgrown patch is mown." },
+        { src: "/projects/meine-gemeinde-meine-natur-mahd.webp", alt: "View over a mower onto a patch of tall vegetation, with another person working in the background", caption: "The species-rich fen meadow is mown to slow its abandonment and push back the encroaching bulrush." },
         { src: "/projects/meine-gemeinde-meine-natur-rechen.webp", alt: "A person raking cut vegetation on a mown area", caption: "The cuttings are raked together." },
         { src: "/projects/meine-gemeinde-meine-natur-maehgut.webp", alt: "Mown meadow with a pile of cuttings, woodland and a power line behind", caption: "After mowing, the cuttings are gathered into piles." },
         { src: "/projects/meine-gemeinde-meine-natur-gemaehte-flaeche.webp", alt: "Mown area with rows and piles of cuttings in front of trees and shrubs", caption: "The mown area at the end of the work day." },
-        { src: "/projects/meine-gemeinde-meine-natur-haufen-waldrand.webp", alt: "Pile of cuttings at the edge of the woods", caption: "A pile of cuttings at the edge of the site." },
-        { src: "/projects/meine-gemeinde-meine-natur-haufen-baeume.webp", alt: "Cuttings stacked beneath trees", caption: "The cuttings stacked beneath the trees." }
+        { src: "/projects/meine-gemeinde-meine-natur-haufen-waldrand.webp", alt: "Pile of cuttings at the edge of the woods", caption: "A pile of cuttings at the edge of the site." }
       ],
       summary: "Discovering and caring for the biotopes on our doorstep: a flock of sheep and goats keeps dry grasslands and poor pastures in the Eisack Valley open.",
-      description: "We want to bring the importance of these habitats home to every age group and part of the population, and carry out management work that preserves the biodiversity of these biotopes. We work with a professional shepherd who tends these habitats in the traditional way with his flock of sheep and goats.",
+      description: "We bring the importance of these habitats closer to children and adults alike through activities in which they discover the habitat’s biodiversity for themselves. We preserve and promote biodiversity by working with professional shepherds who graze these habitats with their livestock in the traditional way. Where necessary, we carry out management work by hand, such as removing shrubs and trees, to restore species-rich cultural landscape.",
       whyItMatters: "In almost every village in South Tyrol there are natural and semi-natural habitats that harbour rare and endangered communities and are therefore protected as biotopes or natural monuments. These areas often lie right next to the settlements and were mostly created and maintained by people through managed grazing. Over recent decades grazing has frequently been abandoned, and these valuable habitats are turning to scrub. A flower-rich dry grassland full of insects can be overgrown by shrubs and trees within a few years.",
       municipality: "Klausen, Natz-Schabs",
       sites: [
@@ -347,10 +344,10 @@ const projectTranslations: Record<Exclude<Locale, "de">, Record<string, Partial<
         { name: "Säben Abbey", municipality: "Klausen" }
       ],
       impact: [
-        { value: "4", label: "biotope sites" },
-        { value: "30 + 10", label: "sheep and goats in the flock" },
-        { value: "Meadows and pastures", label: "species-rich, core habitat" },
-        { value: "Rare species", label: "many rare plant and animal species" }
+        { value: "4", label: "species-rich meadows and pastures" },
+        { value: "30 + 10", label: "sheep and goats" },
+        { value: "40+", label: "plant species" },
+        { value: "Rare animals", label: "many rare animal species" }
       ],
       supportedBy: "Nature Office – Autonomous Province of Bolzano",
       monitoring: {
@@ -363,14 +360,14 @@ const projectTranslations: Record<Exclude<Locale, "de">, Record<string, Partial<
     "vorfahrt-fuer-den-igel": {
       title: "Right of way for the hedgehog",
       summary: "A project to protect and study our wild neighbour: population surveys, an awareness campaign, and connected hedgehog highways between gardens.",
-      description: "We are investigating whether the northern white-breasted hedgehog also occurs in South Tyrol, and where the boundary of its range might run. We are also launching an information and awareness campaign for the hedgehog and its habitat, using a wide range of media, communication tools and creative ideas to reach as many people as possible: citizen science activities, analogue and digital media, workshops and much more. Finally, we are putting concrete measures in place to protect and improve its habitat — so-called hedgehog highways, along which the animal can move freely between gardens and other habitats. With the hedgehog as an umbrella species, we also conserve and support many other plant and animal species.",
-      whyItMatters: "The hedgehog is a much-loved animal that, by general impression, is seen less and less often in South Tyrol. So far, however, there are no concrete data on local hedgehog populations. We therefore want to carry out targeted, standardised surveys of the current population and solve an intriguing puzzle at the same time: do both European hedgehog species occur here in South Tyrol? Alongside the widespread European hedgehog (Erinaceus europaeus), the northern white-breasted hedgehog (Erinaceus roumanicus) is also expected in South Tyrol, having been recorded in the neighbouring countries and regions to the east.",
+      description: "We are finding out whether the northern white-breasted hedgehog also occurs in South Tyrol and where the edge of its range lies. At the same time, a broad campaign draws attention to the hedgehog and its habitat: citizen science activities, workshops, analogue and digital media and creative ideas that reach as many people as possible. And we take concrete action: hedgehog highways link gardens and other habitats so the hedgehog can move freely, and hedgehog-friendly schools give it additional space. Many other species benefit too, because as an umbrella species the hedgehog brings numerous other plants and animals along with it.",
+      whyItMatters: "The hedgehog is much loved, yet it seems to be getting rarer in South Tyrol. So far this cannot be proven: there are no concrete data on local populations. With targeted, standardised surveys we want to close this gap and solve an intriguing puzzle along the way: do both European hedgehog species live in South Tyrol? Besides the European hedgehog (Erinaceus europaeus), widespread across Europe, the northern white-breasted hedgehog (Erinaceus roumanicus) is also expected here, as it has already been recorded in neighbouring countries and regions to the east.",
       municipality: "South Tyrol-wide",
       impact: [
-        { value: "50+", label: "planned hedgehog highways" },
         { value: "1", label: "possible new mammal species for South Tyrol" },
-        { value: "Umbrella species", label: "the hedgehog stands for many others" },
-        { value: "South Tyrol-wide", label: "survey area" }
+        { value: "50+", label: "hedgehog-friendly schools" },
+        { value: "50+", label: "hedgehog highways" },
+        { value: "Umbrella species", label: "protecting the hedgehog benefits many other species" }
       ],
       supportedBy: "Nature Office – Autonomous Province of Bolzano",
       monitoring: {

@@ -26,7 +26,6 @@ export type HomeStoryCopy = {
     factors: [string, string][];
     /** Beschriftung des Höhenschnitts. */
     profile: {
-      zones: { valley: string; forest: string; alpine: string; rock: string };
       levels: { "1000": string; "2000": string; "3000": string };
       peak: string;
       note: string;
@@ -110,10 +109,9 @@ const homeStory: Localized<HomeStoryCopy> = {
         ["Höhenstufen", "Von 200 m im Unterland bis 3.905 m am Ortler: Flaumeichen im Tal, Polsterpflanzen am Gipfel."]
       ],
       profile: {
-        zones: { valley: "Talboden", forest: "Bergwald", alpine: "Almen", rock: "Fels & Gletscher" },
         levels: { "1000": "1.000 m", "2000": "2.000 m", "3000": "3.000 m" },
         peak: "3.905 m",
-        note: "Vom Talboden mit Weinbergen, Obstwiesen und Trockenmauern über den Bergwald aus Laubbäumen, Fichten und Lärchen und die Almen oberhalb der Waldgrenze bis zu Fels und Gletscher in der Gipfelregion."
+        note: "Vom Talboden mit Weinbergen, Obstwiesen und Trockenmauern über den Wald aus Laubbäumen, Fichten und Lärchen und die Almen oberhalb der Waldgrenze bis zu Fels und Gletscher in der Gipfelregion."
       }
     },
     figures: {
@@ -162,9 +160,11 @@ const homeStory: Localized<HomeStoryCopy> = {
       scene: { before: "Früher", after: "Heute", slider: "Früher und heute vergleichen", note: "Schematisch: derselbe Talboden früher und wie er heute oft aussieht. Regler ziehen zum Vergleichen." },
       facts: [
         ["46 %", "der Tagfalterarten Südtirols gelten als regional gefährdet."],
-        ["6", "Heu- und Fangschreckenarten sind in Südtirol in den letzten 100 Jahren ausgestorben."]
+        ["38 %", "der bewerteten Brutvogelarten Südtirols sind gefährdet, vor allem Wiesenbrüter."],
+        ["6", "Heu- und Fangschreckenarten sind in Südtirol in den letzten 100 Jahren ausgestorben."],
+        ["9", "Libellenarten sind in Südtirol ausgestorben oder verschollen, meist Arten der Talböden."]
       ],
-      factsSource: "Quelle: Biodiversitätsmonitoring Südtirol (Eurac Research), Artengruppen Tagfalter und Heuschrecken.",
+      factsSource: "Quellen: Biodiversitätsmonitoring Südtirol (Eurac Research), Artengruppen Tagfalter und Heuschrecken; Ceresa & Kranebitter (2020), Rote Liste der Brutvögel Südtirols, Gredleriana 20; Lösch et al. (2018), Rote Liste der Libellen Südtirols, Gredleriana 18.",
       closing: "Verlorene Lebensräume lassen sich nicht überall zurückholen. Aber was noch da ist, können wir wiederherstellen, vergrößern und verbinden.",
       projectsBridge: "Hier setzen die b*alance-Projekte an."
     },
@@ -225,10 +225,9 @@ const homeStory: Localized<HomeStoryCopy> = {
         ["Fasce altitudinali", "Dai 200 m della Bassa Atesina ai 3.905 m dell’Ortles: roverelle nel fondovalle, piante a cuscinetto in vetta."]
       ],
       profile: {
-        zones: { valley: "Fondovalle", forest: "Bosco montano", alpine: "Alpeggi", rock: "Roccia e ghiaccio" },
         levels: { "1000": "1.000 m", "2000": "2.000 m", "3000": "3.000 m" },
         peak: "3.905 m",
-        note: "Dal fondovalle con vigneti, frutteti e muretti a secco, attraverso il bosco montano di latifoglie, abeti rossi e larici e gli alpeggi sopra il limite del bosco, fino a roccia e ghiaccio nella zona delle vette."
+        note: "Dal fondovalle con vigneti, frutteti e muretti a secco, attraverso il bosco di latifoglie, abeti rossi e larici e gli alpeggi sopra il limite del bosco, fino a roccia e ghiaccio nella zona delle vette."
       }
     },
     figures: {
@@ -277,9 +276,11 @@ const homeStory: Localized<HomeStoryCopy> = {
       scene: { before: "Prima", after: "Oggi", slider: "Confronta prima e oggi", note: "Schema: lo stesso fondovalle com’era un tempo e come appare spesso oggi. Trascina il cursore per confrontare." },
       facts: [
         ["46 %", "delle specie di farfalle diurne dell’Alto Adige sono considerate minacciate a livello regionale."],
-        ["6", "specie di ortotteri e mantidi si sono estinte in Alto Adige negli ultimi 100 anni."]
+        ["38 %", "delle specie di uccelli nidificanti valutate in Alto Adige sono minacciate, soprattutto quelle che nidificano nei prati."],
+        ["6", "specie di ortotteri e mantidi si sono estinte in Alto Adige negli ultimi 100 anni."],
+        ["9", "specie di libellule sono estinte o scomparse in Alto Adige, perlopiù specie di fondovalle."]
       ],
-      factsSource: "Fonte: Monitoraggio della biodiversità Alto Adige (Eurac Research), gruppi farfalle diurne e ortotteri.",
+      factsSource: "Fonti: Monitoraggio della biodiversità Alto Adige (Eurac Research), gruppi farfalle diurne e ortotteri; Ceresa & Kranebitter (2020), Lista Rossa degli uccelli nidificanti in Alto Adige, Gredleriana 20; Lösch et al. (2018), Lista Rossa delle libellule dell’Alto Adige, Gredleriana 18.",
       closing: "Non ovunque gli habitat perduti si possono recuperare. Ma ciò che resta possiamo ripristinarlo, ampliarlo e ricollegarlo.",
       projectsBridge: "È qui che intervengono i progetti b*alance."
     },
@@ -340,10 +341,9 @@ const homeStory: Localized<HomeStoryCopy> = {
         ["Altitude zones", "From 200 m in the Unterland to 3,905 m on the Ortler: downy oak in the valley, cushion plants on the summit."]
       ],
       profile: {
-        zones: { valley: "Valley floor", forest: "Mountain forest", alpine: "High pastures", rock: "Rock & glacier" },
         levels: { "1000": "1,000 m", "2000": "2,000 m", "3000": "3,000 m" },
         peak: "3,905 m",
-        note: "From the valley floor with vineyards, orchards and dry-stone walls, through the mountain forest of broadleaves, spruce and larch and the high pastures above the treeline, up to rock and glacier around the summits."
+        note: "From the valley floor with vineyards, orchards and dry-stone walls, through the forest of broadleaves, spruce and larch and the high pastures above the treeline, up to rock and glacier around the summits."
       }
     },
     figures: {
@@ -392,9 +392,11 @@ const homeStory: Localized<HomeStoryCopy> = {
       scene: { before: "Then", after: "Now", slider: "Compare then and now", note: "Schematic: the same valley floor as it used to be and as it often looks today. Drag the slider to compare." },
       facts: [
         ["46 %", "of South Tyrol’s butterfly species are considered regionally threatened."],
-        ["6", "grasshopper and mantis species have died out in South Tyrol over the past 100 years."]
+        ["38 %", "of the assessed breeding bird species in South Tyrol are threatened, above all meadow nesters."],
+        ["6", "grasshopper and mantis species have died out in South Tyrol over the past 100 years."],
+        ["9", "dragonfly species are extinct or lost in South Tyrol, mostly valley-floor species."]
       ],
-      factsSource: "Source: Biodiversity Monitoring South Tyrol (Eurac Research), groups butterflies and grasshoppers.",
+      factsSource: "Sources: Biodiversity Monitoring South Tyrol (Eurac Research), groups butterflies and grasshoppers; Ceresa & Kranebitter (2020), Red List of breeding birds of South Tyrol, Gredleriana 20; Lösch et al. (2018), Red List of dragonflies of South Tyrol, Gredleriana 18.",
       closing: "Lost habitats cannot be brought back everywhere. But what is still here, we can restore, enlarge and reconnect.",
       projectsBridge: "This is where b*alance projects come in."
     },

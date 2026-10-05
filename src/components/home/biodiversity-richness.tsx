@@ -11,7 +11,7 @@ import { textDisplay, textHeadline, textLead } from "@/components/ui/typography"
 import { cn } from "@/lib/utils";
 import { CountUp } from "./count-up";
 import { RichnessProfile, richnessProfileSpots as spots } from "./richness-profile";
-import { SceneNumber, spotStyle } from "./scene-number";
+import { SceneNumber } from "./scene-number";
 import { LegendCarousel, LegendMarker } from "./legend-carousel";
 
 /** Marken in der Grafik, eine je Faktor, in der Reihenfolge der Legende (von links nach rechts). */
@@ -21,8 +21,6 @@ const markers: ReadonlyArray<{ key: keyof typeof spots.markers; factor: number }
   { key: "geology", factor: 2 },
   { key: "altitude", factor: 3 }
 ];
-
-const zoneKeys = ["valley", "forest", "alpine", "rock"] as const;
 
 const levelKeys = ["1000", "2000", "3000"] as const;
 
@@ -82,16 +80,6 @@ export function BiodiversityRichness({ locale }: { locale: Locale }) {
                   style={spots.levels[key]}
                 >
                   {t.profile.levels[key]}
-                </span>
-              ))}
-              {zoneKeys.map((key) => (
-                <span
-                  key={key}
-                  aria-hidden
-                  className="habitat-fade absolute hidden -translate-x-1/2 -translate-y-full whitespace-nowrap text-[var(--color-ink)] md:block"
-                  style={spotStyle(spots.zones[key], 1200)}
-                >
-                  {t.profile.zones[key]}
                 </span>
               ))}
               {markers.map(({ key, factor }) => (

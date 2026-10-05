@@ -2,12 +2,12 @@
 Erzeugt src/components/home/europe-map.ts: Europa als Silhouette für die
 Infografik „Warum Biodiversitätsverlust auch wirtschaftlich zählt“.
 
-Drei Flächen: der Euroraum (zur Zahl der Unternehmenskredite, EZB 2023), die
-EU-27 (zur Wertschöpfung, JRC 2025) und das übrige Europa als leiser Grund.
-Zu jeder Zahl rechnet das Skript die Höhe aus, bis zu der die Fläche von unten
-gefüllt sein muss, damit genau dieser Anteil der Landfläche bedeckt ist –
-75 % des Euroraums, zwei Drittel der EU. Die Füllung ist also flächentreu,
-nicht nur ein Balken in Landesform.
+Nur der Euroraum (zur Zahl der Unternehmenskredite, EZB 2023), ohne das
+übrige Europa: Stünde es als Grund daneben, läse man die Füllung als Anteil
+an ganz Europa – grün wären dann nur gut ein Drittel des Bildes statt drei
+Viertel. Das Skript rechnet die Höhe aus, bis zu der der Euroraum von unten
+gefüllt sein muss, damit genau 75 % seiner Landfläche bedeckt sind. Die
+Füllung ist also flächentreu, nicht nur ein Balken in Landesform.
 
 Quelle: Natural Earth, Admin 0 Countries 1:50m (gemeinfrei). Projektion:
 Lambert flächentreu azimutal um 10° O / 52° N (wie ETRS89-LAEA), damit
@@ -25,13 +25,6 @@ URL = "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geo
 # Euroraum im Bezugsjahr der EZB-Studie (2023, mit Kroatien).
 EUROZONE = {"AUT", "BEL", "HRV", "CYP", "EST", "FIN", "FRA", "DEU", "GRC", "IRL", "ITA",
             "LVA", "LTU", "LUX", "MLT", "NLD", "PRT", "SVK", "SVN", "ESP"}
-EU = EUROZONE | {"BGR", "CZE", "DNK", "HUN", "POL", "ROU", "SWE"}
-# Übriges Europa als Grund; Russland, Türkei und Nordafrika bleiben weg,
-# sonst schrumpft die EU im Bild.
-# Kleinstaaten (Andorra, Monaco, San Marino, Vatikan, Liechtenstein) bleiben
-# weg: In dieser Größe wären sie nur Punkte.
-OTHER = {"GBR", "NOR", "ISL", "CHE", "ALB", "MKD", "MNE", "SRB", "BIH", "KOS", "XKX",
-         "MDA", "UKR", "BLR"}
 
 LON0, LAT0 = math.radians(10), math.radians(52)
 BOX = (-25, 34, 35, 72)  # lon/lat-Rahmen: schneidet Übersee-Gebiete ab
@@ -81,19 +74,14 @@ def iso(props):
 
 
 data = json.load(urllib.request.urlopen(urllib.request.Request(URL, headers={"User-Agent": "balance build script"}), timeout=120))
-groups = {"eurozone": [], "eu_only": [], "other": []}
+groups = {"eurozone": []}
 for feat in data["features"]:
     code = iso(feat["properties"])
     if code == "FRA" or feat["properties"].get("ADM0_A3") == "FRA":
         code = "FRA"
-    if code in EUROZONE:
-        key = "eurozone"
-    elif code in EU:
-        key = "eu_only"
-    elif code in OTHER:
-        key = "other"
-    else:
+    if code not in EUROZONE:
         continue
+    key = "eurozone"
     geom = feat["geometry"]
     polys = geom["coordinates"] if geom["type"] == "MultiPolygon" else [geom["coordinates"]]
     for poly in polys:
@@ -168,32 +156,22 @@ def path(polys):
     return "".join("M" + "L".join(f"{x:.1f} {y:.1f}" for x, y in ring) + "Z" for poly in polys for ring in poly)
 
 
-eurozone = groups["eurozone"]
-eu = groups["eurozone"] + groups["eu_only"]
-cut_ez = fill_line(eurozone, 0.75)
-cut_eu = fill_line(eu, 2 / 3)
+cut_ez = fill_line(groups["eurozone"], 0.75)
 
 tsx = f'''// Erzeugt von scripts/build-europe-map.py – dort ändern, nicht hier.
 // Umrisse: Natural Earth, Admin 0 Countries 1:50m (gemeinfrei).
 
-export const europeViewBox = "0 0 {W} {H}";
+export const eurozoneViewBox = "0 0 {W} {H}";
 
-/** Euroraum (Stand 2023), übrige EU-Staaten, übriges Europa als Grund. */
-export const europePaths = {{
-  eurozone: "{path(groups["eurozone"])}",
-  euOnly: "{path(groups["eu_only"])}",
-  other: "{path(groups["other"])}"
-}} as const;
+/** Euroraum, Stand 2023. */
+export const eurozonePath = "{path(groups["eurozone"])}";
 
 /**
  * Füllhöhe in Prozent der Bildhöhe, von oben gemessen: Unterhalb dieser Linie
  * liegt genau der genannte Anteil der Landfläche (flächentreue Projektion).
  */
-export const europeFillTop = {{
-  eurozone75: {cut_ez / H * 100:.2f},
-  eu23: {cut_eu / H * 100:.2f}
-}} as const;
+export const eurozoneFillTop = {cut_ez / H * 100:.2f};
 '''
 out = Path(__file__).resolve().parent.parent / "src/components/home/europe-map.ts"
 out.write_text(tsx)
-print(f"wrote {out} ({len(tsx) // 1024} KB), H={H}, fill tops: EZ {cut_ez / H:.3f}, EU {cut_eu / H:.3f}")
+print(f"wrote {out} ({len(tsx) // 1024} KB), H={H}, fill top: {cut_ez / H:.3f}")

@@ -326,11 +326,6 @@ add(1160, bird(560, 96, 1) + bird(586, 110, 0.75, -1.7) + bird(540, 116, 0.6, -3
 levels = {"1000": y(1000), "2000": y(2000), "3000": y(3000)}
 level_lines = "".join(f"M0 {f(v)}H{W}" for v in levels.values())
 
-# Hinweislinien von den Zonenetiketten zur Oberfläche. Wie die Etiketten erst ab `md`.
-zones = {"valley": (196, 418), "forest": (642, 230), "alpine": (872, 196), "rock": (1000, 128)}
-zone_surface = {"valley": g(196) - 18, "forest": g(642) - 40, "alpine": g(872) - 14, "rock": g(1000) - 4}
-leaders = "".join(f"M{f(zx)} {f(zy + 8)}V{f(zone_surface[k])}" for k, (zx, zy) in zones.items())
-
 
 def pct(px, py):
     return {"left": f"{px / W * 100:.2f}%", "top": f"{py / H * 100:.2f}%"}
@@ -346,7 +341,6 @@ spots = {
         "altitude": pct(1130, y(3905) - 22),
     },
     "levels": {k: pct(0, v) for k, v in levels.items()},
-    "zones": {k: pct(zx, zy) for k, (zx, zy) in zones.items()},
 }
 
 lines = []
@@ -361,7 +355,7 @@ tsx = f'''// Erzeugt von scripts/build-richness-profile.py – dort ändern, nic
 import type {{ CSSProperties }} from "react";
 
 /**
- * Lage der HTML-Marken und -Etiketten über der Zeichnung, in Prozent der
+ * Lage der HTML-Marken und Höhenangaben über der Zeichnung, in Prozent der
  * Bildfläche. Kommt aus demselben Skript wie das SVG.
  */
 export const richnessProfileSpots = {json.dumps(spots, indent=2)} as const;
@@ -389,7 +383,6 @@ export function RichnessProfile({{ className }}: {{ className?: string }}) {{
       </defs>
       <path d="{level_lines}" fill="none" stroke="currentColor" strokeWidth="1" strokeDasharray="3 6" opacity="0.22" vectorEffect="non-scaling-stroke" />
 {chr(10).join(lines)}
-      <path className="habitat-fade max-md:hidden" style={{{{ "--habitat-delay": "1200ms" }} as CSSProperties}} d="{leaders}" fill="none" stroke="currentColor" strokeWidth="1" opacity="0.45" vectorEffect="non-scaling-stroke" />
     </svg>
   );
 }}

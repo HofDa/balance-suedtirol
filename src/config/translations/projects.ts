@@ -44,6 +44,8 @@ export const projectsCopy = {
     projectDetail: {
       back: "Zurück zu den Projekten",
       verified: "Geprüfter Projektträger",
+      imagePending: "Projektfotos folgen",
+      locationApproximate: "Die Karte zeigt vorerst die ungefähre Lage in Kiens. Der genaue Projektstandort wird noch ergänzt.",
       habitats: "Lebensräume",
       location: "Projektstandort",
       municipality: "Gemeinde",
@@ -179,6 +181,8 @@ export const projectsCopy = {
     projectDetail: {
       back: "Torna ai progetti",
       verified: "Organizzazione verificata",
+      imagePending: "Le foto del progetto seguiranno",
+      locationApproximate: "La mappa mostra per ora la posizione approssimativa a Chienes. Il luogo preciso del progetto sarà aggiunto.",
       habitats: "Habitat",
       location: "Luogo del progetto",
       municipality: "Comune",
@@ -314,6 +318,8 @@ export const projectsCopy = {
     projectDetail: {
       back: "Back to projects",
       verified: "Verified project team",
+      imagePending: "Project photos to follow",
+      locationApproximate: "The map currently shows the approximate location in Kiens. The exact project site will be added.",
       habitats: "Habitats",
       location: "Project location",
       municipality: "Municipality",

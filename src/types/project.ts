@@ -23,9 +23,13 @@ export type Project = {
   status: ProjectStatus;
   municipality: string;
   organization: string;
+  /** Träger noch offen; deshalb keinen Prüfhinweis anzeigen. */
+  organizationPending?: boolean;
   /** Rechtssitz des Projektträgers, auf der Projektseite unter dem Namen. */
   organizationAddress?: string;
   location: { lat: number; lng: number };
+  /** Kartenpunkt bezeichnet nur die ungefähre Ortslage. */
+  locationApproximate?: boolean;
   /**
    * Einzelne Flächen, wenn ein Projekt an mehreren Orten arbeitet. Die
    * Projektseite listet sie statt der einen Gemeinde; `municipality` bleibt

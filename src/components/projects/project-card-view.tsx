@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { getTranslations } from "@/config/translations";
 import Link from "@/components/ui/site-link";
 import { MapPin } from "lucide-react";
 import type { ProjectCardData } from "@/types/project";
@@ -54,6 +55,9 @@ export function ProjectCardView({
           sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
           className="object-cover transition duration-500 group-hover:scale-[1.03]"
         />
+        {project.image === "/placeholder-grid.svg" && (
+          <p className="absolute inset-x-0 bottom-0 bg-white/90 px-4 py-2 text-xs text-[var(--color-muted)]">{getTranslations(locale).projectDetail.imagePending}</p>
+        )}
       </div>
 
       <div className="flex flex-1 flex-col p-5 sm:p-6">

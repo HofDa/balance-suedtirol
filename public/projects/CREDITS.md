@@ -69,3 +69,14 @@ Supplied by the project team (b*nature). Rotated per EXIF, resized to at most
 metadata including GPS, and converted to WebP (quality 62–68). Original set:
 21.7 MB, converted gallery: 2.1 MB. Whether the photographers want to be named
 is still open; add a `credit` to the gallery entries once that is known.
+
+## Widumwiese Kiens (real project imagery)
+
+| Local asset | Content | Credit |
+| --- | --- | --- |
+| `widumwiese-kiens.webp` | Mown meadow beside the parish house in Kiens | not yet clarified |
+
+Supplied by the user for this project. Original:
+`IMG_20261006_131214106_HDR.jpg`. Rotated per EXIF, resized to at most 1920 px
+wide without cropping, stripped of metadata including GPS, and converted to
+WebP (quality 80). The original is kept in `assets-source/projects/widumwiese-kiens/`.

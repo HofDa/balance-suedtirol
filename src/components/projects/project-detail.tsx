@@ -81,13 +81,13 @@ export function ProjectDetail({ project, otherProjects, locale }: ProjectDetailP
         addressRegion: "Südtirol / Alto Adige",
         addressCountry: "IT"
       },
-      geo: {
+      geo: project.locationApproximate ? undefined : {
         "@type": "GeoCoordinates",
         latitude: project.location.lat,
         longitude: project.location.lng
       }
     },
-    funder: {
+    funder: project.organizationPending ? undefined : {
       "@type": "Organization",
       name: project.organization
     }
@@ -141,7 +141,9 @@ export function ProjectDetail({ project, otherProjects, locale }: ProjectDetailP
                   "relative overflow-hidden",
                   isHedgehogProject
                     ? "aspect-[4/3] sm:aspect-[16/9]"
-                    : "aspect-[21/9] min-h-[260px] sm:min-h-[360px]"
+                    : project.slug === "widumwiese-kiens"
+                      ? "aspect-[16/9]"
+                      : "aspect-[21/9] min-h-[260px] sm:min-h-[360px]"
                 )}
               >
                 <Image
@@ -155,6 +157,9 @@ export function ProjectDetail({ project, otherProjects, locale }: ProjectDetailP
                     isHedgehogProject && "object-[35%_50%] sm:object-center"
                   )}
                 />
+                {project.image === "/placeholder-grid.svg" && (
+                  <p className="absolute inset-x-0 bottom-0 bg-white/90 px-5 py-3 text-sm text-[var(--color-muted)]">{copy.imagePending}</p>
+                )}
               </div>
             </Surface>
           )}
@@ -169,10 +174,12 @@ export function ProjectDetail({ project, otherProjects, locale }: ProjectDetailP
                 <Building2 className="size-4 text-[var(--color-forest)]" aria-hidden />
                 {project.organization}
               </span>
-              <span className="inline-flex items-center gap-1.5 font-semibold text-[var(--color-forest)]">
-                <ShieldCheck className="size-4" aria-hidden />
-                {copy.verified}
-              </span>
+              {!project.organizationPending && (
+                <span className="inline-flex items-center gap-1.5 font-semibold text-[var(--color-forest)]">
+                  <ShieldCheck className="size-4" aria-hidden />
+                  {copy.verified}
+                </span>
+              )}
             </div>
             <h1 className={cn(textDisplay, "mt-4")}>
               {project.title}
@@ -236,6 +243,9 @@ export function ProjectDetail({ project, otherProjects, locale }: ProjectDetailP
                   </div>
                 )}
               </dl>
+              {project.locationApproximate && (
+                <p className="mt-5 text-sm leading-6 text-[var(--color-muted)]">{copy.locationApproximate}</p>
+              )}
               <a href={mapUrl} target="_blank" rel="noreferrer" className={`mt-6 inline-flex min-h-11 items-center gap-2 text-sm font-bold text-[var(--color-forest)] hover:underline ${focusRing}`}>
                 {copy.openMap}
                 <ExternalLink className="size-4" aria-hidden />

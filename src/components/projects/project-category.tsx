@@ -14,6 +14,7 @@ import {
 } from "@/config/project-categories";
 
 const icons = {
+  hedges: Trees,
   "cultural-landscapes": Sprout,
   forests: Trees,
   waters: Waves,

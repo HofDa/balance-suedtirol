@@ -2,6 +2,7 @@ import type { Locale } from "./site";
 import type { Localized } from "../lib/i18n";
 
 export const projectCategoryIds = [
+  "hedges",
   "cultural-landscapes",
   "forests",
   "waters",
@@ -14,6 +15,7 @@ export const projectCategoryIds = [
 export type ProjectCategoryId = (typeof projectCategoryIds)[number];
 
 const visuals: Record<ProjectCategoryId, { surface: string; marker: string }> = {
+  hedges: { surface: "var(--category-forest-surface)", marker: "var(--category-forest-marker)" },
   "cultural-landscapes": {
     surface: "var(--category-cultural-surface)",
     marker: "var(--category-cultural-marker)"
@@ -46,6 +48,7 @@ const visuals: Record<ProjectCategoryId, { surface: string; marker: string }> = 
 
 const labels: Localized<Record<ProjectCategoryId, string>> = {
   de: {
+    hedges: "Hecken",
     "cultural-landscapes": "Kulturlandschaften",
     forests: "Wälder",
     waters: "Gewässer",
@@ -55,6 +58,7 @@ const labels: Localized<Record<ProjectCategoryId, string>> = {
     "settlement-areas": "Siedlungsräume"
   },
   it: {
+    hedges: "Siepi",
     "cultural-landscapes": "Paesaggi culturali",
     forests: "Boschi",
     waters: "Acque",
@@ -64,6 +68,7 @@ const labels: Localized<Record<ProjectCategoryId, string>> = {
     "settlement-areas": "Aree urbane"
   },
   en: {
+    hedges: "Hedges",
     "cultural-landscapes": "Cultural landscapes",
     forests: "Forests",
     waters: "Waters",

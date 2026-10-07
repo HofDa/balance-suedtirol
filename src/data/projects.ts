@@ -3,12 +3,43 @@ import type { Locale } from "../config/site";
 
 export const projects: Project[] = [
   {
+    // Projektstand vom Oktober 2026: Träger, Zeitplan, Budget und Monitoring
+    // sind noch offen. Der Kartenpunkt bezeichnet vorerst nur den Ort Kiens.
+    slug: "widumwiese-kiens",
+    title: "Widumwiese Kiens",
+    summary: "Die Wiese beim Widum wird ökologisch aufgewertet, um Lebensraum für Vögel, Igel, Amphibien, Insekten und weitere Lebewesen zu schaffen.",
+    description: "Die Fläche wird mit kleinen, aber wirksamen Maßnahmen ökologisch aufgewertet. Es werden einige zusätzliche Apfelbäume gepflanzt, die nicht heimischen Sträucher entfernt und heimische Sträucher in einer doppelten Reihe gesetzt. Ein kleiner Teich, ein Lebensraum für Insekten mit einer Wildbieneninsel und eine wilde Ecke für Igel und andere Lebewesen werden angelegt. Die neue Hecke dient Vögeln als Futterquelle und Nistplatz. Der kleine Teich schafft Lebensraum für Libellen, Amphibien und weitere wasserlebende Lebewesen. Mit diesem Projekt kommen wir dem Auftrag der Diözese nach, die Schöpfung zu bewahren und zu fördern.",
+    categoryIds: ["hedges", "cultural-landscapes", "waters"],
+    status: "support-needed",
+    municipality: "Kiens",
+    organization: "Noch zu klären",
+    organizationPending: true,
+    // Ungefähre Ortslage: https://mapcarta.com/18703318. Widumstandort noch bestätigen.
+    location: { lat: 46.8086, lng: 11.8398 },
+    locationApproximate: true,
+    image: "/projects/widumwiese-kiens.webp",
+    supporters: 0,
+    whyItMatters: "Das Widum in Kiens liegt idyllisch am Ortsrand nahe der Felder und des Waldes. Sein großer Garten ist eine Mähwiese mit einigen großwüchsigen Apfelbäumen alter Sorten und einer Hecke aus hauptsächlich nicht heimischen Sträuchern. Diese Fläche bietet großes Potenzial für eine wenig aufwendige, aber ökologisch wertvolle Aufwertung – in einem Gebiet, in dem durch Verbauung und Intensivierung wenig Platz für Natur geblieben ist.",
+    impact: [
+      { value: "1", label: "Hecke für Vögel und Kleinsäuger" },
+      { value: "1", label: "wilde Ecke für Igel und weitere Lebewesen" },
+      { value: "1", label: "Teich für Wasserlebewesen" },
+      { value: "1", label: "kleines Paradies für Insekten" }
+    ],
+    monitoring: {
+      species: "Vögel, Igel, Amphibien, Libellen, Wildbienen und weitere Insekten",
+      surveys: "Noch festzulegen",
+      reporting: "Noch festzulegen",
+      summary: "Das Beobachtungsprogramm wird im Zuge der weiteren Projektplanung festgelegt."
+    }
+  },
+  {
     slug: "millander-au-erweiterung",
     title: "Millander Au – Erweiterung",
     summary:
       "Die Millander Au bei Brixen soll um eine ehemalige Apfelanlage wachsen: Teich, Feuchtwiese und Hecken für rund 130 Vogelarten im Jahr.",
     description:
-      "Nördlich an das bestehende Biotop von rund 4,5 Hektar schließt eine ehemals intensiv bewirtschaftete Apfelanlage an. Sie soll zu einem großen Schilfteich, einer bei Hochwasser überfluteten Feuchtwiese, Heckenstreifen, Erleninseln und einem mäandrierenden Wasserlauf werden. Steilwände aus Lehm und Sand bieten Bienenfresser, Uferschwalbe und Eisvogel Brutröhren; ein Aussichtsturm am Eisackdamm, eine Beobachtungswand und eine Beobachtungshütte machen das Biotop behutsam erlebbar. Weitere Grundeigentümer haben ihre Flächen für die Erweiterung in Aussicht gestellt. Der Ankauf ist auf Spenden angewiesen.",
+      "Nördlich an das bestehende Biotop von rund 4,5 Hektar schließt eine ehemals intensiv bewirtschaftete Apfelanlage an. Sie soll zu einem großen Schilfteich, einer bei Hochwasser überfluteten Feuchtwiese, Heckenstreifen, Erleninseln und einem mäandrierenden Wasserlauf werden. Steilwände aus Lehm und Sand bieten Bienenfresser, Uferschwalbe und Eisvogel Brutröhren; ein Aussichtsturm am Eisackdamm, eine Beobachtungswand und eine Beobachtungshütte machen das Biotop behutsam erlebbar. Weitere Grundeigentümer haben ihre Flächen für die Erweiterung in Aussicht gestellt.",
     categoryIds: ["wetlands", "waters", "cultural-landscapes"],
     status: "support-needed",
     municipality: "Brixen",
@@ -155,10 +186,30 @@ export const projects: Project[] = [
 
 const projectTranslations: Record<Exclude<Locale, "de">, Record<string, Partial<Project>>> = {
   it: {
+    "widumwiese-kiens": {
+      title: "Prato della canonica di Chienes",
+      summary: "Il prato presso la canonica viene valorizzato dal punto di vista ecologico per creare habitat per uccelli, ricci, anfibi, insetti e altri esseri viventi.",
+      municipality: "Chienes",
+      organization: "Da chiarire",
+      whyItMatters: "La canonica di Chienes si trova in una posizione idilliaca ai margini del paese, vicino ai campi e al bosco. Il suo grande giardino è un prato da sfalcio con alcuni grandi meli di antiche varietà e una siepe composta principalmente da arbusti non autoctoni. Quest’area offre un grande potenziale per una valorizzazione semplice ma ecologicamente preziosa, in una zona dove l’edificazione e l’intensificazione hanno lasciato poco spazio alla natura.",
+      description: "L’area viene valorizzata dal punto di vista ecologico con interventi piccoli ma efficaci. Si piantano alcuni meli aggiuntivi, si rimuovono gli arbusti non autoctoni e si piantano arbusti autoctoni su due file. Si realizzano un piccolo stagno, un habitat per gli insetti con un’isola per le api selvatiche e un angolo selvatico per i ricci e altri esseri viventi. La nuova siepe offre cibo e siti di nidificazione agli uccelli. Il piccolo stagno crea habitat per libellule, anfibi e altri organismi acquatici. Con questo progetto rispondiamo all’incarico della diocesi di custodire e promuovere il creato.",
+      impact: [
+        { value: "1", label: "siepe per uccelli e piccoli mammiferi" },
+        { value: "1", label: "angolo selvatico per ricci e altri esseri viventi" },
+        { value: "1", label: "stagno per organismi acquatici" },
+        { value: "1", label: "piccolo paradiso per gli insetti" }
+      ],
+      monitoring: {
+        species: "Uccelli, ricci, anfibi, libellule, api selvatiche e altri insetti",
+        surveys: "Da definire",
+        reporting: "Da definire",
+        summary: "Il programma di osservazione sarà definito durante la successiva pianificazione del progetto."
+      }
+    },
     "millander-au-erweiterung": {
       title: "Millander Au – Ampliamento",
       summary: "La Millander Au presso Bressanone deve crescere di un ex meleto: stagno, prato umido e siepi per circa 130 specie di uccelli all’anno.",
-      description: "A nord del biotopo esistente di circa 4,5 ettari si trova un ex meleto a coltivazione intensiva. Diventerà un grande stagno con canneto, un prato umido inondato in caso di piena, fasce di siepi, isole di ontani e un corso d’acqua a meandri. Pareti ripide di argilla e sabbia offriranno cavità di nidificazione a gruccione, topino e martin pescatore; una torre panoramica sull’argine dell’Isarco, una parete di osservazione e un capanno renderanno il biotopo fruibile con discrezione. Altri proprietari hanno messo in prospettiva i loro terreni per l’ampliamento. L’acquisto dipende dalle donazioni.",
+      description: "A nord del biotopo esistente di circa 4,5 ettari si trova un ex meleto a coltivazione intensiva. Diventerà un grande stagno con canneto, un prato umido inondato in caso di piena, fasce di siepi, isole di ontani e un corso d’acqua a meandri. Pareti ripide di argilla e sabbia offriranno cavità di nidificazione a gruccione, topino e martin pescatore; una torre panoramica sull’argine dell’Isarco, una parete di osservazione e un capanno renderanno il biotopo fruibile con discrezione. Altri proprietari hanno messo in prospettiva i loro terreni per l’ampliamento.",
       whyItMatters: "La Millander Au è ciò che resta di un paesaggio golenale che un tempo occupava l’intera piana fluviale da Bressanone ad Albes. Nel 1988 è stata salvata all’ultimo momento dall’uso come discarica di macerie e posta sotto tutela. Con fronti di maltempo sulla cresta alpina principale è una sosta vitale per gli uccelli migratori: qui vengono rilevate circa 130 specie all’anno, di cui 30–35 nidificanti. La particella vicina rinaturalizzata nel 2026 mostra quanto rapidamente i nuovi habitat vengano colonizzati.",
       municipality: "Bressanone",
       organization: "Stiftung Landschaft Südtirol",
@@ -268,10 +319,29 @@ const projectTranslations: Record<Exclude<Locale, "de">, Record<string, Partial<
     }
   },
   en: {
+    "widumwiese-kiens": {
+      title: "Widum meadow in Kiens",
+      summary: "The meadow beside the parish house will be enhanced ecologically to create habitat for birds, hedgehogs, amphibians, insects and other wildlife.",
+      organization: "To be clarified",
+      whyItMatters: "The parish house in Kiens sits in an idyllic spot on the edge of the village, close to fields and woodland. Its large garden is a hay meadow with several tall apple trees of old varieties and a hedge made up mainly of non-native shrubs. This area offers considerable potential for straightforward yet ecologically valuable improvements in a place where development and intensive land use have left little space for nature.",
+      description: "Small but effective measures will enhance the area ecologically. Several additional apple trees will be planted, non-native shrubs removed and native shrubs planted in a double row. A small pond, an insect habitat with an area for wild bees, and a wild corner for hedgehogs and other wildlife will be created. The new hedge will provide food and nesting sites for birds. The small pond will create habitat for dragonflies, amphibians and other aquatic organisms. Through this project we fulfil the diocese’s call to preserve and nurture creation.",
+      impact: [
+        { value: "1", label: "hedge for birds and small mammals" },
+        { value: "1", label: "wild corner for hedgehogs and other wildlife" },
+        { value: "1", label: "pond for aquatic wildlife" },
+        { value: "1", label: "small paradise for insects" }
+      ],
+      monitoring: {
+        species: "Birds, hedgehogs, amphibians, dragonflies, wild bees and other insects",
+        surveys: "To be defined",
+        reporting: "To be defined",
+        summary: "The monitoring programme will be defined during further project planning."
+      }
+    },
     "millander-au-erweiterung": {
       title: "Millander Au – Expansion",
       summary: "The Millander Au near Brixen is to grow by a former apple orchard: pond, wet meadow and hedgerows for around 130 bird species a year.",
-      description: "North of the existing 4.5-hectare reserve lies a former intensively farmed apple orchard. It is to become a large reed-fringed pond, a wet meadow that floods at high water, strips of hedgerow, alder islands and a meandering watercourse. Steep banks of clay and sand will give bee-eaters, sand martins and kingfishers nesting burrows; an observation tower on the Eisack embankment, a viewing screen and a hide will open the reserve to visitors without disturbing it. Further landowners have offered their plots for the expansion. Buying them depends on donations.",
+      description: "North of the existing 4.5-hectare reserve lies a former intensively farmed apple orchard. It is to become a large reed-fringed pond, a wet meadow that floods at high water, strips of hedgerow, alder islands and a meandering watercourse. Steep banks of clay and sand will give bee-eaters, sand martins and kingfishers nesting burrows; an observation tower on the Eisack embankment, a viewing screen and a hide will open the reserve to visitors without disturbing it. Further landowners have offered their plots for the expansion.",
       whyItMatters: "The Millander Au is what remains of a floodplain that once covered the entire river landscape from Brixen to Albeins. In 1988 it was saved at the last moment from becoming a rubble dump and placed under protection. When bad weather sits over the main Alpine ridge it is a vital stopover for migrating birds: around 130 species are recorded here each year, 30 to 35 of which breed in the reserve. The neighbouring plot restored in 2026 shows how quickly new habitats are taken up.",
       municipality: "Brixen",
       organization: "Stiftung Landschaft Südtirol",

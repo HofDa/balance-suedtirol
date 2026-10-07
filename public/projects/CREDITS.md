@@ -77,6 +77,15 @@ is still open; add a `credit` to the gallery entries once that is known.
 | `widumwiese-kiens.webp` | Mown meadow beside the parish house in Kiens | not yet clarified |
 
 Supplied by the user for this project. Original:
-`IMG_20261006_131214106_HDR.jpg`. Rotated per EXIF, resized to at most 1920 px
+`IMG_20261006_131214106_HDR.jpg`. Rotated per EXIF, resized to at most 1600 px
 wide without cropping, stripped of metadata including GPS, and converted to
-WebP (quality 80). The original is kept in `assets-source/projects/widumwiese-kiens/`.
+WebP (quality 65, effort 6). The original is kept in `assets-source/projects/widumwiese-kiens/`.
+
+## Web compression pass (7 October 2026)
+
+Existing WebP project images were re-encoded at quality 65 and effort 6 only
+when this saved at least 10% of the file size. The labelled sketch uses quality
+80 to preserve text. Existing dimensions and framing were retained; the Kiens
+image was already optimized and was not re-encoded. Earlier entries document
+the original import. Sources and credits are unchanged. Per-file sizes and
+settings: `assets-source/image-compression/report-2026-10-07.json`.

@@ -24,6 +24,6 @@ vorhandenen Speicherdienstes mit diesem Projektordner verbunden werden.
 
 `IMG_20261006_131214106_HDR.jpg` wurde vom Nutzer als Projektbild bereitgestellt.
 Es zeigt die gemähte Wiese mit dem Widum am rechten Bildrand. Die optimierte
-Webfassung liegt unter `public/projects/widumwiese-kiens.webp` (maximal 1920 px
-breit, WebP, Qualität 80, ohne EXIF/GPS). Fotograf:in und gewünschte
+Webfassung liegt unter `public/projects/widumwiese-kiens.webp` (maximal 1600 px
+breit, WebP, Qualität 65, Encoder-Aufwand 6, ohne EXIF/GPS). Fotograf:in und gewünschte
 Namensnennung sind noch offen. Das Original bleibt hier erhalten.

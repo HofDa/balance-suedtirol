@@ -17,3 +17,13 @@ Stichproben der Startseite, Haustour, Millander-Au-Vision und Skizze wurden
 visuell geprüft. Originaldateien sind weiterhin über die bisherigen Quellen
 und die Git-Historie verfügbar; lokale Sicherungen dieser Bearbeitung liegen
 unter `/tmp/balance-compression/originals/`.
+
+## Verkleinerte Projektbilder (8. Oktober 2026)
+
+GitHub Pages liefert Bilder ohne Next-Optimierer in voller Größe aus. Karten,
+Galerie-Vorschaubilder, das Haustour-Ergebnis und die Kachel „Erfolge“ nehmen
+deshalb eigene kleine Fassungen: `name-sm.webp` (800 px, Qualität 62) und
+`name-xs.webp` (240 px, Qualität 60), erzeugt mit
+`scripts/build-project-thumbnails.py`, ausgewählt über
+`src/lib/image-variants.ts`. Nach neuen Projektbildern das Skript erneut
+ausführen.

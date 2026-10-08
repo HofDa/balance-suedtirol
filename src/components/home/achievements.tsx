@@ -54,7 +54,7 @@ export function Achievements({ locale }: { locale: Locale }) {
           <figure data-home-reveal="scale" className={cn(hiddenWhenCollapsed, "w-full shrink-0 sm:max-w-md lg:w-[24rem]")}>
             <div className="relative aspect-[3/2] overflow-hidden rounded-[var(--radius-lg)] bg-[var(--color-sage)]">
               <Image
-                src={withBasePath("/projects/millander-au-zwergdommel.webp")}
+                src={withBasePath("/projects/millander-au-zwergdommel-sm.webp")}
                 alt={t.highlightAlt}
                 fill
                 sizes="(min-width: 1024px) 384px, (min-width: 640px) 448px, 100vw"

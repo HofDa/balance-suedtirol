@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { projectImageVariant } from "@/lib/image-variants";
 import { useId, useRef, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import type { Project } from "@/types/project";
@@ -67,7 +68,7 @@ export function ProjectGallery({ images, labels }: ProjectGalleryProps) {
           <div className="mt-5 flex gap-3 overflow-x-auto p-1">
             {images.map((image, imageIndex) => (
               <button key={image.src} type="button" onClick={() => setIndex(imageIndex)} aria-label={`${labels.image} ${imageIndex + 1}: ${image.alt}`} aria-pressed={imageIndex === index} aria-controls={slideId} className={`relative h-16 w-24 shrink-0 overflow-hidden rounded-[var(--radius-sm)] border-2 transition ${imageIndex === index ? "border-[var(--color-forest)]" : "border-transparent opacity-60 hover:opacity-100"} ${focusRing}`}>
-                <Image src={withBasePath(image.src)} alt="" fill sizes="96px" className="object-cover" />
+                <Image src={withBasePath(projectImageVariant(image.src, "xs"))} alt="" fill sizes="96px" className="object-cover" />
               </button>
             ))}
           </div>

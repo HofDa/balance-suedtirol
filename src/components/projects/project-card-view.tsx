@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { projectImageVariant } from "@/lib/image-variants";
 import { getTranslations } from "@/config/translations";
 import Link from "@/components/ui/site-link";
 import { MapPin } from "lucide-react";
@@ -50,7 +51,7 @@ export function ProjectCardView({
       <ProjectCategoryMarker categoryId={primaryCategory} />
       <div className="relative aspect-[16/10] overflow-hidden bg-[var(--color-sage)]/40">
         <Image
-          src={withBasePath(project.image)}
+          src={withBasePath(projectImageVariant(project.image, "sm"))}
           alt=""
           fill
           sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"

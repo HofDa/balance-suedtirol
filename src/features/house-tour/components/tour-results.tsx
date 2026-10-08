@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import { projectImageVariant } from "@/lib/image-variants";
 import Link from "@/components/ui/site-link";
 import { ArrowRight, Bookmark, BookmarkCheck, BookOpen, ChevronRight, Home, Plus } from "lucide-react";
 import { animate, motion, useReducedMotion } from "framer-motion";
@@ -511,7 +512,7 @@ export function TourResults({
                           )}
                         >
                           {/* eslint-disable-next-line @next/next/no-img-element */}
-                          <img src={withBasePath(project.image)} alt="" className="size-20 shrink-0 rounded-[var(--radius-md)] object-cover" />
+                          <img src={withBasePath(projectImageVariant(project.image, "xs"))} alt="" className="size-20 shrink-0 rounded-[var(--radius-md)] object-cover" />
                           <span className="flex min-w-0 flex-col justify-center">
                             <span className="text-sm font-semibold leading-5">{project.title}</span>
                             <span className="mt-0.5 text-xs text-[var(--color-muted)]">{project.municipality}</span>

@@ -117,7 +117,7 @@ export function ProjectDetail({ project, otherProjects, locale }: ProjectDetailP
                 }}
                 aspectClassName={
                   project.slug === "widumwiese-kiens"
-                    ? "aspect-[1437/1020]"
+                    ? "aspect-[1441/1045]"
                     : project.slug === "millander-au-erweiterung"
                       ? "aspect-[1491/1055]"
                       : "aspect-[4/3] sm:aspect-[1491/1055]"
@@ -313,36 +313,13 @@ export function ProjectDetail({ project, otherProjects, locale }: ProjectDetailP
             </section>
           )}
 
-          <section className="mt-20">
-            <Surface level="sheet" tone="paper" framed={false} className="h-fit sm:p-8">
-              <div className="flex items-center gap-2 font-bold text-[var(--color-forest)]">
-                <ShieldCheck className="size-5" aria-hidden />
-                <h2>{copy.transparency}</h2>
-              </div>
-              <p className="mt-4 text-base leading-7 text-[var(--color-ink)]">
-                <strong>{project.organization}</strong>
-                {project.organizationAddress ? (
-                  <span className="mt-1 block text-sm text-[var(--color-muted)]">{project.organizationAddress}</span>
-                ) : <> · {project.municipality}</>}
-              </p>
-              {/* Öffentliche Unterstützung gilt je Projekt, nicht für die Plattform:
-                  deshalb beim Träger dieses Projekts, nicht am Seitenende, wo sie
-                  wie ein Vermerk für die ganze Seite wirkte. Kein Hauptinvestor,
-                  keine Kachel. */}
-              {project.supportedBy && (
-                <p className="mt-4 border-t border-[var(--color-line)] pt-4 text-sm text-[var(--color-muted)]">
-                  {copy.supportedBy}: <span className="font-semibold text-[var(--color-ink)]">{project.supportedBy}</span>
-                </p>
-              )}
-              <p className="mt-3 max-w-[58ch] text-sm leading-6 text-[var(--color-muted)]">{copy.transparencyCopy}</p>
-            </Surface>
-          </section>
-
           <ProjectSponsors
             project={project}
             copy={{
-              sponsorsEyebrow: copy.sponsorsEyebrow,
-              sponsorsTitle: copy.sponsorsTitle,
+              title: copy.backersTitle,
+              intro: copy.transparencyCopy,
+              organization: copy.organization,
+              supportedBy: copy.supportedBy,
               mainSponsor: copy.mainSponsor,
               coSponsors: copy.coSponsors,
               sponsorOpen: copy.sponsorOpen,

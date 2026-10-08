@@ -84,13 +84,15 @@ wide without cropping, stripped of metadata including GPS, and converted to
 WebP (quality 65, effort 6). The original is kept in `assets-source/projects/widumwiese-kiens/`.
 
 The before/after pair (8 October 2026) was supplied by the user as
-`map-2026-10-07T19_40_41.824Z.png` and `Luftbild eines blühenden Naturgartens.png`.
-The aerial photo was warped onto the visualisation's framing with a feature-based
-homography (house, roads and car park coincide), so the slider lines up. Both are
-1437 × 1020 px WebP (cropped to the area both images cover), quality 65, effort 6 (3.5 MB to 295 KB and 1.5 MB to 69 KB).
-Originals are in `assets-source/projects/widumwiese-kiens/`. Before publishing,
-clarify the aerial image's source and licence and the visualisation's author, and
-label the visualisation as such wherever it appears.
+`map-2026-10-07T19_40_41.824Z.png` (before) and, replacing a first draft,
+`Luftaufnahme eines Biodiversitätsgartens.png` (after; the first draft is kept as
+`luftbild-vision-original.png`). The aerial photo was warped onto the
+visualisation's framing with a feature-based homography (house, roads and car
+park coincide), so the slider lines up. Both are cropped to the area both images
+cover, 1441 × 1045 px WebP, quality 65, effort 6 (3.2 MB to 232 KB and 1.5 MB to
+69 KB). Originals are in `assets-source/projects/widumwiese-kiens/`. Before
+publishing, clarify the aerial image's source and licence and the visualisation's
+author, and label the visualisation as such wherever it appears.
 
 ## Web compression pass (7 October 2026)
 

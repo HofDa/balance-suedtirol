@@ -7,30 +7,27 @@ import {
   Building2,
   ExternalLink,
   MapPin,
-  Users,
   ShieldCheck
 } from "lucide-react";
 import { Container } from "@/components/ui/container";
 import { ProjectCard } from "@/components/projects/project-card";
 import { cn } from "@/lib/utils";
-import { formatCurrency } from "@/lib/format";
 import type { Project } from "@/types/project";
 import type { Locale } from "@/config/site";
 import { Label } from "@/components/ui/label";
-import { Progress } from "@/components/ui/progress";
 import { Surface } from "@/components/ui/surface";
-import { focusRing, focusRingOnDark } from "@/components/ui/focus";
+import { focusRing } from "@/components/ui/focus";
 import { ProjectSponsors } from "./project-sponsors";
 import { ProjectCategoryIcon } from "./project-category";
 import { getProjectCategoryLabel } from "@/config/project-categories";
 import { getTranslations } from "@/config/translations";
 import { SouthTyrolMap } from "./south-tyrol-map";
 import { ProjectShareButton } from "./project-share-button";
+import { ProjectSupportBar } from "./project-support-bar";
 import { BeforeAfterSlider } from "./before-after-slider";
 import { ProjectGallery } from "./project-gallery";
 import {
   ProjectSupportDialog,
-  ProjectSupportTrigger,
   type ProjectSupportCopy
 } from "./project-support";
 import { withBasePath } from "@/lib/public-path";
@@ -43,12 +40,6 @@ interface ProjectDetailProps {
 }
 
 export function ProjectDetail({ project, otherProjects, locale }: ProjectDetailProps) {
-  // Ein Projekt ohne entschiedenes Ziel bekommt keinen Balken: 0 von 0 wäre
-  // weder 0 % noch 100 %, sondern eine Zahl, die es nicht gibt.
-  const hasFundingTarget = typeof project.goal === "number" && project.goal > 0;
-  const progress = hasFundingTarget
-    ? Math.min(100, Math.round(((project.funded ?? 0) / project.goal!) * 100))
-    : null;
   const copy = getTranslations(locale).projectDetail;
   const mapUrl = `https://www.openstreetmap.org/?mlat=${project.location.lat}&mlon=${project.location.lng}#map=14/${project.location.lat}/${project.location.lng}`;
   const supportCopy: ProjectSupportCopy = {
@@ -99,8 +90,8 @@ export function ProjectDetail({ project, otherProjects, locale }: ProjectDetailP
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <section className="pb-24 pt-8 sm:pt-12">
-        <Container>
+      <section className="pt-8 sm:pt-12">
+        <Container className="pb-16">
           <Link
             href={`/${locale}/projekte`}
             className={`inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-[var(--color-muted)] transition hover:text-[var(--color-forest)] ${focusRing}`}
@@ -124,7 +115,13 @@ export function ProjectDetail({ project, otherProjects, locale }: ProjectDetailP
                   after: beforeAfter.afterLabel ?? copy.after,
                   slider: copy.beforeAfterSliderLabel
                 }}
-                aspectClassName={project.slug === "millander-au-erweiterung" ? "aspect-[1491/1055]" : "aspect-[4/3] sm:aspect-[1491/1055]"}
+                aspectClassName={
+                  project.slug === "widumwiese-kiens"
+                    ? "aspect-[1437/1020]"
+                    : project.slug === "millander-au-erweiterung"
+                      ? "aspect-[1491/1055]"
+                      : "aspect-[4/3] sm:aspect-[1491/1055]"
+                }
                 priority
                 className="rounded-[var(--radius-xl)]"
               />
@@ -316,35 +313,7 @@ export function ProjectDetail({ project, otherProjects, locale }: ProjectDetailP
             </section>
           )}
 
-          <section className="mt-20 grid gap-6 lg:grid-cols-[0.72fr_1.28fr]">
-            <aside className="h-fit rounded-[var(--radius-xl)] border border-[var(--color-line)] bg-white p-6 sm:p-7">
-              <Label size="section">{copy.funding}</Label>
-              {progress === null ? (
-                <p className="mt-5 text-sm leading-6 text-[var(--color-muted)]">{copy.fundingOpen}</p>
-              ) : (
-                <>
-                  <p className="mt-5 text-sm font-medium text-[var(--color-muted)]">{copy.fundingProgress}</p>
-                  <div className="mt-1 flex items-end justify-between gap-3">
-                    <p className="text-3xl font-bold tracking-[-0.03em] tabular-nums text-[var(--color-ink)]">{formatCurrency(project.funded ?? 0, localeTags[locale])}</p>
-                    <span className="text-sm font-bold tabular-nums text-[var(--color-forest)]">{progress} %</span>
-                  </div>
-                  <p className="mt-1 text-xs tabular-nums text-[var(--color-muted)]">
-                    {copy.fundingTarget.replace("{goal}", formatCurrency(project.goal!, localeTags[locale]))}
-                  </p>
-                  <Progress value={progress} label={`${copy.fundingProgress}: ${progress} %`} className="mt-5" />
-                </>
-              )}
-              <p className="mt-3 inline-flex items-center gap-1.5 text-xs text-[var(--color-muted)]">
-                <Users className="size-4" aria-hidden />
-                {project.supporters} {copy.supporters}
-              </p>
-              <ProjectSupportTrigger
-                label={copy.support}
-                className="mt-6 w-full bg-[var(--color-forest)] font-bold hover:bg-[var(--color-ink)]"
-              />
-              <ProjectShareButton copy={copy} title={project.title} description={project.summary} image={withBasePath(project.image)} />
-              <p className="mt-3 text-xs text-[var(--color-muted)]">{copy.tax}</p>
-            </aside>
+          <section className="mt-20">
             <Surface level="sheet" tone="paper" framed={false} className="h-fit sm:p-8">
               <div className="flex items-center gap-2 font-bold text-[var(--color-forest)]">
                 <ShieldCheck className="size-5" aria-hidden />
@@ -375,7 +344,9 @@ export function ProjectDetail({ project, otherProjects, locale }: ProjectDetailP
               sponsorsEyebrow: copy.sponsorsEyebrow,
               sponsorsTitle: copy.sponsorsTitle,
               mainSponsor: copy.mainSponsor,
-              supportingSponsors: copy.supportingSponsors,
+              coSponsors: copy.coSponsors,
+              sponsorOpen: copy.sponsorOpen,
+              sponsorOpenShort: copy.sponsorOpenShort,
               placeholder: getTranslations(locale).card.placeholder,
               website: copy.sponsorWebsite
             }}
@@ -405,28 +376,25 @@ export function ProjectDetail({ project, otherProjects, locale }: ProjectDetailP
             </div>
           )}
 
-          <section className="mt-20 rounded-[var(--radius-xl)] bg-[var(--color-ink)] p-6 text-white sm:p-10" aria-labelledby="project-final-cta">
-            <div className="max-w-2xl">
-              <h2 id="project-final-cta" className={textHeadline}>{copy.finalTitle}</h2>
-              <p className="mt-3 text-sm leading-6 text-white/70 sm:text-base">{copy.finalCopy}</p>
-            </div>
-            <div className="mt-7 flex flex-col gap-3 sm:flex-row">
-              <ProjectSupportTrigger
-                label={copy.support}
-                variant="accent"
-                className={`font-bold ${focusRingOnDark}`}
-              />
-              <Link
-                href={`/${locale}/projekte`}
-                className={`inline-flex min-h-11 items-center justify-center gap-2 rounded-[var(--radius-md)] border border-white/30 px-5 text-sm font-bold text-white transition hover:bg-white/10 ${focusRingOnDark}`}
-              >
-                {copy.discoverMore}
-                <ArrowRight className="size-4" aria-hidden />
-              </Link>
-            </div>
-          </section>
-
         </Container>
+
+        <ProjectSupportBar
+          funded={project.funded}
+          goal={project.goal}
+          supporters={project.supporters}
+          localeTag={localeTags[locale]}
+          copy={copy}
+          share={
+            <ProjectShareButton
+              copy={copy}
+              title={project.title}
+              description={project.summary}
+              image={withBasePath(project.image)}
+              className="sm:px-6"
+              tone="dark"
+            />
+          }
+        />
       </section>
 
       <ProjectSupportDialog

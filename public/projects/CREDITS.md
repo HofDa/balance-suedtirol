@@ -75,11 +75,22 @@ is still open; add a `credit` to the gallery entries once that is known.
 | Local asset | Content | Credit |
 | --- | --- | --- |
 | `widumwiese-kiens.webp` | Mown meadow beside the parish house in Kiens | not yet clarified |
+| `widumwiese-kiens-heute.webp` | Aerial view of the meadow today (map screenshot, "before") | source of the aerial image not yet clarified |
+| `widumwiese-kiens-vision.webp` | Visualisation of the enhanced meadow from above ("after") | creator of the visualisation not yet clarified |
 
 Supplied by the user for this project. Original:
 `IMG_20261006_131214106_HDR.jpg`. Rotated per EXIF, resized to at most 1600 px
 wide without cropping, stripped of metadata including GPS, and converted to
 WebP (quality 65, effort 6). The original is kept in `assets-source/projects/widumwiese-kiens/`.
+
+The before/after pair (8 October 2026) was supplied by the user as
+`map-2026-10-07T19_40_41.824Z.png` and `Luftbild eines blühenden Naturgartens.png`.
+The aerial photo was warped onto the visualisation's framing with a feature-based
+homography (house, roads and car park coincide), so the slider lines up. Both are
+1437 × 1020 px WebP (cropped to the area both images cover), quality 65, effort 6 (3.5 MB to 295 KB and 1.5 MB to 69 KB).
+Originals are in `assets-source/projects/widumwiese-kiens/`. Before publishing,
+clarify the aerial image's source and licence and the visualisation's author, and
+label the visualisation as such wherever it appears.
 
 ## Web compression pass (7 October 2026)
 

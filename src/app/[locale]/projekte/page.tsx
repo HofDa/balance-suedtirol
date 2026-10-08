@@ -67,7 +67,8 @@ export default async function ProjectsPage({ params }: { params: Promise<{ local
               status: translations.card.status,
               mainSponsor: translations.card.mainSponsor,
               placeholder: translations.card.placeholder,
-              partner: translations.card.partner
+              partner: translations.card.partner,
+              sponsorOpen: translations.card.sponsorOpen
             }}
             categoryLabels={categoryLabels}
           />

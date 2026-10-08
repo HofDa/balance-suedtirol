@@ -19,12 +19,20 @@ export const projects: Project[] = [
     locationApproximate: true,
     image: "/projects/widumwiese-kiens.webp",
     supporters: 0,
+    beforeAfter: {
+      before: "/projects/widumwiese-kiens-heute.webp",
+      after: "/projects/widumwiese-kiens-vision.webp",
+      beforeLabel: "Heute",
+      afterLabel: "Vision",
+      caption:
+        "Die Wiese beim Widum heute aus der Luft und als Visualisierung nach der geplanten Aufwertung: Hecke, Teich, Insektenparadies und wilde Ecke."
+    },
     whyItMatters: "Das Widum in Kiens liegt idyllisch am Ortsrand nahe der Felder und des Waldes. Sein großer Garten ist eine Mähwiese mit einigen großwüchsigen Apfelbäumen alter Sorten und einer Hecke aus hauptsächlich nicht heimischen Sträuchern. Diese Fläche bietet großes Potenzial für eine wenig aufwendige, aber ökologisch wertvolle Aufwertung – in einem Gebiet, in dem durch Verbauung und Intensivierung wenig Platz für Natur geblieben ist.",
     impact: [
-      { value: "1", label: "Hecke für Vögel und Kleinsäuger" },
-      { value: "1", label: "wilde Ecke für Igel und weitere Lebewesen" },
-      { value: "1", label: "Teich für Wasserlebewesen" },
-      { value: "1", label: "kleines Paradies für Insekten" }
+      { value: "45 m", label: "Hecke für Vögel und Kleinsäuger" },
+      { value: "50 m²", label: "Insektenparadies mit Wildbieneninsel" },
+      { value: "40 m²", label: "wilde Ecke für Igel & Co." },
+      { value: "1", label: "Teich für Wasserlebewesen" }
     ],
     monitoring: {
       species: "Vögel, Igel, Amphibien, Libellen, Wildbienen und weitere Insekten",
@@ -191,13 +199,21 @@ const projectTranslations: Record<Exclude<Locale, "de">, Record<string, Partial<
       summary: "Il prato presso la canonica viene valorizzato dal punto di vista ecologico per creare habitat per uccelli, ricci, anfibi, insetti e altri esseri viventi.",
       municipality: "Chienes",
       organization: "Da chiarire",
+      beforeAfter: {
+        before: "/projects/widumwiese-kiens-heute.webp",
+        after: "/projects/widumwiese-kiens-vision.webp",
+        beforeLabel: "Oggi",
+        afterLabel: "Visione",
+        caption:
+          "Il prato presso la canonica oggi dall’alto e come visualizzazione dopo la valorizzazione prevista: siepe, stagno, paradiso per gli insetti e angolo selvatico."
+      },
       whyItMatters: "La canonica di Chienes si trova in una posizione idilliaca ai margini del paese, vicino ai campi e al bosco. Il suo grande giardino è un prato da sfalcio con alcuni grandi meli di antiche varietà e una siepe composta principalmente da arbusti non autoctoni. Quest’area offre un grande potenziale per una valorizzazione semplice ma ecologicamente preziosa, in una zona dove l’edificazione e l’intensificazione hanno lasciato poco spazio alla natura.",
       description: "L’area viene valorizzata dal punto di vista ecologico con interventi piccoli ma efficaci. Si piantano alcuni meli aggiuntivi, si rimuovono gli arbusti non autoctoni e si piantano arbusti autoctoni su due file. Si realizzano un piccolo stagno, un habitat per gli insetti con un’isola per le api selvatiche e un angolo selvatico per i ricci e altri esseri viventi. La nuova siepe offre cibo e siti di nidificazione agli uccelli. Il piccolo stagno crea habitat per libellule, anfibi e altri organismi acquatici. Con questo progetto rispondiamo all’incarico della diocesi di custodire e promuovere il creato.",
       impact: [
-        { value: "1", label: "siepe per uccelli e piccoli mammiferi" },
-        { value: "1", label: "angolo selvatico per ricci e altri esseri viventi" },
-        { value: "1", label: "stagno per organismi acquatici" },
-        { value: "1", label: "piccolo paradiso per gli insetti" }
+        { value: "45 m", label: "siepe per uccelli e piccoli mammiferi" },
+        { value: "50 m²", label: "paradiso per gli insetti con isola per le api selvatiche" },
+        { value: "40 m²", label: "angolo selvatico per ricci & Co." },
+        { value: "1", label: "stagno per organismi acquatici" }
       ],
       monitoring: {
         species: "Uccelli, ricci, anfibi, libellule, api selvatiche e altri insetti",
@@ -323,13 +339,21 @@ const projectTranslations: Record<Exclude<Locale, "de">, Record<string, Partial<
       title: "Widum meadow in Kiens",
       summary: "The meadow beside the parish house will be enhanced ecologically to create habitat for birds, hedgehogs, amphibians, insects and other wildlife.",
       organization: "To be clarified",
+      beforeAfter: {
+        before: "/projects/widumwiese-kiens-heute.webp",
+        after: "/projects/widumwiese-kiens-vision.webp",
+        beforeLabel: "Today",
+        afterLabel: "Vision",
+        caption:
+          "The meadow beside the parish house today from the air and as a visualisation after the planned enhancement: hedge, pond, insect paradise and wild corner."
+      },
       whyItMatters: "The parish house in Kiens sits in an idyllic spot on the edge of the village, close to fields and woodland. Its large garden is a hay meadow with several tall apple trees of old varieties and a hedge made up mainly of non-native shrubs. This area offers considerable potential for straightforward yet ecologically valuable improvements in a place where development and intensive land use have left little space for nature.",
       description: "Small but effective measures will enhance the area ecologically. Several additional apple trees will be planted, non-native shrubs removed and native shrubs planted in a double row. A small pond, an insect habitat with an area for wild bees, and a wild corner for hedgehogs and other wildlife will be created. The new hedge will provide food and nesting sites for birds. The small pond will create habitat for dragonflies, amphibians and other aquatic organisms. Through this project we fulfil the diocese’s call to preserve and nurture creation.",
       impact: [
-        { value: "1", label: "hedge for birds and small mammals" },
-        { value: "1", label: "wild corner for hedgehogs and other wildlife" },
-        { value: "1", label: "pond for aquatic wildlife" },
-        { value: "1", label: "small paradise for insects" }
+        { value: "45 m", label: "hedge for birds and small mammals" },
+        { value: "50 m²", label: "insect paradise with a wild bee island" },
+        { value: "40 m²", label: "wild corner for hedgehogs & co." },
+        { value: "1", label: "pond for aquatic wildlife" }
       ],
       monitoring: {
         species: "Birds, hedgehogs, amphibians, dragonflies, wild bees and other insects",

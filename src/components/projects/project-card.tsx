@@ -22,7 +22,8 @@ export function ProjectCard({ project, locale }: { project: Project; locale: Loc
         statusValue: translations.projectsPage.statuses[project.status],
         mainSponsor: translations.card.mainSponsor,
         placeholder: translations.card.placeholder,
-        partner: translations.card.partner
+        partner: translations.card.partner,
+        sponsorOpen: translations.card.sponsorOpen
       }}
     />
   );

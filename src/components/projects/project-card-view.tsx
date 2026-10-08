@@ -19,6 +19,7 @@ export type ProjectCardViewCopy = {
   mainSponsor: string;
   placeholder: string;
   partner: string;
+  sponsorOpen: string;
 };
 
 export function ProjectCardView({
@@ -96,17 +97,16 @@ export function ProjectCardView({
 
         <p className="mt-2 line-clamp-3 text-sm leading-6 text-[var(--color-muted)]">{project.summary}</p>
 
-        {project.mainSponsor ? (
-          <ProjectCardSponsor
-            mainSponsor={project.mainSponsor}
-            additionalCount={project.additionalSponsorCount}
-            copy={{
-              mainSponsor: copy.mainSponsor,
-              placeholder: copy.placeholder,
-              partner: copy.partner
-            }}
-          />
-        ) : null}
+        <ProjectCardSponsor
+          mainSponsor={project.mainSponsor}
+          additionalCount={project.additionalSponsorCount}
+          copy={{
+            mainSponsor: copy.mainSponsor,
+            placeholder: copy.placeholder,
+            partner: copy.partner,
+            sponsorOpen: copy.sponsorOpen
+          }}
+        />
 
         <div className="mt-auto pt-5">
           <div className="flex items-end justify-between gap-3 border-t border-[var(--color-line)] pt-4">

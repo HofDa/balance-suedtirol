@@ -111,7 +111,7 @@ const homeStory: Localized<HomeStoryCopy> = {
       profile: {
         levels: { "1000": "1.000 m", "2000": "2.000 m", "3000": "3.000 m" },
         peak: "3.905 m",
-        note: "Vom Talboden mit Weinbergen, Obstwiesen und Trockenmauern über den Wald aus Laubbäumen, Fichten und Lärchen und die Almen oberhalb der Waldgrenze bis zu Fels und Gletscher in der Gipfelregion."
+        note: "Vom Talboden über Wälder und Almen bis hinauf zu Fels und Gletscher."
       }
     },
     figures: {
@@ -227,7 +227,7 @@ const homeStory: Localized<HomeStoryCopy> = {
       profile: {
         levels: { "1000": "1.000 m", "2000": "2.000 m", "3000": "3.000 m" },
         peak: "3.905 m",
-        note: "Dal fondovalle con vigneti, frutteti e muretti a secco, attraverso il bosco di latifoglie, abeti rossi e larici e gli alpeggi sopra il limite del bosco, fino a roccia e ghiaccio nella zona delle vette."
+        note: "Dal fondovalle, attraverso boschi e alpeggi, fino a roccia e ghiaccio in quota."
       }
     },
     figures: {
@@ -343,7 +343,7 @@ const homeStory: Localized<HomeStoryCopy> = {
       profile: {
         levels: { "1000": "1,000 m", "2000": "2,000 m", "3000": "3,000 m" },
         peak: "3,905 m",
-        note: "From the valley floor with vineyards, orchards and dry-stone walls, through the forest of broadleaves, spruce and larch and the high pastures above the treeline, up to rock and glacier around the summits."
+        note: "From the valley floor, through forests and high pastures, up to rock and glacier."
       }
     },
     figures: {

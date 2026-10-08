@@ -12,7 +12,7 @@ import { SceneNumber } from "./scene-number";
  *
  * Die sichtbare Karte hebt ihre Nummer in der Grafik hervor: Marken tragen
  * `data-factor`, der gemeinsame Vorfahr `data-legend-scope`; die Hervorhebung
- * selbst steht in globals.css und gilt nur unter `sm`, wo die Reihe sichtbar ist.
+ * selbst steht in globals.css.
  *
  * `revealed` und `follow` gehören zum Talboden: Karten jenseits von `revealed`
  * bleiben verborgen (`data-sweep-*`), und solange `follow` gilt, rückt die
@@ -120,7 +120,7 @@ export function LegendCarousel({
       <ol
         ref={scroller}
         onPointerDown={() => (touched.current = true)}
-        className="-mx-5 flex snap-x snap-mandatory gap-3 overflow-x-auto px-5 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        className="-mx-5 flex snap-x snap-mandatory gap-3 overflow-x-auto px-5 pb-1 sm:mx-0 sm:gap-4 sm:px-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
       >
         {items.map(([title, copy], index) => (
           <li
@@ -128,7 +128,7 @@ export function LegendCarousel({
             {...(revealed !== undefined && { "data-sweep-item": "", "data-sweep-shown": index < revealed })}
             {...(stagger && { "data-home-reveal": "slide", style: { "--home-reveal-delay": `${index * 90}ms` } as CSSProperties })}
             className={cn(
-              "w-[84%] shrink-0 snap-center rounded-[var(--radius-md)] p-5",
+              "w-[84%] shrink-0 snap-center sm:w-[24rem] rounded-[var(--radius-md)] p-5",
               dark ? "bg-white/[0.06]" : "bg-[var(--color-surface)]/70 ring-1 ring-[var(--color-line)]"
             )}
           >

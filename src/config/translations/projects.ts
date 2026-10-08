@@ -95,6 +95,12 @@ export const projectsCopy = {
       fundingProgress: "Finanzierungsstand",
       fundingTarget: "von {goal} Zielsumme",
       fundingOpen: "Das Finanzierungsziel steht noch nicht fest. Sobald es die Trägerorganisation festgelegt hat, steht der Finanzierungsstand hier.",
+      fundingRaised: "gesammelt",
+      fundingPercent: "finanziert",
+      fundingRemaining: "noch offen",
+      fundingGoalOpen: "Ziel wird festgelegt",
+      fundingGoal: "Ziel",
+      fundingGoalPending: "offen",
       supporters: "Unterstützer",
       support: "Projekt unterstützen",
       tax: "Steuerlich absetzbar",
@@ -118,6 +124,9 @@ export const projectsCopy = {
       mainSponsor: "Hauptinvestor",
       supportedBy: "Unterstützt von",
       supportingSponsors: "Weitere Förderpartner",
+      coSponsors: "Mitinvestoren",
+      sponsorOpen: "Hier könnte Ihr Logo oder Name stehen",
+      sponsorOpenShort: "Ihr Logo",
       relatedEyebrow: "Weitere Projekte",
       relatedTitle: "Ähnliche Projekte in Südtirol",
       showAll: "Alle anzeigen",
@@ -134,7 +143,7 @@ export const projectsCopy = {
       volunteeringCopy: "Als ehrenamtliche Person unterstützt du bei Pflanzaktionen und Monitoring vor Ort. Wir senden dir alle Details per E-Mail.",
       confirm: "Jetzt verbindlich bestätigen"
     },
-    card: { view: "Projekt ansehen", of: "von", supporters: "Unterstützer", funding: "Finanzierung", open: "offen", status: "Projektstatus", mainSponsor: "Hauptinvestor", placeholder: "Platzhalter", partner: "Partner" }
+    card: { view: "Projekt ansehen", of: "von", supporters: "Unterstützer", funding: "Finanzierung", open: "offen", status: "Projektstatus", mainSponsor: "Hauptinvestor", placeholder: "Platzhalter", partner: "Partner", sponsorOpen: "Hier könnte Ihr Logo oder Name stehen" }
   },
   it: {
     projectSubmission: {
@@ -232,6 +241,12 @@ export const projectsCopy = {
       fundingProgress: "Stato del finanziamento",
       fundingTarget: "su {goal} previsti",
       fundingOpen: "L’obiettivo di finanziamento non è ancora stabilito. Non appena l’organizzazione promotrice lo definirà, lo stato del finanziamento comparirà qui.",
+      fundingRaised: "raccolti",
+      fundingPercent: "finanziato",
+      fundingRemaining: "mancanti",
+      fundingGoalOpen: "Obiettivo da definire",
+      fundingGoal: "Obiettivo",
+      fundingGoalPending: "da definire",
       supporters: "sostenitori",
       support: "Sostieni il progetto",
       tax: "Fiscalmente detraibile",
@@ -255,6 +270,9 @@ export const projectsCopy = {
       mainSponsor: "Investitore principale",
       supportedBy: "Con il sostegno di",
       supportingSponsors: "Altri partner",
+      coSponsors: "Co-investitori",
+      sponsorOpen: "Qui potrebbe esserci il tuo logo o nome",
+      sponsorOpenShort: "Il tuo logo",
       relatedEyebrow: "Altri progetti",
       relatedTitle: "Progetti simili in Alto Adige",
       showAll: "Mostra tutti",
@@ -271,7 +289,7 @@ export const projectsCopy = {
       volunteeringCopy: "Come volontario o volontaria puoi partecipare alle attività di piantumazione e monitoraggio sul posto. Ti invieremo tutti i dettagli via e-mail.",
       confirm: "Conferma"
     },
-    card: { view: "Vedi il progetto", of: "su", supporters: "sostenitori", funding: "Finanziamento", open: "mancanti", status: "Stato del progetto", mainSponsor: "Investitore principale", placeholder: "Segnaposto", partner: "Partner" }
+    card: { view: "Vedi il progetto", of: "su", supporters: "sostenitori", funding: "Finanziamento", open: "mancanti", status: "Stato del progetto", mainSponsor: "Investitore principale", placeholder: "Segnaposto", partner: "Partner", sponsorOpen: "Qui potrebbe esserci il tuo logo o nome" }
   },
   en: {
     projectSubmission: {
@@ -369,6 +387,12 @@ export const projectsCopy = {
       fundingProgress: "Funding progress",
       fundingTarget: "of {goal} target",
       fundingOpen: "The funding target has not been set yet. As soon as the lead organisation defines it, the funding progress will appear here.",
+      fundingRaised: "raised",
+      fundingPercent: "funded",
+      fundingRemaining: "to go",
+      fundingGoalOpen: "Goal to be set",
+      fundingGoal: "Goal",
+      fundingGoalPending: "to be set",
       supporters: "supporters",
       support: "Support this project",
       tax: "Tax deductible",
@@ -392,6 +416,9 @@ export const projectsCopy = {
       mainSponsor: "Lead investor",
       supportedBy: "Supported by",
       supportingSponsors: "Supporting partners",
+      coSponsors: "Co-investors",
+      sponsorOpen: "Your logo or name could appear here",
+      sponsorOpenShort: "Your logo",
       relatedEyebrow: "More projects",
       relatedTitle: "Similar projects in South Tyrol",
       showAll: "View all",
@@ -408,6 +435,6 @@ export const projectsCopy = {
       volunteeringCopy: "As a volunteer, you can help with planting and on-site monitoring. We will send you all details by email.",
       confirm: "Confirm contribution"
     },
-    card: { view: "View project", of: "of", supporters: "supporters", funding: "Funding", open: "remaining", status: "Project status", mainSponsor: "Lead investor", placeholder: "Placeholder", partner: "Partner" }
+    card: { view: "View project", of: "of", supporters: "supporters", funding: "Funding", open: "remaining", status: "Project status", mainSponsor: "Lead investor", placeholder: "Placeholder", partner: "Partner", sponsorOpen: "Your logo or name could appear here" }
   }
 } as const;

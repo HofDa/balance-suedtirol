@@ -1,8 +1,16 @@
 import { Label } from "@/components/ui/label";
-import { Surface } from "@/components/ui/surface";
 import type { Project } from "@/types/project";
 import { SponsorIdentity } from "./sponsor-identity";
 
+const emptyTile =
+  "grid place-items-center rounded-[var(--radius-lg)] border border-dashed border-[var(--color-forest)]/30 px-4 text-center text-sm text-[var(--color-muted)]";
+
+/**
+ * Wer das Projekt finanziert, in zwei Rängen: links der Hauptinvestor als
+ * große Kachel mit kräftiger Kopflinie, rechts die Mitinvestoren als kleinere,
+ * ruhigere Kacheln. Größe und Linie tragen die Rangfolge, nicht nur das Label.
+ * Fehlt ein Rang noch, bleibt die Stelle als gestrichelte Einladung sichtbar.
+ */
 export function ProjectSponsors({
   project,
   copy
@@ -12,13 +20,15 @@ export function ProjectSponsors({
     sponsorsEyebrow: string;
     sponsorsTitle: string;
     mainSponsor: string;
-    supportingSponsors: string;
+    coSponsors: string;
+    sponsorOpen: string;
+    sponsorOpenShort: string;
     placeholder: string;
     website: string;
   };
 }) {
-  const supporting = project.otherSponsors ?? [];
-  if (!project.mainSponsor && supporting.length === 0) return null;
+  const main = project.mainSponsor;
+  const others = project.otherSponsors ?? [];
 
   return (
     <section className="mt-16" aria-labelledby="project-sponsors-title">
@@ -30,47 +40,46 @@ export function ProjectSponsors({
         {copy.sponsorsTitle}
       </h2>
 
-      {project.mainSponsor ? (
-        <Surface level="sheet" className="mt-6 grid gap-6 sm:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] sm:items-center">
-          <div>
-            <Label size="dense" tone="muted" className="mb-3">
-              {copy.mainSponsor}{project.mainSponsor.isPlaceholder ? " · Demo" : ""}
-            </Label>
-            <SponsorIdentity sponsor={project.mainSponsor} size="featured" linked copy={copy} />
-          </div>
-          <div className="border-t border-[var(--color-line)] pt-5 sm:border-l sm:border-t-0 sm:pl-8 sm:pt-0">
-            <p className="text-sm font-semibold text-[var(--color-ink)]">{project.mainSponsor.name}</p>
-            {project.mainSponsor.contribution ? (
-              <p className="mt-2 max-w-[52ch] text-sm leading-6 text-[var(--color-muted)]">
-                {project.mainSponsor.contribution}
-              </p>
-            ) : (
-              <p className="mt-2 text-sm leading-6 text-[var(--color-muted)]">
-                {copy.mainSponsor}
-              </p>
-            )}
-          </div>
-        </Surface>
-      ) : null}
-
-      {supporting.length > 0 ? (
-        <div className="mt-8">
-          <Label size="block" tone="muted">
-            {copy.supportingSponsors}
+      <div className="mt-8 grid gap-8 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-10">
+        <div>
+          <Label size="block">
+            {copy.mainSponsor}
+            {main?.isPlaceholder ? " · Demo" : ""}
           </Label>
-          <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-            {supporting.map((sponsor) => (
-              <Surface
-                key={sponsor.name}
-                level="inset"
-                className="flex min-h-24 items-center justify-center text-center"
-              >
-                <SponsorIdentity sponsor={sponsor} linked copy={copy} />
-              </Surface>
-            ))}
-          </div>
+          {main ? (
+            <div className="mt-3 flex min-h-52 flex-col justify-center gap-4 rounded-[var(--radius-lg)] border border-[var(--color-line)] border-t-[3px] border-t-[var(--color-forest)] bg-white p-8">
+              <SponsorIdentity sponsor={main} size="featured" linked copy={copy} />
+              {main.contribution ? (
+                <p className="max-w-[44ch] text-sm leading-6 text-[var(--color-muted)]">{main.contribution}</p>
+              ) : null}
+            </div>
+          ) : (
+            <p className={`${emptyTile} mt-3 min-h-52 border-t-[3px] border-t-[var(--color-forest)]/50`}>{copy.sponsorOpen}</p>
+          )}
         </div>
-      ) : null}
+
+        <div>
+          <Label size="block" tone="muted">
+            {copy.coSponsors}
+          </Label>
+          <ul className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-3">
+            {others.length > 0
+              ? others.map((sponsor) => (
+                  <li
+                    key={sponsor.name}
+                    className="grid min-h-24 place-items-center rounded-[var(--radius-lg)] border border-[var(--color-line)] bg-white/60 p-4 text-center"
+                  >
+                    <SponsorIdentity sponsor={sponsor} linked copy={copy} />
+                  </li>
+                ))
+              : [0, 1, 2].map((slot) => (
+                  <li key={slot} className={`${emptyTile} min-h-24`}>
+                    {copy.sponsorOpenShort}
+                  </li>
+                ))}
+          </ul>
+        </div>
+      </div>
     </section>
   );
 }

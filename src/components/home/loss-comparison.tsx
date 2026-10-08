@@ -24,6 +24,9 @@ function ease(t: number) {
  * Bewegung (prefers-reduced-motion) gibt es keine Fahrt: Regler in der Mitte,
  * Legende vollständig. Das Ausblenden hängt in globals.css an
  * `.home-motion-ready`, damit sie ohne JavaScript nie verborgen bleibt.
+ *
+ * Die Legende ist auf allen Bildschirmen dieselbe Kartenreihe unter der
+ * Grafik; ein Tipp auf eine Nummer holt ihre Karte in die Mitte.
  */
 export function LossComparison({
   before,
@@ -51,7 +54,6 @@ export function LossComparison({
   const [position, setPosition] = useState(0);
   const [revealed, setRevealed] = useState(0);
   const [sweeping, setSweeping] = useState(false);
-  const [selectedLegend, setSelectedLegend] = useState<number | null>(null);
   const scopeRef = useRef<HTMLDivElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
   const viewportRef = useRef<HTMLDivElement>(null);
@@ -153,14 +155,7 @@ export function LossComparison({
   const showLegend = (index: number) => {
     stopSweep();
     setRevealed(markers.length);
-    setSelectedLegend(index);
-    if (window.matchMedia("(max-width: 639px)").matches) {
-      scopeRef.current?.dispatchEvent(new CustomEvent("legend:show", { detail: index }));
-    } else {
-      const entry = scopeRef.current?.querySelector<HTMLElement>(`[data-loss-legend-index="${index}"]`);
-      entry?.focus({ preventScroll: true });
-      entry?.scrollIntoView({ block: "nearest", behavior: "instant" });
-    }
+    scopeRef.current?.dispatchEvent(new CustomEvent("legend:show", { detail: index }));
   };
 
   return (
@@ -204,7 +199,7 @@ export function LossComparison({
                               n={index + 1}
                               tone="dark"
                               marker
-                              className="profile-marker profile-marker-dark relative"
+                              className={`profile-marker profile-marker-dark relative`}
                               style={{ "--marker-delay": `${index * 0.7}s` } as CSSProperties}
                             />
                           </button>
@@ -237,7 +232,7 @@ export function LossComparison({
         </div>
         <figcaption className="mt-3 text-xs leading-5 text-white/60">{caption}</figcaption>
       </figure>
-      <LegendGrid items={items} revealed={revealed} aside={aside} pagerLabel={pagerLabel} follow={sweeping} onActiveChange={showMarker} selected={selectedLegend} />
+      <LegendGrid items={items} revealed={revealed} aside={aside} pagerLabel={pagerLabel} follow={sweeping} onActiveChange={showMarker} />
     </div>
   );
 }
@@ -248,8 +243,7 @@ const LegendGrid = memo(function LegendGrid({
   aside,
   pagerLabel,
   follow,
-  onActiveChange,
-  selected
+  onActiveChange
 }: {
   items: ReadonlyArray<readonly [string, string]>;
   revealed: number;
@@ -257,13 +251,11 @@ const LegendGrid = memo(function LegendGrid({
   pagerLabel: string;
   follow: boolean;
   onActiveChange: (index: number) => void;
-  selected: number | null;
 }) {
   return (
     <div className="mt-8 grid grid-cols-1 gap-10 sm:mt-10 lg:gap-24">
-      {/* Telefon: wischbare Kartenreihe, die der Reglerfahrt folgt. */}
+      {/* Wischbare Kartenreihe, die der Reglerfahrt folgt. */}
       <LegendCarousel
-        className="sm:hidden"
         items={items}
         tone="dark"
         pagerLabel={pagerLabel}
@@ -271,25 +263,6 @@ const LegendGrid = memo(function LegendGrid({
         follow={follow}
         onActiveChange={onActiveChange}
       />
-      <ol className="hidden gap-x-10 gap-y-5 sm:grid sm:grid-cols-2 lg:grid-cols-3">
-        {items.map(([title, copy], index) => (
-          <li
-            key={title}
-            data-sweep-item
-            data-sweep-shown={index < revealed}
-            data-loss-legend-index={index}
-            data-selected={index === selected}
-            tabIndex={-1}
-            className={`grid grid-cols-[1.5rem_minmax(0,1fr)] gap-x-3 border-t border-white/15 pt-5 data-[selected=true]:border-[var(--color-moss)] ${focusRingOnDark}`}
-          >
-            <SceneNumber n={index + 1} tone="dark" className="mt-px ring-0" />
-            <div>
-              <h3 className="font-semibold tracking-[-0.01em]">{title}</h3>
-              <p className="mt-1 max-w-[44ch] leading-7 text-white/70">{copy}</p>
-            </div>
-          </li>
-        ))}
-      </ol>
       {aside}
     </div>
   );

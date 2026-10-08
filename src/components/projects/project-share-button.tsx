@@ -5,7 +5,7 @@ import { Check, Copy, Share2, X, Download, ArrowUpRight, Loader2 } from "lucide-
 import { createProjectStoryImage } from "@/lib/project-story-image";
 import Image from "next/image";
 import { withBasePath } from "@/lib/public-path";
-import { focusRing } from "@/components/ui/focus";
+import { focusRing, focusRingOnDark } from "@/components/ui/focus";
 
 interface ShareCopy {
   shareProject: string;
@@ -22,7 +22,7 @@ interface ShareCopy {
   downloadFailed: string;
 }
 
-export function ProjectShareButton({ copy, title, description, image }: { copy: ShareCopy; title: string; description: string; image: string }) {
+export function ProjectShareButton({ copy, title, description, image, className = "mt-3 w-full", tone = "light" }: { copy: ShareCopy; title: string; description: string; image: string; className?: string; tone?: "light" | "dark" }) {
   const dialogRef = useRef<HTMLDialogElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const [open, setOpen] = useState(false);
@@ -104,7 +104,7 @@ export function ProjectShareButton({ copy, title, description, image }: { copy: 
 
   return (
     <>
-      <button ref={triggerRef} type="button" onClick={() => { setOpen(true); setStatus(null); setInstagramOpen(false); }} className={`mt-3 flex min-h-12 w-full items-center justify-center gap-2 rounded-[var(--radius-md)] border border-[var(--color-forest)]/30 bg-white px-4 py-3 text-sm font-bold text-[var(--color-forest)] transition hover:bg-[var(--color-sage)] hover:shadow-sm ${focusRing}`}>
+      <button ref={triggerRef} type="button" onClick={() => { setOpen(true); setStatus(null); setInstagramOpen(false); }} className={`${className} flex min-h-12 items-center justify-center gap-2 whitespace-nowrap rounded-[var(--radius-md)] border px-4 py-3 text-sm font-bold transition ${tone === "dark" ? `border-white/30 bg-transparent text-white hover:bg-white/10 ${focusRingOnDark}` : `border-[var(--color-forest)]/30 bg-white text-[var(--color-forest)] hover:bg-[var(--color-sage)] hover:shadow-sm ${focusRing}`}`}>
         <Share2 className="size-4" aria-hidden />{copy.shareProject}
       </button>
       <dialog ref={dialogRef} aria-labelledby="project-share-title" onCancel={() => setOpen(false)} onClick={(event) => { if (event.target === event.currentTarget) setOpen(false); }} className="fixed inset-x-0 bottom-0 top-auto m-0 max-h-[90dvh] w-full max-w-none overflow-y-auto rounded-t-3xl border-0 bg-white p-0 text-[var(--color-forest)] shadow-2xl backdrop:bg-black/40 backdrop:backdrop-blur-sm sm:inset-0 sm:m-auto sm:max-w-lg sm:rounded-3xl">

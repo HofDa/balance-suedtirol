@@ -20,7 +20,7 @@ interface ProjectListClientProps {
   categories: Array<{ id: ProjectCategoryId; label: string }>;
   allCategoryLabel: string;
   copy: ReturnType<typeof getTranslations>["projectsPage"];
-  cardCopy: { view: string; status: string; mainSponsor: string; placeholder: string; partner: string };
+  cardCopy: { view: string; status: string; mainSponsor: string; placeholder: string; partner: string; sponsorOpen: string };
   categoryLabels: Record<ProjectCategoryId, string>;
 }
 
@@ -270,7 +270,8 @@ export function ProjectListClient({
                 statusValue: copy.statuses[project.status],
                 mainSponsor: cardCopy.mainSponsor,
                 placeholder: cardCopy.placeholder,
-                partner: cardCopy.partner
+                partner: cardCopy.partner,
+                sponsorOpen: cardCopy.sponsorOpen
               }}
             />
           ))}

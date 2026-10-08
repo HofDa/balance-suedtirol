@@ -803,3 +803,110 @@ button {
     padding: 0 !important;
   }
 }
+
+/* Höhenschnitt unter dem Hero (biodiversity-richness.tsx): erst bergauf
+   wachsen, dann die Nummern nacheinander mit ihrer Legendenspalte, je ein
+   Puls, danach Ruhe. Die Verzögerungen kommen als `--habitat-delay`. */
+@media (prefers-reduced-motion: no-preference) {
+  /* Die Übergänge hängen nur am sichtbaren Zustand: Verborgen wird sofort.
+     Sonst liefe das Ausblenden beim Laden mit derselben Verzögerung wie das
+     Einblenden, und Spalten mit langer Verzögerung stünden schon da, wenn der
+     Abschnitt ins Bild kommt. */
+  [data-home-page].home-motion-ready .richness-scene :is(.habitat-grow, .habitat-fade) {
+    transition: none;
+  }
+
+  [data-home-page].home-motion-ready .richness-scene[data-home-visible="true"] .habitat-grow {
+    transition: transform 1100ms cubic-bezier(0.16, 1, 0.3, 1) var(--habitat-delay, 0ms);
+  }
+
+  [data-home-page].home-motion-ready .richness-scene[data-home-visible="true"] .habitat-fade {
+    transition: opacity 700ms ease-out var(--habitat-delay, 0ms);
+  }
+
+  /* Legendenspalte steigt mit ihrer Nummer auf. */
+  [data-home-page].home-motion-ready .richness-scene .richness-rise {
+    transform: translateY(10px);
+  }
+
+  [data-home-page].home-motion-ready .richness-scene[data-home-visible="true"] .richness-rise {
+    transform: none;
+    transition:
+      opacity 700ms ease-out var(--habitat-delay, 0ms),
+      transform 700ms cubic-bezier(0.16, 1, 0.3, 1) var(--habitat-delay, 0ms);
+  }
+
+  /* Nummer ploppt kurz auf, wenn sie erscheint. */
+  [data-home-page].home-motion-ready .richness-scene[data-home-visible="true"] .richness-pop > * {
+    animation: richness-pop 520ms cubic-bezier(0.34, 1.56, 0.64, 1) var(--habitat-delay, 0ms) backwards;
+  }
+
+  /* Ein Puls je Nummer, direkt nach dem Erscheinen, statt endlos. */
+  [data-home-page].home-motion-ready .richness-scene[data-home-visible="true"] .profile-marker::after {
+    animation: profile-marker 1.8s ease-out calc(var(--habitat-delay, 0ms) + 300ms) 1;
+  }
+
+  /* Leiserer Wind; Sonne, Wolke, Regen und Vögel nur einmal, nachdem alle
+     Nummern stehen. */
+  [data-home-page].home-motion-ready .richness-scene[data-home-visible="true"] .profile-sway {
+    animation-name: richness-sway;
+  }
+
+  [data-home-page].home-motion-ready .richness-scene[data-home-visible="true"] .profile-rays {
+    animation: profile-rays 6s ease-in-out 4.4s 1 both;
+  }
+
+  [data-home-page].home-motion-ready .richness-scene[data-home-visible="true"] .profile-cloud {
+    animation: profile-cloud 9s ease-in-out 4.4s 1 both;
+  }
+
+  [data-home-page].home-motion-ready .richness-scene[data-home-visible="true"] .profile-rain {
+    animation: profile-rain 0.9s linear 4.4s 8;
+  }
+
+  [data-home-page].home-motion-ready .richness-scene[data-home-visible="true"] .profile-bird {
+    animation: profile-bird 9s ease-in-out calc(4.4s + var(--bird-delay, 0s) * -1) 1 both;
+  }
+
+  [data-home-page].home-motion-ready .richness-scene[data-home-visible="true"] .profile-wing {
+    animation: profile-wing 0.7s ease-in-out calc(4.4s + var(--bird-delay, 0s) * -1) 12 alternate;
+  }
+}
+
+/* Desktop: Hover oder Fokus auf eine Nummer hebt ihre Legendenspalte hervor
+   und umgekehrt; die anderen treten zurück. */
+@media (hover: hover) and (min-width: 640px) {
+  .richness-scene [data-link] > * {
+    transition: opacity 250ms ease-out, transform 250ms ease-out;
+  }
+
+  .richness-scene:has([data-link="0"]:is(:hover, :focus-within)) [data-link]:not([data-link="0"]) > *,
+  .richness-scene:has([data-link="1"]:is(:hover, :focus-within)) [data-link]:not([data-link="1"]) > *,
+  .richness-scene:has([data-link="2"]:is(:hover, :focus-within)) [data-link]:not([data-link="2"]) > *,
+  .richness-scene:has([data-link="3"]:is(:hover, :focus-within)) [data-link]:not([data-link="3"]) > * {
+    opacity: 0.35;
+  }
+
+  .richness-scene:has([data-link="0"]:is(:hover, :focus-within)) .richness-pop[data-link="0"] > *,
+  .richness-scene:has([data-link="1"]:is(:hover, :focus-within)) .richness-pop[data-link="1"] > *,
+  .richness-scene:has([data-link="2"]:is(:hover, :focus-within)) .richness-pop[data-link="2"] > *,
+  .richness-scene:has([data-link="3"]:is(:hover, :focus-within)) .richness-pop[data-link="3"] > * {
+    transform: scale(1.3);
+  }
+}
+
+@keyframes richness-pop {
+  from {
+    transform: scale(0.4);
+  }
+}
+
+@keyframes richness-sway {
+  0%,
+  100% {
+    transform: skewX(0.3deg);
+  }
+  50% {
+    transform: skewX(-0.7deg);
+  }
+}

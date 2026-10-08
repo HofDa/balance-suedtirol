@@ -58,6 +58,7 @@ export function HabitatLoss({ locale }: { locale: Locale }) {
             beforeLabel={t.scene.before}
             afterLabel={t.scene.after}
             sliderLabel={t.scene.slider}
+            replayLabel={t.scene.replay}
             aside={
               <div data-home-reveal="rise" className="lg:mx-auto lg:w-full lg:max-w-3xl lg:text-center">
                 <dl className="grid grid-cols-2 gap-x-6 gap-y-8 lg:gap-x-16">

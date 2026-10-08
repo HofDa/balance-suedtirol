@@ -253,7 +253,9 @@ def add(delay, elements, kind="grow", extra=""):
 
 
 def veg_delay(x):
-    return 380 + int(x / W * 650)
+    # Bergauf in rund 1,5 s: langsam genug, dass man den Weg vom Talboden zum
+    # Gipfel als Bewegung liest. Danach erscheinen die Nummern (biodiversity-richness.tsx).
+    return 380 + int(x / W * 1500)
 
 
 # Hintergrund: ferne Kette, dann die blassen Dolomiten.
@@ -318,9 +320,9 @@ while x < W + 10:
 # Klima: Sonne im Süden, Regen am Alpenhauptkamm. Zuletzt die Vögel.
 # Sonne nah am linken Rand: Ab `lg` steht ihre Nummer über der ersten
 # Legendenspalte, also ganz links.
-add(1000, sun(62, 104, 24), "fade")
-add(1080, cloud(1316, 118, 1.15), "fade")
-add(1160, bird(560, 96, 1) + bird(586, 110, 0.75, -1.7) + bird(540, 116, 0.6, -3.1), "fade")
+add(1700, sun(62, 104, 24), "fade")
+add(1800, cloud(1316, 118, 1.15), "fade")
+add(1900, bird(560, 96, 1) + bird(586, 110, 0.75, -1.7) + bird(540, 116, 0.6, -3.1), "fade")
 
 # Höhenlinien hinter allem: gestrichelt, sehr leise.
 levels = {"1000": y(1000), "2000": y(2000), "3000": y(3000)}

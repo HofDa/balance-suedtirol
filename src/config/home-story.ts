@@ -54,7 +54,7 @@ export type HomeStoryCopy = {
     /** Sieben Ursachen; die Szene nummeriert in dieser Reihenfolge. */
     pressures: [string, string][];
     /** Beschriftung der Szene „früher | heute“. */
-    scene: { before: string; after: string; slider: string; note: string };
+    scene: { before: string; after: string; slider: string; note: string; replay: string };
     facts: [string, string][];
     factsSource: string;
     closing: string;
@@ -157,7 +157,7 @@ const homeStory: Localized<HomeStoryCopy> = {
         ["Strukturverlust", "Mit Hecken, Einzelbäumen und Trockenmauern verschwinden Brutplätze, Verstecke und Nahrung."],
         ["Klimawandel", "Wärmere, trockenere Sommer schieben Lebensräume bergauf – Arten der Hochlagen können nicht beliebig ausweichen."]
       ],
-      scene: { before: "Früher", after: "Heute", slider: "Früher und heute vergleichen", note: "Schematisch: derselbe Talboden früher und wie er heute oft aussieht. Regler ziehen zum Vergleichen." },
+      scene: { before: "Früher", after: "Heute", slider: "Früher und heute vergleichen", note: "Schematisch: derselbe Talboden früher und wie er heute oft aussieht. Regler ziehen zum Vergleichen.", replay: "Nochmal abspielen" },
       facts: [
         ["46 %", "der Tagfalterarten Südtirols gelten als regional gefährdet."],
         ["38 %", "der bewerteten Brutvogelarten Südtirols sind gefährdet, vor allem Wiesenbrüter."],
@@ -273,7 +273,7 @@ const homeStory: Localized<HomeStoryCopy> = {
         ["Perdita di strutture", "Con siepi, alberi isolati e muretti a secco scompaiono siti di nidificazione, rifugi e cibo."],
         ["Cambiamento climatico", "Estati più calde e secche spingono gli habitat verso l’alto – le specie d’alta quota non possono salire all’infinito."]
       ],
-      scene: { before: "Prima", after: "Oggi", slider: "Confronta prima e oggi", note: "Schema: lo stesso fondovalle com’era un tempo e come appare spesso oggi. Trascina il cursore per confrontare." },
+      scene: { before: "Prima", after: "Oggi", slider: "Confronta prima e oggi", note: "Schema: lo stesso fondovalle com’era un tempo e come appare spesso oggi. Trascina il cursore per confrontare.", replay: "Riproduci di nuovo" },
       facts: [
         ["46 %", "delle specie di farfalle diurne dell’Alto Adige sono considerate minacciate a livello regionale."],
         ["38 %", "delle specie di uccelli nidificanti valutate in Alto Adige sono minacciate, soprattutto quelle che nidificano nei prati."],
@@ -389,7 +389,7 @@ const homeStory: Localized<HomeStoryCopy> = {
         ["Loss of structure", "With hedgerows, solitary trees and dry-stone walls go nesting sites, shelter and food."],
         ["Climate change", "Warmer, drier summers push habitats uphill – high-altitude species cannot keep moving up forever."]
       ],
-      scene: { before: "Then", after: "Now", slider: "Compare then and now", note: "Schematic: the same valley floor as it used to be and as it often looks today. Drag the slider to compare." },
+      scene: { before: "Then", after: "Now", slider: "Compare then and now", note: "Schematic: the same valley floor as it used to be and as it often looks today. Drag the slider to compare.", replay: "Play again" },
       facts: [
         ["46 %", "of South Tyrol’s butterfly species are considered regionally threatened."],
         ["38 %", "of the assessed breeding bird species in South Tyrol are threatened, above all meadow nesters."],

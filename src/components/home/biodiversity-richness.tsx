@@ -12,7 +12,9 @@ import { cn } from "@/lib/utils";
 import { CountUp } from "./count-up";
 import { RichnessProfile, richnessProfileSpots as spots } from "./richness-profile";
 import { SceneNumber } from "./scene-number";
-import { LegendCarousel, LegendMarker } from "./legend-carousel";
+import { LegendMarker } from "./legend-carousel";
+import { RichnessLegendCarousel } from "./richness-legend-carousel";
+import { richnessMarkerDelay } from "./richness-timing";
 
 /** Marken in der Grafik, eine je Faktor, in der Reihenfolge der Legende (von links nach rechts). */
 const markers: ReadonlyArray<{ key: keyof typeof spots.markers; factor: number }> = [
@@ -43,6 +45,13 @@ function markerStyle(spot: { left: string; top: string }, column: number, delay:
  * Fließtext ein Höhenschnitt aus Silhouetten, auf dem vier Nummern die Gründe
  * zeigen; darunter die Legende in je einem Satz. Dann die Zahlen als
  * typografische Zeile und der Weg zum Monitoringbericht als eigene Zeile.
+ *
+ * Bewegung in einer Reihenfolge statt gleichzeitig: Das Gelände wächst
+ * bergauf, dann erscheinen die Nummern nacheinander, jede zusammen mit ihrer
+ * Legendenspalte (`richness-timing.ts`), und pulsieren einmal. Danach ist
+ * Ruhe; Vögel, Wolke und Sonne ziehen nur einmal. Auf dem Desktop hebt Hover
+ * oder Fokus auf eine Nummer ihre Spalte hervor und umgekehrt (`data-link`,
+ * globals.css `.richness-scene`).
  */
 export function BiodiversityRichness({ locale }: { locale: Locale }) {
   const story = getHomeStory(locale);
@@ -66,10 +75,10 @@ export function BiodiversityRichness({ locale }: { locale: Locale }) {
           <p className={cn(hiddenWhenCollapsed, textLead, "lg:pb-2")}>{t.lead}</p>
         </div>
 
-        <div data-legend-scope className={hiddenWhenCollapsed}>
+        <div data-legend-scope data-home-reveal="grow" className={cn(hiddenWhenCollapsed, "richness-scene")}>
         <figure className="mt-10 sm:mt-16">
           {/* Auf dem Telefon randlos, damit die Zeichnung nicht noch kleiner wird. */}
-          <div data-home-reveal="grow" className="relative -mx-5 text-[var(--color-ink)] sm:mx-0">
+          <div className="relative -mx-5 text-[var(--color-ink)] sm:mx-0">
             <RichnessProfile className="block h-auto w-full" />
             <div className="text-[11px] font-bold uppercase tracking-[0.14em]">
               {levelKeys.map((key) => (
@@ -85,22 +94,22 @@ export function BiodiversityRichness({ locale }: { locale: Locale }) {
               {markers.map(({ key, factor }) => (
                 <span
                   key={key}
+                  data-link={factor}
                   className={cn(
-                    "habitat-fade absolute flex -translate-x-1/2 -translate-y-1/2 items-center gap-2",
+                    "habitat-fade richness-pop absolute flex -translate-x-1/2 -translate-y-1/2 items-center gap-2",
                     "left-[var(--spot-left)]",
                     // 1 bleibt unter der Sonne; 2 bis 4 rücken über ihre Legendenspalte.
                     factor > 0 && "lg:left-[calc(var(--col)*(100%_-_7.5rem)/4_+_var(--col)*2.5rem_+_0.75rem)]",
                     // 4 und 2 etwas höher, sonst sitzen sie auf Grat und Baumkronen.
                     (key === "altitude" || key === "culture") && "-mt-2.5 sm:-mt-4"
                   )}
-                  style={markerStyle(spots.markers[key], factor, 1300 + factor * 120)}
+                  style={markerStyle(spots.markers[key], factor, richnessMarkerDelay(factor))}
                 >
                   <LegendMarker index={factor} label={`${factor + 1}: ${t.factors[factor][0]}`}>
                     <SceneNumber
                       n={factor + 1}
                       marker
                       className="profile-marker relative shadow-[var(--shadow-on-photo)] max-sm:size-[18px] max-sm:text-[10px] max-sm:ring-1"
-                      style={{ "--marker-delay": `${factor * 1.1}s` } as CSSProperties}
                     />
                   </LegendMarker>
                   {key === "altitude" ? (
@@ -116,14 +125,14 @@ export function BiodiversityRichness({ locale }: { locale: Locale }) {
         </figure>
 
         {/* Telefon: wischbare Kartenreihe, damit die Grafik im Bild bleibt. */}
-        <LegendCarousel className="mt-6 sm:hidden" items={t.factors} tone="light" pagerLabel={story.legendPager} stagger />
+        <RichnessLegendCarousel className="mt-6 sm:hidden" items={t.factors} pagerLabel={story.legendPager} />
         <ol className="mt-10 hidden gap-x-10 gap-y-6 sm:grid sm:grid-cols-2 lg:grid-cols-4">
           {t.factors.map(([term, description], index) => (
             <li
               key={term}
-              data-home-reveal="rise"
-              style={{ "--home-reveal-delay": `${index * 80}ms` } as CSSProperties}
-              className="grid grid-cols-[1.5rem_minmax(0,1fr)] gap-x-3 border-t border-[var(--color-line)] pt-5"
+              data-link={index}
+              style={{ "--habitat-delay": `${richnessMarkerDelay(index) + 120}ms` } as CSSProperties}
+              className="habitat-fade richness-rise grid grid-cols-[1.5rem_minmax(0,1fr)] gap-x-3 border-t border-[var(--color-line)] pt-5"
             >
               <SceneNumber n={index + 1} className="mt-px ring-0" />
               <div>

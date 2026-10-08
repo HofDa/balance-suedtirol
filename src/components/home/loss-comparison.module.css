@@ -22,6 +22,143 @@
   z-index: 1;
 }
 
+/* Geführte Tour (loss-comparison.tsx). Alles hier hängt an `data-*`, das
+   nur während der Tour gesetzt ist; ohne Bewegung bleibt die Szene unverändert. */
+
+/* „Heute“ steht still: keine Wiese im Wind, keine Sonne, kein Verkehr. */
+.still :global(.profile-sway),
+.still :global(.profile-rays),
+.still :global(.profile-flow),
+.still :global(.profile-car) {
+  animation: none !important;
+}
+
+/* Die Nummern pulsieren nicht mehr alle gleichzeitig. */
+.comparison :global(.profile-marker-dark)::after {
+  animation: none !important;
+}
+
+.beforeDim {
+  position: absolute;
+  inset: 0;
+  background: var(--color-ink);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 600ms ease-out;
+}
+
+.comparison[data-touring="true"] .beforeDim {
+  opacity: 0.5;
+}
+
+/* Vignette: je Nummer eine Ebene, die aktive blendet ein. Überblenden statt
+   Verschieben, weil sich ein Verlaufsmittelpunkt nicht weich animieren lässt. */
+.spot {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(
+    circle at calc(100% - var(--marker-left)) var(--marker-top),
+    transparent 0,
+    transparent 7%,
+    rgb(16 36 30 / 0.62) 26%
+  );
+  transition: opacity 500ms ease-out;
+}
+
+.spot[data-on="true"] {
+  opacity: 1;
+}
+
+.marker {
+  transition:
+    opacity 400ms ease-out,
+    transform 400ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.marker[data-tour="dim"] {
+  opacity: 0.35;
+}
+
+.marker[data-tour="active"] {
+  transform: translate(-50%, -50%) scale(1.4);
+  z-index: 2;
+}
+
+.marker[data-tour="active"] :global(.profile-marker-dark) {
+  box-shadow: 0 0 0 3px var(--color-ink), 0 0 0 5px var(--color-moss);
+}
+
+.callout {
+  position: absolute;
+  left: calc(100% - var(--marker-left));
+  top: var(--marker-top);
+  z-index: 30;
+  display: none;
+  align-items: center;
+  gap: 0.4rem;
+  white-space: nowrap;
+  border-radius: var(--radius-sm);
+  background: var(--color-ink);
+  box-shadow: 0 0 0 1px rgb(255 255 255 / 0.14);
+  padding: 0.35rem 0.6rem;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  line-height: 1.2;
+  color: #fff;
+  pointer-events: none;
+  --callout-x: -50%;
+  --callout-y: calc(-100% - 26px);
+  transform: translate(var(--callout-x), var(--callout-y));
+  animation: callout-in 380ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.callout[data-x="start"] {
+  --callout-x: -18px;
+}
+
+.callout[data-x="end"] {
+  --callout-x: calc(-100% + 18px);
+}
+
+.callout[data-y="below"] {
+  --callout-y: 26px;
+}
+
+@media (min-width: 640px) {
+  .callout {
+    display: inline-flex;
+  }
+}
+
+@keyframes callout-in {
+  from {
+    opacity: 0;
+    transform: translate(var(--callout-x), calc(var(--callout-y) + 6px));
+  }
+}
+
+.progress {
+  opacity: 0;
+  transition: opacity 400ms ease-out;
+}
+
+.progress[data-on="true"] {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  /* Nach der Tour: nur Nummer 1 pulsiert, dreimal, als Einstieg. */
+  .comparison .marker[data-pulse="true"] :global(.profile-marker-dark)::after {
+    animation: profile-marker-dark 2.4s ease-out 600ms 3 !important;
+  }
+
+  .replay {
+    animation: callout-in 500ms ease-out both;
+  }
+}
+
 @media (max-width: 639px) {
   /* Die beiden breiten SVGs werden beim Ziehen neu beschnitten. Hunderte
      gleichzeitig animierte Pflanzen belasten dabei mobile Compositoren. */
@@ -66,4 +203,10 @@
     border-left: 1px solid var(--color-moss);
     opacity: 0.45;
   }
+}
+
+/* Während der Tour vergrößert die Tour die Nummer, nicht zusätzlich die
+   Kartenreihe (sonst doppelt skaliert). */
+.comparison[data-touring="true"] :global([data-factor][data-active="true"]) {
+  transform: none;
 }

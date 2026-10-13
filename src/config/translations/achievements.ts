@@ -6,7 +6,7 @@ export const achievementsCopy = {
     stats: {
       projects: "Projekte auf der Plattform",
       habitats: "Lebensraumtypen",
-      supporters: "Unterstützerinnen und Unterstützer",
+      supporters: "Unterstützer:innen",
       funded: "zugesagte Mittel"
     },
     completedEyebrow: "Abgeschlossen",

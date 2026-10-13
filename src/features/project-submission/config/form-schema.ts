@@ -437,7 +437,7 @@ export const formSteps: FormStep[] = [
           {
             id: "unterstuetzer",
             kind: "textarea",
-            label: { de: "Unterstützer und Förderer", it: "Sostenitori e promotori", en: "Supporters and backers" },
+            label: { de: "Unterstützer:innen und Förderer:innen", it: "Sostenitori e promotori", en: "Supporters and backers" },
             placeholder: {
               de: "z. B. Vereine, Bürgerinitiativen, Unternehmen",
               it: "es. associazioni, iniziative di cittadini, imprese",

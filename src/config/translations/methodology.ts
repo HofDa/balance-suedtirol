@@ -85,7 +85,7 @@ export const methodologyCopy = {
           {
             title: "Raumwärme · persönlicher Abrechnungswert",
             status: "anchor",
-            copy: "Statt eines pauschalen Gebäudemodells verwendet der Check den persönlichen Anteil am gemessenen Jahresverbrauch. Damit gehen Gebäudezustand, Wohnfläche, Wetter und Verhalten gemeinsam ein. Der Nutzer ordnet das Heizsystem zu; unbekannte und lokale Wärmenetze bleiben eine Unsicherheit. Gas- und Ölrechnungen nennen Smc und Liter statt kWh: Der Check rechnet mit 10,7 kWh je Smc (ARERA-Bezugswert) und rund 10 kWh je Liter Heizöl (ISPRA-Heizwert bei 0,84 kg/l).",
+            copy: "Statt eines pauschalen Gebäudemodells verwendet der Check den persönlichen Anteil am gemessenen Jahresverbrauch. Damit gehen Gebäudezustand, Wohnfläche, Wetter und Verhalten gemeinsam ein. Wer den Check macht, ordnet das Heizsystem zu; unbekannte und lokale Wärmenetze bleiben eine Unsicherheit. Gas- und Ölrechnungen nennen Smc und Liter statt kWh: Der Check rechnet mit 10,7 kWh je Smc (ARERA-Bezugswert) und rund 10 kWh je Liter Heizöl (ISPRA-Heizwert bei 0,84 kg/l).",
             sources: [
               { label: "ISO 52016-1: Berechnung von Heiz- und Kühlenergiebedarf", href: sources.iso52016 },
               { label: "Land Südtirol: Energy Report 2024", href: sources.energyReport },
@@ -105,7 +105,7 @@ export const methodologyCopy = {
           {
             title: "Haushaltsstrom, Standby und Beleuchtung",
             status: "anchor",
-            copy: "Der Jahreswert aus der Stromrechnung enthält Kühlgeräte, Kochen, Waschen, Spülen, Beleuchtung und Unterhaltungselektronik. Standby und Lampen werden deshalb nur qualitativ beurteilt und nicht nochmals addiert. 1 Watt Dauerlast entspricht zur Einordnung 8,76 kWh im Jahr. „Mittlerer Verbrauch“ und „Weiß ich nicht“ stehen auf rund 950 kWh pro Person: 510,7 GWh Haushaltsstrom in der Provinz Bozen 2024 geteilt durch 539.679 Einwohner.",
+            copy: "Der Jahreswert aus der Stromrechnung enthält Kühlgeräte, Kochen, Waschen, Spülen, Beleuchtung und Unterhaltungselektronik. Standby und Lampen werden deshalb nur qualitativ beurteilt und nicht nochmals addiert. 1 Watt Dauerlast entspricht zur Einordnung 8,76 kWh im Jahr. „Mittlerer Verbrauch“ und „Weiß ich nicht“ stehen auf rund 950 kWh pro Person: 510,7 GWh Haushaltsstrom in der Provinz Bozen 2024 geteilt durch 539.679 Einwohner:innen.",
             sources: [
               { label: "Terna: Elettricità nelle regioni 2024, Verbrauch der Haushalte nach Provinz", href: sources.terna },
               { label: "ASTAT: Bevölkerung Südtirols", href: sources.astatPopulation },

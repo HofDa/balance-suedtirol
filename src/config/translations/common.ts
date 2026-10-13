@@ -5,7 +5,7 @@ export const commonCopy = {
     skipToContent: "Zum Hauptinhalt springen",
     mobileNavLabel: "Mobile Navigation",
     headerCta: "Projekte",
-    projectOwners: "Für Projektträger",
+    projectOwners: "Für Projektträger:innen",
     submitProject: "Projekt einreichen",
     menu: "Menü öffnen"
   },

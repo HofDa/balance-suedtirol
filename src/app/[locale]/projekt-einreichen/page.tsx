@@ -39,7 +39,7 @@ const pageCopy: Record<
   de: {
     eyebrow: "Begleitete Projektentwicklung",
     title: "Von der Idee zum lebendigen Lebensraum",
-    copy: "b*alance begleitet Projektträger Schritt für Schritt dabei, aus einer ersten Idee ein ökologisch fundiertes, realistisch geplantes und transparent dokumentiertes Biodiversitätsprojekt zu entwickeln.",
+    copy: "b*alance begleitet Projektträger:innen Schritt für Schritt dabei, aus einer ersten Idee ein ökologisch fundiertes, realistisch geplantes und transparent dokumentiertes Biodiversitätsprojekt zu entwickeln.",
     journey: ["Idee", "Planung", "Umsetzung", "Monitoring", "Transparente Wirkung"],
     frameworkLabel: "Der Weg mit b*alance",
     frameworkTitle: "Ein klarer Rahmen für wirksame Projekte",
@@ -68,7 +68,7 @@ const pageCopy: Record<
       }
     ],
     cta: "Projekt einreichen",
-    note: "b*alance schafft den Rahmen – die fachliche Verantwortung bleibt bei den Projektträgern und ihren Partnern."
+    note: "b*alance schafft den Rahmen – die fachliche Verantwortung bleibt bei den Trägerorganisationen und ihren Partner:innen."
   },
   it: {
     eyebrow: "Sviluppo guidato dei progetti",

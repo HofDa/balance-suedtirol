@@ -49,7 +49,7 @@ export const livingRoom: TourRoom = {
           label: "Weiß ich nicht",
           regionalAverage: {
             source: "Terna, Elettricità nelle regioni 2024; ASTAT, Bevölkerungsstand 31.12.2024",
-            basis: "Die Haushalte in der Provinz Bozen verbrauchten 2024 zusammen 510,7 GWh Strom; bei 539.679 Einwohnern sind das rund 950 kWh pro Person."
+            basis: "Die Haushalte in der Provinz Bozen verbrauchten 2024 zusammen 510,7 GWh Strom; bei 539.679 Einwohner:innen sind das rund 950 kWh pro Person."
           },
           impact: { carbon: 1, resources: 1 },
         }

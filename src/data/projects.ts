@@ -6,7 +6,7 @@ export const projects: Project[] = [
     // Projektstand vom Oktober 2026: Träger, Zeitplan, Budget und Monitoring
     // sind noch offen. Der Kartenpunkt bezeichnet vorerst nur den Ort Kiens.
     slug: "widumwiese-kiens",
-    title: "Widumwiese Kiens",
+    title: "Naturoase Garten Widum Kiens",
     summary: "Die Wiese beim Widum wird ökologisch aufgewertet, um Lebensraum für Vögel, Igel, Amphibien, Insekten und weitere Lebewesen zu schaffen.",
     description: "Die Fläche wird mit kleinen, aber wirksamen Maßnahmen ökologisch aufgewertet. Es werden einige zusätzliche Apfelbäume gepflanzt, die nicht heimischen Sträucher entfernt und heimische Sträucher in einer doppelten Reihe gesetzt. Ein kleiner Teich, ein Lebensraum für Insekten mit einer Wildbieneninsel und eine wilde Ecke für Igel und andere Lebewesen werden angelegt. Die neue Hecke dient Vögeln als Futterquelle und Nistplatz. Der kleine Teich schafft Lebensraum für Libellen, Amphibien und weitere wasserlebende Lebewesen. Mit diesem Projekt kommen wir dem Auftrag der Diözese nach, die Schöpfung zu bewahren und zu fördern.",
     categoryIds: ["hedges", "cultural-landscapes", "waters"],
@@ -29,6 +29,8 @@ export const projects: Project[] = [
     },
     whyItMatters: "Das Widum in Kiens liegt idyllisch am Ortsrand nahe der Felder und des Waldes. Sein großer Garten ist eine Mähwiese mit einigen großwüchsigen Apfelbäumen alter Sorten und einer Hecke aus hauptsächlich nicht heimischen Sträuchern. Diese Fläche bietet großes Potenzial für eine wenig aufwendige, aber ökologisch wertvolle Aufwertung – in einem Gebiet, in dem durch Verbauung und Intensivierung wenig Platz für Natur geblieben ist.",
     impact: [
+      // Fläche laut Messung im Geobrowser (Rückmeldung Oktober 2026).
+      { value: "2.700 m²", label: "Naturoase im Widumgarten" },
       { value: "45 m", label: "Hecke für Vögel und Kleinsäuger" },
       { value: "50 m²", label: "Insektenparadies mit Wildbieneninsel" },
       { value: "40 m²", label: "wilde Ecke für Igel & Co." },
@@ -47,7 +49,7 @@ export const projects: Project[] = [
     summary:
       "Die Millander Au bei Brixen soll um eine ehemalige Apfelanlage wachsen: Teich, Feuchtwiese und Hecken für rund 130 Vogelarten im Jahr.",
     description:
-      "Nördlich an das bestehende Biotop von rund 4,5 Hektar schließt eine ehemals intensiv bewirtschaftete Apfelanlage an. Sie soll zu einem großen Schilfteich, einer bei Hochwasser überfluteten Feuchtwiese, Heckenstreifen, Erleninseln und einem mäandrierenden Wasserlauf werden. Steilwände aus Lehm und Sand bieten Bienenfresser, Uferschwalbe und Eisvogel Brutröhren; ein Aussichtsturm am Eisackdamm, eine Beobachtungswand und eine Beobachtungshütte machen das Biotop behutsam erlebbar. Weitere Grundeigentümer haben ihre Flächen für die Erweiterung in Aussicht gestellt.",
+      "Nördlich an das bestehende Biotop von rund 4,5 Hektar schließt eine ehemals intensiv bewirtschaftete Apfelanlage an. Sie soll zu einem großen Schilfteich, einer bei Hochwasser überfluteten Feuchtwiese, Heckenstreifen, Erleninseln und einem mäandrierenden Wasserlauf werden. Steilwände aus Lehm und Sand bieten Bienenfresser, Uferschwalbe und Eisvogel Brutröhren; ein Aussichtsturm am Eisackdamm, eine Beobachtungswand und eine Beobachtungshütte machen das Biotop behutsam erlebbar. Weitere Grundeigentümer:innen haben ihre Flächen für die Erweiterung in Aussicht gestellt.",
     categoryIds: ["wetlands", "waters", "cultural-landscapes"],
     status: "support-needed",
     municipality: "Brixen",
@@ -195,7 +197,7 @@ export const projects: Project[] = [
 const projectTranslations: Record<Exclude<Locale, "de">, Record<string, Partial<Project>>> = {
   it: {
     "widumwiese-kiens": {
-      title: "Prato della canonica di Chienes",
+      title: "Oasi naturale nel giardino della canonica di Chienes",
       summary: "Il prato presso la canonica viene valorizzato dal punto di vista ecologico per creare habitat per uccelli, ricci, anfibi, insetti e altri esseri viventi.",
       municipality: "Chienes",
       organization: "Da chiarire",
@@ -210,6 +212,7 @@ const projectTranslations: Record<Exclude<Locale, "de">, Record<string, Partial<
       whyItMatters: "La canonica di Chienes si trova in una posizione idilliaca ai margini del paese, vicino ai campi e al bosco. Il suo grande giardino è un prato da sfalcio con alcuni grandi meli di antiche varietà e una siepe composta principalmente da arbusti non autoctoni. Quest’area offre un grande potenziale per una valorizzazione semplice ma ecologicamente preziosa, in una zona dove l’edificazione e l’intensificazione hanno lasciato poco spazio alla natura.",
       description: "L’area viene valorizzata dal punto di vista ecologico con interventi piccoli ma efficaci. Si piantano alcuni meli aggiuntivi, si rimuovono gli arbusti non autoctoni e si piantano arbusti autoctoni su due file. Si realizzano un piccolo stagno, un habitat per gli insetti con un’isola per le api selvatiche e un angolo selvatico per i ricci e altri esseri viventi. La nuova siepe offre cibo e siti di nidificazione agli uccelli. Il piccolo stagno crea habitat per libellule, anfibi e altri organismi acquatici. Con questo progetto rispondiamo all’incarico della diocesi di custodire e promuovere il creato.",
       impact: [
+        { value: "2.700 m²", label: "oasi naturale nel giardino della canonica" },
         { value: "45 m", label: "siepe per uccelli e piccoli mammiferi" },
         { value: "50 m²", label: "paradiso per gli insetti con isola per le api selvatiche" },
         { value: "40 m²", label: "angolo selvatico per ricci & Co." },
@@ -336,7 +339,7 @@ const projectTranslations: Record<Exclude<Locale, "de">, Record<string, Partial<
   },
   en: {
     "widumwiese-kiens": {
-      title: "Widum meadow in Kiens",
+      title: "Widum Garden Nature Oasis, Kiens",
       summary: "The meadow beside the parish house will be enhanced ecologically to create habitat for birds, hedgehogs, amphibians, insects and other wildlife.",
       organization: "To be clarified",
       beforeAfter: {
@@ -350,6 +353,7 @@ const projectTranslations: Record<Exclude<Locale, "de">, Record<string, Partial<
       whyItMatters: "The parish house in Kiens sits in an idyllic spot on the edge of the village, close to fields and woodland. Its large garden is a hay meadow with several tall apple trees of old varieties and a hedge made up mainly of non-native shrubs. This area offers considerable potential for straightforward yet ecologically valuable improvements in a place where development and intensive land use have left little space for nature.",
       description: "Small but effective measures will enhance the area ecologically. Several additional apple trees will be planted, non-native shrubs removed and native shrubs planted in a double row. A small pond, an insect habitat with an area for wild bees, and a wild corner for hedgehogs and other wildlife will be created. The new hedge will provide food and nesting sites for birds. The small pond will create habitat for dragonflies, amphibians and other aquatic organisms. Through this project we fulfil the diocese’s call to preserve and nurture creation.",
       impact: [
+        { value: "2,700 m²", label: "nature oasis in the parish garden" },
         { value: "45 m", label: "hedge for birds and small mammals" },
         { value: "50 m²", label: "insect paradise with a wild bee island" },
         { value: "40 m²", label: "wild corner for hedgehogs & co." },

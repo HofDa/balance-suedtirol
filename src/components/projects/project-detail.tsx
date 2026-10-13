@@ -42,6 +42,7 @@ interface ProjectDetailProps {
 export function ProjectDetail({ project, otherProjects, locale }: ProjectDetailProps) {
   const copy = getTranslations(locale).projectDetail;
   const mapUrl = `https://www.openstreetmap.org/?mlat=${project.location.lat}&mlon=${project.location.lng}#map=14/${project.location.lat}/${project.location.lng}`;
+  const impactColumns = project.impact.length === 5 ? 5 : 4;
   const supportCopy: ProjectSupportCopy = {
     close: copy.close,
     support: copy.support,
@@ -281,13 +282,19 @@ export function ProjectDetail({ project, otherProjects, locale }: ProjectDetailP
               </h2>
               <p className="mt-3 text-sm leading-6 text-[var(--color-muted)]">{copy.impactCopy}</p>
             </div>
-            <dl className="mt-8 grid grid-cols-2 gap-x-6 gap-y-8 border-t border-[var(--color-line)] pt-8 sm:mt-10 lg:grid-cols-4 lg:gap-x-0">
+            {/* Fünf Kennzahlen stehen in einer Reihe statt vier plus Waise; dafür
+                rücken die Spalten enger zusammen. */}
+            <dl
+              className={`mt-8 grid grid-cols-2 gap-x-6 gap-y-8 border-t border-[var(--color-line)] pt-8 sm:mt-10 lg:gap-x-0 ${
+                impactColumns === 5 ? "lg:grid-cols-5" : "lg:grid-cols-4"
+              }`}
+            >
               {project.impact.map((metric, index) => (
                 <div
                   key={metric.label}
-                  className={`flex flex-col-reverse justify-end ${index % 4 > 0 ? "lg:border-l lg:border-[var(--color-line)] lg:pl-10" : ""} ${
-                    index % 4 < 3 ? "lg:pr-10" : ""
-                  }`}
+                  className={`flex flex-col-reverse justify-end ${
+                    index % impactColumns > 0 ? `lg:border-l lg:border-[var(--color-line)] ${impactColumns === 5 ? "lg:pl-6" : "lg:pl-10"}` : ""
+                  } ${index % impactColumns < impactColumns - 1 ? (impactColumns === 5 ? "lg:pr-6" : "lg:pr-10") : ""}`}
                 >
                   <dt className="mt-3 max-w-[24ch] text-sm leading-6 text-[var(--color-muted)]">{metric.label}</dt>
                   <dd className="whitespace-nowrap font-display text-[clamp(2rem,3.4vw,3rem)] leading-none tracking-[-0.035em] tabular-nums text-[var(--color-forest)]">
@@ -358,6 +365,7 @@ export function ProjectDetail({ project, otherProjects, locale }: ProjectDetailP
         <ProjectSupportBar
           funded={project.funded}
           goal={project.goal}
+          deadline={project.fundingDeadline}
           supporters={project.supporters}
           localeTag={localeTags[locale]}
           copy={copy}

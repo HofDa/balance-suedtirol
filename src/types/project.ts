@@ -63,6 +63,8 @@ export type Project = {
   /** Fehlt, solange das Finanzierungsziel nicht entschieden ist. */
   goal?: number;
   funded?: number;
+  /** Letzter Tag, an dem unterstützt werden kann (ISO-Datum, z. B. "2027-03-31"). Fehlt, solange keine Frist feststeht. */
+  fundingDeadline?: string;
   supporters: number;
   whyItMatters: string;
   impact: Array<{ value: string; label: string; description?: string }>;

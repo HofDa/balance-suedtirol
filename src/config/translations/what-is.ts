@@ -23,8 +23,8 @@ export const whatIsCopy = {
     whoTitle: "Drei Gruppen, drei Wege",
     who: [
       ["Privatpersonen", "Den Check machen, das eigene Ergebnis verstehen und ein Projekt in der Nähe unterstützen.", "Check starten"],
-      ["Projektträger", "Vereine, Netzwerke und Organisationen reichen Projekte ein; ein Fachgremium prüft sie vor der Veröffentlichung.", "Projekt einreichen"],
-      ["Gemeinden und Förderer", "Geprüfte, dokumentierte Projekte mit Ort, Laufzeit und Budget – als Grundlage für Förderung und Kooperation.", "Über uns"]
+      ["Projektträger:innen", "Vereine, Netzwerke und Organisationen reichen Projekte ein; ein Fachgremium prüft sie vor der Veröffentlichung.", "Projekt einreichen"],
+      ["Gemeinden und Förderer:innen", "Geprüfte, dokumentierte Projekte mit Ort, Laufzeit und Budget – als Grundlage für Förderung und Kooperation.", "Über uns"]
     ],
     statusEyebrow: "Stand",
     statusCopy: "Die Plattform ist im Aufbau. Projektdaten, Zahlen und Zitate sind teils Platzhalter und überall dort, wo sie es sind, als solche gekennzeichnet.",

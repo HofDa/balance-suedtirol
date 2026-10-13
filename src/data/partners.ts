@@ -17,7 +17,7 @@ export type Partner = {
 };
 
 /**
- * Gründungsförderer, die b*alance finanziell ermöglicht haben. Logos liegen
+ * Startförderer:innen, die b*alance finanziell ermöglicht haben. Logos liegen
  * optimiert in /public/partners, die Originale in assets-source/partners.
  * Fremde Institutionen stehen hier nur mit ausdrücklich freigegebener Nennung.
  */
@@ -25,7 +25,7 @@ export const platformPartners: Partner[] = [
   {
     slug: "raiffeisen-eisacktal",
     name: "Raiffeisenkasse Eisacktal",
-    role: "Gründungsförderer",
+    role: "Startförderung",
     logo: "/partners/raiffeisen-eisacktal.webp",
     logoSize: { width: 600, height: 208 },
     logoBackground: "rgb(0 127 50)"
@@ -33,7 +33,7 @@ export const platformPartners: Partner[] = [
   {
     slug: "alperia",
     name: "Alperia",
-    role: "Gründungsförderer",
+    role: "Startförderung",
     logo: "/partners/alperia.webp",
     logoSize: { width: 150, height: 50 }
   }
@@ -73,15 +73,15 @@ type PartnerTranslation = Partial<Pick<SciencePartner, "name" | "role" | "field"
 
 const partnerTranslations: Record<Exclude<Locale, "de">, Record<string, PartnerTranslation>> = {
   it: {
-    alperia: { role: "Sostenitore fondatore" },
-    "raiffeisen-eisacktal": { name: "Cassa Raiffeisen della Valle Isarco", role: "Sostenitore fondatore" },
+    alperia: { role: "Sostenitore della prima ora" },
+    "raiffeisen-eisacktal": { name: "Cassa Raiffeisen della Valle Isarco", role: "Sostenitore della prima ora" },
     "it-u": { field: "IT:U Linz", role: "Interdisciplinary Transformation University Austria, Linz" },
     unibz: { field: "Università di Bolzano", role: "Libera Università di Bolzano" },
     eurac: { role: "Eurac Research, Istituto per l’ambiente alpino, Bolzano" }
   },
   en: {
-    alperia: { role: "Founding supporter" },
-    "raiffeisen-eisacktal": { role: "Founding supporter" },
+    alperia: { role: "Launch supporter" },
+    "raiffeisen-eisacktal": { role: "Launch supporter" },
     "it-u": { field: "IT:U Linz", role: "Interdisciplinary Transformation University Austria, Linz" },
     unibz: { field: "University of Bozen-Bolzano", role: "Free University of Bozen-Bolzano" },
     eurac: { role: "Eurac Research, Institute for Alpine Environment, Bolzano" }

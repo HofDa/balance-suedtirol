@@ -1,7 +1,7 @@
 export const projectsCopy = {
   de: {
     projectSubmission: {
-      eyebrow: "Für Projektträger",
+      eyebrow: "Für Projektträger:innen",
       title: "Sie betreuen ein Biodiversitätsprojekt in Südtirol?",
       copy: "Reichen Sie es ein. Ein Fachgremium prüft Ziele, Laufzeit und Budget; danach entscheidet sich die Aufnahme.",
       cta: "Projekt einreichen"
@@ -43,14 +43,14 @@ export const projectsCopy = {
     },
     projectDetail: {
       back: "Zurück zu den Projekten",
-      verified: "Geprüfter Projektträger",
+      verified: "Geprüfte Trägerorganisation",
       imagePending: "Projektfotos folgen",
       locationApproximate: "Die Karte zeigt vorerst die ungefähre Lage in Kiens. Der genaue Projektstandort wird noch ergänzt.",
       habitats: "Lebensräume",
       location: "Projektstandort",
       municipality: "Gemeinde",
       sites: "Standorte",
-      organization: "Projektträger",
+      organization: "Trägerorganisation",
       organizationAddress: "Sitz",
       mapLabel: "Südtirol im Umriss mit dem Standort dieses Projekts.",
       mapAttribution: "Umriss: © OpenStreetMap-Mitwirkende (ODbL)",
@@ -101,7 +101,8 @@ export const projectsCopy = {
       fundingGoalOpen: "Ziel wird festgelegt",
       fundingGoal: "Ziel",
       fundingGoalPending: "offen",
-      supporters: "Unterstützer",
+      fundingDeadline: "Läuft bis",
+      supporters: "Unterstützer:innen",
       support: "Projekt unterstützen",
       tax: "Steuerlich absetzbar",
       share: "Teilen",
@@ -120,11 +121,11 @@ export const projectsCopy = {
       transparencyCopy: "Maßnahmenplan, Monitoring und Ergebnisse stehen auf dieser Seite und werden aktualisiert.",
       sponsorWebsite: "Website öffnen",
       sponsorsEyebrow: "Ermöglicht durch",
-      sponsorsTitle: "Förderpartner des Projekts",
-      mainSponsor: "Hauptinvestor",
+      sponsorsTitle: "Förderpartner:innen des Projekts",
+      mainSponsor: "Hauptinvestor:in",
       supportedBy: "Unterstützt von",
-      supportingSponsors: "Weitere Förderpartner",
-      coSponsors: "Mitinvestoren",
+      supportingSponsors: "Weitere Förderpartner:innen",
+      coSponsors: "Mitinvestor:innen",
       backersTitle: "Wer das Projekt trägt",
       sponsorOpen: "Hier könnte Ihr Logo oder Name stehen",
       sponsorOpenShort: "Ihr Logo",
@@ -144,7 +145,7 @@ export const projectsCopy = {
       volunteeringCopy: "Als ehrenamtliche Person unterstützt du bei Pflanzaktionen und Monitoring vor Ort. Wir senden dir alle Details per E-Mail.",
       confirm: "Jetzt verbindlich bestätigen"
     },
-    card: { view: "Projekt ansehen", of: "von", supporters: "Unterstützer", funding: "Finanzierung", open: "offen", status: "Projektstatus", mainSponsor: "Hauptinvestor", placeholder: "Platzhalter", partner: "Partner", sponsorOpen: "Hier könnte Ihr Logo oder Name stehen" }
+    card: { view: "Projekt ansehen", of: "von", supporters: "Unterstützer:innen", funding: "Finanzierung", open: "offen", status: "Projektstatus", mainSponsor: "Hauptinvestor:in", placeholder: "Platzhalter", partner: "Partner:innen", sponsorOpen: "Hier könnte Ihr Logo oder Name stehen" }
   },
   it: {
     projectSubmission: {
@@ -248,6 +249,7 @@ export const projectsCopy = {
       fundingGoalOpen: "Obiettivo da definire",
       fundingGoal: "Obiettivo",
       fundingGoalPending: "da definire",
+      fundingDeadline: "Aperto fino al",
       supporters: "sostenitori",
       support: "Sostieni il progetto",
       tax: "Fiscalmente detraibile",
@@ -395,6 +397,7 @@ export const projectsCopy = {
       fundingGoalOpen: "Goal to be set",
       fundingGoal: "Goal",
       fundingGoalPending: "to be set",
+      fundingDeadline: "Open until",
       supporters: "supporters",
       support: "Support this project",
       tax: "Tax deductible",

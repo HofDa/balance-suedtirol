@@ -91,7 +91,14 @@ export function Header({ locale }: { locale: Locale }) {
                 ))}
               </div>
 
-              <div className="mt-3 border-t border-[var(--color-line)] pt-3">
+              <Link
+                href={`/${locale}/projekte`}
+                className={`mt-3 flex min-h-11 items-center justify-center rounded-[var(--radius-md)] bg-[var(--color-forest)] px-5 text-sm font-bold text-white shadow-sm transition-colors hover:bg-[var(--color-ink)] ${focusRingTool}`}
+              >
+                {t.headerCta}
+              </Link>
+
+              <div className="mt-4 border-t border-[var(--color-line)] pt-3">
                 <Label size="block" tone="muted" className="px-4 py-1.5 text-xs">
                   {t.projectOwners}
                 </Label>
@@ -102,13 +109,6 @@ export function Header({ locale }: { locale: Locale }) {
                   {t.submitProject}
                 </Link>
               </div>
-
-              <Link
-                href={`/${locale}/projekte`}
-                className={`mt-4 flex min-h-11 items-center justify-center rounded-[var(--radius-md)] bg-[var(--color-forest)] px-5 text-sm font-bold text-white shadow-sm transition-colors hover:bg-[var(--color-ink)] ${focusRingTool}`}
-              >
-                {t.headerCta}
-              </Link>
 
               <div className="mt-4 border-t border-[var(--color-line)] px-4 pt-3 sm:hidden">
                 <LanguageSwitcher locale={locale} />

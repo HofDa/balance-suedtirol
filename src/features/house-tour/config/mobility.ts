@@ -61,7 +61,7 @@ export const mobilityRoom: TourRoom = {
     },
     {
       id: "mobility-km",
-      title: "Wie viele Auto-Kilometer kommen sonst im Jahr zusammen?",
+      title: "Mit welchem Auto bist du auf den übrigen Wegen unterwegs?",
       sceneLabel: "Jahreswege ansehen",
       description:
         "Alles außer den Kurzstrecken von eben: Pendeln, Ausflüge, Besorgungen. Ein Blick auf den Tachostand vom letzten Jahr trifft es genauer als jede Schätzung.",

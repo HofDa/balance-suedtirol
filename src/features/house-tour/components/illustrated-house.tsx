@@ -15,6 +15,7 @@ import type { RoomId } from "../model/types";
 import layout from "../config/full-house-layout.json";
 import styles from "./interactive-room.module.css";
 import { withBasePath } from "@/lib/public-path";
+import { objectImage } from "./game/knowledge-card";
 
 const skyMask = `url(${withBasePath("/images/house-tour/full-house/sky-mask.png")})`;
 
@@ -142,8 +143,18 @@ export function IllustratedRoom({ roomId, questionIndex, answers, adjustments, s
               // Pillen waren unlesbar und deckten den kleinen Bildausschnitt zu.
               className={cn("pointer-events-auto flex min-h-10 min-w-10 items-center justify-center gap-1.5 rounded-full text-xs font-semibold shadow-md backdrop-blur transition-colors",
                 active ? "min-w-0 bg-[var(--color-forest)] py-1 pl-1 pr-3.5 text-white" : "bg-white/90 text-[var(--color-forest)]", focusRingTool)}>
-              <span className={cn("grid size-7 shrink-0 place-items-center rounded-full text-[11px]", active && "bg-white/20")}>
-                {answered ? <Check className="size-3.5" aria-hidden /> : skipped ? <SkipForward className="size-3.5" aria-hidden /> : index + 1}
+              {/* Beantwortete Objekte zeigen ihr Bild statt nur eines Häkchens:
+                  nach zwei Antworten standen sonst zwei gleiche Haken nebeneinander. */}
+              <span className={cn("relative grid size-7 shrink-0 place-items-center rounded-full text-[11px]", active && "bg-white/20", answered && !active && "bg-white")}>
+                {answered ? (
+                  <>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={objectImage(item.id)} alt="" className="size-6 object-contain" />
+                    <span className="absolute -bottom-0.5 -right-0.5 grid size-3.5 place-items-center rounded-full bg-[var(--color-forest)] text-white ring-2 ring-white">
+                      <Check className="size-2.5" strokeWidth={3} aria-hidden />
+                    </span>
+                  </>
+                ) : skipped ? <SkipForward className="size-3.5" aria-hidden /> : index + 1}
               </span>
               {active && <span className="truncate">{item.sceneLabel}</span>}
             </button>

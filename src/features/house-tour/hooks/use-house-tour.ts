@@ -36,7 +36,8 @@ export function useHouseTour() {
       adjustments: state.adjustments,
       cardsRead: state.cardsRead,
       whatIf: state.whatIf,
-      goals: state.goals
+      goals: state.goals,
+      householdSize: state.householdSize
     };
     const timeout = window.setTimeout(() => {
       try {
@@ -54,7 +55,8 @@ export function useHouseTour() {
     state.adjustments,
     state.cardsRead,
     state.whatIf,
-    state.goals
+    state.goals,
+    state.householdSize
   ]);
 
   const scores = useMemo(

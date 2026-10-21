@@ -26,10 +26,12 @@ import {
   LampDesk,
   LeafyGreen,
   Lightbulb,
+  Minus,
   Music,
   Plane,
   Plug,
   PlugZap,
+  Plus,
   Power,
   Recycle,
   Shirt,
@@ -55,6 +57,7 @@ import { localeTags } from "@/lib/i18n";
 import type { Locale } from "@/config/site";
 import { isAdjusted, presetFor, presetsOnly, quantityFor } from "../model/calculator";
 import { electricityShare, heatingBillUnit, landmark, type Landmarks } from "../model/everyday";
+import { MAX_HOUSEHOLD_SIZE } from "../model/reducer";
 import { useTourI18n } from "../i18n/context";
 import { optionIcons, type OptionIcon } from "../config/option-icons";
 import type { TourUi } from "../i18n/ui";
@@ -70,7 +73,7 @@ import { MealWeek, TapCounter } from "./quantity-inputs";
 type InputSpec =
   | { kind: "week" }
   | { kind: "tiles"; icon: LucideIcon; emptyIcon?: LucideIcon; columns: number; perTile?: number; grow?: boolean }
-  | { kind: "slider"; note?: Landmarks | "heating" | "electricity" };
+  | { kind: "slider"; note?: Landmarks | "electricity" };
 
 const inputs: Record<string, InputSpec> = {
   "kitchen-diet": { kind: "week" },
@@ -86,30 +89,54 @@ const inputs: Record<string, InputSpec> = {
   "mobility-km": { kind: "slider", note: "distance" },
   "mobility-long": { kind: "slider", note: "distance" },
   "garden-ground": { kind: "slider", note: "area" },
-  // kWh sagt kaum jemandem etwas: Heizung in der Einheit der Rechnung, Strom
-  // gegen den Südtiroler Durchschnitt.
-  "bedroom-heating": { kind: "slider", note: "heating" },
+  // kWh sagt kaum jemandem etwas: Strom gegen den Südtiroler Durchschnitt.
+  // Die Heizung fragt gleich in der Einheit der Rechnung, siehe `billUnit`.
+  "bedroom-heating": { kind: "slider" },
   "living-tv-streaming": { kind: "slider", note: "electricity" }
 };
 
-function noteFor(
-  kind: Landmarks | "heating" | "electricity",
-  value: number,
-  optionId: string | undefined,
-  t: TourUi,
-  locale: Locale
-) {
+function noteFor(kind: Landmarks | "electricity", value: number, t: TourUi, locale: Locale) {
   const format = (n: number, digits = 0) => n.toLocaleString(localeTags[locale], { maximumFractionDigits: digits });
-  if (kind === "heating") {
-    const bill = heatingBillUnit(optionId, value);
-    return bill ? t.bill[bill.key](format(bill.amount)) : null;
-  }
   if (kind === "electricity") {
     const share = electricityShare(value);
     return share === null ? null : t.bill.electricity(format(share, 1));
   }
   const match = landmark(kind, value);
   return match ? t.landmarks[match.key](format(match.times, 1), match.times === 1) : null;
+}
+
+/**
+ * In welcher Einheit eine Haushaltsrechnung eingegeben wird: Gas in Smc, Öl
+ * in Litern, wie es auf der Rechnung steht; alles andere in der Einheit der
+ * Frage. Gerechnet wird weiter in kWh.
+ */
+function billUnit(question: TourQuestion, optionId: string | undefined, t: TourUi) {
+  const adjust = question.adjust!;
+  const bill = question.id === "bedroom-heating" ? heatingBillUnit(optionId) : null;
+  return bill ? { kwhPerUnit: bill.kwhPerUnit, unit: t.bill[bill.key], step: 10 } : { kwhPerUnit: 1, unit: adjust.unit, step: adjust.step };
+}
+
+/** Die Personenzahl über dem Regler: einmal eingestellt, gilt sie überall. */
+function HouseholdSize({ size, onChange }: { size: number; onChange: (size: number) => void }) {
+  const { t } = useTourI18n();
+  const button = cn(
+    "grid size-9 shrink-0 place-items-center rounded-full border border-[var(--color-line)] bg-white text-[var(--color-forest)] transition-colors hover:border-[var(--color-forest)] disabled:opacity-35",
+    focusRingTool
+  );
+  return (
+    <div className="flex items-center justify-between gap-3 border-b border-[var(--color-line)] px-3 pb-2 md:px-4">
+      <span id="household-size" className="text-xs font-semibold md:text-sm">{t.household.label}</span>
+      <div role="group" aria-labelledby="household-size" className="flex items-center gap-2">
+        <button type="button" onClick={() => onChange(size - 1)} disabled={size <= 1} aria-label={t.household.fewer} className={button}>
+          <Minus className="size-4" aria-hidden />
+        </button>
+        <output aria-live="polite" className="w-6 text-center text-base font-semibold tabular-nums">{size}</output>
+        <button type="button" onClick={() => onChange(size + 1)} disabled={size >= MAX_HOUSEHOLD_SIZE} aria-label={t.household.more} className={button}>
+          <Plus className="size-4" aria-hidden />
+        </button>
+      </div>
+    </div>
+  );
 }
 
 /** Die Vorlagen einer Frage, deren Optionen nur eine Menge vorgeben. */
@@ -174,6 +201,7 @@ function QuantityControl({
   isCustom,
   unset,
   hideLabel,
+  householdSize,
   onChange,
   onReset
 }: {
@@ -183,12 +211,48 @@ function QuantityControl({
   isCustom: boolean;
   unset?: boolean;
   hideLabel?: boolean;
+  householdSize: number;
   onChange: (quantity: number) => void;
   onReset?: () => void;
 }) {
   const { t, locale } = useTourI18n();
-  const adjust = question.adjust!;
   const spec = inputs[question.id] ?? { kind: "slider" };
+  if (question.adjust!.perHousehold) {
+    // Der Regler zeigt die Rechnung des Haushalts; gespeichert wird der
+    // Anteil pro Person in kWh, mit dem der Rechner arbeitet.
+    const bill = billUnit(question, optionId, t);
+    const toShown = householdSize / bill.kwhPerUnit;
+    const raw = question.adjust!;
+    const adjust = {
+      ...raw,
+      unit: bill.unit,
+      step: bill.step,
+      min: raw.min * toShown,
+      max: Math.ceil((raw.max * toShown) / bill.step) * bill.step
+    };
+    const format = (n: number, digits = 0) => n.toLocaleString(localeTags[locale], { maximumFractionDigits: digits });
+    const perPerson = t.household.perPerson(format(Math.round(quantity / 10) * 10));
+    const share = spec.kind === "slider" && spec.note === "electricity" ? electricityShare(quantity) : null;
+    const showPerPerson = householdSize > 1 || bill.kwhPerUnit !== 1;
+    const note = [showPerPerson ? perPerson : null, share === null ? null : t.bill.electricity(format(share, 1))]
+      .filter(Boolean)
+      .join(" · ");
+    return (
+      <AdjustControl
+        adjust={adjust}
+        questionId={question.id}
+        quantity={Math.round((quantity * toShown) / bill.step) * bill.step}
+        isCustom={isCustom}
+        onChange={(shown) => onChange(shown / toShown)}
+        onReset={onReset}
+        unset={unset}
+        hideLabel={hideLabel}
+        note={note || null}
+        hint={optionId === "heat-pump" ? `${t.adjust.heatPump} ${raw.hint ?? ""}`.trim() : raw.hint}
+      />
+    );
+  }
+  const adjust = question.adjust!;
   if (spec.kind === "week") {
     return <MealWeek adjust={adjust} questionId={question.id} quantity={quantity} hideLabel={hideLabel} onCount={onChange} />;
   }
@@ -220,7 +284,9 @@ function QuantityControl({
       onReset={onReset}
       unset={unset}
       hideLabel={hideLabel}
-      note={spec.note ? noteFor(spec.note, quantity, optionId, t, locale) : null}
+      note={spec.note ? noteFor(spec.note, quantity, t, locale) : null}
+      // Der Wärmepumpenhinweis gehört nur unter die Wärmepumpe, nicht unter Gas oder Öl.
+      hint={optionId === "heat-pump" ? `${t.adjust.heatPump} ${adjust.hint ?? ""}`.trim() : adjust.hint}
     />
   );
 }
@@ -276,8 +342,11 @@ export function KindStep({
   // Spalten brachen „Durchlauferhitzer“ mitten im Wort —, auf dem Desktop
   // Kacheln in zwei Spalten.
   const tiles = question.options.length >= 4;
+  // Ab sieben Antworten (Warmwasser) noch eine Stufe enger, damit auch die
+  // letzte, „Weiß ich nicht“, mobil ohne Scrollen zu sehen ist.
+  const dense = question.options.length >= 7;
   return (
-    <div className={cn("mt-3 grid md:mt-4", tiles ? "gap-1.5 md:grid-cols-2 md:gap-2" : "gap-2")} role="radiogroup" aria-labelledby="step-title">
+    <div className={cn("mt-3 grid md:mt-4", tiles ? cn(dense ? "gap-1" : "gap-1.5", "md:grid-cols-2 md:gap-2") : "gap-2")} role="radiogroup" aria-labelledby="step-title">
       {question.options.map((option, index) => {
         const active = selected === option.id;
         const Icon = iconFor(question.id, option.id);
@@ -292,7 +361,7 @@ export function KindStep({
             className={cn(
               "group relative w-full rounded-[var(--radius-lg)] border text-left transition-colors duration-200",
               tiles
-                ? "flex min-h-12 items-center gap-2.5 py-1.5 pl-2 pr-3 md:min-h-14 md:py-2 md:pl-2.5"
+                ? cn("flex items-center gap-2.5 pl-2 pr-3 md:min-h-14 md:py-2 md:pl-2.5", dense ? "min-h-11 py-1" : "min-h-12 py-1.5")
                 : "flex min-h-14 items-center gap-3 px-4 py-3",
               active
                 ? "border-[var(--color-forest)] bg-[var(--color-sage)]/55"
@@ -349,6 +418,8 @@ export function AmountStep({
   selected,
   adjustments,
   hideLabel,
+  householdSize,
+  onHouseholdSize,
   onChoose,
   onAnswer,
   onAdjust,
@@ -358,6 +429,8 @@ export function AmountStep({
   selected?: string;
   adjustments: Record<string, number>;
   hideLabel: boolean;
+  householdSize: number;
+  onHouseholdSize: (size: number) => void;
   onChoose: (optionId: string) => void;
   onAnswer: (questionId: string, optionId: string) => void;
   onAdjust: (questionId: string, quantity: number) => void;
@@ -369,6 +442,7 @@ export function AmountStep({
     <>
       {quick && <PresetChips question={question} selected={selected} onChoose={onChoose} />}
       <div className="mt-4 rounded-[var(--radius-lg)] border border-[var(--color-line)] bg-[var(--color-paper)]/60 pt-2">
+        {adjust.perHousehold && <HouseholdSize size={householdSize} onChange={onHouseholdSize} />}
         <QuantityControl
           question={question}
           optionId={selected}
@@ -376,6 +450,7 @@ export function AmountStep({
           isCustom={!quick && isAdjusted(question.id, adjustments)}
           unset={!selected}
           hideLabel={hideLabel}
+          householdSize={householdSize}
           onChange={(quantity) => {
             if (!quick) return onAdjust(question.id, quantity);
             // Die Antwort zuerst, denn sie setzt die Menge zurück.
@@ -395,11 +470,24 @@ export function AmountStep({
  * Mengenfragen steht die Vorlage, zu der die Zahl gehört, davor:
  * „Überwiegend pflanzlich · 1× pro Woche“ sagt mehr als die Zahl allein.
  */
-export function answerSummary(question: TourQuestion, selected: string, adjustments: Record<string, number>, locale: Locale) {
+export function answerSummary(
+  question: TourQuestion,
+  selected: string,
+  adjustments: Record<string, number>,
+  locale: Locale,
+  t: TourUi,
+  householdSize = 1
+) {
   const option = question.options.find((item) => item.id === selected);
   const parts: string[] = [];
   if (option) parts.push(option.label);
-  if (question.adjust && option) {
+  if (question.adjust?.perHousehold && option) {
+    // Wie eingegeben: die Rechnung des Haushalts, nicht der geteilte Wert.
+    const bill = billUnit(question, option.id, t);
+    const shown = Math.round((quantityFor(question, option.id, adjustments) * householdSize) / bill.kwhPerUnit / bill.step) * bill.step;
+    parts.push(`${shown.toLocaleString(localeTags[locale])} ${bill.unit}`);
+    if (householdSize > 1) parts.push(t.household.people(householdSize));
+  } else if (question.adjust && option) {
     const quantity = quantityFor(question, option.id, adjustments);
     const digits = question.adjust.step < 1 ? 1 : 0;
     const unit = question.adjust.unit;

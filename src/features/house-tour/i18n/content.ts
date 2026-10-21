@@ -54,17 +54,17 @@ const it: Record<RoomId, RoomText> = {
     completion: "Hai esplorato come calore, tessili ed elettronica influiscono su risorse e habitat.",
     questions: {
       "bedroom-heating": {
-        title: "Come ti riscaldi e quanto consumi in un anno?",
+        title: "Come ti riscaldi e quanto consuma la tua casa?",
         sceneLabel: "Letto e clima",
         description:
           "Il riscaldamento è di solito la voce energetica più grande della casa. Il valore reale della bolletta rappresenta edificio, superficie, clima e abitudini meglio di una stima forfettaria.",
         impactText:
           "La tua quota del consumo annuo viene valutata con il fattore del sistema di riscaldamento. Con una pompa di calore si intende l’elettricità acquistata; con gas, gasolio o teleriscaldamento l’energia fornita.",
-        tip: "Usa se possibile l’ultima bolletta annuale e dividi un consumo comune per il numero di persone in casa.",
+        tip: "Prendi l’ultima bolletta annuale: per il gas in Smc, per il gasolio in litri, altrimenti in kWh. Senza bolletta a portata di mano va bene il valore predefinito.",
         adjust: {
-          label: "La tua quota del consumo annuo",
+          label: "Consumo annuo della tua casa",
           unit: "kWh",
-          hint: "Con una pompa di calore solo la sua elettricità; dividi il consumo comune per persona."
+          hint: "Inserisci il consumo di tutta la casa, come sulla bolletta annuale. La tua quota la calcoliamo noi."
         },
         options: {
           "heat-oil": { label: "Gasolio" },
@@ -103,16 +103,16 @@ const it: Record<RoomId, RoomText> = {
         }
       },
       "bedroom-standby": {
-        title: "Quanti apparecchi restano sempre collegati alla rete?",
+        title: "Quanti apparecchi di casa tua aspettano in standby?",
         sceneLabel: "Comò e lampade",
         description:
-          "Router, caricabatterie, televisore, macchina del caffè, console: ognuno assorbe in standby da uno a cinque watt. Giorno e notte, tutto l’anno.",
+          "Conta tutta la casa, non solo la camera: router, caricabatterie, televisore, macchina del caffè, console. Ognuno assorbe in standby da uno a cinque watt, giorno e notte. Frigorifero e congelatore non contano: lavorano, non aspettano.",
         impactText:
           "In molte case lo standby vale quasi un decimo del consumo elettrico — per apparecchi che intanto non fanno nulla.",
         tip: "Il router non è tra questi: spegnerlo di notte fa risparmiare poco e disturba gli aggiornamenti. Conviene di più l’angolo TV, gli elettrodomestici da cucina e le stazioni di ricarica.",
         scopeNote:
           "Il consumo è già compreso nella tua elettricità domestica e qui non viene sommato una seconda volta. La risposta agisce solo sul profilo qualitativo.",
-        adjust: { label: "Apparecchi sempre accesi", unit: "pezzi" },
+        adjust: { label: "Apparecchi in standby", unit: "pezzi", hint: "In tutta la casa. Non contare frigorifero e congelatore." },
         options: {
           "standby-all": { label: "Tutto resta collegato" },
           "standby-partial": { label: "Qualcosa viene spento" },
@@ -157,10 +157,11 @@ const it: Record<RoomId, RoomText> = {
         tip: "Non abbassare mai la temperatura in modo generico: con accumuli centralizzati e ricircolo valgono di norma, contro la legionella, almeno 60 °C nell’accumulo e 55 °C nell’impianto. Chiedi a un installatore o al gestore.",
         options: {
           "electric-boiler": { label: "Boiler elettrico o scaldabagno istantaneo" },
-          "gas-boiler": { label: "Caldaia a gas" },
+          "gas-boiler": { label: "Riscaldamento a gas" },
           "oil-boiler": { label: "Caldaia a gasolio" },
           "heat-pump": { label: "Pompa di calore per acqua calda" },
-          "solar-district": { label: "Solare termico o teleriscaldamento a basse emissioni" },
+          "solar-district": { label: "Solare termico" },
+          "district-heat": { label: "Teleriscaldamento" },
           "hot-water-average": {
             label: "Non lo so",
             regionalAverage: {
@@ -195,15 +196,15 @@ const it: Record<RoomId, RoomText> = {
     completion: "Hai esplorato come energia, apparecchi e viaggi lunghi sono legati alla biodiversità.",
     questions: {
       "living-tv-streaming": {
-        title: "Quanta elettricità domestica ti spetta in un anno?",
+        title: "Quanta elettricità consuma la tua casa in un anno?",
         sceneLabel: "TV e mobile",
         description:
           "Il consumo annuo della bolletta comprende frigorifero, cucina, lavatrice, lavastoviglie, illuminazione, elettronica e altri apparecchi. Per questo è più affidabile di singole stime per apparecchio.",
         impactText:
           "Si calcola la tua quota del prelievo misurato dalla rete con il fattore di produzione elettrica italiano. Un contratto di energia verde o un impianto fotovoltaico proprio non vengono accreditati individualmente in questo calcolo semplificato location-based.",
-        tip: "Prendi il consumo dell’ultima bolletta annuale e dividilo per il numero di persone. Togli l’elettricità di una pompa di calore indicata a parte.",
+        tip: "Inserisci il consumo di tutta la casa dall’ultima bolletta annuale; la tua quota la calcoliamo noi. Togli l’elettricità di una pompa di calore indicata a parte.",
         adjust: {
-          label: "Elettricità domestica per persona all’anno",
+          label: "Elettricità domestica all’anno",
           unit: "kWh",
           hint: "Tutti gli elettrodomestici insieme; togli l’elettricità della pompa di calore se è già nel riscaldamento."
         },
@@ -382,7 +383,7 @@ const it: Record<RoomId, RoomText> = {
         }
       },
       "mobility-km": {
-        title: "Quanti chilometri in auto fai per il resto in un anno?",
+        title: "Con quale auto fai gli altri tragitti?",
         sceneLabel: "Guardare i tragitti dell’anno",
         description:
           "Tutto tranne i tragitti brevi di prima: pendolarismo, gite, commissioni. Uno sguardo al contachilometri dell’anno scorso è più preciso di qualsiasi stima.",
@@ -470,17 +471,17 @@ const en: Record<RoomId, RoomText> = {
     completion: "You explored how heat, textiles and electronics affect resources and habitats.",
     questions: {
       "bedroom-heating": {
-        title: "How do you heat, and how much do you use in a year?",
+        title: "How do you heat, and how much does your household use?",
         sceneLabel: "Bed & room climate",
         description:
           "Space heating is usually the largest energy item in a household. The actual figure on your bill reflects the building, floor area, weather and heating habits better than a flat estimate.",
         impactText:
           "Your share of the annual consumption is rated with the factor of your heating system. For a heat pump this means the electricity bought; for gas, oil or district heating, the energy delivered.",
-        tip: "Use your last annual bill if you can, and divide shared consumption by the number of people in the household.",
+        tip: "Take your last annual bill: gas in Smc, oil in litres, otherwise kWh. If you don’t have the bill to hand, the default is fine.",
         adjust: {
-          label: "Your share of annual consumption",
+          label: "Your household’s annual consumption",
           unit: "kWh",
-          hint: "For a heat pump only its electricity; split shared consumption per person."
+          hint: "Enter the whole household’s figure, as it appears on your annual bill. We work out your share."
         },
         options: {
           "heat-oil": { label: "Heating oil" },
@@ -519,16 +520,16 @@ const en: Record<RoomId, RoomText> = {
         }
       },
       "bedroom-standby": {
-        title: "How many devices stay plugged in all the time?",
+        title: "How many devices in your home sit on standby?",
         sceneLabel: "Chest of drawers & lamps",
         description:
-          "Router, chargers, TV, coffee machine, games console: each draws one to five watts on standby. Around the clock, all year.",
+          "Count the whole home, not just the bedroom: router, chargers, TV, coffee machine, games console. Each draws one to five watts on standby, around the clock. Fridge and freezer don’t count — they’re working, not waiting.",
         impactText:
           "In many households standby accounts for almost a tenth of electricity use — for devices doing nothing at all.",
         tip: "The router isn’t one of them: switching it off at night saves little and gets in the way of updates. The TV corner, kitchen appliances and charging stations are more worthwhile.",
         scopeNote:
           "This consumption is already part of your household electricity and isn’t added a second time here. The answer only affects the qualitative profile.",
-        adjust: { label: "Devices always on", unit: "items" },
+        adjust: { label: "Devices on standby", unit: "items", hint: "Across the whole home. Don’t count the fridge or freezer." },
         options: {
           "standby-all": { label: "Everything stays plugged in" },
           "standby-partial": { label: "Some things get switched off" },
@@ -573,10 +574,11 @@ const en: Record<RoomId, RoomText> = {
         tip: "Never turn temperatures down across the board: with central storage tanks and circulation, protection against legionella usually requires at least 60 °C in the tank and 55 °C in the system. Ask an installer or operator.",
         options: {
           "electric-boiler": { label: "Electric boiler or instantaneous heater" },
-          "gas-boiler": { label: "Gas boiler" },
+          "gas-boiler": { label: "Gas heating" },
           "oil-boiler": { label: "Oil boiler" },
           "heat-pump": { label: "Hot-water heat pump" },
-          "solar-district": { label: "Solar thermal or low-emission district heating" },
+          "solar-district": { label: "Solar thermal" },
+          "district-heat": { label: "District heating" },
           "hot-water-average": {
             label: "Don’t know",
             regionalAverage: {
@@ -611,15 +613,15 @@ const en: Record<RoomId, RoomText> = {
     completion: "You explored how energy, devices and long-distance travel connect to biodiversity.",
     questions: {
       "living-tv-streaming": {
-        title: "How much household electricity is yours in a year?",
+        title: "How much electricity does your household use in a year?",
         sceneLabel: "TV & TV unit",
         description:
           "The annual consumption on your electricity bill covers fridges, cooking, washing, dishwashing, lighting, entertainment electronics and other devices. That makes it more reliable than estimates for single devices.",
         impactText:
           "Your share of the metered grid electricity is calculated with the Italian generation factor. A green electricity tariff or your own solar panels aren’t credited individually in this simplified location-based calculation.",
-        tip: "Take the consumption from your last annual bill and divide it by the number of people. Please subtract electricity for a separately listed heat pump.",
+        tip: "Enter the whole household’s consumption from your last annual bill; we work out your share. Please subtract electricity for a separately listed heat pump.",
         adjust: {
-          label: "Household electricity per person per year",
+          label: "Household electricity per year",
           unit: "kWh",
           hint: "All household appliances together; subtract heat-pump electricity if it’s already under heating."
         },
@@ -798,7 +800,7 @@ const en: Record<RoomId, RoomText> = {
         }
       },
       "mobility-km": {
-        title: "How many car kilometres add up otherwise in a year?",
+        title: "Which car do you use for your other trips?",
         sceneLabel: "Look at the year’s trips",
         description:
           "Everything except the short trips above: commuting, outings, errands. A look at last year’s odometer is more accurate than any estimate.",

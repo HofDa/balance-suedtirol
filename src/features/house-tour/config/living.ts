@@ -9,15 +9,15 @@ export const livingRoom: TourRoom = {
   questions: [
     {
       id: "living-tv-streaming",
-      title: "Wie viel Haushaltsstrom entfällt im Jahr auf dich?",
+      title: "Wie viel Strom verbraucht dein Haushalt im Jahr?",
       sceneLabel: "Fernseher & TV-Schrank",
       description:
         "Der Jahresverbrauch aus der Stromrechnung umfasst Kühlgeräte, Kochen, Waschen, Spülen, Beleuchtung, Unterhaltungselektronik und weitere Geräte. Damit ist er belastbarer als einzelne Geräteschätzungen.",
       impactText:
         "Gerechnet wird dein Anteil am gemessenen Netzbezug mit dem italienischen Stromerzeugungsfaktor. Ein eigener Ökostromvertrag oder eine PV-Anlage wird in dieser vereinfachten location-based Rechnung nicht individuell gutgeschrieben.",
-      tip: "Nimm den Verbrauch der letzten Jahresrechnung und teile ihn durch die Zahl der Personen. Strom für eine separat erfasste Wärmepumpe bitte abziehen.",
+      tip: "Trag den Verbrauch des ganzen Haushalts von der letzten Jahresrechnung ein; deinen Anteil rechnen wir aus. Strom für eine separat erfasste Wärmepumpe bitte abziehen.",
       adjust: {
-        label: "Haushaltsstrom pro Person und Jahr",
+        label: "Haushaltsstrom im Jahr",
         unit: "kWh",
         min: 0,
         max: 6000,
@@ -26,7 +26,8 @@ export const livingRoom: TourRoom = {
         // Durchschnitt (SOUTH_TYROL_HOUSEHOLD_KWH_PER_PERSON, auf die
         // Reglerstufe gerundet). Hoch und niedrig sind keine Messwerte.
         defaults: { "electricity-high": 2500, "electricity-medium": 950, "electricity-low": 800, "electricity-average": 950 },
-        hint: "Alle Haushaltsgeräte zusammen; Wärmepumpenstrom abziehen, wenn er bei Heizung steht."
+        hint: "Alle Haushaltsgeräte zusammen; Wärmepumpenstrom abziehen, wenn er bei Heizung steht.",
+        perHousehold: true
       },
       options: [
         {

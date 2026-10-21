@@ -186,6 +186,9 @@ function TourApp({ locale }: { locale: Locale }) {
   const clearAdjustment = useCallback((questionId: string) => {
     dispatch({ type: "CLEAR_ADJUSTMENT", questionId });
   }, [dispatch]);
+  const setHouseholdSize = useCallback((size: number) => {
+    dispatch({ type: "SET_HOUSEHOLD_SIZE", size });
+  }, [dispatch]);
   const openHouse = useCallback(() => {
     cancelFlight();
     dispatch({ type: "OPEN_HOUSE" });
@@ -379,6 +382,7 @@ function TourApp({ locale }: { locale: Locale }) {
             objectOpen={state.objectOpen}
             answers={state.answers}
             adjustments={state.adjustments}
+            householdSize={state.householdSize}
             skippedQuestions={state.skippedQuestions}
             cardsRead={state.cardsRead}
             onReadCard={readCard}
@@ -387,6 +391,7 @@ function TourApp({ locale }: { locale: Locale }) {
             onAnswer={answerQuestion}
             onAdjust={adjustQuestion}
             onClearAdjust={clearAdjustment}
+            onHouseholdSize={setHouseholdSize}
             onContinue={continueToNextObject}
             onSkip={skipCurrentObject}
             onBack={goToPreviousObject}

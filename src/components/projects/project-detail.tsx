@@ -27,7 +27,7 @@ import { ProjectSupportBar } from "./project-support-bar";
 import { BeforeAfterSlider } from "./before-after-slider";
 import { ProjectGallery } from "./project-gallery";
 import {
-  ProjectSupportDialog,
+  ProjectSupportHost,
   type ProjectSupportCopy
 } from "./project-support";
 import { withBasePath } from "@/lib/public-path";
@@ -53,7 +53,8 @@ export function ProjectDetail({ project, otherProjects, locale }: ProjectDetailP
     volunteering: copy.volunteering,
     amount: copy.amount,
     volunteeringCopy: copy.volunteeringCopy,
-    confirm: copy.confirm
+    confirm: copy.confirm,
+    requestNote: copy.requestNote
   };
 
   const beforeAfter = project.beforeAfter?.isPlaceholder ? undefined : project.beforeAfter;
@@ -89,7 +90,7 @@ export function ProjectDetail({ project, otherProjects, locale }: ProjectDetailP
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }}
       />
       <section className="pt-8 sm:pt-12">
         <Container className="pb-16">
@@ -382,7 +383,7 @@ export function ProjectDetail({ project, otherProjects, locale }: ProjectDetailP
         />
       </section>
 
-      <ProjectSupportDialog
+      <ProjectSupportHost
         title={project.title}
         municipality={project.municipality}
         organization={project.organization}

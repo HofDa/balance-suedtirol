@@ -92,6 +92,46 @@ export const referenceValues: AnnualValues = {
   energyKwh: 8950
 };
 
+/**
+ * Die mittlere Antwortkombination hinter `referenceValues`, ausgeschrieben
+ * statt aus der Reihenfolge der Optionen abgeleitet: eine neue Option darf
+ * den Vergleich nicht stillschweigend verschieben.
+ */
+export const referenceAnswers: Record<string, string> = {
+  "bedroom-heating": "heat-district",
+  "bedroom-textiles": "textiles-mixed",
+  "bedroom-standby": "standby-partial",
+  "bath-shower": "bath-normal",
+  "bath-water-heating": "oil-boiler",
+  "bath-toilet": "flush-mixed",
+  "living-tv-streaming": "electricity-medium",
+  "living-lighting": "light-mixed",
+  "living-plants": "some-plants",
+  "mobility-long": "long-transit",
+  "kitchen-diet": "diet-mixed",
+  "kitchen-origin": "origin-partial",
+  "kitchen-waste": "waste-sometimes",
+  "mobility-short": "mixed",
+  "mobility-km": "car-electric",
+  "garden-ground": "lawn",
+  "garden-plants": "ornamental",
+  "garden-structures": "hotel"
+};
+
+/**
+ * Der Modellvergleich für genau die beantworteten Gegenstände. So lässt sich
+ * schon nach dem ersten Raum sagen, ob die eigene Zahl hoch oder niedrig
+ * ist, ohne eine halbe Bilanz neben das ganze Modell zu stellen.
+ */
+export function referenceFor(answeredIds: Iterable<string>): AnnualValues {
+  let total = emptyValues;
+  for (const id of answeredIds) {
+    const optionId = referenceAnswers[id];
+    if (optionId) total = addValues(total, optionValues(id, optionId, referenceAnswers, {}));
+  }
+  return total;
+}
+
 /** Die vollen Durchschnittswerte, für die Einordnung in der Bilanz. */
 export const fullFootprintNote =
   "Der Check erfasst ausgewählte Beiträge aus Wohnen, Ernährung und Mobilität. Konsum, Gebäude, öffentliche Leistungen und weitere Alltagsbereiche fehlen; die Summe ist kein vollständiger persönlicher Fußabdruck.";

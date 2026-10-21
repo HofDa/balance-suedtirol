@@ -9,15 +9,15 @@ export const bedroomRoom: TourRoom = {
   questions: [
     {
       id: "bedroom-heating",
-      title: "Wie heizt du und wie hoch ist dein Jahresverbrauch?",
+      title: "Wie heizt du und wie viel verbraucht dein Haushalt?",
       sceneLabel: "Bett & Raumklima",
       description:
         "Raumwärme ist meist der größte Energieposten im Haushalt. Der tatsächliche Rechnungswert bildet Gebäude, Wohnfläche, Wetter und Heizverhalten besser ab als eine pauschale Schätzung.",
       impactText:
         "Der persönliche Anteil am Jahresverbrauch wird mit dem Faktor des Heizsystems bewertet. Bei einer Wärmepumpe ist der eingekaufte Strom gemeint, bei Gas, Öl oder Fernwärme die gelieferte Energiemenge.",
-      tip: "Nutze möglichst die letzte Jahresabrechnung und teile einen gemeinsamen Verbrauch durch die Zahl der Haushaltsmitglieder.",
+      tip: "Nimm die letzte Jahresabrechnung: beim Gas in Smc, beim Öl in Litern, sonst in kWh. Ohne Rechnung zur Hand passt die Vorgabe.",
       adjust: {
-        label: "Dein Anteil am Jahresverbrauch",
+        label: "Jahresverbrauch deines Haushalts",
         unit: "kWh",
         min: 0,
         max: 15000,
@@ -29,7 +29,8 @@ export const bedroomRoom: TourRoom = {
           "heat-pump": 1600,
           "heat-unknown": 4200
         },
-        hint: "Bei einer Wärmepumpe nur deren Strom; gemeinsamen Verbrauch pro Person aufteilen."
+        hint: "Den ganzen Haushalt eintragen, so wie er auf der Jahresabrechnung steht. Deinen Anteil rechnen wir aus.",
+        perHousehold: true
       },
       options: [
         {
@@ -113,22 +114,23 @@ export const bedroomRoom: TourRoom = {
     },
     {
       id: "bedroom-standby",
-      title: "Wie viele Geräte hängen dauerhaft am Netz?",
+      title: "Wie viele Geräte in deiner Wohnung warten im Standby?",
       sceneLabel: "Kommode & Lampen",
       description:
-        "Router, Ladegeräte, Fernseher, Kaffeemaschine, Spielkonsole: jedes zieht im Standby ein bis fünf Watt. Rund um die Uhr, das ganze Jahr.",
+        "Gezählt wird die ganze Wohnung, nicht nur das Schlafzimmer: Router, Ladegeräte, Fernseher, Kaffeemaschine, Spielkonsole. Jedes zieht im Standby ein bis fünf Watt, rund um die Uhr. Kühlschrank und Gefriertruhe zählen nicht — sie arbeiten, statt zu warten.",
       impactText:
         "Standby macht in vielen Haushalten fast ein Zehntel des Stromverbrauchs aus — für Geräte, die dabei nichts tun.",
       tip: "Der Router gehört nicht dazu: ihn nachts abzuschalten spart wenig und stört Updates. Lohnender sind TV-Ecke, Küchengeräte und Ladestationen.",
       scopeNote:
         "Der Verbrauch steckt bereits in deinem Haushaltsstrom und wird hier nicht ein zweites Mal addiert. Die Antwort wirkt nur auf das qualitative Profil.",
       adjust: {
-        label: "Geräte im Dauerbetrieb",
+        label: "Geräte im Standby",
         unit: "Stück",
         min: 0,
         max: 30,
         step: 1,
-        defaults: { "standby-all": 12, "standby-partial": 7, "standby-off": 3 }
+        defaults: { "standby-all": 12, "standby-partial": 7, "standby-off": 3 },
+        hint: "In der ganzen Wohnung. Kühlschrank und Gefriertruhe nicht mitzählen."
       },
       options: [
         {

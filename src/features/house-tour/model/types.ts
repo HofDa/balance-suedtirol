@@ -54,6 +54,12 @@ export type QuestionAdjust = {
    * Regler zeigt die Basismenge als Gegenprobe darunter an.
    */
   base?: { factor: number; unit: string };
+  /**
+   * Die Zahl steht auf der Rechnung des ganzen Haushalts. Eingegeben wird
+   * dieser Wert, gespeichert und gerechnet der Anteil pro Person; die
+   * Personenzahl fragt der Check einmal und teilt selbst.
+   */
+  perHousehold?: true;
 };
 
 export type TourQuestion = {
@@ -93,6 +99,8 @@ export type TourState = {
   whatIf: Record<string, string>;
   /** Als Vorhaben gemerkte Hebel (Frage-IDs), höchstens drei. */
   goals: string[];
+  /** Personen im Haushalt, durch die Rechnungswerte geteilt werden. */
+  householdSize: number;
 };
 
 export type TourAction =
@@ -102,6 +110,7 @@ export type TourAction =
   | { type: "SELECT_ANSWER"; questionId: string; optionId: string }
   | { type: "SET_ADJUSTMENT"; questionId: string; quantity: number }
   | { type: "CLEAR_ADJUSTMENT"; questionId: string }
+  | { type: "SET_HOUSEHOLD_SIZE"; size: number }
   | { type: "SKIP_QUESTION"; questionId: string }
   /** `open` hält das Objekt geöffnet, damit der Weiter-Weg ohne Szenenklick trägt. */
   | { type: "SET_QUESTION"; index: number; open?: boolean }

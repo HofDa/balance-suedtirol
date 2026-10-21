@@ -80,7 +80,7 @@ const quietButton = cn(
   focusRingTool
 );
 const primaryButton = cn(
-  "relative isolate ml-auto inline-flex min-h-12 items-center gap-2 overflow-hidden rounded-[var(--radius-md)] bg-[var(--color-forest)] px-6 text-sm font-semibold text-white transition-colors hover:bg-[var(--color-ink)] md:min-h-11 md:px-5",
+  "relative isolate ml-auto inline-flex min-h-12 items-center gap-2 overflow-hidden whitespace-nowrap rounded-[var(--radius-md)] bg-[var(--color-forest)] px-6 text-sm font-semibold text-white transition-colors hover:bg-[var(--color-ink)] md:min-h-11 md:px-5",
   focusRingTool
 );
 
@@ -99,6 +99,8 @@ export function ObjectContextPanel({
   onAnswer,
   onAdjust,
   onClearAdjust,
+  onHouseholdSize,
+  householdSize,
   onReadCard,
   onContinue,
   onSkip,
@@ -117,6 +119,7 @@ export function ObjectContextPanel({
   objectOpen: boolean;
   answers: Record<string, string>;
   adjustments: Record<string, number>;
+  householdSize: number;
   skippedQuestions: Record<string, boolean>;
   cardsRead: Record<string, true>;
   nextRoom?: TourRoom;
@@ -125,6 +128,7 @@ export function ObjectContextPanel({
   onAnswer: (questionId: string, optionId: string) => void;
   onAdjust: (questionId: string, quantity: number) => void;
   onClearAdjust: (questionId: string) => void;
+  onHouseholdSize: (size: number) => void;
   onReadCard: (questionId: string) => void;
   onContinue: () => void;
   onSkip: () => void;
@@ -191,7 +195,7 @@ export function ObjectContextPanel({
     // den Vorlagen einer reinen Mengenfrage.
     allowDigits: step === "kind" || (step === "amount" && !steps.includes("kind"))
   });
-  const { selectedValues, saving } = useQuestionMetrics(question, answers, adjustments);
+  const { selectedValues, saving, savingOption, range } = useQuestionMetrics(question, answers, adjustments);
   // Jeder Schritt und der Raumabschluss beginnen oben. Der Abschluss folgt
   // auf den letzten Gegenstand derselben Frage und erbte sonst dessen
   // Scrollposition: die Überschrift stand abgeschnitten über dem Rand.
@@ -240,7 +244,9 @@ export function ObjectContextPanel({
     <section className="flex h-full min-h-0 flex-col overflow-hidden bg-white">
       {/* Mitten in einer Frage braucht mobil niemand den Raumwechsel; die
           Leiste kostet dort eine Zeile, die den Antworten fehlt. */}
-      <div className={cn(objectOpen && !roomDone && "max-md:hidden")}>
+      {/* Auch beim letzten Gegenstand eines Raums: dort ist der Raum schon
+          `roomDone`, die Leiste tauchte aber mitten im Antworten auf. */}
+      <div className={cn(objectOpen && "max-md:hidden")}>
         <RoomNavigation
           activeRoom={room.id}
           answers={answers}
@@ -320,7 +326,9 @@ export function ObjectContextPanel({
                   <h2 id="step-title" className="text-lg font-semibold leading-tight tracking-[-0.025em] md:text-2xl md:leading-snug">
                     {question.title}
                   </h2>
-                  {firstEver && <p className="mt-1.5 text-xs leading-5 text-[var(--color-muted)]">{t.answerHint}</p>}
+                  {/* Bei sieben Antworten passt der Hinweis mobil nicht mehr darüber;
+                      er bleibt stehen, bis etwas beantwortet ist, und kommt beim nächsten Gegenstand. */}
+                  {firstEver && question.options.length < 7 && <p className="mt-1.5 text-xs leading-5 text-[var(--color-muted)]">{t.answerHint}</p>}
                   <KindStep question={question} selected={selected} onChoose={choose} />
                   <p className="mt-4 hidden text-[11px] text-[var(--color-muted)] md:block">
                     {t.panel.keys.keys} <kbd className="font-semibold tabular-nums">1</kbd>–
@@ -355,6 +363,8 @@ export function ObjectContextPanel({
                     selected={selected}
                     adjustments={adjustments}
                     hideLabel={hasKind}
+                    householdSize={householdSize}
+                    onHouseholdSize={onHouseholdSize}
                     onChoose={choose}
                     onAnswer={onAnswer}
                     onAdjust={onAdjust}
@@ -369,7 +379,7 @@ export function ObjectContextPanel({
                   <div className="flex items-center justify-between gap-3">
                     <p className="min-w-0 text-sm leading-6">
                       <span className="text-[var(--color-muted)]">{t.steps.yourAnswer}: </span>
-                      <span className="font-semibold">{answerSummary(question, selectedOption.id, adjustments, locale)}</span>
+                      <span className="font-semibold">{answerSummary(question, selectedOption.id, adjustments, locale, t, householdSize)}</span>
                     </p>
                     <button
                       type="button"
@@ -387,6 +397,8 @@ export function ObjectContextPanel({
                     impact={selectedOption.impact}
                     locale={locale}
                     size="lg"
+                    savingOption={savingOption?.label}
+                    rangePosition={range?.position}
                   />
                   <CardButton read={Boolean(cardsRead[question.id])} onOpen={openCard} />
                 </>

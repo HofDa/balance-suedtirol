@@ -67,7 +67,7 @@ export const bathRoom: TourRoom = {
         },
         {
           id: "gas-boiler",
-          label: "Gastherme",
+          label: "Gasheizung",
           params: { co2PerKwh: 0.24, efficiency: 0.9 },
           impact: { carbon: -2, resources: -1 },
         },
@@ -85,9 +85,18 @@ export const bathRoom: TourRoom = {
         },
         {
           id: "solar-district",
-          label: "Solarthermie oder emissionsarme Fernwärme",
+          label: "Solarthermie",
           params: { co2PerKwh: 0.08, efficiency: 1 },
           impact: { carbon: 7, resources: 4 },
+        },
+        {
+          // Welcher Brennstoff im Heizwerk steckt, weiß kaum jemand. Deshalb
+          // derselbe Faktor wie bei der Fernwärme in der Heizungsfrage, damit
+          // beide Antworten zusammenpassen.
+          id: "district-heat",
+          label: "Fernwärme",
+          params: { co2PerKwh: 0.1, efficiency: 1 },
+          impact: { carbon: 4, resources: 2 },
         },
         {
           id: "hot-water-average",

@@ -6,7 +6,7 @@ import { optionIcons } from "../src/features/house-tour/config/option-icons";
 import { presetsOnly } from "../src/features/house-tour/model/calculator";
 import { SOUTH_TYROL_HOUSEHOLD_KWH_PER_PERSON, bestCaseSaving, optionValues, presetFor, totalValues } from "../src/features/house-tour/model/calculator";
 import { POINTS, co2Contributions, discovery, levers, whatIfTotals } from "../src/features/house-tour/model/game";
-import { electricityShare, heatingBillUnit, landmark, yearInPictures } from "../src/features/house-tour/model/everyday";
+import { answerRange, electricityShare, heatingBillUnit, landmark, yearInPictures } from "../src/features/house-tour/model/everyday";
 import { initialTourState, restoreTourState, tourReducer } from "../src/features/house-tour/model/reducer";
 import type { TourState } from "../src/features/house-tour/model/types";
 
@@ -151,12 +151,11 @@ test("Vergleiche unter den Reglern nehmen den größten, der hineinpasst", () =>
 });
 
 test("Heizung erscheint in der Einheit der Rechnung, Strom gegen den Südtiroler Schnitt", () => {
-  // 10.700 kWh Gas sind 1.000 Smc bei 10,7 kWh je Smc (ARERA).
-  assert.deepEqual(heatingBillUnit("heat-gas", 10700), { key: "gas", amount: 1000 });
+  // 1.000 Smc Gas sind 10.700 kWh bei 10,7 kWh je Smc (ARERA).
+  assert.equal(Math.round(heatingBillUnit("heat-gas")!.kwhPerUnit * 1000), 10700);
   // Rund 10 kWh je Liter Heizöl (ISPRA, 0,84 kg/l).
-  assert.deepEqual(heatingBillUnit("heat-oil", 5000), { key: "oil", amount: 500 });
-  assert.equal(heatingBillUnit("heat-pump", 3000), null);
-  assert.equal(heatingBillUnit("heat-gas", 0), null);
+  assert.equal(Math.round(heatingBillUnit("heat-oil")!.kwhPerUnit), 10);
+  assert.equal(heatingBillUnit("heat-pump"), null);
   // 510,7 GWh ÷ 539.679 Personen ≈ 946 kWh.
   assert.equal(electricityShare(946), 1);
   assert.equal(electricityShare(1500), 1.6);
@@ -189,4 +188,40 @@ test("jede Antwort im Schritt „Art“ hat ein Symbol, und keins ist übrig", (
       if (option.regionalAverage) assert.equal(optionIcons[item.id][option.id], "circle-help", option.id);
     }
   }
+});
+
+test("die Spannweite misst in der Größe des Satzes und fehlt, wo es keine gibt", () => {
+  const shower = question("bath-shower").options.map((option) => optionValues("bath-shower", option.id, {}, {}));
+  const long = optionValues("bath-shower", "bath-long", {}, {});
+  const eco = optionValues("bath-shower", "bath-eco", {}, {});
+  assert.equal(answerRange("bath-shower", long, shower)?.position, 1);
+  assert.equal(answerRange("bath-shower", eco, shower)?.position, 0);
+
+  const diet = question("kitchen-diet").options.map((option) => optionValues("kitchen-diet", option.id, {}, {}));
+  const mixed = answerRange("kitchen-diet", optionValues("kitchen-diet", "diet-mixed", {}, {}), diet)!;
+  assert.ok(mixed.position > 0 && mixed.position < 1);
+
+  const plants = question("garden-plants").options.map((option) => optionValues("garden-plants", option.id, {}, {}));
+  assert.equal(answerRange("garden-plants", plants[0], plants), null);
+});
+
+test("die Personenzahl teilt die Rechnung, und eine eingetragene Rechnung bleibt beim Ändern stehen", () => {
+  let state = tourReducer(initialTourState, { type: "SELECT_ANSWER", questionId: "bedroom-heating", optionId: "heat-gas" });
+  state = tourReducer(state, { type: "SET_ADJUSTMENT", questionId: "bedroom-heating", quantity: 9000 });
+  state = tourReducer(state, { type: "SET_HOUSEHOLD_SIZE", size: 3 });
+  // 9.000 kWh für eine Person waren die Rechnung; zu dritt sind es 3.000 pro Kopf.
+  assert.equal(state.adjustments["bedroom-heating"], 3000);
+  assert.equal(state.householdSize, 3);
+  // Mengen ohne Haushaltsbezug bleiben unberührt.
+  state = tourReducer(state, { type: "SET_ADJUSTMENT", questionId: "bath-shower", quantity: 4 });
+  state = tourReducer(state, { type: "SET_HOUSEHOLD_SIZE", size: 1 });
+  assert.equal(state.adjustments["bath-shower"], 4);
+  assert.equal(state.adjustments["bedroom-heating"], 9000);
+  // Beim Strom folgt die Antwort der geteilten Zahl.
+  state = tourReducer(state, { type: "SELECT_ANSWER", questionId: "living-tv-streaming", optionId: "electricity-high" });
+  state = tourReducer(state, { type: "SET_ADJUSTMENT", questionId: "living-tv-streaming", quantity: 2500 });
+  state = tourReducer(state, { type: "SET_HOUSEHOLD_SIZE", size: 3 });
+  assert.equal(state.answers["living-tv-streaming"], presetFor(question("living-tv-streaming"), 2500 / 3).id);
+  assert.equal(restoreTourState({ householdSize: 99 }).householdSize, 12);
+  assert.equal(restoreTourState({}).householdSize, 1);
 });

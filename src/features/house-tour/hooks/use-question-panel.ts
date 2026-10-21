@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useRef } from "react";
 import type { AnnualValues, TourQuestion, TourRoom } from "../model/types";
 import { getRoomProgress } from "../model/scoring";
 import { alternativeValues, bestCaseSavingFromValues } from "../model/calculator";
+import { answerRange } from "../model/everyday";
 
 export function useQuestionPanelInteraction({
   room, question, questionIndex, objectOpen, answers, skippedQuestions,
@@ -140,5 +141,14 @@ export function useQuestionMetrics(question: TourQuestion, answers: Record<strin
   const saving = selectedValues
     ? bestCaseSavingFromValues(selectedValues, optionResults.map(({ values }) => values))
     : null;
-  return { optionResults, scale, selectedValues, saving };
+  // Dieselbe Wahl wie in `bestCaseSavingFromValues`: die Option mit dem
+  // geringsten CO₂, damit der Satz sagt, womit die Ersparnis erreicht wäre.
+  const savingOption = optionResults.reduce<(typeof optionResults)[number] | undefined>(
+    (best, item) => (!best || item.values.co2Kg < best.values.co2Kg ? item : best),
+    undefined
+  )?.option;
+  const range = selectedValues
+    ? answerRange(question.id, selectedValues, optionResults.map(({ values }) => values))
+    : null;
+  return { optionResults, scale, selectedValues, saving, savingOption, range };
 }

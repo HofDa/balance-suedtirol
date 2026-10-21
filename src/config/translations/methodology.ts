@@ -222,7 +222,7 @@ export const methodologyCopy = {
     comparisonEyebrow: "Vergleichswerte",
     comparisonTitle: "Ein Vergleichswert ist kein Naturgesetz",
     comparisonCopy: "Die internen Vergleichswerte von {co2} kg CO₂e, {water} Litern und {energy} kWh sind auf den abgefragten Ausschnitt kalibrierte Modellwerte. Sie entsprechen einer fest definierten mittleren Antwortkombination im Check — nicht einem amtlichen Durchschnittshaushalt.",
-    comparisonNoTarget: "Der Check zeigt bewusst keine persönliche „Paris-Zielmarke“. Globale Lebensstilpfade lassen sich nicht seriös auf den unvollständigen Ausschnitt dieses Rechners übertragen. Ein Ergebnis wird nur dann gegen den internen Vergleich eingeordnet, wenn alle Fragen beantwortet wurden.",
+    comparisonNoTarget: "Der Check zeigt bewusst keine persönliche „Paris-Zielmarke“. Globale Lebensstilpfade lassen sich nicht seriös auf den unvollständigen Ausschnitt dieses Rechners übertragen. Solange nicht alle Fragen beantwortet sind, vergleicht der Check nur mit den Gegenständen, die schon beantwortet sind — mit derselben mittleren Antwort für jeden davon.",
     comparisonSources: [
       { label: "UNEP: Enabling Sustainable Lifestyles in a Climate Emergency", href: sources.unep },
       { label: "JRC: Consumption Footprint – Lebenszyklusbasierte EU-Vergleichsdaten", href: sources.jrc }
@@ -429,7 +429,7 @@ export const methodologyCopy = {
     comparisonEyebrow: "Valori di confronto",
     comparisonTitle: "Un valore di confronto non è una legge di natura",
     comparisonCopy: "I valori di confronto interni di {co2} kg CO₂e, {water} litri e {energy} kWh sono valori di modello calibrati sugli ambiti richiesti. Corrispondono a una combinazione media di risposte definita nel check — non a una famiglia media ufficiale.",
-    comparisonNoTarget: "Il check volutamente non mostra un “obiettivo di Parigi” personale. I percorsi globali sugli stili di vita non si trasferiscono in modo serio sull’estratto incompleto di questo calcolatore. Un risultato viene confrontato con il riferimento interno solo se tutte le domande hanno una risposta.",
+    comparisonNoTarget: "Il check volutamente non mostra un “obiettivo di Parigi” personale. I percorsi globali sugli stili di vita non si trasferiscono in modo serio sull’estratto incompleto di questo calcolatore. Finché non tutte le domande hanno una risposta, il check confronta solo gli oggetti già risposti — con la stessa risposta media per ciascuno.",
     comparisonSources: [
       { label: "UNEP: Enabling Sustainable Lifestyles in a Climate Emergency", href: sources.unep },
       { label: "JRC: Consumption Footprint – dati di confronto UE basati sul ciclo di vita", href: sources.jrc }
@@ -636,7 +636,7 @@ export const methodologyCopy = {
     comparisonEyebrow: "Reference values",
     comparisonTitle: "A reference value is not a law of nature",
     comparisonCopy: "The internal reference values of {co2} kg CO₂e, {water} litres and {energy} kWh are model values calibrated to the areas asked about. They correspond to a fixed, medium combination of answers in the check — not to an official average household.",
-    comparisonNoTarget: "The check deliberately shows no personal “Paris target”. Global lifestyle pathways cannot be credibly transferred to the incomplete slice this calculator covers. A result is only compared against the internal reference once all questions are answered.",
+    comparisonNoTarget: "The check deliberately shows no personal “Paris target”. Global lifestyle pathways cannot be credibly transferred to the incomplete slice this calculator covers. Until every question is answered, the check compares only the objects answered so far — against the same middle answer for each.",
     comparisonSources: [
       { label: "UNEP: Enabling Sustainable Lifestyles in a Climate Emergency", href: sources.unep },
       { label: "JRC: Consumption Footprint – life-cycle-based EU reference data", href: sources.jrc }

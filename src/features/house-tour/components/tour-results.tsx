@@ -13,9 +13,9 @@ import type { Locale } from "@/config/site";
 import { getProjects } from "@/data/projects";
 import { withBasePath } from "@/lib/public-path";
 import { baseScores, scoreDimensions } from "../model/scoring";
-import { formatMetric, metrics, referenceValues } from "../model/calculator";
+import { formatMetric, metrics, referenceFor } from "../model/calculator";
 import { MAX_GOALS, co2Contributions, levers as findLevers, toUnit, whatIfTotals, type Discovery, type Lever, type LeverTheme } from "../model/game";
-import { round2, yearInPictures } from "../model/everyday";
+import { BATHTUB_LITERS, co2Amount, formatters, round2, yearInPictures } from "../model/everyday";
 import { everydayUnits, type EverydayUnit } from "../config/game-copy";
 import { useTourI18n } from "../i18n/context";
 import type { Rich } from "../i18n/ui";
@@ -129,6 +129,78 @@ function MeasuredMetric({
   );
 }
 
+/**
+ * Abstufungen von Waldgrün für die größten Posten, vom größten zum kleinsten.
+ * Dieselbe Stufe trägt der Balken in der Rangliste darunter; so findet man
+ * jedes Stück des Jahresbalkens dort mit Namen wieder.
+ */
+const rankShades = [1, 0.78, 0.6, 0.45, 0.32];
+
+/**
+ * Das Jahr als ein Balken statt als Zahl: aus den größten Posten
+ * zusammengesetzt, mit dem Modellvergleich als Strich. Verglichen wird nur
+ * mit den Gegenständen, die beantwortet sind — eine halbe Bilanz neben dem
+ * ganzen Modell sähe immer klein aus.
+ */
+function YearBar({
+  segments,
+  total,
+  reference,
+  partial,
+  reduceMotion
+}: {
+  segments: { id: string; amount: number; title: string }[];
+  total: number;
+  reference?: number;
+  /** Noch nicht alles beantwortet: der Strich gilt für dieselben Gegenstände. */
+  partial: boolean;
+  reduceMotion: boolean;
+}) {
+  const { t } = useTourI18n();
+  const scale = reference ? Math.max(total, reference) / 0.9 : total;
+  const rest = Math.max(0, total - segments.reduce((sum, segment) => sum + segment.amount, 0));
+  const parts = rest >= 1 ? [...segments, { id: "rest", amount: rest, title: "" }] : segments;
+  const share = reference ? total / reference : 0;
+  return (
+    <div className="mt-4">
+      <div className={cn("relative h-3", reference && "rounded-[4px] bg-[var(--color-ink)]/[0.05]")} aria-hidden>
+        <motion.div
+          className="flex h-full gap-[2px] overflow-hidden"
+          initial={reduceMotion ? false : { width: 0 }}
+          animate={{ width: `${(total / scale) * 100}%` }}
+          transition={{ duration: reduceMotion ? 0 : 0.7, ease: [0.16, 1, 0.3, 1] }}
+        >
+          {parts.map((part, index) => (
+            <span
+              key={part.id}
+              title={part.title || undefined}
+              className={cn(
+                "h-full min-w-[2px] first:rounded-l-[4px] last:rounded-r-[4px]",
+                part.id === "rest" ? "bg-[var(--color-ink)]/15" : "bg-[var(--color-forest)]"
+              )}
+              style={{ flexGrow: part.amount, flexBasis: 0, opacity: part.id === "rest" ? undefined : rankShades[index] ?? 1 }}
+            />
+          ))}
+        </motion.div>
+        {reference && (
+          // Ragt über den Balken hinaus und trägt einen weißen Rand, damit er
+          // auch über dem dunklen Stück zu sehen ist.
+          <span className="absolute inset-y-[-5px] w-[3px] -translate-x-1/2 rounded-full bg-[var(--color-ink)] ring-2 ring-white" style={{ left: `${(reference / scale) * 100}%` }} />
+        )}
+      </div>
+      {reference && (
+        <span className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] leading-4 text-[var(--color-muted)]">
+          <span className="inline-flex items-center gap-1.5 font-semibold tabular-nums text-[var(--color-ink)]">
+            <span className="h-3 w-[3px] rounded-full bg-[var(--color-ink)]" aria-hidden />
+            {t.results.percentOfModel(Math.round(share * 100))}
+          </span>
+          {partial && <span>{t.results.sameObjects}</span>}
+        </span>
+      )}
+    </div>
+  );
+}
+
 /** Die Ersparnis eines Hebels in derselben Alltagsgröße wie beim Gegenstand. */
 function leverUnit(questionId: string): EverydayUnit {
   return everydayUnits[questionId] ?? "carKm";
@@ -137,6 +209,7 @@ function leverUnit(questionId: string): EverydayUnit {
 function LeverCard({
   lever,
   adjustments,
+  totals,
   active,
   goal,
   goalsFull,
@@ -145,6 +218,7 @@ function LeverCard({
 }: {
   lever: Lever;
   adjustments: Record<string, number>;
+  totals: AnnualValues;
   active: boolean;
   goal: boolean;
   goalsFull: boolean;
@@ -155,6 +229,11 @@ function LeverCard({
   const { t, locale, question } = useTourI18n();
   const unit = leverUnit(lever.questionId);
   const less = formatUnit(unit, toUnit(unit, lever.saving), t, locale);
+  // Wie groß das Stück am eigenen Jahr ist, in derselben Größe wie die Ersparnis.
+  const water = unit === "bathtubs";
+  const whole = water ? totals.waterL : totals.co2Kg;
+  const share = whole > 0 ? (water ? lever.saving.waterL : lever.saving.co2Kg) / whole : 0;
+  const percent = share < 0.01 ? "<1" : String(Math.round(share * 100));
   // Texte aus der gewählten Sprache; der Hebel selbst rechnet mit den Originaldaten.
   const text = question(lever.questionId);
   const label = (id: string) => text?.options.find((option) => option.id === id)?.label ?? id;
@@ -188,6 +267,14 @@ function LeverCard({
           </span>{" "}
           {t.results.perYearShort}
         </p>
+        <div className="mt-1.5 flex items-center gap-2">
+          <span className="relative h-1.5 w-16 shrink-0 overflow-hidden rounded-full bg-[var(--color-ink)]/10" aria-hidden>
+            <span className="absolute inset-y-0 left-0 rounded-full bg-[var(--color-forest)]" style={{ width: `${Math.max(4, share * 100)}%` }} />
+          </span>
+          <span className="text-[11px] font-semibold leading-4 text-[var(--color-ink)]">
+            {water ? t.results.leverShareWater(percent) : t.results.leverShareCo2(percent)}
+          </span>
+        </div>
       </div>
       <div className="col-start-2 flex flex-wrap gap-1.5 sm:col-start-3">
         <button
@@ -275,7 +362,8 @@ export function TourResults({
   const sorted = [...scoreDimensions].sort((a, b) => scores[b.id] - scores[a.id]);
   const hasAnswers = answeredCount > 0;
   const isComplete = answeredCount === totalQuestions;
-  const comparison = referenceValues.co2Kg > 0 ? totals.co2Kg / referenceValues.co2Kg : 0;
+  const reference = useMemo(() => referenceFor(Object.keys(answers)), [answers]);
+  const comparison = reference.co2Kg > 0 ? totals.co2Kg / reference.co2Kg : 0;
   const openRooms = rooms.filter((room) => !answeredRooms.includes(room.id));
   const lowest = sorted.at(-1) ?? scoreDimensions[0];
 
@@ -292,12 +380,15 @@ export function TourResults({
     .filter((lever): lever is Lever => Boolean(lever));
   const goalThemes = [...new Set(goalLevers.map((lever) => lever.theme))];
   const i18nLabel = (questionId: string) => i18n.question(questionId)?.sceneLabel ?? questionId;
-  const fallbackReason = t.reasons[lowest.id];
+  // Ohne Vorhaben das Thema, bei dem am meisten Spielraum steckt.
+  const fallbackTheme: LeverTheme = lowest.id === "resources" ? "carbon" : (lowest.id as LeverTheme);
   const tag = localeTags[locale];
-
-  const de = new Intl.NumberFormat(tag, { maximumFractionDigits: 0 });
-  const de1 = new Intl.NumberFormat(tag, { maximumFractionDigits: 1 });
-  const co2Text = (kg: number) => (kg >= 1000 ? `${de1.format(kg / 1000)} t` : `${de.format(kg)} kg`);
+  const f = formatters(locale);
+  const de = f.whole;
+  const co2Text = (kg: number) => {
+    const { value, tonnes } = co2Amount(kg, f);
+    return `${value} ${tonnes ? "t" : "kg"}`;
+  };
   const year = yearInPictures(totals, locale);
   const top = co2Contributions(answers, adjustments).slice(0, 5);
 
@@ -324,6 +415,13 @@ export function TourResults({
                 <span className="mt-1.5 block text-sm leading-5 text-[var(--color-muted)]">
                   {r.waterExact(de.format(round2(totals.waterL)))}
                 </span>
+                <YearBar
+                  segments={[{ id: "water", amount: totals.waterL, title: "" }]}
+                  total={totals.waterL}
+                  reference={reference.waterL || undefined}
+                  partial={!isComplete}
+                  reduceMotion={Boolean(reduceMotion)}
+                />
               </dd>
             </div>
           )}
@@ -334,6 +432,19 @@ export function TourResults({
                 <span className="block text-2xl font-semibold leading-tight tracking-[-0.02em] md:text-3xl">{year.co2}</span>
                 {year.car && (
                   <span className="mt-1.5 block text-sm leading-5 text-[var(--color-muted)]">{r.co2Compare(year.car)}</span>
+                )}
+                {top.length > 1 && (
+                  <YearBar
+                    segments={top.map((row) => ({
+                      id: row.questionId,
+                      amount: row.co2Kg,
+                      title: `${t.topics[row.questionId] ?? i18nLabel(row.questionId)}: ${co2Text(row.co2Kg)}`
+                    }))}
+                    total={totals.co2Kg}
+                    reference={reference.co2Kg || undefined}
+                    partial={!isComplete}
+                    reduceMotion={Boolean(reduceMotion)}
+                  />
                 )}
               </dd>
             </div>
@@ -363,6 +474,7 @@ export function TourResults({
                   <div className="mt-1.5 h-2 overflow-hidden rounded-full bg-[var(--color-ink)]/8" aria-hidden>
                     <motion.div
                       className="h-full rounded-[4px] bg-[var(--color-forest)]"
+                      style={{ opacity: rankShades[index] ?? 1 }}
                       initial={reduceMotion ? false : { width: 0 }}
                       animate={{ width: `${Math.max(1, row.share * 100)}%` }}
                       transition={{ duration: reduceMotion ? 0 : 0.6, ease: [0.16, 1, 0.3, 1], delay: reduceMotion ? 0 : 0.1 + index * 0.06 }}
@@ -429,7 +541,7 @@ export function TourResults({
                     {lessWater >= 150 && (
                       <>
                         <span className="font-semibold text-[var(--color-forest)]">
-                          −<CountingValue value={lessWater / 150} format={(n) => de.format(n)} /> {r.bathtubs}
+                          −<CountingValue value={lessWater / BATHTUB_LITERS} format={(n) => de.format(n)} /> {r.bathtubs}
                         </span>{" "}{r.water}{lessCo2 >= 1 ? ` ${r.and} ` : " "}
                       </>
                     )}
@@ -455,6 +567,7 @@ export function TourResults({
                     key={lever.questionId}
                     lever={lever}
                     adjustments={adjustments}
+                    totals={totals}
                     active={Boolean(whatIf[lever.questionId])}
                     goal={goals.includes(lever.questionId)}
                     goalsFull={goals.length >= MAX_GOALS}
@@ -476,10 +589,10 @@ export function TourResults({
       {hasAnswers && (
         <section className="mt-14" aria-labelledby="results-goals">
           <h2 id="results-goals" className={sectionTitle}>
-            {goalThemes.length > 0 ? r.goalsTitle : r.themeTitle}
+            {goalThemes.length > 0 ? r.goalsTitle : r.themeTitle(t.themes[fallbackTheme])}
           </h2>
           <p className="mt-2 max-w-[58ch] text-sm leading-6 text-[var(--color-muted)]">
-            {goalThemes.length > 0 ? r.goalsLead : r.noGoalsLead(MAX_GOALS, fallbackReason)}{" "}
+            {goalThemes.length > 0 ? r.goalsLead : r.noGoalsLead(MAX_GOALS, t.themes[fallbackTheme])}{" "}
             <Link
               href={`/${locale}/co2-und-biodiversitaet`}
               className={cn("font-semibold text-[var(--color-forest)] underline underline-offset-2", focusRingTool)}
@@ -489,7 +602,7 @@ export function TourResults({
           </p>
 
           <div className="mt-5 grid gap-6">
-            {(goalThemes.length > 0 ? goalThemes : [lowest.id === "resources" ? "carbon" : (lowest.id as LeverTheme)]).map((theme) => {
+            {(goalThemes.length > 0 ? goalThemes : [fallbackTheme]).map((theme) => {
               const category = categoryByDimension[theme];
               const reason = t.reasons[theme];
               const matches = projects.filter((project) => project.categoryIds.includes(category));
@@ -500,7 +613,7 @@ export function TourResults({
                     {themeGoals.length > 0 ? themeGoals.map((lever) => i18nLabel(lever.questionId)).join(", ") : t.themes[theme]}
                     <span className="font-normal text-[var(--color-muted)]"> → {getProjectCategoryLabel(category, locale)}</span>
                   </p>
-                  {goalThemes.length > 0 && <p className="mt-1 max-w-[58ch] text-xs leading-5 text-[var(--color-muted)]">{reason}</p>}
+                  <p className="mt-1 max-w-[58ch] text-xs leading-5 text-[var(--color-muted)]">{reason}</p>
                   <ul className="mt-3 grid gap-3 sm:grid-cols-2">
                     {matches.map((project) => (
                       <li key={project.slug}>
@@ -549,7 +662,7 @@ export function TourResults({
 
         <div className="border-t border-[var(--color-line)] px-5 pb-6 pt-5">
           <p className="max-w-[58ch] text-sm leading-6 text-[var(--color-muted)]">
-            {!hasAnswers ? r.noAnswers : isComplete ? r.complete(Math.round(comparison * 100)) : r.partial}
+            {!hasAnswers ? r.noAnswers : isComplete ? r.complete(Math.round(comparison * 100)) : r.partial(Math.round(comparison * 100))}
             {t.fullFootprintNote}
           </p>
           <p className="mt-2 text-xs leading-5 text-[var(--color-muted)]">
@@ -561,15 +674,15 @@ export function TourResults({
           <dl className="mt-3 grid gap-4 sm:grid-cols-3">
             {metrics.map((metric) => {
               const value = totals[metric.key];
-              const reference = referenceValues[metric.key];
+              const anchor = reference[metric.key];
               return (
                 <MeasuredMetric
                   key={metric.id}
                   label={t.metrics[metric.id].label}
                   scopeNote={t.metrics[metric.id].scopeNote}
                   value={value}
-                  reference={reference}
-                  formatted={formatMetric(metric.id, value, Math.max(value, reference), tag)}
+                  reference={anchor}
+                  formatted={formatMetric(metric.id, value, Math.max(value, anchor), tag)}
                 />
               );
             })}

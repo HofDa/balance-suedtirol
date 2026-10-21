@@ -39,7 +39,8 @@ const story: Record<string, { primary: Kind; secondary?: Kind }> = {
   "mobility-long": { primary: "co2-plain" }
 };
 
-const formatters = (locale: Locale) => ({
+/** Ganze Zahlen und Zehntel in der Schreibweise der Sprache; für alle Alltagsgrößen der Tour. */
+export const formatters = (locale: Locale) => ({
   whole: new Intl.NumberFormat(localeTags[locale], { maximumFractionDigits: 0 }),
   tenth: new Intl.NumberFormat(localeTags[locale], { maximumFractionDigits: 1 })
 });
@@ -70,8 +71,16 @@ function carKm(co2Kg: number, w: Words, f: Numbers) {
   return { count: round2(km), text: (n: number) => w.carKm(f.whole.format(n)) };
 }
 
+/** CO₂ als Zahl mit Einheit, ab einer Tonne in Tonnen: „1,2 t“, „140 kg“. */
+export function co2Amount(co2Kg: number, f: Numbers) {
+  return co2Kg >= 1000
+    ? { value: f.tenth.format(co2Kg / 1000), tonnes: true }
+    : { value: f.whole.format(round2(co2Kg)), tonnes: false };
+}
+
 function tonnes(co2Kg: number, w: Words, f: Numbers) {
-  return co2Kg >= 1000 ? w.tonnes(f.tenth.format(co2Kg / 1000)) : w.kilos(f.whole.format(round2(co2Kg)));
+  const { value, tonnes: inTonnes } = co2Amount(co2Kg, f);
+  return inTonnes ? w.tonnes(value) : w.kilos(value);
 }
 
 export type EverydayLine = { headline: string; detail?: string; saving?: string };
@@ -82,7 +91,9 @@ export function everydayLine(
   values: AnnualValues | null,
   saving: AnnualValues | null,
   impact: ScoreImpact,
-  locale: Locale = "de"
+  locale: Locale = "de",
+  /** Die Antwort, mit der die Ersparnis erreicht wäre; der Satz nennt sie beim Namen. */
+  savingOption?: string
 ): EverydayLine {
   const plan = story[questionId] ?? { primary: "co2" as Kind };
   const w = tourUi[locale].everyday;
@@ -110,7 +121,7 @@ export function everydayLine(
   return {
     headline,
     detail: second ? w.heating(second) : undefined,
-    saving: less ? w.saving(less) : undefined
+    saving: less ? w.saving(less, savingOption) : undefined
   };
 }
 
@@ -129,6 +140,21 @@ export function yearInPictures(values: AnnualValues, locale: Locale = "de") {
     co2: values.co2Kg >= 1 ? tonnes(values.co2Kg, w, f) : null,
     car: car && car.count > 0 ? car.text(car.count) : null
   };
+}
+
+/**
+ * Wo die eigene Antwort zwischen der sparsamsten und der aufwendigsten liegt,
+ * in der Größe, die der Satz darüber erzählt. „280 Badewannen“ sagt erst, ob
+ * das viel ist, wenn man sieht, dass dieselbe Dusche auch 71 sein könnte.
+ * Ohne nennenswerte Spannweite gibt es nichts zu zeigen.
+ */
+export function answerRange(questionId: string, selected: AnnualValues, alternatives: AnnualValues[]) {
+  const key = story[questionId]?.primary === "water" ? "waterL" : "co2Kg";
+  const all = [...alternatives.map((values) => values[key]), selected[key]];
+  const min = Math.min(...all);
+  const max = Math.max(...all);
+  if (!(max > 0) || (max - min) / max < 0.05) return null;
+  return { position: (selected[key] - min) / (max - min) };
 }
 
 /** Für Fragen ohne Mengenbeitrag: die Richtung in Worten statt Punkten. */
@@ -174,16 +200,14 @@ export function landmark(kind: Landmarks, value: number): { key: LandmarkKey; ti
 }
 
 /**
- * Heizenergie in der Einheit, die auf der Rechnung steht: Smc beim Gas,
- * Liter beim Öl, auf zehn gerundet. So lässt sich der Regler an der Rechnung
- * einstellen, statt sie erst umzurechnen. Fernwärme und Wärmepumpe rechnen
- * ohnehin in kWh ab; „Biomasse“ teilt sich die Option mit der Fernwärme und
- * hat deshalb keine eindeutige Einheit.
+ * Die Einheit, die auf der Heizrechnung steht: Smc beim Gas, Liter beim Öl.
+ * So wird die Rechnung abgetippt, statt sie erst in kWh umzurechnen.
+ * Fernwärme und Wärmepumpe rechnen ohnehin in kWh ab; „Biomasse“ teilt sich
+ * die Option mit der Fernwärme und hat deshalb keine eindeutige Einheit.
  */
-export function heatingBillUnit(optionId: string | undefined, kwh: number): { key: "gas" | "oil"; amount: number } | null {
-  if (!(kwh > 0)) return null;
-  if (optionId === "heat-gas") return { key: "gas", amount: Math.round(kwh / GAS_KWH_PER_SMC / 10) * 10 };
-  if (optionId === "heat-oil") return { key: "oil", amount: Math.round(kwh / HEATING_OIL_KWH_PER_LITER / 10) * 10 };
+export function heatingBillUnit(optionId: string | undefined): { key: "smc" | "liters"; kwhPerUnit: number } | null {
+  if (optionId === "heat-gas") return { key: "smc", kwhPerUnit: GAS_KWH_PER_SMC };
+  if (optionId === "heat-oil") return { key: "liters", kwhPerUnit: HEATING_OIL_KWH_PER_LITER };
   return null;
 }
 

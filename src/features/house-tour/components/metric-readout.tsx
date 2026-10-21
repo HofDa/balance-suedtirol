@@ -23,7 +23,9 @@ export function EverydayFeedback({
   saving,
   impact,
   locale = "de",
-  size = "md"
+  size = "md",
+  savingOption,
+  rangePosition
 }: {
   questionId: string;
   values: AnnualValues | null;
@@ -32,9 +34,13 @@ export function EverydayFeedback({
   locale?: Locale;
   /** `lg` ist der Ergebnisschritt: der Satz ist dort die Hauptsache. */
   size?: "md" | "lg";
+  savingOption?: string;
+  /** 0 = sparsamste, 1 = aufwendigste Antwort dieses Gegenstands. */
+  rangePosition?: number;
 }) {
   const reduceMotion = useReducedMotion();
-  const line = everydayLine(questionId, values, saving, impact, locale);
+  const { t } = useTourI18n();
+  const line = everydayLine(questionId, values, saving, impact, locale, savingOption);
   return (
     <motion.section
       key={line.headline}
@@ -55,6 +61,9 @@ export function EverydayFeedback({
       >
         {line.headline}
       </p>
+      {rangePosition !== undefined && (
+        <AnswerRange position={rangePosition} labels={t.everyday} reduceMotion={Boolean(reduceMotion)} />
+      )}
       {line.detail && (
         <p className={cn("text-[var(--color-ink)]/80", size === "lg" ? "mt-2 text-sm leading-6" : "mt-1 text-xs leading-5")}>{line.detail}</p>
       )}
@@ -62,6 +71,44 @@ export function EverydayFeedback({
         <p className={cn("text-[var(--color-muted)]", size === "lg" ? "mt-1 text-sm leading-6" : "mt-1 text-xs leading-5")}>{line.saving}</p>
       )}
     </motion.section>
+  );
+}
+
+/**
+ * Die Spannweite unter dem Satz: links die sparsamste Antwort, rechts die
+ * aufwendigste, der Punkt ist die eigene. Keine Skala und keine Zahl — die
+ * stehen im Satz darüber; hier geht es nur darum, ob das viel ist.
+ */
+function AnswerRange({
+  position,
+  labels,
+  reduceMotion
+}: {
+  position: number;
+  labels: { rangeLow: string; rangeHigh: string; rangeAria: (percent: number) => string };
+  reduceMotion: boolean;
+}) {
+  const at = `${Math.min(100, Math.max(0, position * 100))}%`;
+  return (
+    <div className="mt-3 flex items-center gap-2 text-[11px] font-semibold text-[var(--color-muted)]">
+      <span className="sr-only">{labels.rangeAria(Math.round(position * 100))}</span>
+      <span aria-hidden>{labels.rangeLow}</span>
+      <div className="relative h-1.5 min-w-0 flex-1 rounded-full bg-[var(--color-ink)]/12" aria-hidden>
+        <motion.div
+          className="absolute inset-y-0 left-0 rounded-full bg-[var(--color-forest)]/45"
+          initial={reduceMotion ? false : { width: 0 }}
+          animate={{ width: at }}
+          transition={{ duration: reduceMotion ? 0 : 0.5, ease: [0.16, 1, 0.3, 1] }}
+        />
+        <motion.span
+          className="absolute top-1/2 size-3.5 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-white bg-[var(--color-forest)] shadow-sm"
+          initial={reduceMotion ? false : { left: "0%" }}
+          animate={{ left: at }}
+          transition={{ duration: reduceMotion ? 0 : 0.5, ease: [0.16, 1, 0.3, 1] }}
+        />
+      </div>
+      <span aria-hidden>{labels.rangeHigh}</span>
+    </div>
   );
 }
 
@@ -80,7 +127,8 @@ export function AdjustControl({
   onReset,
   note,
   unset = false,
-  hideLabel = false
+  hideLabel = false,
+  hint = adjust.hint
 }: {
   adjust: QuestionAdjust;
   questionId: string;
@@ -97,6 +145,8 @@ export function AdjustControl({
   unset?: boolean;
   /** Die Überschrift des Schritts nennt die Größe schon; dann nur für Screenreader. */
   hideLabel?: boolean;
+  /** Ein Hinweis, der zur gewählten Art passt; sonst der allgemeine der Frage. */
+  hint?: string;
 }) {
   const sliderId = `adjust-${questionId}`;
   const decimals = adjust.step < 1 ? 1 : 0;
@@ -181,8 +231,8 @@ export function AdjustControl({
       {note && !unset && (
         <p className="mt-1 text-[11px] font-semibold tabular-nums text-[var(--color-forest)]">{note}</p>
       )}
-      {adjust.hint && (
-        <p className="mt-1 text-[11px] leading-4 text-[var(--color-muted)]">{adjust.hint}</p>
+      {hint && (
+        <p className="mt-1 text-[11px] leading-4 text-[var(--color-muted)]">{hint}</p>
       )}
     </div>
   );

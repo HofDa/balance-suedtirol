@@ -5,6 +5,8 @@ import {
   GRID_CO2_PER_KWH,
   optionValues,
   quantityFor,
+  referenceAnswers,
+  referenceFor,
   referenceValues,
   totalValues
 } from "../src/features/house-tour/model/calculator";
@@ -125,11 +127,12 @@ test("alle konfigurierten Optionen liefern endliche, nichtnegative Jahreswerte",
 });
 
 test("der Modellvergleich bleibt an eine reproduzierbare mittlere Auswahl gekoppelt", () => {
-  const answers: Record<string, string> = {};
-  for (const room of availableRooms) for (const question of room.questions) {
-    answers[question.id] = middleOption(question).id;
-  }
-  const values = totalValues(answers, {});
+  const ids = availableRooms.flatMap((room) => room.questions.map((question) => question.id));
+  assert.deepEqual(Object.keys(referenceAnswers).sort(), [...ids].sort());
+  const values = totalValues(referenceAnswers, {});
+  // Teilweise beantwortet: nur die beantworteten Gegenstände zählen, und alle zusammen ergeben das Ganze.
+  assert.deepEqual(referenceFor(ids), values);
+  assert.ok(referenceFor(["bath-shower"]).waterL > 0 && referenceFor(["bath-shower"]).co2Kg < values.co2Kg);
   assert.ok(Math.abs(values.co2Kg - referenceValues.co2Kg) / referenceValues.co2Kg < 0.01);
   assert.ok(Math.abs(values.waterL - referenceValues.waterL) / referenceValues.waterL < 0.01);
   assert.ok(Math.abs(values.energyKwh - referenceValues.energyKwh) / referenceValues.energyKwh < 0.01);

@@ -17,6 +17,7 @@ export type ProjectSupportCopy = {
   amount: string;
   volunteeringCopy: string;
   confirm: string;
+  requestNote: string;
 };
 
 const LazyProjectSupportDialog = dynamic(
@@ -45,7 +46,8 @@ export function ProjectSupportTrigger({
   );
 }
 
-export function ProjectSupportDialog({
+/** Hört auf den Auslöser und lädt den Dialog erst, wenn ihn jemand öffnet. */
+export function ProjectSupportHost({
   title,
   municipality,
   organization,

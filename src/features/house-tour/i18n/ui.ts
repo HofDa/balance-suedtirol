@@ -101,11 +101,19 @@ export type TourUi = {
   };
   continue: string;
   finishRoom: string;
-  adjust: { reset: string; less: (label: string) => string; more: (label: string) => string; setTo: (value: string) => string };
+  adjust: { reset: string; less: (label: string) => string; more: (label: string) => string; setTo: (value: string) => string; heatPump: string };
   /** Vergleichsgrößen unter großen Reglern; `n` ist schon formatiert. */
   landmarks: Record<LandmarkKey, (n: string, one: boolean) => string>;
   /** Heizung in der Einheit der Rechnung, Strom gegen den Südtiroler Durchschnitt. */
-  bill: { gas: (n: string) => string; oil: (n: string) => string; electricity: (n: string) => string };
+  bill: { smc: string; liters: string; electricity: (n: string) => string };
+  /** Die Personenzahl, durch die Rechnungswerte geteilt werden. */
+  household: {
+    label: string;
+    fewer: string;
+    more: string;
+    perPerson: (amount: string) => string;
+    people: (n: number) => string;
+  };
   /** Wovon ein Gegenstand handelt, für Ranglisten: „Autofahrten“ statt „Jahreswege ansehen“. */
   topics: Record<string, string>;
   presets: string;
@@ -142,13 +150,17 @@ export type TourUi = {
     co2: (head: string) => string;
     plain: (head: string) => string;
     heating: (second: string) => string;
-    saving: (less: string) => string;
+    saving: (less: string, option?: string) => string;
     natureStrong: string;
     natureSome: string;
     natureNone: string;
     thrifty: string;
     room: string;
     none: string;
+    /** Die Enden der Spannweite unter dem Satz: sparsamste und aufwendigste Antwort. */
+    rangeLow: string;
+    rangeHigh: string;
+    rangeAria: (percent: number) => string;
   };
   roomComplete: {
     title: (room: string) => string;
@@ -193,16 +205,18 @@ export type TourUi = {
     captionNow: string;
     captionTried: string;
     goalsTitle: string;
-    themeTitle: string;
+    themeTitle: (theme: string) => string;
     goalsLead: string;
-    noGoalsLead: (n: number, reason: string) => string;
+    noGoalsLead: (n: number, theme: string) => string;
+    leverShareCo2: (percent: string) => string;
+    leverShareWater: (percent: string) => string;
     whyNot: string;
     viewProject: string;
     exactTitle: string;
     exactEmpty: string;
     noAnswers: string;
     complete: (percent: number) => string;
-    partial: string;
+    partial: (percent: number) => string;
     answered: (answered: number, total: number) => Rich;
     calculated: string;
     calculatedSub: string;
@@ -214,6 +228,7 @@ export type TourUi = {
     indexNote: string;
     modelComparison: string;
     percentOfModel: (percent: number) => string;
+    sameObjects: string;
     toHouse: string;
   };
   themes: { water: string; biodiversity: string; carbon: string };
@@ -456,7 +471,7 @@ const de: TourUi = {
   },
   continue: "Weiter",
   finishRoom: "Raum abschließen",
-  adjust: { reset: "Vorgabe", less: (label) => `${label}: weniger`, more: (label) => `${label}: mehr`, setTo: (value) => `Auf ${value} setzen` },
+  adjust: { reset: "Vorgabe", less: (label) => `${label}: weniger`, more: (label) => `${label}: mehr`, setTo: (value) => `Auf ${value} setzen`, heatPump: "Nur den Strom der Wärmepumpe angeben." },
   landmarks: {
     meran: (n) => `≈ ${n}× Bozen–Meran`,
     innsbruck: (n) => `≈ ${n}× Bozen–Innsbruck`,
@@ -466,9 +481,16 @@ const de: TourUi = {
     tennis: (n, one) => `≈ ${n} ${one ? "Tennisplatz" : "Tennisplätze"}`
   },
   bill: {
-    gas: (n) => `≈ ${n} Smc Erdgas — die Einheit auf der Gasrechnung`,
-    oil: (n) => `≈ ${n} Liter Heizöl`,
-    electricity: (n) => `≈ ${n}× der Südtiroler Durchschnitt pro Kopf`
+    smc: "Smc",
+    liters: "Liter",
+    electricity: (n) => `${n}× der Südtiroler Durchschnitt`
+  },
+  household: {
+    label: "Personen im Haushalt",
+    fewer: "Eine Person weniger",
+    more: "Eine Person mehr",
+    perPerson: (amount) => `= ${amount} kWh pro Person`,
+    people: (n) => `${n} Personen`
   },
   topics: {
     "bedroom-heating": "Heizung",
@@ -523,13 +545,16 @@ const de: TourUi = {
     co2: (head) => `So viel CO₂ wie ${head} im Jahr.`,
     plain: (head) => `Rund ${head} im Jahr.`,
     heating: (second) => `Das Aufheizen wiegt so viel CO₂ wie ${second}.`,
-    saving: (less) => `Mit der sparsamsten Antwort: ${less} weniger.`,
+    saving: (less, option) => (option ? `Mit „${option}“: ${less} weniger.` : `Mit der sparsamsten Antwort: ${less} weniger.`),
     natureStrong: "Ein echter Gewinn für Wildbienen, Vögel und Falter.",
     natureSome: "Ein Anfang für die Artenvielfalt vor deiner Tür.",
     natureNone: "Hier findet die Natur vor deiner Tür wenig.",
     thrifty: "Eine sparsame Wahl.",
     room: "Hier steckt noch Spielraum.",
-    none: "Zählt nicht in die Bilanz — eine Frage zum Nachdenken."
+    none: "Zählt nicht in die Bilanz — eine Frage zum Nachdenken.",
+    rangeLow: "sparsam",
+    rangeHigh: "aufwendig",
+    rangeAria: (percent) => `Deine Antwort liegt bei ${percent} % zwischen der sparsamsten und der aufwendigsten Antwort.`
   },
   roomComplete: {
     title: (room) => `${room} entdeckt`,
@@ -561,7 +586,7 @@ const de: TourUi = {
     continueRoom: (room) => `Weiter: ${room}`,
     stillOpen: (rooms) => `Noch offen: ${rooms}. Die Bilanz unten ist bis dahin ein Zwischenstand.`,
     whatIfTitle: "Was wäre, wenn …?",
-    whatIfLead: "Deine Antworten bleiben, wie sie sind. Hier probierst du aus, was die größten Hebel aus deinem Haushalt bewirken würden.",
+    whatIfLead: "Ein Hebel ist eine andere Antwort bei einem deiner Gegenstände — jeweils die, die am meisten ändert. Schalte ihn ein, und die Leiste darüber rechnet dein Jahr neu. Deine echten Antworten bleiben dabei, wie sie sind.",
     whatIfHint: "Schalte einen Hebel ein, um zu sehen, was er im Jahr ausmacht.",
     withLevers: (n) => (n === 1 ? "Mit diesem Hebel:" : `Mit ${n} Hebeln:`),
     bathtubs: "Badewannen",
@@ -580,17 +605,19 @@ const de: TourUi = {
     captionNow: "Jetzt",
     captionTried: "Ausprobiert",
     goalsTitle: "Deine Vorhaben in Südtirol",
-    themeTitle: "Wo dein Thema in Südtirol wirkt",
+    themeTitle: (theme) => `Projekte zum Thema ${theme} in Südtirol`,
     goalsLead:
       "Ein Projekt macht keine Dusche und keinen Kilometer wett — das soll es auch nicht. Es zeigt, wo dasselbe Thema in Südtirol vor Ort Lebensraum schafft.",
-    noGoalsLead: (n, reason) => `Merk dir bis zu ${n} Hebel als Vorhaben, dann ordnen wir sie Projekten zu. Bis dahin: ${reason}`,
+    noGoalsLead: (n, theme) => `Beim Thema ${theme} steckt in deinen Antworten am meisten Spielraum. Diese Projekte arbeiten in Südtirol am selben Thema — als Anregung, nicht als Ausgleich. Merk dir bis zu ${n} Hebel als Vorhaben, dann zeigen wir Projekte zu genau diesen.`,
+    leverShareCo2: (percent) => `${percent} % deiner Klimawirkung`,
+    leverShareWater: (percent) => `${percent} % deines Wasserverbrauchs`,
     whyNot: "Warum wir nicht kompensieren",
     viewProject: "Projekt ansehen",
     exactTitle: "Genaue Bilanz und Methodik",
     exactEmpty: "noch leer",
     noAnswers: "Beantworte mindestens eine Frage, bevor Zahlen eingeordnet werden. ",
     complete: (percent) => `Das entspricht rund ${percent} % des Vergleichswerts für den erfassten Ausschnitt. `,
-    partial: "Diese Summe ist ein Zwischenstand und darf nicht als vollständiges persönliches Ergebnis gelesen werden. ",
+    partial: (percent) => `Ein Zwischenstand: rund ${percent} % des Vergleichswerts für dieselben Gegenstände. Als vollständiges persönliches Ergebnis taugt die Summe noch nicht. `,
     answered: (answered, total) => ["Beantwortet sind ", { b: `${answered} von ${total} Fragen` }, "."],
     calculated: "Gerechnet",
     calculatedSub: "Physikalische Größen pro Person und Jahr",
@@ -603,6 +630,7 @@ const de: TourUi = {
       "Diese vier Werte sind keine validierten Messwerte. Mengenregler verändern den Index entlang der berechneten Belastung; nicht quantifizierbare Wirkungen bleiben als vorsichtige qualitative Punkte getrennt von den Messwerten oben. Die Entdeckerpunkte des Spiels fließen in keinen dieser Werte ein.",
     modelComparison: "Modellvergleich",
     percentOfModel: (percent) => `${percent} % des Modellvergleichs`,
+    sameObjects: "für dieselben Gegenstände",
     toHouse: "Zur Hausübersicht"
   },
   themes: { water: "Wasser", biodiversity: "Lebensraum", carbon: "Klima" },
@@ -723,7 +751,7 @@ const it: TourUi = {
   },
   continue: "Avanti",
   finishRoom: "Concludi la stanza",
-  adjust: { reset: "Valore predefinito", less: (label) => `${label}: meno`, more: (label) => `${label}: più`, setTo: (value) => `Imposta a ${value}` },
+  adjust: { reset: "Valore predefinito", less: (label) => `${label}: meno`, more: (label) => `${label}: più`, setTo: (value) => `Imposta a ${value}`, heatPump: "Indica solo l’elettricità della pompa di calore." },
   landmarks: {
     meran: (n) => `≈ ${n}× Bolzano–Merano`,
     innsbruck: (n) => `≈ ${n}× Bolzano–Innsbruck`,
@@ -733,9 +761,16 @@ const it: TourUi = {
     tennis: (n, one) => `≈ ${n} ${one ? "campo da tennis" : "campi da tennis"}`
   },
   bill: {
-    gas: (n) => `≈ ${n} Smc di metano — l’unità della bolletta del gas`,
-    oil: (n) => `≈ ${n} litri di gasolio da riscaldamento`,
-    electricity: (n) => `≈ ${n}× la media altoatesina pro capite`
+    smc: "Smc",
+    liters: "litri",
+    electricity: (n) => `${n}× la media altoatesina`
+  },
+  household: {
+    label: "Persone in casa",
+    fewer: "Una persona in meno",
+    more: "Una persona in più",
+    perPerson: (amount) => `= ${amount} kWh a persona`,
+    people: (n) => `${n} persone`
   },
   topics: {
     "bedroom-heating": "Riscaldamento",
@@ -790,13 +825,16 @@ const it: TourUi = {
     co2: (head) => `Tanta CO₂ quanto ${head} all’anno.`,
     plain: (head) => `Circa ${head} all’anno.`,
     heating: (second) => `Scaldare l’acqua pesa in CO₂ quanto ${second}.`,
-    saving: (less) => `Con la risposta più parsimoniosa: ${less} in meno.`,
+    saving: (less, option) => (option ? `Con «${option}»: ${less} in meno.` : `Con la risposta più parsimoniosa: ${less} in meno.`),
     natureStrong: "Un vero guadagno per api selvatiche, uccelli e farfalle.",
     natureSome: "Un inizio per la biodiversità davanti a casa.",
     natureNone: "Qui la natura davanti a casa trova poco.",
     thrifty: "Una scelta parsimoniosa.",
     room: "Qui c’è ancora margine.",
-    none: "Non conta nel bilancio — una domanda per riflettere."
+    none: "Non conta nel bilancio — una domanda per riflettere.",
+    rangeLow: "parsimonioso",
+    rangeHigh: "dispendioso",
+    rangeAria: (percent) => `La tua risposta si trova al ${percent} % tra la più parsimoniosa e la più dispendiosa.`
   },
   roomComplete: {
     title: (room) => `${room}: scoperto`,
@@ -828,7 +866,7 @@ const it: TourUi = {
     continueRoom: (room) => `Avanti: ${room}`,
     stillOpen: (rooms) => `Ancora da scoprire: ${rooms}. Fino ad allora il bilancio qui sotto è provvisorio.`,
     whatIfTitle: "E se …?",
-    whatIfLead: "Le tue risposte restano come sono. Qui provi che effetto avrebbero le leve più grandi della tua casa.",
+    whatIfLead: "Una leva è un’altra risposta per uno dei tuoi oggetti — ogni volta quella che cambia di più. Attivala e la barra sopra ricalcola il tuo anno. Le tue risposte vere restano come sono.",
     whatIfHint: "Attiva una leva per vedere quanto conta in un anno.",
     withLevers: (n) => (n === 1 ? "Con questa leva:" : `Con ${n} leve:`),
     bathtubs: "vasche da bagno",
@@ -847,17 +885,19 @@ const it: TourUi = {
     captionNow: "Ora",
     captionTried: "Provato",
     goalsTitle: "I tuoi propositi in Alto Adige",
-    themeTitle: "Dove il tuo tema agisce in Alto Adige",
+    themeTitle: (theme) => `Progetti sul tema ${theme.toLowerCase()} in Alto Adige`,
     goalsLead:
       "Un progetto non compensa nessuna doccia e nessun chilometro — e non deve farlo. Mostra dove lo stesso tema crea habitat sul posto in Alto Adige.",
-    noGoalsLead: (n, reason) => `Segna fino a ${n} leve come propositi e le collegheremo a dei progetti. Nel frattempo: ${reason}`,
+    noGoalsLead: (n, theme) => `Nelle tue risposte il margine maggiore è sul tema ${theme.toLowerCase()}. Questi progetti lavorano sullo stesso tema in Alto Adige — come spunto, non come compensazione. Segna fino a ${n} leve come propositi e ti mostreremo progetti proprio su quelle.`,
+    leverShareCo2: (percent) => `${percent} % del tuo impatto sul clima`,
+    leverShareWater: (percent) => `${percent} % del tuo consumo d’acqua`,
     whyNot: "Perché non compensiamo",
     viewProject: "Vedi il progetto",
     exactTitle: "Bilancio esatto e metodo",
     exactEmpty: "ancora vuoto",
     noAnswers: "Rispondi ad almeno una domanda prima che i numeri vengano inquadrati. ",
     complete: (percent) => `Corrisponde a circa il ${percent} % del valore di confronto per l’ambito rilevato. `,
-    partial: "Questa somma è provvisoria e non va letta come risultato personale completo. ",
+    partial: (percent) => `Un risultato provvisorio: circa il ${percent} % del valore di confronto per gli stessi oggetti. La somma non va ancora letta come risultato personale completo. `,
     answered: (answered, total) => ["Hai risposto a ", { b: `${answered} domande su ${total}` }, "."],
     calculated: "Calcolato",
     calculatedSub: "Grandezze fisiche per persona all’anno",
@@ -870,6 +910,7 @@ const it: TourUi = {
       "Questi quattro valori non sono misure validate. I cursori delle quantità spostano l’indice lungo il carico calcolato; gli effetti non quantificabili restano punti qualitativi prudenti, separati dai valori misurati sopra. I punti scoperta del gioco non entrano in nessuno di questi valori.",
     modelComparison: "Confronto modello",
     percentOfModel: (percent) => `${percent} % del confronto modello`,
+    sameObjects: "per gli stessi oggetti",
     toHouse: "Alla panoramica della casa"
   },
   themes: { water: "Acqua", biodiversity: "Habitat", carbon: "Clima" },
@@ -990,7 +1031,7 @@ const en: TourUi = {
   },
   continue: "Next",
   finishRoom: "Finish room",
-  adjust: { reset: "Default", less: (label) => `${label}: less`, more: (label) => `${label}: more`, setTo: (value) => `Set to ${value}` },
+  adjust: { reset: "Default", less: (label) => `${label}: less`, more: (label) => `${label}: more`, setTo: (value) => `Set to ${value}`, heatPump: "Enter only the heat pump’s electricity." },
   landmarks: {
     meran: (n) => `≈ ${n}× Bolzano–Merano`,
     innsbruck: (n) => `≈ ${n}× Bolzano–Innsbruck`,
@@ -1000,9 +1041,16 @@ const en: TourUi = {
     tennis: (n, one) => `≈ ${n} ${one ? "tennis court" : "tennis courts"}`
   },
   bill: {
-    gas: (n) => `≈ ${n} Smc of natural gas — the unit on your gas bill`,
-    oil: (n) => `≈ ${n} litres of heating oil`,
-    electricity: (n) => `≈ ${n}× the South Tyrol average per person`
+    smc: "Smc",
+    liters: "litres",
+    electricity: (n) => `${n}× the South Tyrol average`
+  },
+  household: {
+    label: "People in your household",
+    fewer: "One person fewer",
+    more: "One person more",
+    perPerson: (amount) => `= ${amount} kWh per person`,
+    people: (n) => `${n} people`
   },
   topics: {
     "bedroom-heating": "Heating",
@@ -1057,13 +1105,16 @@ const en: TourUi = {
     co2: (head) => `As much CO₂ as ${head} a year.`,
     plain: (head) => `About ${head} a year.`,
     heating: (second) => `Heating the water weighs as much CO₂ as ${second}.`,
-    saving: (less) => `With the most economical answer: ${less} less.`,
+    saving: (less, option) => (option ? `With “${option}”: ${less} less.` : `With the most economical answer: ${less} less.`),
     natureStrong: "A real gain for wild bees, birds and butterflies.",
     natureSome: "A start for the biodiversity outside your door.",
     natureNone: "Here nature outside your door finds little.",
     thrifty: "An economical choice.",
     room: "There’s still room to move here.",
-    none: "Doesn’t count in the balance — a question for reflection."
+    none: "Doesn’t count in the balance — a question for reflection.",
+    rangeLow: "economical",
+    rangeHigh: "lavish",
+    rangeAria: (percent) => `Your answer sits at ${percent} % between the most economical and the most lavish answer.`
   },
   roomComplete: {
     title: (room) => `${room} discovered`,
@@ -1095,7 +1146,7 @@ const en: TourUi = {
     continueRoom: (room) => `Next: ${room}`,
     stillOpen: (rooms) => `Still to discover: ${rooms}. Until then the balance below is provisional.`,
     whatIfTitle: "What if …?",
-    whatIfLead: "Your answers stay as they are. Here you try out what the biggest levers in your household would do.",
+    whatIfLead: "A lever is a different answer for one of your objects — the one that changes the most. Switch it on and the bar above recalculates your year. Your real answers stay as they are.",
     whatIfHint: "Switch on a lever to see what it makes up in a year.",
     withLevers: (n) => (n === 1 ? "With this lever:" : `With ${n} levers:`),
     bathtubs: "bathtubs",
@@ -1114,17 +1165,19 @@ const en: TourUi = {
     captionNow: "Now",
     captionTried: "Tried",
     goalsTitle: "Your goals in South Tyrol",
-    themeTitle: "Where your theme matters in South Tyrol",
+    themeTitle: (theme) => `Projects on ${theme.toLowerCase()} in South Tyrol`,
     goalsLead:
       "A project doesn’t make up for a shower or a kilometre — and it isn’t meant to. It shows where the same theme creates habitat on the ground in South Tyrol.",
-    noGoalsLead: (n, reason) => `Save up to ${n} levers as goals and we’ll match them to projects. Until then: ${reason}`,
+    noGoalsLead: (n, theme) => `Your answers leave the most room on ${theme.toLowerCase()}. These projects work on the same topic in South Tyrol — as inspiration, not as offsetting. Save up to ${n} levers as goals and we’ll show projects for exactly those.`,
+    leverShareCo2: (percent) => `${percent} % of your climate impact`,
+    leverShareWater: (percent) => `${percent} % of your water use`,
     whyNot: "Why we don’t offset",
     viewProject: "View project",
     exactTitle: "Exact balance and method",
     exactEmpty: "still empty",
     noAnswers: "Answer at least one question before the numbers are put in context. ",
     complete: (percent) => `That’s about ${percent} % of the comparison value for the recorded scope. `,
-    partial: "This total is provisional and must not be read as a complete personal result. ",
+    partial: (percent) => `A provisional result: about ${percent} % of the comparison value for the same objects. The total can’t yet be read as a complete personal result. `,
     answered: (answered, total) => ["You’ve answered ", { b: `${answered} of ${total} questions` }, "."],
     calculated: "Calculated",
     calculatedSub: "Physical quantities per person per year",
@@ -1137,6 +1190,7 @@ const en: TourUi = {
       "These four values aren’t validated measurements. Quantity sliders move the index along the calculated load; effects that can’t be quantified stay as cautious qualitative points, separate from the measured values above. The game’s discovery points feed into none of these values.",
     modelComparison: "Model comparison",
     percentOfModel: (percent) => `${percent} % of the model comparison`,
+    sameObjects: "for the same objects",
     toHouse: "To the house overview"
   },
   themes: { water: "Water", biodiversity: "Habitat", carbon: "Climate" },

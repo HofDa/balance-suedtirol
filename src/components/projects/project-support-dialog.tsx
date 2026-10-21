@@ -1,12 +1,15 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { CheckCircle2, Heart, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Surface } from "@/components/ui/surface";
 import { chipClass } from "@/components/ui/chip";
+import { submissionRecipient } from "@/features/project-submission/config/copy";
 import type { ProjectSupportCopy } from "./project-support";
+
+const focusable = 'button:not([disabled]), input:not([disabled]), [href], [tabindex]:not([tabindex="-1"])';
 
 export function ProjectSupportDialog({
   title,
@@ -24,14 +27,49 @@ export function ProjectSupportDialog({
   const [supportType, setSupportType] = useState<"donation" | "sponsorship" | "volunteering">("donation");
   const [amount, setAmount] = useState(50);
   const [hasSupported, setHasSupported] = useState(false);
+  const sheetRef = useRef<HTMLDivElement>(null);
 
+  // Fokus in den Dialog, beim Tabben darin halten und beim Schließen
+  // dorthin zurück, wo er vorher war.
+  useEffect(() => {
+    const previous = document.activeElement as HTMLElement | null;
+    sheetRef.current?.querySelector<HTMLElement>(focusable)?.focus();
+    const trap = (event: KeyboardEvent) => {
+      if (event.key !== "Tab" || !sheetRef.current) return;
+      const items = [...sheetRef.current.querySelectorAll<HTMLElement>(focusable)];
+      if (items.length === 0) return;
+      const first = items[0];
+      const last = items[items.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    };
+    document.addEventListener("keydown", trap);
+    return () => {
+      document.removeEventListener("keydown", trap);
+      previous?.focus();
+    };
+  }, []);
+
+  // Hier wird nichts bezahlt: Die Seite bereitet nur eine E-Mail vor, und die
+  // Unterstützung wird danach persönlich vereinbart.
   const handleSupport = (event: React.FormEvent) => {
     event.preventDefault();
+    const typeLabel = { donation: copy.donation, sponsorship: copy.sponsorship, volunteering: copy.volunteering }[supportType];
+    const lines = [`${title} · ${municipality}`, typeLabel];
+    if (supportType !== "volunteering") lines.push(`${copy.amount}: ${amount}`);
+    const subject = encodeURIComponent(`${copy.support}: ${title}`);
+    window.location.href = `mailto:${submissionRecipient}?subject=${subject}&body=${encodeURIComponent(lines.join("\n"))}`;
     setHasSupported(true);
   };
 
   return (
     <div
+      ref={sheetRef}
       className="dialog-scrim fixed inset-0 z-50 flex items-center justify-center bg-[var(--color-ink)]/60 p-4 backdrop-blur-xs"
       role="dialog"
       aria-modal="true"
@@ -101,6 +139,8 @@ export function ProjectSupportDialog({
                 </div>
                 <input
                   type="number"
+                  min={1}
+                  required
                   value={amount}
                   onChange={(event) => setAmount(Number(event.target.value))}
                   className="min-h-11 w-full rounded-[var(--radius-md)] border border-[var(--color-line)] p-3 text-sm font-bold tabular-nums text-[var(--color-ink)] focus:border-[var(--color-forest)] focus:outline-none focus:ring-2 focus:ring-[var(--color-forest)]/20"
@@ -115,6 +155,7 @@ export function ProjectSupportDialog({
             <Button type="submit" className="w-full bg-[var(--color-forest)] font-bold hover:bg-[var(--color-ink)]">
               {copy.confirm}
             </Button>
+            <p className="-mt-3 text-center text-xs text-[var(--color-muted)]">{copy.requestNote}</p>
           </form>
         )}
       </Surface>

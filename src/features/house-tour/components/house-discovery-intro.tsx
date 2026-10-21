@@ -90,7 +90,7 @@ export function HouseDiscoveryIntro({
   }
 
   return (
-    <section className="flex h-full min-h-0 flex-col overflow-y-auto bg-white px-4 py-5 sm:px-6 sm:py-8">
+    <section className="flex h-full min-h-0 flex-col overflow-y-auto bg-white px-4 pt-5 sm:px-6 sm:py-8">
       <div className="m-auto w-full max-w-lg">
         <h1 className="text-2xl font-semibold leading-tight tracking-[-0.03em] sm:text-3xl">
           {intro.headline}
@@ -122,11 +122,15 @@ export function HouseDiscoveryIntro({
           {intro.honesty}
         </p>
 
+        {/* Mobil passt die Anleitung nicht ganz unter das Hausbild; der Start
+            bleibt deshalb am unteren Rand stehen, statt unter dem Falz zu liegen. */}
         {rooms[0] && (
-          <button type="button" onClick={() => onSelectRoom(rooms[0].id)} className={cn(primary, "mt-5")}>
-            {intro.start}
-            <ChevronRight className="size-4" aria-hidden />
-          </button>
+          <div className="sticky bottom-0 -mx-4 mt-5 border-t border-[var(--color-line)] bg-white px-4 py-2 sm:static sm:mx-0 sm:border-0 sm:p-0">
+            <button type="button" onClick={() => onSelectRoom(rooms[0].id)} className={cn(primary, "w-full justify-center sm:w-auto")}>
+              {intro.start}
+              <ChevronRight className="size-4" aria-hidden />
+            </button>
+          </div>
         )}
       </div>
     </section>

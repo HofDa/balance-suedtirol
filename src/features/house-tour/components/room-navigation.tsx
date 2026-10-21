@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import { Check, Home } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { focusRingTool } from "@/components/ui/focus";
@@ -30,6 +31,21 @@ export function RoomNavigation({
   onHouse: () => void;
 }) {
   const { t, rooms } = useTourI18n();
+  // Küche, Mobilität und Garten liegen mobil rechts außerhalb der Leiste; der
+  // aktuelle Raum rückt deshalb ins Bild, statt abgeschnitten zu bleiben.
+  const listRef = useRef<HTMLUListElement>(null);
+  useEffect(() => {
+    const list = listRef.current;
+    const active = list?.querySelector<HTMLElement>('[aria-current="step"]');
+    if (!list || !active) return;
+    const box = list.getBoundingClientRect();
+    const item = active.getBoundingClientRect();
+    // 24 px: die ausblendende Maske am rechten Rand.
+    const overflowRight = item.right + 24 - box.right;
+    const overflowLeft = box.left - item.left;
+    if (overflowRight > 0) list.scrollLeft += overflowRight;
+    else if (overflowLeft > 0) list.scrollLeft -= overflowLeft;
+  }, [activeRoom]);
   return (
     <nav
       aria-label={t.roomNav.label}
@@ -49,6 +65,7 @@ export function RoomNavigation({
 
       {/* Waagrecht laufend mit ausblendender Maske statt sichtbarer Bildlaufleiste. */}
       <ul
+        ref={listRef}
         className="flex min-w-0 flex-1 items-center gap-1 overflow-x-auto py-1.5 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
         style={{
           maskImage: "linear-gradient(to right, #000 calc(100% - 24px), transparent)",

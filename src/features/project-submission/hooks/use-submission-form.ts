@@ -113,7 +113,8 @@ export function useSubmissionForm(locale: Locale) {
     anchor.href = url;
     anchor.download = buildFileName(values);
     anchor.click();
-    URL.revokeObjectURL(url);
+    // Sofort freigegeben, bricht Safari oder Firefox den Download teils ab.
+    window.setTimeout(() => URL.revokeObjectURL(url), 1000);
   }, [copy, locale, values]);
 
   const handleSubmit = () => {

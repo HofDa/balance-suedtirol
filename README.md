@@ -20,12 +20,14 @@ Ein lauffähiges Next.js-Grundgerüst für eine hochwertige Plattform, die pers�
 
 ## Voraussetzungen
 
-- Node.js 20.18 oder neuer
-- npm 10 oder neuer empfohlen
+- Node.js 24.22.1 LTS (Version in `.nvmrc`)
+- npm 11 oder neuer empfohlen
 
 ## Installation
 
 ```bash
+nvm install
+nvm use
 cp .env.example .env
 npm ci
 npm run dev

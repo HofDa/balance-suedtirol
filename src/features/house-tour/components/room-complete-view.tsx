@@ -60,7 +60,7 @@ export function RoomCompleteView({
     <motion.div
       initial={reduceMotion ? false : { opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
-      className="mx-auto flex min-h-full max-w-lg flex-col justify-center pb-4"
+      className="mx-auto flex min-h-full max-w-lg flex-col justify-center md:pb-4"
     >
       <div className="flex items-baseline justify-between gap-3">
         <h2 className="text-2xl font-semibold tracking-[-0.025em]">{t.roomComplete.title(room.title)}</h2>
@@ -104,7 +104,9 @@ export function RoomCompleteView({
         ))}
       </ul>
 
-      <div className="mt-6 flex flex-wrap gap-3">
+      {/* Wie in jedem Schritt steht der Weg weiter mobil am unteren Rand; die
+          Liste darüber darf scrollen, der nächste Raum liegt nie unter dem Falz. */}
+      <div className="sticky bottom-0 -mx-4 mt-6 flex flex-wrap gap-3 border-t border-[var(--color-line)] bg-white px-4 py-2 md:static md:mx-0 md:border-0 md:p-0">
         <button
           type="button"
           onClick={allComplete ? onResults : onNextRoom}

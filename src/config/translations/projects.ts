@@ -136,14 +136,15 @@ export const projectsCopy = {
       finalCopy: "Direkt unterstützen oder weitere Projekte in Südtirol ansehen.",
       discoverMore: "Weitere Biodiversitätsprojekte",
       close: "Dialog schließen",
-      thankYou: "Vielen Dank für deine Unterstützung!",
-      thankYouCopy: "Der Stand des Projekts wird auf dieser Seite aktualisiert.",
+      thankYou: "Fast geschafft",
+      thankYouCopy: "Dein E-Mail-Programm hat eine Anfrage vorbereitet. Sobald du sie abschickst, melden wir uns mit den nächsten Schritten. Verbindlich ist bis dahin nichts.",
       donation: "Spende",
       sponsorship: "Patenschaft",
       volunteering: "Mithelfen",
       amount: "Beitragsbetrag (€)",
       volunteeringCopy: "Als ehrenamtliche Person unterstützt du bei Pflanzaktionen und Monitoring vor Ort. Wir senden dir alle Details per E-Mail.",
-      confirm: "Jetzt verbindlich bestätigen"
+      confirm: "Anfrage per E-Mail senden",
+      requestNote: "Es wird noch nichts bezahlt. Wir melden uns persönlich mit allen Details."
     },
     card: { view: "Projekt ansehen", of: "von", supporters: "Unterstützer:innen", funding: "Finanzierung", open: "offen", status: "Projektstatus", mainSponsor: "Hauptinvestor:in", placeholder: "Platzhalter", partner: "Partner:innen", sponsorOpen: "Hier könnte Ihr Logo oder Name stehen" }
   },
@@ -284,14 +285,15 @@ export const projectsCopy = {
       finalCopy: "Sostienilo direttamente o guarda altri progetti in Alto Adige.",
       discoverMore: "Altri progetti per la biodiversità",
       close: "Chiudi finestra",
-      thankYou: "Grazie per il tuo sostegno!",
-      thankYouCopy: "Lo stato del progetto viene aggiornato su questa pagina.",
+      thankYou: "Quasi fatto",
+      thankYouCopy: "Il tuo programma di posta ha preparato una richiesta. Quando la invii, ti ricontattiamo con i prossimi passi. Fino ad allora nulla è vincolante.",
       donation: "Donazione",
       sponsorship: "Sostegno",
       volunteering: "Volontariato",
       amount: "Importo (€)",
       volunteeringCopy: "Come volontario o volontaria puoi partecipare alle attività di piantumazione e monitoraggio sul posto. Ti invieremo tutti i dettagli via e-mail.",
-      confirm: "Conferma"
+      confirm: "Invia richiesta via e-mail",
+      requestNote: "Non si paga ancora nulla. Ti ricontattiamo personalmente con tutti i dettagli."
     },
     card: { view: "Vedi il progetto", of: "su", supporters: "sostenitori", funding: "Finanziamento", open: "mancanti", status: "Stato del progetto", mainSponsor: "Investitore principale", placeholder: "Segnaposto", partner: "Partner", sponsorOpen: "Qui potrebbe esserci il tuo logo o nome" }
   },
@@ -432,14 +434,15 @@ export const projectsCopy = {
       finalCopy: "Support it directly or view more projects in South Tyrol.",
       discoverMore: "Discover more biodiversity projects",
       close: "Close dialog",
-      thankYou: "Thank you for your support!",
-      thankYouCopy: "The project's status is updated on this page.",
+      thankYou: "Almost done",
+      thankYouCopy: "Your email app has prepared a request. Once you send it, we will get back to you with the next steps. Nothing is binding until then.",
       donation: "Donation",
       sponsorship: "Sponsorship",
       volunteering: "Volunteer",
       amount: "Contribution amount (€)",
       volunteeringCopy: "As a volunteer, you can help with planting and on-site monitoring. We will send you all details by email.",
-      confirm: "Confirm contribution"
+      confirm: "Send request by email",
+      requestNote: "Nothing is paid yet. We will get back to you personally with all the details."
     },
     card: { view: "View project", of: "of", supporters: "supporters", funding: "Funding", open: "remaining", status: "Project status", mainSponsor: "Lead investor", placeholder: "Placeholder", partner: "Partner", sponsorOpen: "Your logo or name could appear here" }
   }

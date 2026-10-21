@@ -44,6 +44,7 @@ export const optionIcons: Record<string, Record<string, OptionIcon>> = {
     "oil-boiler": "fuel",
     "heat-pump": "fan",
     "solar-district": "sun",
+    "district-heat": "factory",
     "hot-water-average": "circle-help"
   },
   "bath-toilet": {

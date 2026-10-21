@@ -17,7 +17,7 @@ export function InteractiveRoom({ room, questionIndex, answers, adjustments, ski
         <RegisteredHouseScene roomId={room.id} questionIndex={questionIndex} answers={answers} adjustments={adjustments}
           skippedQuestions={skippedQuestions} onSelectObject={(_, index) => onSelectObject(index)} onHoverObject={setHovered} />
       </div>
-      <p className="mt-3 hidden shrink-0 text-center text-sm font-semibold text-[var(--color-forest)] md:block">{shown?.sceneLabel} <span className="font-normal text-[var(--color-muted)]">· {t.scene.tapHint}</span></p>
+      <p className="mt-3 hidden shrink-0 text-center text-sm font-semibold text-[var(--color-forest)] md:block">{shown?.sceneLabel}{/* Der offene Gegenstand ist schon entdeckt; die Aufforderung gilt nur einem anderen. */}{hovered !== null && hovered !== questionIndex && <span className="font-normal text-[var(--color-muted)]"> · {t.scene.tapHint}</span>}</p>
     </div>
   );
 }

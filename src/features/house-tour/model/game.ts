@@ -69,17 +69,26 @@ export function discovery(state: Pick<TourState, "answers" | "cardsRead">): Disc
  * beiträgt; Gegenstände ohne Mengenbeitrag gehören nicht in diese Rangliste.
  */
 export function co2Contributions(answers: Record<string, string>, adjustments: Record<string, number>) {
+  return contributions(answers, adjustments, "co2Kg").map(({ questionId, amount, share }) => ({ questionId, co2Kg: amount, share }));
+}
+
+/** Dasselbe für eine beliebige Jahresgröße; beim Wasser zählt ab einem Liter. */
+export function contributions(
+  answers: Record<string, string>,
+  adjustments: Record<string, number>,
+  key: keyof AnnualValues
+) {
   const rows = allQuestions
     .filter((question) => answers[question.id])
     .map((question) => ({
       questionId: question.id,
-      co2Kg: optionValues(question.id, answers[question.id], answers, adjustments).co2Kg
+      amount: optionValues(question.id, answers[question.id], answers, adjustments)[key]
     }))
-    .filter((row) => row.co2Kg >= 1);
-  const total = rows.reduce((sum, row) => sum + row.co2Kg, 0);
+    .filter((row) => row.amount >= 1);
+  const total = rows.reduce((sum, row) => sum + row.amount, 0);
   return rows
-    .map((row) => ({ ...row, share: total > 0 ? row.co2Kg / total : 0 }))
-    .sort((a, b) => b.co2Kg - a.co2Kg);
+    .map((row) => ({ ...row, share: total > 0 ? row.amount / total : 0 }))
+    .sort((a, b) => b.amount - a.amount);
 }
 
 // ---------------------------------------------------------------------------

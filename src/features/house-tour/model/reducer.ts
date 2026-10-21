@@ -1,5 +1,11 @@
 import type { TourAction, TourState } from "./types";
 import { availableRooms } from "../config/rooms";
+import { presetFor, presetsOnly } from "./calculator";
+import { MAX_GOALS } from "./game";
+
+export const MAX_HOUSEHOLD_SIZE = 12;
+const clampHousehold = (size: unknown) =>
+  typeof size === "number" && Number.isFinite(size) ? Math.min(MAX_HOUSEHOLD_SIZE, Math.max(1, Math.round(size))) : 1;
 
 const recordOrEmpty = <T>(value: unknown): Record<string, T> =>
   value && typeof value === "object" && !Array.isArray(value)
@@ -65,7 +71,7 @@ function sanitizeWhatIf(value: unknown, answers: Record<string, string>) {
 
 function sanitizeGoals(value: unknown, answers: Record<string, string>) {
   if (!Array.isArray(value)) return [];
-  return [...new Set(value.filter((id): id is string => typeof id === "string" && Boolean(answers[id])))].slice(0, 3);
+  return [...new Set(value.filter((id): id is string => typeof id === "string" && Boolean(answers[id])))].slice(0, MAX_GOALS);
 }
 
 export const initialTourState: TourState = {
@@ -78,7 +84,8 @@ export const initialTourState: TourState = {
   adjustments: {},
   cardsRead: {},
   whatIf: {},
-  goals: []
+  goals: [],
+  householdSize: 1
 };
 
 export function tourReducer(state: TourState, action: TourAction): TourState {
@@ -124,6 +131,23 @@ export function tourReducer(state: TourState, action: TourAction): TourState {
         adjustments: { ...state.adjustments, [action.questionId]: quantity }
       };
     }
+    case "SET_HOUSEHOLD_SIZE": {
+      // Eine eingetragene Rechnung gilt für den Haushalt und bleibt stehen;
+      // ändert sich die Personenzahl, ändert sich der Anteil pro Person.
+      const size = clampHousehold(action.size);
+      const adjustments = { ...state.adjustments };
+      const answers = { ...state.answers };
+      for (const [questionId, quantity] of Object.entries(state.adjustments)) {
+        const question = questions.get(questionId);
+        if (!question?.adjust?.perHousehold) continue;
+        const scaled = clampAdjustment(questionId, (quantity * state.householdSize) / size);
+        if (scaled === undefined) continue;
+        adjustments[questionId] = scaled;
+        // Bei reinen Mengenfragen folgt die Antwort der Zahl.
+        if (presetsOnly(question) && answers[questionId]) answers[questionId] = presetFor(question, scaled).id;
+      }
+      return { ...state, householdSize: size, adjustments, answers };
+    }
     case "CLEAR_ADJUSTMENT": {
       const adjustments = { ...state.adjustments };
       delete adjustments[action.questionId];
@@ -161,7 +185,7 @@ export function tourReducer(state: TourState, action: TourAction): TourState {
       if (state.goals.includes(action.questionId)) {
         return { ...state, goals: state.goals.filter((id) => id !== action.questionId) };
       }
-      if (state.goals.length >= 3 || !state.answers[action.questionId]) return state;
+      if (state.goals.length >= MAX_GOALS || !state.answers[action.questionId]) return state;
       return { ...state, goals: [...state.goals, action.questionId] };
     }
     case "SHOW_RESULTS":
@@ -191,6 +215,7 @@ export function restoreTourState(input: unknown): TourState {
     adjustments: sanitizeAdjustments(source.adjustments),
     cardsRead: sanitizeCards(source.cardsRead),
     whatIf: sanitizeWhatIf(source.whatIf, answers),
-    goals: sanitizeGoals(source.goals, answers)
+    goals: sanitizeGoals(source.goals, answers),
+    householdSize: clampHousehold(source.householdSize)
   };
 }

@@ -43,7 +43,9 @@ function sceneRow(roomId: RoomId | null, answering: boolean, panelNeed: number |
   // Eingabe auch auf ein 640-px-Telefon.
   // Zusätzlich nie mehr, als der Schritt darunter übrig lässt; unter 7rem
   // geht die Szene nicht, dann darf der Schritt scrollen.
-  const share = answering ? 0.38 : 0.55;
+  // Ist der Bedarf des Schritts gemessen, begrenzt `fit` die Szene ohnehin;
+  // dann darf sie wachsen, damit ein Tablet hochkant keinen leeren Rest zeigt.
+  const share = answering ? (panelNeed ? 0.6 : 0.38) : 0.55;
   const available = "(100dvh - 3.5rem - env(safe-area-inset-top) - env(safe-area-inset-bottom))";
   const fit = answering && panelNeed ? `,calc(${available} - ${panelNeed}px)` : "";
   return `minmax(7rem,min(calc(100vw*${ratio.toFixed(3)}),calc(${available}*${share})${fit}))`;
@@ -288,14 +290,14 @@ function TourApp({ locale }: { locale: Locale }) {
     <div
       className={cn(
         // Nur noch eine Steuerungsebene über dem Inhalt statt Kopfzeile plus Raumleiste.
-        "grid h-full min-h-0 min-w-0 grid-cols-[minmax(0,1fr)] overflow-hidden bg-[var(--color-paper)] md:grid-cols-[minmax(0,1.3fr)_minmax(23rem,1fr)] md:grid-rows-[3.5rem_minmax(0,1fr)]",
+        "grid h-full min-h-0 min-w-0 grid-cols-[minmax(0,1fr)] overflow-hidden bg-[var(--color-paper)] tour:grid-cols-[minmax(0,1.3fr)_minmax(23rem,1fr)] tour:grid-rows-[3.5rem_minmax(0,1fr)]",
         state.view === "room"
           ? "grid-rows-[3.5rem_var(--scene-row)_minmax(0,1fr)] transition-[grid-template-rows] duration-500 ease-out motion-reduce:transition-none"
-          : "grid-rows-[3.5rem_minmax(10rem,42dvh)_minmax(0,1fr)]"
+          : "grid-rows-[3.5rem_minmax(10rem,42dvh)_minmax(0,1fr)] sm:max-tour:grid-rows-[3.5rem_minmax(10rem,50dvh)_minmax(0,1fr)]"
       )}
       style={{ ["--scene-row" as string]: sceneRow(state.activeRoom, state.view === "room" && state.objectOpen, panelNeed) }}
     >
-      <div className="min-w-0 md:col-start-2">
+      <div className="min-w-0 tour:col-start-2">
         <TourToolbar
           locale={locale}
           points={discoveryState.points}
@@ -310,7 +312,7 @@ function TourApp({ locale }: { locale: Locale }) {
       </div>
 
       {/* Mobil obere Hälfte, auf dem Desktop linke Spalte: die Szene */}
-      <div className="relative flex h-full min-h-0 min-w-0 items-center justify-center overflow-hidden border-b border-[var(--color-line)] md:col-start-1 md:row-span-2 md:row-start-1 md:border-b-0 md:border-r">
+      <div className="relative flex h-full min-h-0 min-w-0 items-center justify-center overflow-hidden border-b border-[var(--color-line)] tour:col-start-1 tour:row-span-2 tour:row-start-1 tour:border-b-0 tour:border-r">
         {/* Haus und Raum liegen während des Wechsels übereinander: die Kamera
             fährt im Hausbild in den Raum, und das scharfe Raumbild blendet am
             Ende der Fahrt darüber. Zurück läuft es umgekehrt. */}
@@ -362,7 +364,7 @@ function TourApp({ locale }: { locale: Locale }) {
 
       {/* Mobil untere Hälfte, auf dem Desktop rechte Spalte: Frage, Werte und Aktion */}
       <aside
-        className="flex min-h-0 min-w-0 flex-col overflow-hidden bg-white md:col-start-2 md:row-start-2"
+        className="flex min-h-0 min-w-0 flex-col overflow-hidden bg-white tour:col-start-2 tour:row-start-2"
         aria-label={i18n.t.panelRegion}
       >
         {state.view === "house" ? (

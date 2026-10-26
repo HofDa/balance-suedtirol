@@ -48,7 +48,7 @@ function RichText({ parts }: { parts: Rich }) {
   );
 }
 
-const sectionTitle = "text-xl font-semibold tracking-[-0.02em] md:text-2xl";
+const sectionTitle = "text-xl font-semibold tracking-[-0.02em] tour:text-2xl";
 
 /** Zählt sichtbar von der alten zur neuen Zahl: der Was-wäre-wenn-Moment. */
 function CountingValue({ value, format }: { value: number; format: (value: number) => string }) {
@@ -411,7 +411,7 @@ export function TourResults({
             <div className="rounded-[var(--radius-xl)] border border-[var(--color-line)] bg-white p-5">
               <dt className="text-sm font-semibold text-[var(--color-muted)]">{r.yearWater}</dt>
               <dd className="mt-2">
-                <span className="block text-2xl font-semibold leading-tight tracking-[-0.02em] md:text-3xl">{year.water}</span>
+                <span className="block text-2xl font-semibold leading-tight tracking-[-0.02em] tour:text-3xl">{year.water}</span>
                 <span className="mt-1.5 block text-sm leading-5 text-[var(--color-muted)]">
                   {r.waterExact(de.format(round2(totals.waterL)))}
                 </span>
@@ -429,7 +429,7 @@ export function TourResults({
             <div className="rounded-[var(--radius-xl)] border border-[var(--color-line)] bg-white p-5">
               <dt className="text-sm font-semibold text-[var(--color-muted)]">{r.yearCo2}</dt>
               <dd className="mt-2">
-                <span className="block text-2xl font-semibold leading-tight tracking-[-0.02em] md:text-3xl">{year.co2}</span>
+                <span className="block text-2xl font-semibold leading-tight tracking-[-0.02em] tour:text-3xl">{year.co2}</span>
                 {year.car && (
                   <span className="mt-1.5 block text-sm leading-5 text-[var(--color-muted)]">{r.co2Compare(year.car)}</span>
                 )}
@@ -454,7 +454,7 @@ export function TourResults({
 
       {top.length > 1 && (
         <section className="mt-8" aria-labelledby="results-top">
-          <h2 id="results-top" className="text-base font-semibold md:text-lg">{r.topTitle}</h2>
+          <h2 id="results-top" className="text-base font-semibold tour:text-lg">{r.topTitle}</h2>
           <p className="mt-1 max-w-[58ch] text-sm leading-6 text-[var(--color-muted)]">{r.topLead}</p>
           {/* Die Balken zeigen den Anteil an der ganzen Summe, nicht am größten
               Posten: ein Drittel soll aussehen wie ein Drittel. */}

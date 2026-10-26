@@ -96,6 +96,21 @@ effort 6 (3.2 MB to 226 KB and 1.5 MB to 104 KB). Originals are in
 aerial image's source and licence and the visualisation's author, and label the
 visualisation as such wherever it appears.
 
+## Frangarter Möser (supplied design visualisations)
+
+`frangarter-moeser-feuchtwiese.webp`, `frangarter-moeser-wasser.webp` and
+`frangarter-moeser-gehoelz.webp` are conceptual renderings supplied by the user in October 2026, showing alternative
+designs rather than the current site or an approved plan. Their creator and
+requested attribution are still to be clarified. Birds depicted in the meadow
+variant are illustrative and do not establish species records for the site.
+
+The gallery retains both complete layouts, including aerial views, sections and
+labels, as WebP at quality 80. `frangarter-moeser-titel.webp` is an aerial crop of the
+woody variant for the card and page header. Each has `-sm` and `-xs` variants.
+The main image and gallery captions identify the images as design visions.
+Unchanged original PNGs and processing details are retained in
+`assets-source/projects/frangarter-moeser/`.
+
 ## Web compression pass (7 October 2026)
 
 Existing WebP project images were re-encoded at quality 65 and effort 6 only

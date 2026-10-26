@@ -26,7 +26,7 @@ function ProgressBar({ value, total }: { value: number; total: number }) {
 export function ProgressSummary({ room, roomHandled }: { room: TourRoom; roomHandled: number }) {
   const { t } = useTourI18n();
   return (
-    <div className="border-b border-[var(--color-line)] bg-[var(--color-paper)]/65 px-6 py-3 max-md:hidden">
+    <div className="border-b border-[var(--color-line)] bg-[var(--color-paper)]/65 px-6 py-3 max-tour:hidden">
       <div className="mb-1.5 flex items-center justify-between gap-2 text-xs">
         <span className="truncate font-semibold">{room.title}</span>
         <span className="tabular-nums text-[var(--color-muted)]">

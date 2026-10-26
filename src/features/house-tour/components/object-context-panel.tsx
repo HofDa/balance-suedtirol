@@ -74,13 +74,13 @@ function StepTrack({ steps, current }: { steps: Step[]; current: number }) {
 }
 
 const footerClass =
-  "sticky bottom-0 -mx-4 mt-4 flex items-center gap-2 border-t border-[var(--color-line)] bg-white px-4 py-2 md:static md:mx-0 md:mt-6 md:border-0 md:p-0";
+  "sticky bottom-0 -mx-4 mt-4 flex items-center gap-2 border-t border-[var(--color-line)] bg-white px-4 py-2 tour:static tour:mx-0 tour:mt-6 tour:border-0 tour:p-0";
 const quietButton = cn(
   "inline-flex min-h-11 items-center gap-1.5 rounded-[var(--radius-md)] px-3 text-xs font-semibold text-[var(--color-muted)] transition-colors hover:bg-[var(--color-ink)]/5 hover:text-[var(--color-ink)]",
   focusRingTool
 );
 const primaryButton = cn(
-  "relative isolate ml-auto inline-flex min-h-12 items-center gap-2 overflow-hidden whitespace-nowrap rounded-[var(--radius-md)] bg-[var(--color-forest)] px-6 text-sm font-semibold text-white transition-colors hover:bg-[var(--color-ink)] md:min-h-11 md:px-5",
+  "relative isolate ml-auto inline-flex min-h-12 items-center gap-2 overflow-hidden whitespace-nowrap rounded-[var(--radius-md)] bg-[var(--color-forest)] px-6 text-sm font-semibold text-white transition-colors hover:bg-[var(--color-ink)] tour:min-h-11 tour:px-5",
   focusRingTool
 );
 
@@ -246,7 +246,7 @@ export function ObjectContextPanel({
           Leiste kostet dort eine Zeile, die den Antworten fehlt. */}
       {/* Auch beim letzten Gegenstand eines Raums: dort ist der Raum schon
           `roomDone`, die Leiste tauchte aber mitten im Antworten auf. */}
-      <div className={cn(objectOpen && "max-md:hidden")}>
+      <div className={cn(objectOpen && "max-tour:hidden")}>
         <RoomNavigation
           activeRoom={room.id}
           answers={answers}
@@ -259,7 +259,7 @@ export function ObjectContextPanel({
 
       <div
         ref={scrollRef}
-        className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden px-4 pt-3 md:px-6 md:py-6"
+        className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden px-4 pt-3 tour:px-6 tour:py-6"
         onTouchStart={onTouchStart}
         onTouchEnd={onTouchEnd}
       >
@@ -286,16 +286,16 @@ export function ObjectContextPanel({
               animate={{ opacity: 1, y: 0 }}
               className="mx-auto flex min-h-full max-w-lg flex-col justify-center pb-4"
             >
-              <span className="hidden size-11 place-items-center rounded-full bg-[var(--color-sage)] text-[var(--color-forest)] md:grid">
+              <span className="hidden size-11 place-items-center rounded-full bg-[var(--color-sage)] text-[var(--color-forest)] tour:grid">
                 <MousePointer2 className="size-5" aria-hidden />
               </span>
-              <h2 className="text-2xl font-semibold leading-tight tracking-[-0.025em] md:mt-5">
+              <h2 className="text-2xl font-semibold leading-tight tracking-[-0.025em] tour:mt-5">
                 {t.panel.discover(question.sceneLabel)}
               </h2>
               <p className="mt-2 text-sm leading-6 text-[var(--color-muted)]">
                 {t.panel.objectOf(room.title, questionIndex + 1, room.questions.length)}
               </p>
-              <div className="mt-4 flex flex-wrap items-center gap-3 md:mt-6">
+              <div className="mt-4 flex flex-wrap items-center gap-3 tour:mt-6">
                 <button type="button" onClick={onOpenObject} className={cn(primaryButton, "ml-0")}>
                   {t.panel.openObject(question.sceneLabel)}
                   <ChevronRight className="size-4" aria-hidden />
@@ -314,7 +314,7 @@ export function ObjectContextPanel({
             >
               {/* Mobil steht der Schritt in der Fußleiste; Raum und Gegenstand
                   zeigt dort schon die Szene darüber. */}
-              <div className="mb-3 hidden min-w-0 items-center justify-between gap-3 md:flex">
+              <div className="mb-3 hidden min-w-0 items-center justify-between gap-3 tour:flex">
                 <Label size="dense" className="shrink-0">
                   {room.title} · {questionIndex + 1}/{room.questions.length}
                 </Label>
@@ -323,14 +323,14 @@ export function ObjectContextPanel({
 
               {step === "kind" && (
                 <>
-                  <h2 id="step-title" className="text-lg font-semibold leading-tight tracking-[-0.025em] md:text-2xl md:leading-snug">
+                  <h2 id="step-title" className="text-lg font-semibold leading-tight tracking-[-0.025em] tour:text-2xl tour:leading-snug">
                     {question.title}
                   </h2>
                   {/* Bei sieben Antworten passt der Hinweis mobil nicht mehr darüber;
                       er bleibt stehen, bis etwas beantwortet ist, und kommt beim nächsten Gegenstand. */}
                   {firstEver && question.options.length < 7 && <p className="mt-1.5 text-xs leading-5 text-[var(--color-muted)]">{t.answerHint}</p>}
                   <KindStep question={question} selected={selected} onChoose={choose} />
-                  <p className="mt-4 hidden text-[11px] text-[var(--color-muted)] md:block">
+                  <p className="mt-4 hidden text-[11px] text-[var(--color-muted)] tour:block">
                     {t.panel.keys.keys} <kbd className="font-semibold tabular-nums">1</kbd>–
                     <kbd className="font-semibold tabular-nums">{question.options.length}</kbd> {t.panel.keys.choose}{" "}
                     <kbd className="font-semibold">Enter</kbd> {t.panel.keys.next}
@@ -354,7 +354,7 @@ export function ObjectContextPanel({
                       <span className="shrink-0 text-xs font-medium text-[var(--color-muted)] underline underline-offset-2">{t.steps.edit}</span>
                     </button>
                   )}
-                  <h2 id="step-title" className="text-lg font-semibold leading-tight tracking-[-0.025em] md:text-2xl md:leading-snug">
+                  <h2 id="step-title" className="text-lg font-semibold leading-tight tracking-[-0.025em] tour:text-2xl tour:leading-snug">
                     {hasKind ? question.adjust.label : question.title}
                   </h2>
                   {firstEver && !hasKind && <p className="mt-1.5 text-xs leading-5 text-[var(--color-muted)]">{t.answerHint}</p>}
@@ -406,7 +406,7 @@ export function ObjectContextPanel({
 
               <div className={footerClass}>
                 {back}
-                <span className="mx-auto md:hidden">
+                <span className="mx-auto tour:hidden">
                   <StepTrack steps={steps} current={stepIndex} />
                 </span>
                 {step === "result" ? (
@@ -420,7 +420,7 @@ export function ObjectContextPanel({
                     <ChevronRight className="size-4" aria-hidden />
                   </button>
                 ) : (
-                  <button type="button" onClick={onSkip} className={cn(quietButton, "ml-auto min-h-12 md:min-h-11")}>
+                  <button type="button" onClick={onSkip} className={cn(quietButton, "ml-auto min-h-12 tour:min-h-11")}>
                     <SkipForward className="size-3.5" aria-hidden />
                     {t.panel.skip}
                   </button>

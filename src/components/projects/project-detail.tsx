@@ -142,7 +142,7 @@ export function ProjectDetail({ project, otherProjects, locale }: ProjectDetailP
                     ? "aspect-[4/3] sm:aspect-[16/9]"
                     : project.slug === "widumwiese-kiens"
                       ? "aspect-[16/9]"
-                      : "aspect-[21/9] min-h-[260px] sm:min-h-[360px]"
+                      : "aspect-[4/3] sm:aspect-[16/9] lg:aspect-[21/9]"
                 )}
               >
                 <Image
@@ -156,8 +156,8 @@ export function ProjectDetail({ project, otherProjects, locale }: ProjectDetailP
                     isHedgehogProject && "object-[35%_50%] sm:object-center"
                   )}
                 />
-                {project.image === "/placeholder-grid.svg" && (
-                  <p className="absolute inset-x-0 bottom-0 bg-white/90 px-5 py-3 text-sm text-[var(--color-muted)]">{copy.imagePending}</p>
+                {(project.imageCaption || project.image === "/placeholder-grid.svg") && (
+                  <p className="absolute inset-x-0 bottom-0 bg-white/90 px-5 py-3 text-sm text-[var(--color-muted)]">{project.imageCaption ?? copy.imagePending}</p>
                 )}
               </div>
             </Surface>
@@ -243,7 +243,7 @@ export function ProjectDetail({ project, otherProjects, locale }: ProjectDetailP
                 )}
               </dl>
               {project.locationApproximate && (
-                <p className="mt-5 text-sm leading-6 text-[var(--color-muted)]">{copy.locationApproximate}</p>
+                <p className="mt-5 text-sm leading-6 text-[var(--color-muted)]">{copy.locationApproximate.replace("{municipality}", project.municipality)}</p>
               )}
               <a href={mapUrl} target="_blank" rel="noreferrer" className={`mt-6 inline-flex min-h-11 items-center gap-2 text-sm font-bold text-[var(--color-forest)] hover:underline ${focusRing}`}>
                 {copy.openMap}
@@ -263,13 +263,13 @@ export function ProjectDetail({ project, otherProjects, locale }: ProjectDetailP
               <h2 className={textHeadline}>
                 {copy.whyMatters}
               </h2>
-              <p className="mt-5 text-base leading-7 text-[var(--color-muted)]">{project.whyItMatters}</p>
+              <p className="mt-5 max-w-[68ch] text-base leading-7 text-[var(--color-muted)]">{project.whyItMatters}</p>
             </div>
             <div className="border-t border-[var(--color-line)] pt-8 lg:border-l lg:border-t-0 lg:pl-12 lg:pt-0">
               <h2 className={textHeadline}>
                 {copy.whatItDoes}
               </h2>
-              <p className="mt-5 text-base leading-7 text-[var(--color-muted)]">{project.description}</p>
+              <p className="mt-5 max-w-[68ch] text-base leading-7 text-[var(--color-muted)]">{project.description}</p>
             </div>
           </section>
 
@@ -376,7 +376,8 @@ export function ProjectDetail({ project, otherProjects, locale }: ProjectDetailP
               title={project.title}
               description={project.summary}
               image={withBasePath(project.image)}
-              className="sm:px-6"
+              className="w-12 shrink-0 px-0 xl:w-auto xl:px-6"
+              labelClassName="sr-only xl:not-sr-only"
               tone="dark"
             />
           }

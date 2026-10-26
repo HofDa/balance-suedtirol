@@ -41,9 +41,9 @@ export default async function HouseTourPage({ params }: { params: Promise<{ loca
   if (!isLocale(locale)) notFound();
 
   return (
-    // Mobil deckt die Tour die Kopfzeile der Website ab: deren 72 px fehlten
+    // In der gestapelten Ansicht (Handy, Tablet hochkant) deckt die Tour die Kopfzeile der Website ab: deren 72 px fehlten
     // sonst dem Raumbild. Der Weg zurück zur Website steht in der Werkzeugleiste.
-    <section className="fixed inset-x-0 bottom-0 top-0 z-[60] h-dvh overflow-hidden overscroll-none bg-[var(--color-paper)] [padding-bottom:env(safe-area-inset-bottom)] [padding-top:env(safe-area-inset-top)] md:top-[4.5rem] md:z-40 md:h-[calc(100dvh-4.5rem)] md:pt-0" aria-label={pageLabels[locale].ariaLabel}>
+    <section className="fixed inset-x-0 bottom-0 top-0 z-[60] h-dvh overflow-hidden overscroll-none bg-[var(--color-paper)] [padding-bottom:env(safe-area-inset-bottom)] [padding-top:env(safe-area-inset-top)] tour:top-[4.5rem] tour:z-40 tour:h-[calc(100dvh-4.5rem)] tour:pt-0" aria-label={pageLabels[locale].ariaLabel}>
       <TourAppShell locale={locale} />
     </section>
   );

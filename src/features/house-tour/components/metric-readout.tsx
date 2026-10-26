@@ -49,14 +49,14 @@ export function EverydayFeedback({
       transition={{ duration: 0.3, ease: "easeOut" }}
       className={cn(
         "rounded-[var(--radius-lg)] bg-[var(--color-sage)]/45",
-        size === "lg" ? "mt-4 px-4 py-5 md:px-5 md:py-6" : "mt-3 px-3 py-3 md:mt-4 md:px-4"
+        size === "lg" ? "mt-4 px-4 py-5 tour:px-5 tour:py-6" : "mt-3 px-3 py-3 tour:mt-4 tour:px-4"
       )}
       aria-live="polite"
     >
       <p
         className={cn(
           "font-semibold text-[var(--color-forest)] [text-wrap:balance]",
-          size === "lg" ? "text-xl leading-7 tracking-[-0.02em] md:text-2xl md:leading-8" : "text-sm leading-5 md:text-base md:leading-6"
+          size === "lg" ? "text-xl leading-7 tracking-[-0.02em] tour:text-2xl tour:leading-8" : "text-sm leading-5 tour:text-base tour:leading-6"
         )}
       >
         {line.headline}
@@ -162,14 +162,14 @@ export function AdjustControl({
     onChange(Math.min(adjust.max, Math.max(adjust.min, Number(next.toFixed(decimals)))));
   };
   const stepButton = cn(
-    "grid size-10 shrink-0 place-items-center rounded-full border border-[var(--color-line)] bg-white text-[var(--color-forest)] transition-colors hover:border-[var(--color-forest)] disabled:opacity-35 md:size-9",
+    "grid size-10 shrink-0 place-items-center rounded-full border border-[var(--color-line)] bg-white text-[var(--color-forest)] transition-colors hover:border-[var(--color-forest)] disabled:opacity-35 tour:size-9",
     focusRingTool
   );
 
   return (
-    <div className="px-3 pb-3 pt-1 md:px-4">
+    <div className="px-3 pb-3 pt-1 tour:px-4">
       <div className="flex items-baseline justify-between gap-3">
-        <label htmlFor={sliderId} className={cn("text-xs font-semibold text-[var(--color-ink)] md:text-sm", hideLabel && "sr-only")}>
+        <label htmlFor={sliderId} className={cn("text-xs font-semibold text-[var(--color-ink)] tour:text-sm", hideLabel && "sr-only")}>
           {adjust.label}
         </label>
         {isCustom && onReset && (

@@ -124,14 +124,14 @@ export function IllustratedRoom({ roomId, questionIndex, answers, adjustments, s
     <section className="relative flex h-full w-full min-w-0 flex-col bg-[#f5f1e7]" aria-label={t.scene.roomAria(room.title)}>
       {/* Mobil zählt jeder Pixel für das Bild: Raumname und Objektwahl stehen dort
           schon im Fragenbereich, die Nummern sitzen direkt auf den Gegenständen. */}
-      <div className="hidden shrink-0 items-center justify-between gap-2 px-6 py-4 md:flex">
+      <div className="hidden shrink-0 items-center justify-between gap-2 px-6 py-4 tour:flex">
         <p className="text-xs font-semibold text-[var(--color-forest)]">{room.title}</p>
-        <p className="text-[10px] text-[var(--color-muted)] md:text-xs">{t.scene.chooseObject}</p>
+        <p className="text-[10px] text-[var(--color-muted)] tour:text-xs">{t.scene.chooseObject}</p>
       </div>
       <InteractiveRoom room={room} questionIndex={questionIndex} answers={answers} adjustments={adjustments} skippedQuestions={skippedQuestions} onSelectObject={onSelectObject} />
       {/* Mobil folgt das Bild dem aktiven Objekt, die anderen liegen dann
           außerhalb. Diese Leiste hält alle drei erreichbar, ohne Höhe zu kosten. */}
-      <nav aria-label={t.scene.objectsNav} className="pointer-events-none absolute inset-x-2 bottom-2 z-10 flex justify-center gap-1.5 md:hidden">
+      <nav aria-label={t.scene.objectsNav} className="pointer-events-none absolute inset-x-2 bottom-2 z-10 flex justify-center gap-1.5 tour:hidden">
         {room.questions.map((item, index) => {
           const active = index === questionIndex;
           const answered = Boolean(answers[item.id]);
@@ -161,7 +161,7 @@ export function IllustratedRoom({ roomId, questionIndex, answers, adjustments, s
           );
         })}
       </nav>
-      <nav aria-label={t.scene.objectsNav} className="hidden shrink-0 gap-3 border-t border-[var(--color-line)] bg-white/70 p-4 md:grid"
+      <nav aria-label={t.scene.objectsNav} className="hidden shrink-0 gap-3 border-t border-[var(--color-line)] bg-white/70 p-4 tour:grid"
         style={{ gridTemplateColumns: `repeat(${room.questions.length}, minmax(0, 1fr))` }}>
         {room.questions.map((item, index) => {
           const active = index === questionIndex;
@@ -170,13 +170,13 @@ export function IllustratedRoom({ roomId, questionIndex, answers, adjustments, s
           return (
             <button key={item.id} type="button" onClick={() => onSelectObject(index)} aria-current={active ? "step" : undefined}
               aria-label={`${item.sceneLabel}, ${answered ? t.scene.state.answered : skipped ? t.scene.state.skipped : t.scene.state.open}`}
-              className={cn("relative flex min-h-16 min-w-0 flex-col items-center gap-1 rounded-xl border p-2 text-center transition-colors md:gap-2 md:p-3", active ? "border-[var(--color-forest)] bg-[#e8ecdf]" : "border-[var(--color-line)] bg-[#faf7f0] hover:border-[var(--color-forest)]", focusRingTool)}>
+              className={cn("relative flex min-h-16 min-w-0 flex-col items-center gap-1 rounded-xl border p-2 text-center transition-colors tour:gap-2 tour:p-3", active ? "border-[var(--color-forest)] bg-[#e8ecdf]" : "border-[var(--color-line)] bg-[#faf7f0] hover:border-[var(--color-forest)]", focusRingTool)}>
               <span className="grid size-5 place-items-center rounded-full bg-white text-[10px] font-semibold text-[var(--color-forest)]">
                 {answered ? <Check className="size-3" aria-hidden /> : skipped ? <SkipForward className="size-3" aria-hidden /> : index + 1}
               </span>
               {/* The scene contains the furniture; these compact controls are an alternative way to select it. */}
-              <span className="text-[10px] font-semibold leading-tight md:text-xs">{item.sceneLabel}</span>
-              <span className="hidden text-[10px] text-[var(--color-muted)] md:block">{answered ? t.scene.desktopState.answered : skipped ? t.scene.desktopState.skipped : active ? t.scene.desktopState.active : t.scene.desktopState.open}</span>
+              <span className="text-[10px] font-semibold leading-tight tour:text-xs">{item.sceneLabel}</span>
+              <span className="hidden text-[10px] text-[var(--color-muted)] tour:block">{answered ? t.scene.desktopState.answered : skipped ? t.scene.desktopState.skipped : active ? t.scene.desktopState.active : t.scene.desktopState.open}</span>
             </button>
           );
         })}

@@ -37,6 +37,8 @@ export type Project = {
    */
   sites?: Array<{ name: string; municipality: string }>;
   image: string;
+  /** Sichtbare Einordnung des Hauptbilds, etwa als noch offene Gestaltungsvision. */
+  imageCaption?: string;
   /**
    * Fotopaar vom selben Standpunkt, vor und nach der Maßnahme. Fehlt es,
    * zeigt die Projektseite keinen Vorher/Nachher-Vergleich.
@@ -95,6 +97,7 @@ export type ProjectCardData = Pick<
   | "municipality"
   | "organization"
   | "image"
+  | "imageCaption"
   | "mainSponsor"
 > & { additionalSponsorCount: number };
 

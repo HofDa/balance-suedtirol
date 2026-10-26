@@ -95,7 +95,7 @@ export function RegisteredHouseScene({ roomId, questionIndex, answers, adjustmen
                 // Ragt ein Objekt über den Raumausschnitt hinaus (die Baumkrone),
                 // bleibt das Abzeichen an dessen oberem Rand sichtbar.
                 style={{ top: `${Math.max(0, top - item.box[1]) / item.box[3] * 100}%` }}
-                className={cn(styles.badge, "pointer-events-none absolute right-0 grid size-5 place-items-center rounded-full border border-white text-[11px] font-bold shadow-sm md:size-6", active ? "bg-[var(--color-forest)] text-white" : "bg-white text-[var(--color-forest)]")} aria-hidden>
+                className={cn(styles.badge, "pointer-events-none absolute right-0 grid size-5 place-items-center rounded-full border border-white text-[11px] font-bold shadow-sm tour:size-6", active ? "bg-[var(--color-forest)] text-white" : "bg-white text-[var(--color-forest)]")} aria-hidden>
                 {answered ? <Check className="size-3" /> : skipped ? <SkipForward className="size-3" /> : item.question + 1}
               </span>}
             </button>

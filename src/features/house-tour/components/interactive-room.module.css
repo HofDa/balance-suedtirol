@@ -250,8 +250,9 @@
 
 /* Mobile camera: the room fills the width and slides vertically so the active
    object sits in the middle, clamped to the picture's edges. A room shorter
-   than the frame stays centred and does not move. */
-@media (max-width: 767.98px) {
+   than the frame stays centred and does not move. Same query as the `tour`
+   variant in globals.css, so portrait tablets get this camera too. */
+@media not all and (min-width: 768px) and (orientation: landscape) {
   .panFrame {
     align-items: safe center;
   }
@@ -268,8 +269,10 @@
     flex-shrink: 0;
   }
 }
-@media (max-width: 767.98px) and (prefers-reduced-motion: reduce) {
-  .pan {
-    transition: none;
+@media not all and (min-width: 768px) and (orientation: landscape) {
+  @media (prefers-reduced-motion: reduce) {
+    .pan {
+      transition: none;
+    }
   }
 }

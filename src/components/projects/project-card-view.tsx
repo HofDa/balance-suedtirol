@@ -57,8 +57,8 @@ export function ProjectCardView({
           sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
           className="object-cover transition duration-500 group-hover:scale-[1.03]"
         />
-        {project.image === "/placeholder-grid.svg" && (
-          <p className="absolute inset-x-0 bottom-0 bg-white/90 px-4 py-2 text-xs text-[var(--color-muted)]">{getTranslations(locale).projectDetail.imagePending}</p>
+        {(project.imageCaption || project.image === "/placeholder-grid.svg") && (
+          <p className="absolute inset-x-0 bottom-0 bg-white/90 px-4 py-2 text-xs text-[var(--color-muted)]">{project.imageCaption ?? getTranslations(locale).projectDetail.imagePending}</p>
         )}
       </div>
 
@@ -109,15 +109,17 @@ export function ProjectCardView({
           }}
         />
 
-        <div className="mt-auto pt-5">
-          <div className="flex items-end justify-between gap-3 border-t border-[var(--color-line)] pt-4">
+        {/* Containerabfrage statt Breakpoint: In drei Spalten auf dem Tablet ist
+            die Kachel zu schmal für Status und Schaltfläche nebeneinander. */}
+        <div className="@container mt-auto pt-5">
+          <div className="flex flex-col gap-3 border-t border-[var(--color-line)] pt-4 @min-[17rem]:flex-row @min-[17rem]:items-end @min-[17rem]:justify-between">
             <span className="min-w-0 text-xs text-[var(--color-muted)]">
               <span className="block">{copy.status}</span>
               <span className="mt-0.5 block font-bold text-[var(--color-ink)]">
                 {copy.statusValue}
               </span>
             </span>
-            <span className="inline-flex min-h-10 shrink-0 items-center gap-1.5 whitespace-nowrap rounded-[var(--radius-md)] bg-[var(--color-forest)] px-3.5 text-sm font-semibold text-white transition-colors group-hover:bg-[var(--color-ink)]" aria-hidden>
+            <span className="inline-flex min-h-10 shrink-0 items-center justify-center gap-1.5 whitespace-nowrap rounded-[var(--radius-md)] bg-[var(--color-forest)] px-3.5 text-sm font-semibold text-white transition-colors group-hover:bg-[var(--color-ink)]" aria-hidden>
               {copy.view}
               <ArrowIcon />
             </span>

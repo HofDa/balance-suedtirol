@@ -40,7 +40,7 @@ export function Achievements({ locale }: { locale: Locale }) {
       <Container>
         {/* Oben rechts ein Beleg aus dem Gelände: Die Zwergdommel brütet wieder
             in der Millander Au. Die Namensnennung wünscht der Fotograf. */}
-        <div className="flex flex-col gap-8 lg:flex-row lg:items-start lg:justify-between lg:gap-16">
+        <div className="flex flex-col gap-8 md:flex-row md:items-start md:justify-between md:gap-10 lg:gap-16">
           <div data-home-reveal="rise">
             <SectionHeading
               id="achievements-title"
@@ -51,7 +51,7 @@ export function Achievements({ locale }: { locale: Locale }) {
               toggle={<MobileCollapseToggle labelledBy="achievements-title" />}
             />
           </div>
-          <figure data-home-reveal="scale" className={cn(hiddenWhenCollapsed, "w-full shrink-0 sm:max-w-md lg:w-[24rem]")}>
+          <figure data-home-reveal="scale" className={cn(hiddenWhenCollapsed, "w-full shrink-0 sm:max-w-md md:w-[18rem] lg:w-[24rem]")}>
             <div className="relative aspect-[3/2] overflow-hidden rounded-[var(--radius-lg)] bg-[var(--color-sage)]">
               <Image
                 src={withBasePath("/projects/millander-au-zwergdommel-sm.webp")}

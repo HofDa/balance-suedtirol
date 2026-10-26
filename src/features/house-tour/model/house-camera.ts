@@ -15,7 +15,8 @@ import type { RoomId } from "./types";
 const [SIZE] = layout.size;
 const CAMERA_EASE = [0.4, 0, 0.2, 1] as const;
 export const CAMERA_SECONDS = 0.55;
-const MOBILE_QUERY = "(max-width: 767.98px)";
+// Gestapelte Ansicht, Gegenstück zur `tour`-Variante in globals.css.
+const MOBILE_QUERY = "not all and (min-width: 768px) and (orientation: landscape)";
 
 export type CameraTarget = { roomId: RoomId | null; questionIndex: number } | null;
 

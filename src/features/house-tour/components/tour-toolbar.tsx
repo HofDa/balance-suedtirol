@@ -71,7 +71,7 @@ export function TourToolbar({
       <Link
         href={`/${locale}`}
         aria-label={t.toolbar.logo}
-        className={cn("inline-flex min-h-11 shrink-0 items-center md:hidden", focusRingTool)}
+        className={cn("inline-flex min-h-11 shrink-0 items-center tour:hidden", focusRingTool)}
       >
         <Image
           src={withBasePath("/balance-logo-harmonized.svg")}
@@ -82,7 +82,7 @@ export function TourToolbar({
           className="h-8 w-16 object-contain"
         />
       </Link>
-      <span className="h-6 w-px bg-[var(--color-line)] md:hidden" aria-hidden />
+      <span className="h-6 w-px bg-[var(--color-line)] tour:hidden" aria-hidden />
       <button
         type="button"
         onClick={onHouse}

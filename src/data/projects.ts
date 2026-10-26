@@ -3,6 +3,55 @@ import type { Locale } from "../config/site";
 
 export const projects: Project[] = [
   {
+    // Projektbriefing Oktober 2026. Kauf und spätere Unterschutzstellung sind
+    // geplant; Budget, genaue Parzelle und Monitoring sind noch offen.
+    slug: "frangarter-moeser",
+    title: "Trittsteinbiotope im Etschtal",
+    summary: "Ein Hektar brachliegende Obstbaufläche soll zum Feuchtbiotop werden: eine neue Naturinsel im Etschtal und Auftakt für weitere vernetzte Lebensräume.",
+    description: "Die Stiftung Landschaft Südtirol möchte eine zum Verkauf stehende, derzeit unbepflanzte Fläche im Etschtal erwerben. Ziel ist es, den einen Hektar dauerhaft für die Natur zu sichern und zu einem Feuchtbiotop zu entwickeln; eine offizielle Unterschutzstellung wird anschließend angestrebt. Drei Gestaltungsansätze setzen unterschiedliche Schwerpunkte auf offene Wasserflächen, Auwald oder Feuchtwiese. Welche Lebensräume in welchem Verhältnis entstehen, wird gemeinsam mit der Naturschutzbehörde und Fachleuten anhand des Wasserhaushalts und der ökologischen Eignung erarbeitet. Auch die mögliche Anbindung an bestehende Wassergräben wird dabei geprüft. Das Projekt soll den Anfang einer Reihe weiterer Trittsteinbiotope im Etschtal bilden – im Sinne der EU-Wiederherstellungsverordnung, die seit dem 18. August 2024 in Kraft ist.",
+    categoryIds: ["wetlands", "waters", "forests", "meadows-dry-grasslands"],
+    status: "support-needed",
+    municipality: "Frangart, Eppan",
+    organization: "Stiftung Landschaft Südtirol",
+    organizationAddress: "Waltherhaus, Schlernstraße 1, 39100 Bozen, Südtirol",
+    // Ortslage Frangart, kein bestätigter Parzellenstandort.
+    location: { lat: 46.478, lng: 11.299 },
+    locationApproximate: true,
+    image: "/projects/frangarter-moeser-titel.webp",
+    imageCaption: "Gestaltungsvision · Die endgültige Planung ist offen.",
+    gallery: [
+      {
+        src: "/projects/frangarter-moeser-gehoelz.webp",
+        alt: "Gestaltungsvision eines Feuchtlebensraums von einem Hektar mit Wasserflächen, Röhricht, Sträuchern und Bäumen zwischen Obstplantagen, dargestellt in Luftansicht und Querschnitt",
+        caption: "Variante mit Gehölzen: Wasserflächen mit Röhricht, umgeben von Sträuchern und Bäumen. Visualisierung, keine festgelegte Planung."
+      },
+      {
+        src: "/projects/frangarter-moeser-feuchtwiese.webp",
+        alt: "Gestaltungsvision mit gemähter Feuchtwiese links und Wasserfläche mit Röhricht rechts, dargestellt in Luftansicht und Querschnitt",
+        caption: "Variante Feuchtwiese: Offene Wiesenflächen ergänzen eine Wasserfläche mit Röhricht. Visualisierung, keine festgelegte Planung; die abgebildeten Vogelarten sind Beispiele und keine Nachweise auf der Fläche."
+      },
+      {
+        src: "/projects/frangarter-moeser-wasser.webp",
+        alt: "Gestaltungsvision mit mehreren Wasserflächen, Röhrichten und Feuchtwiesen zwischen Obstplantagen, dargestellt in Luftansicht und Querschnitt",
+        caption: "Variante Wasserflächen: Ein Mosaik aus offenen Wasserflächen, Röhrichten und Feuchtwiesen. Visualisierung; die endgültige Gestaltung wird mit der Naturschutzbehörde und Fachleuten erarbeitet."
+      }
+    ],
+    supporters: 0,
+    whyItMatters: "In der intensiv bewirtschafteten Talsohle sind naturnahe Feuchtlebensräume selten geworden. Gerade hier kann ein Hektar wertvollen Rückzugsraum und Verbindungen zwischen verbliebenen Lebensräumen schaffen. Nach den Projektangaben ist der Grundwasserstand auf der Fläche hoch; Obstbau erfordert zum Teil aufwendige Geländeauffüllungen. Die Renaturierung greift stattdessen die feuchten Standortbedingungen auf und gibt einem Teil der früheren Feuchtlandschaft wieder Raum. Je nach Gestaltung können Amphibien, Libellen, weitere Insekten und feuchtigkeitsliebende Pflanzen profitieren. Für Zugvögel soll ein zusätzlicher Rast- und Nahrungsplatz im Umfeld der Jaufenroute entstehen. Die Nachbarschaft zur bereits gesicherten Stiftungsfläche bietet die Chance, zusammenhängenden Naturraum zu entwickeln. Der Kauf schafft dafür eine langfristige Grundlage; fachlich abgestimmte Pflege soll die Vielfalt erhalten.",
+    impact: [
+      { value: "1 ha", label: "Fläche für ein geplantes Feuchtbiotop" },
+      { value: "3", label: "Gestaltungsansätze in fachlicher Abstimmung" },
+      { value: "Vernetzung", label: "Anbindung an Wassergräben als Ziel" },
+      { value: "Auftakt", label: "für weitere Trittsteinbiotope im Etschtal" }
+    ],
+    monitoring: {
+      species: "Mögliche Zielgruppen: Amphibien, Libellen, weitere Insekten, Feuchtgebietsvegetation sowie Zug- und Brutvögel; vor Ort noch zu erheben",
+      surveys: "Noch mit der Naturschutzbehörde und Fachleuten festzulegen",
+      reporting: "Noch festzulegen",
+      summary: "Ein Beobachtungsprogramm wird im Zuge der Fachplanung erarbeitet. Es soll die Entwicklung der Lebensräume und ihre Nutzung durch Tiere und Pflanzen nachvollziehbar machen. Artenvorkommen und messbare Entwicklungsziele sind noch zu erheben bzw. festzulegen."
+    }
+  },
+  {
     // Projektstand vom Oktober 2026: Träger, Zeitplan, Budget und Monitoring
     // sind noch offen. Der Kartenpunkt bezeichnet vorerst nur den Ort Kiens.
     slug: "widumwiese-kiens",
@@ -132,14 +181,9 @@ export const projects: Project[] = [
     image: "/projects/meine-gemeinde-meine-natur.webp",
     gallery: [
       { src: "/projects/meine-gemeinde-meine-natur-herde-hang.webp", alt: "Hirte mit Hütehund und einer Herde aus Ziegen und Schafen an einem steilen Wiesenhang", caption: "Der Hirte, sein Hütehund und die Herde aus Schafen und Ziegen an einem steilen Hang." },
-      { src: "/projects/meine-gemeinde-meine-natur-ziegen-weg.webp", alt: "Ziegen auf einem Weg zwischen Holzzäunen, dahinter der Hirte und die Berge", caption: "Unterwegs mit der Herde: Ziegen auf einem Weg zwischen Holzzäunen." },
       { src: "/projects/meine-gemeinde-meine-natur-herde-winter.webp", alt: "Ziegen und Schafe auf einem Weg neben gestapelten Baumstämmen, am Rand liegt Schnee", caption: "Auch im Winter ist die Herde unterwegs." },
-      { src: "/projects/meine-gemeinde-meine-natur-hirte-schnee.webp", alt: "Der Hirte mit seinem Hütehund vor der Herde auf einer verschneiten Fläche", caption: "Der Hirte mit Hütehund und Herde im Schnee." },
       { src: "/projects/meine-gemeinde-meine-natur-mahd.webp", alt: "Blick über ein Mähgerät auf eine hochgewachsene Fläche, im Hintergrund arbeitet eine weitere Person", caption: "Die artenreiche Riedwiese wird gemäht, um die Verbrachung zu verringern und den eindringenden Rohrkolben zurückzudrängen." },
-      { src: "/projects/meine-gemeinde-meine-natur-rechen.webp", alt: "Eine Person recht auf einer gemähten Fläche das Schnittgut zusammen", caption: "Das Schnittgut wird zusammengerecht." },
-      { src: "/projects/meine-gemeinde-meine-natur-maehgut.webp", alt: "Gemähte Wiese mit einem Haufen Schnittgut, dahinter Wald und eine Stromleitung", caption: "Nach der Mahd wird das Schnittgut auf Haufen gesammelt." },
-      { src: "/projects/meine-gemeinde-meine-natur-gemaehte-flaeche.webp", alt: "Gemähte Fläche mit Reihen und Haufen aus Schnittgut vor Gehölzen", caption: "Die gemähte Fläche am Ende des Einsatztags." },
-      { src: "/projects/meine-gemeinde-meine-natur-haufen-waldrand.webp", alt: "Haufen aus Schnittgut am Waldrand", caption: "Schnittgut-Haufen am Rand der Fläche." }
+      { src: "/projects/meine-gemeinde-meine-natur-maehgut.webp", alt: "Gemähte Wiese mit einem Haufen Schnittgut, dahinter Wald und eine Stromleitung", caption: "Nach der Mahd wird das Schnittgut auf Haufen gesammelt." }
     ],
     supporters: 0,
     supportedBy: "Amt für Natur – Autonome Provinz Bozen",
@@ -196,6 +240,32 @@ export const projects: Project[] = [
 
 const projectTranslations: Record<Exclude<Locale, "de">, Record<string, Partial<Project>>> = {
   it: {
+    "frangarter-moeser": {
+      title: "Biotopi di collegamento nella Val d’Adige",
+      summary: "Un ettaro di terreno frutticolo incolto diventerà una zona umida: una nuova isola di natura nella Val d’Adige e il primo passo verso altri habitat collegati.",
+      description: "La Stiftung Landschaft Südtirol intende acquistare un terreno in vendita, attualmente privo di alberi da frutto, nella Val d’Adige. L’obiettivo è assicurare stabilmente questo ettaro alla natura e trasformarlo in una zona umida, puntando successivamente alla tutela ufficiale come biotopo. Tre ipotesi progettuali privilegiano rispettivamente gli specchi d’acqua, il bosco ripariale o il prato umido. La combinazione degli habitat sarà definita insieme all’autorità competente per la tutela della natura e a esperti, sulla base del regime idrico e dell’idoneità ecologica. Sarà valutato anche un possibile collegamento ai fossi esistenti. Il progetto vuole avviare una serie di altri biotopi di collegamento nella Val d’Adige, in linea con il regolamento europeo sul ripristino della natura, in vigore dal 18 agosto 2024.",
+      municipality: "Frangarto, Appiano",
+      organizationAddress: "Casa Walther, Via Sciliar 1, 39100 Bolzano, Alto Adige",
+      imageCaption: "Visione progettuale · La pianificazione definitiva è ancora aperta.",
+      gallery: [
+        { src: "/projects/frangarter-moeser-gehoelz.webp", alt: "Visione progettuale di una zona umida di un ettaro con specchi d’acqua, canneti, arbusti e alberi tra i frutteti, in vista aerea e in sezione", caption: "Variante con alberi e arbusti: specchi d’acqua con canneto, circondati da arbusti e alberi. Visualizzazione, non un progetto definitivo." },
+        { src: "/projects/frangarter-moeser-feuchtwiese.webp", alt: "Visione progettuale con prato umido falciato a sinistra e specchio d’acqua con canneto a destra, in vista aerea e in sezione", caption: "Variante prato umido: superfici prative aperte affiancano uno specchio d’acqua con canneto. Visualizzazione, non un progetto definitivo; gli uccelli raffigurati sono esempi e non presenze documentate sul terreno." },
+        { src: "/projects/frangarter-moeser-wasser.webp", alt: "Visione progettuale con più specchi d’acqua, canneti e prati umidi tra i frutteti, in vista aerea e in sezione", caption: "Variante specchi d’acqua: un mosaico di acque aperte, canneti e prati umidi. Visualizzazione; il progetto definitivo sarà elaborato con l’autorità competente per la tutela della natura e con esperti." }
+      ],
+      whyItMatters: "Nel fondovalle intensamente coltivato gli habitat umidi seminaturali sono diventati rari. Proprio qui un ettaro può offrire un prezioso rifugio e collegare gli habitat rimasti. Secondo le informazioni del progetto, sul terreno la falda è alta; la frutticoltura richiede talvolta onerosi riporti di terreno. La rinaturalizzazione valorizza invece le condizioni umide del sito, restituendo spazio a una parte dell’antico paesaggio. A seconda degli interventi potranno beneficiarne anfibi, libellule, altri insetti e piante legate agli ambienti umidi. Si vuole creare anche un ulteriore luogo di sosta e alimentazione per gli uccelli migratori lungo la rotta del Giovo. La vicinanza al terreno già acquisito dalla fondazione offre l’opportunità di sviluppare uno spazio naturale connesso. L’acquisto ne crea le basi a lungo termine; una gestione concordata con esperti dovrà conservarne la diversità.",
+      impact: [
+        { value: "1 ha", label: "superficie per una futura zona umida" },
+        { value: "3", label: "ipotesi progettuali da valutare con esperti" },
+        { value: "Connessione", label: "obiettivo di collegamento ai fossi" },
+        { value: "Primo passo", label: "verso altri biotopi di collegamento nella Val d’Adige" }
+      ],
+      monitoring: {
+        species: "Possibili gruppi obiettivo: anfibi, libellule, altri insetti, vegetazione delle zone umide e uccelli migratori e nidificanti; da rilevare sul posto",
+        surveys: "Da definire con l’autorità competente per la tutela della natura e con esperti",
+        reporting: "Da definire",
+        summary: "Un programma di monitoraggio sarà elaborato durante la pianificazione tecnica per seguire lo sviluppo degli habitat e il loro utilizzo da parte di animali e piante. Le presenze delle specie e gli obiettivi misurabili sono ancora da rilevare e definire."
+      }
+    },
     "widumwiese-kiens": {
       title: "Oasi naturale nel giardino della canonica di Chienes",
       summary: "Il prato presso la canonica viene valorizzato dal punto di vista ecologico per creare habitat per uccelli, ricci, anfibi, insetti e altri esseri viventi.",
@@ -283,14 +353,9 @@ const projectTranslations: Record<Exclude<Locale, "de">, Record<string, Partial<
       organizationAddress: "c/o b*coop, Via Vintler 34, 39042 Bressanone",
       gallery: [
         { src: "/projects/meine-gemeinde-meine-natur-herde-hang.webp", alt: "Pastore con cane da pastore e un gregge di capre e pecore su un ripido pendio erboso", caption: "Il pastore, il suo cane e il gregge di pecore e capre su un pendio ripido." },
-        { src: "/projects/meine-gemeinde-meine-natur-ziegen-weg.webp", alt: "Capre su un sentiero tra recinzioni di legno, dietro il pastore e le montagne", caption: "In cammino con il gregge: capre su un sentiero tra recinzioni di legno." },
         { src: "/projects/meine-gemeinde-meine-natur-herde-winter.webp", alt: "Capre e pecore su una strada accanto a cataste di tronchi, ai lati c’è neve", caption: "Il gregge è in cammino anche d’inverno." },
-        { src: "/projects/meine-gemeinde-meine-natur-hirte-schnee.webp", alt: "Il pastore con il suo cane davanti al gregge su un terreno innevato", caption: "Il pastore con il cane e il gregge nella neve." },
         { src: "/projects/meine-gemeinde-meine-natur-mahd.webp", alt: "Vista oltre una falciatrice su un’area con erba alta, sullo sfondo lavora un’altra persona", caption: "Il prato umido ricco di specie viene falciato per contrastarne l’abbandono e far arretrare la tifa che lo sta invadendo." },
-        { src: "/projects/meine-gemeinde-meine-natur-rechen.webp", alt: "Una persona rastrella l’erba tagliata su un’area falciata", caption: "L’erba tagliata viene raccolta con il rastrello." },
         { src: "/projects/meine-gemeinde-meine-natur-maehgut.webp", alt: "Prato falciato con un cumulo di erba tagliata, dietro bosco e una linea elettrica", caption: "Dopo lo sfalcio l’erba tagliata viene raccolta in cumuli." },
-        { src: "/projects/meine-gemeinde-meine-natur-gemaehte-flaeche.webp", alt: "Area falciata con file e cumuli di erba tagliata davanti a boschetti", caption: "L’area falciata alla fine della giornata di lavoro." },
-        { src: "/projects/meine-gemeinde-meine-natur-haufen-waldrand.webp", alt: "Cumulo di erba tagliata al margine del bosco", caption: "Cumulo di erba tagliata al margine dell’area." }
       ],
       summary: "Scoprire e curare i biotopi dietro casa: un gregge di pecore e capre mantiene aperti prati aridi e pascoli magri in Valle Isarco.",
       description: "Avviciniamo bambini e adulti all’importanza di questi habitat con attività in cui scoprono di persona la biodiversità del luogo. Conserviamo e promuoviamo la biodiversità collaborando con pastori e pastore professionisti che pascolano questi habitat con i loro animali secondo la tradizione. Dove necessario interveniamo a mano, per esempio rimuovendo arbusti e alberi, per recuperare un paesaggio culturale ricco di specie.",
@@ -338,6 +403,32 @@ const projectTranslations: Record<Exclude<Locale, "de">, Record<string, Partial<
     }
   },
   en: {
+    "frangarter-moeser": {
+      title: "Stepping-stone habitats in the Adige Valley",
+      summary: "One hectare of fallow orchard land is to become a wetland: a new island of nature in the Adige Valley and a first step towards a network of connected habitats.",
+      description: "Stiftung Landschaft Südtirol intends to purchase a plot for sale in the Adige Valley, currently without fruit trees. The aim is to secure this hectare for nature in the long term and develop it into a wetland, with official protection as a biotope to follow. Three design approaches place different emphasis on open water, riparian woodland or wet meadow. The final mix of habitats will be developed with the nature conservation authority and specialists, based on the water regime and ecological suitability. A possible connection to existing water ditches will also be assessed. The project is intended to launch a series of further stepping-stone habitats in the Adige Valley, in keeping with the EU Nature Restoration Regulation, which entered into force on 18 August 2024.",
+      municipality: "Frangart, Eppan",
+      organizationAddress: "Waltherhaus, Schlernstraße 1, 39100 Bolzano, South Tyrol",
+      imageCaption: "Design vision · The final plan is still open.",
+      gallery: [
+        { src: "/projects/frangarter-moeser-gehoelz.webp", alt: "Design vision of a one-hectare wetland with pools, reed beds, shrubs and trees between orchards, in aerial view and cross-section", caption: "Variant with trees and shrubs: reed-fringed pools surrounded by shrubs and trees. Visualisation, not a final plan." },
+        { src: "/projects/frangarter-moeser-feuchtwiese.webp", alt: "Design vision showing a mown wet meadow on the left and reed-fringed water on the right, in aerial view and cross-section", caption: "Wet meadow variant: open meadows alongside reed-fringed water. Visualisation, not a final plan; the birds shown are examples rather than species recorded on the site." },
+        { src: "/projects/frangarter-moeser-wasser.webp", alt: "Design vision showing several pools, reed beds and wet meadows between orchards, in aerial view and cross-section", caption: "Open water variant: a mosaic of pools, reed beds and wet meadows. Visualisation; the final design will be developed with the nature conservation authority and specialists." }
+      ],
+      whyItMatters: "Semi-natural wetland habitats have become scarce on the intensively farmed valley floor. Here, even one hectare can offer valuable refuge and connections between remaining habitats. According to the project information, groundwater levels on the site are high; fruit growing sometimes requires substantial raising of the ground with imported soil. Restoration instead works with the wet conditions and returns space to part of the former wetland landscape. Depending on the design, amphibians, dragonflies, other insects and wetland plants could benefit. The site is also intended to offer migrating birds an additional resting and feeding place along the Jaufen migration route. Adjoining land already owned by the foundation creates an opportunity to develop connected natural habitat. Purchasing the site provides a long-term basis for this; management agreed with specialists should maintain its diversity.",
+      impact: [
+        { value: "1 ha", label: "of land for a planned wetland" },
+        { value: "3", label: "design approaches to assess with specialists" },
+        { value: "Connectivity", label: "connection to water ditches as a goal" },
+        { value: "First step", label: "towards further stepping-stone habitats in the Adige Valley" }
+      ],
+      monitoring: {
+        species: "Potential target groups: amphibians, dragonflies, other insects, wetland vegetation, migrating and breeding birds; site surveys still needed",
+        surveys: "To be defined with the nature conservation authority and specialists",
+        reporting: "To be defined",
+        summary: "A monitoring programme will be developed during specialist planning to track habitat development and use by wildlife and plants. Species records and measurable development targets still need to be established."
+      }
+    },
     "widumwiese-kiens": {
       title: "Widum Garden Nature Oasis, Kiens",
       summary: "The meadow beside the parish house will be enhanced ecologically to create habitat for birds, hedgehogs, amphibians, insects and other wildlife.",
@@ -423,14 +514,9 @@ const projectTranslations: Record<Exclude<Locale, "de">, Record<string, Partial<
       title: "My municipality, my nature",
       gallery: [
         { src: "/projects/meine-gemeinde-meine-natur-herde-hang.webp", alt: "Shepherd with herding dog and a flock of goats and sheep on a steep grassy slope", caption: "The shepherd, his herding dog and the flock of sheep and goats on a steep slope." },
-        { src: "/projects/meine-gemeinde-meine-natur-ziegen-weg.webp", alt: "Goats on a path between wooden fences, with the shepherd and mountains behind", caption: "On the move with the flock: goats on a path between wooden fences." },
         { src: "/projects/meine-gemeinde-meine-natur-herde-winter.webp", alt: "Goats and sheep on a track beside stacked logs, with snow at the edges", caption: "The flock is on the move in winter too." },
-        { src: "/projects/meine-gemeinde-meine-natur-hirte-schnee.webp", alt: "The shepherd with his herding dog in front of the flock on snow-covered ground", caption: "The shepherd with dog and flock in the snow." },
         { src: "/projects/meine-gemeinde-meine-natur-mahd.webp", alt: "View over a mower onto a patch of tall vegetation, with another person working in the background", caption: "The species-rich fen meadow is mown to slow its abandonment and push back the encroaching bulrush." },
-        { src: "/projects/meine-gemeinde-meine-natur-rechen.webp", alt: "A person raking cut vegetation on a mown area", caption: "The cuttings are raked together." },
         { src: "/projects/meine-gemeinde-meine-natur-maehgut.webp", alt: "Mown meadow with a pile of cuttings, woodland and a power line behind", caption: "After mowing, the cuttings are gathered into piles." },
-        { src: "/projects/meine-gemeinde-meine-natur-gemaehte-flaeche.webp", alt: "Mown area with rows and piles of cuttings in front of trees and shrubs", caption: "The mown area at the end of the work day." },
-        { src: "/projects/meine-gemeinde-meine-natur-haufen-waldrand.webp", alt: "Pile of cuttings at the edge of the woods", caption: "A pile of cuttings at the edge of the site." }
       ],
       summary: "Discovering and caring for the biotopes on our doorstep: a flock of sheep and goats keeps dry grasslands and poor pastures in the Eisack Valley open.",
       description: "We bring the importance of these habitats closer to children and adults alike through activities in which they discover the habitat’s biodiversity for themselves. We preserve and promote biodiversity by working with professional shepherds who graze these habitats with their livestock in the traditional way. Where necessary, we carry out management work by hand, such as removing shrubs and trees, to restore species-rich cultural landscape.",
@@ -493,6 +579,7 @@ export function toProjectCardData(project: Project): ProjectCardData {
     municipality: project.municipality,
     organization: project.organization,
     image: project.image,
+    imageCaption: project.imageCaption,
     mainSponsor: project.mainSponsor,
     additionalSponsorCount: project.otherSponsors?.length ?? 0
   };

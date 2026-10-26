@@ -1,5 +1,13 @@
 @import "tailwindcss";
 
+/* Lebensraum-Check: geteilte Ansicht (Haus links, Fragen rechts) erst ab
+   768 px im Querformat. Ein Tablet im Hochformat bekommt die gestapelte
+   Handyansicht; nebeneinander bliebe das Haus dort ein kleines Bild in einer
+   hohen, leeren Spalte. Gleiche Abfrage in house-camera.ts und
+   interactive-room.module.css. */
+@custom-variant tour (@media (min-width: 768px) and (orientation: landscape));
+@custom-variant max-tour (@media not all and (min-width: 768px) and (orientation: landscape));
+
 :root {
   --color-paper: #f7f6f0;
   --color-surface: #ffffff;

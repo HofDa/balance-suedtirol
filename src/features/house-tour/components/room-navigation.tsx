@@ -9,7 +9,7 @@ import { getRoomProgress } from "../model/scoring";
 import type { RoomId } from "../model/types";
 
 /**
- * Die Raumleiste aus DESIGN.md: der Reiseplan des Hauses, dauerhaft sichtbar.
+ * Die Raumleiste aus DESIGN.tour: der Reiseplan des Hauses, dauerhaft sichtbar.
  * Ohne sie führt jeder Raumwechsel über den Umweg Hausübersicht, und wo man
  * gerade steht, ist nur aus dem Panelkopf zu erschließen.
  *
@@ -49,7 +49,7 @@ export function RoomNavigation({
   return (
     <nav
       aria-label={t.roomNav.label}
-      className="flex items-center gap-1 border-b border-[var(--color-line)] bg-[var(--color-paper)]/65 px-2 md:px-3"
+      className="flex items-center gap-1 border-b border-[var(--color-line)] bg-[var(--color-paper)]/65 px-2 tour:px-3"
     >
       <button
         type="button"
@@ -86,7 +86,7 @@ export function RoomNavigation({
                 aria-current={active ? "step" : undefined}
                 aria-label={t.roomNav.roomAria(room.title, handled, room.questions.length)}
                 className={cn(
-                  "inline-flex min-h-8 items-center gap-1.5 rounded-[var(--radius-sm)] px-2.5 text-[11px] font-semibold transition-colors md:text-xs",
+                  "inline-flex min-h-8 items-center gap-1.5 rounded-[var(--radius-sm)] px-2.5 text-[11px] font-semibold transition-colors tour:text-xs",
                   focusRingTool,
                   active
                     ? "bg-[var(--color-forest)] text-white"

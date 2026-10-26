@@ -124,8 +124,8 @@ function HouseholdSize({ size, onChange }: { size: number; onChange: (size: numb
     focusRingTool
   );
   return (
-    <div className="flex items-center justify-between gap-3 border-b border-[var(--color-line)] px-3 pb-2 md:px-4">
-      <span id="household-size" className="text-xs font-semibold md:text-sm">{t.household.label}</span>
+    <div className="flex items-center justify-between gap-3 border-b border-[var(--color-line)] px-3 pb-2 tour:px-4">
+      <span id="household-size" className="text-xs font-semibold tour:text-sm">{t.household.label}</span>
       <div role="group" aria-labelledby="household-size" className="flex items-center gap-2">
         <button type="button" onClick={() => onChange(size - 1)} disabled={size <= 1} aria-label={t.household.fewer} className={button}>
           <Minus className="size-4" aria-hidden />
@@ -152,11 +152,11 @@ function PresetChips({
   const { t } = useTourI18n();
   return (
     <>
-      <p className="mt-4 hidden text-[11px] font-semibold text-[var(--color-muted)] md:block" aria-hidden>
+      <p className="mt-4 hidden text-[11px] font-semibold text-[var(--color-muted)] tour:block" aria-hidden>
         {t.presets}
       </p>
       <div
-        className={cn("mt-3 grid gap-1.5 md:mt-1.5", question.options.length === 3 ? "grid-cols-3" : "grid-cols-2")}
+        className={cn("mt-3 grid gap-1.5 tour:mt-1.5", question.options.length === 3 ? "grid-cols-3" : "grid-cols-2")}
         role="radiogroup"
         aria-label={t.presets}
       >
@@ -346,7 +346,7 @@ export function KindStep({
   // letzte, „Weiß ich nicht“, mobil ohne Scrollen zu sehen ist.
   const dense = question.options.length >= 7;
   return (
-    <div className={cn("mt-3 grid md:mt-4", tiles ? cn(dense ? "gap-1" : "gap-1.5", "md:grid-cols-2 md:gap-2") : "gap-2")} role="radiogroup" aria-labelledby="step-title">
+    <div className={cn("mt-3 grid tour:mt-4", tiles ? cn(dense ? "gap-1" : "gap-1.5", "tour:grid-cols-2 tour:gap-2") : "gap-2")} role="radiogroup" aria-labelledby="step-title">
       {question.options.map((option, index) => {
         const active = selected === option.id;
         const Icon = iconFor(question.id, option.id);
@@ -361,7 +361,7 @@ export function KindStep({
             className={cn(
               "group relative w-full rounded-[var(--radius-lg)] border text-left transition-colors duration-200",
               tiles
-                ? cn("flex items-center gap-2.5 pl-2 pr-3 md:min-h-14 md:py-2 md:pl-2.5", dense ? "min-h-11 py-1" : "min-h-12 py-1.5")
+                ? cn("flex items-center gap-2.5 pl-2 pr-3 tour:min-h-14 tour:py-2 tour:pl-2.5", dense ? "min-h-11 py-1" : "min-h-12 py-1.5")
                 : "flex min-h-14 items-center gap-3 px-4 py-3",
               active
                 ? "border-[var(--color-forest)] bg-[var(--color-sage)]/55"
@@ -372,7 +372,7 @@ export function KindStep({
             <span
               className={cn(
                 "grid shrink-0 place-items-center rounded-[var(--radius-md)] transition-colors duration-200",
-                tiles ? "size-8 md:size-9" : "size-10",
+                tiles ? "size-8 tour:size-9" : "size-10",
                 active ? "bg-[var(--color-forest)] text-white" : "bg-[var(--color-sage)]/70 text-[var(--color-forest)]"
               )}
               aria-hidden
@@ -393,7 +393,7 @@ export function KindStep({
               <Check className="size-5 shrink-0 text-[var(--color-forest)]" aria-hidden />
             ) : (
               <kbd
-                className="hidden size-6 shrink-0 place-items-center rounded-[var(--radius-sm)] border border-[var(--color-line)] text-[11px] font-semibold tabular-nums text-[var(--color-muted)] md:grid"
+                className="hidden size-6 shrink-0 place-items-center rounded-[var(--radius-sm)] border border-[var(--color-line)] text-[11px] font-semibold tabular-nums text-[var(--color-muted)] tour:grid"
                 aria-hidden
               >
                 {index + 1}

@@ -77,9 +77,9 @@ export function TapCounter({
   const fromTile = Math.floor(count.from / perTile);
 
   return (
-    <div className="px-3 pb-3 pt-1 md:px-4">
+    <div className="px-3 pb-3 pt-1 tour:px-4">
       <div className="flex items-baseline justify-between gap-3">
-        <span id={labelId} className={cn("text-xs font-semibold text-[var(--color-ink)] md:text-sm", hideLabel && "sr-only")}>
+        <span id={labelId} className={cn("text-xs font-semibold text-[var(--color-ink)] tour:text-sm", hideLabel && "sr-only")}>
           {adjust.label}
         </span>
         {isCustom && onReset && (
@@ -214,9 +214,9 @@ export function MealWeek({
   };
 
   return (
-    <div className="p-3 md:p-4">
+    <div className="p-3 tour:p-4">
       <div className="flex items-baseline justify-between gap-3">
-        <span id={labelId} className={cn("text-xs font-semibold md:text-sm", hideLabel && "sr-only")}>{adjust.label}</span>
+        <span id={labelId} className={cn("text-xs font-semibold tour:text-sm", hideLabel && "sr-only")}>{adjust.label}</span>
         <output aria-live="polite" className="shrink-0 text-xl font-semibold tabular-nums">
           {quantity}
         </output>

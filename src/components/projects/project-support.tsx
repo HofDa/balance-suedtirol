@@ -1,7 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { Button } from "@/components/ui/button";
 
 export const OPEN_SUPPORT_EVENT = "balance:open-project-support";
@@ -30,7 +30,7 @@ export function ProjectSupportTrigger({
   variant = "primary",
   className
 }: {
-  label: string;
+  label: ReactNode;
   variant?: "primary" | "accent";
   className?: string;
 }) {

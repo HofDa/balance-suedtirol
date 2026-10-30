@@ -1,7 +1,7 @@
 import type { Project, ProjectCardData, ProjectListItem } from "../types/project";
 import type { Locale } from "../config/site";
 
-export const projects: Project[] = [
+const projectCatalog: Project[] = [
   {
     // Projektbriefing Oktober 2026. Kauf und spätere Unterschutzstellung sind
     // geplant; Budget, genaue Parzelle und Monitoring sind noch offen.
@@ -19,23 +19,6 @@ export const projects: Project[] = [
     locationApproximate: true,
     image: "/projects/frangarter-moeser-titel.webp",
     imageCaption: "Gestaltungsvision · Die endgültige Planung ist offen.",
-    gallery: [
-      {
-        src: "/projects/frangarter-moeser-gehoelz.webp",
-        alt: "Gestaltungsvision eines Feuchtlebensraums von einem Hektar mit Wasserflächen, Röhricht, Sträuchern und Bäumen zwischen Obstplantagen, dargestellt in Luftansicht und Querschnitt",
-        caption: "Variante mit Gehölzen: Wasserflächen mit Röhricht, umgeben von Sträuchern und Bäumen. Visualisierung, keine festgelegte Planung."
-      },
-      {
-        src: "/projects/frangarter-moeser-feuchtwiese.webp",
-        alt: "Gestaltungsvision mit gemähter Feuchtwiese links und Wasserfläche mit Röhricht rechts, dargestellt in Luftansicht und Querschnitt",
-        caption: "Variante Feuchtwiese: Offene Wiesenflächen ergänzen eine Wasserfläche mit Röhricht. Visualisierung, keine festgelegte Planung; die abgebildeten Vogelarten sind Beispiele und keine Nachweise auf der Fläche."
-      },
-      {
-        src: "/projects/frangarter-moeser-wasser.webp",
-        alt: "Gestaltungsvision mit mehreren Wasserflächen, Röhrichten und Feuchtwiesen zwischen Obstplantagen, dargestellt in Luftansicht und Querschnitt",
-        caption: "Variante Wasserflächen: Ein Mosaik aus offenen Wasserflächen, Röhrichten und Feuchtwiesen. Visualisierung; die endgültige Gestaltung wird mit der Naturschutzbehörde und Fachleuten erarbeitet."
-      }
-    ],
     supporters: 0,
     whyItMatters: "In der intensiv bewirtschafteten Talsohle sind naturnahe Feuchtlebensräume selten geworden. Gerade hier kann ein Hektar wertvollen Rückzugsraum und Verbindungen zwischen verbliebenen Lebensräumen schaffen. Nach den Projektangaben ist der Grundwasserstand auf der Fläche hoch; Obstbau erfordert zum Teil aufwendige Geländeauffüllungen. Die Renaturierung greift stattdessen die feuchten Standortbedingungen auf und gibt einem Teil der früheren Feuchtlandschaft wieder Raum. Je nach Gestaltung können Amphibien, Libellen, weitere Insekten und feuchtigkeitsliebende Pflanzen profitieren. Für Zugvögel soll ein zusätzlicher Rast- und Nahrungsplatz im Umfeld der Jaufenroute entstehen. Die Nachbarschaft zur bereits gesicherten Stiftungsfläche bietet die Chance, zusammenhängenden Naturraum zu entwickeln. Der Kauf schafft dafür eine langfristige Grundlage; fachlich abgestimmte Pflege soll die Vielfalt erhalten.",
     impact: [
@@ -238,6 +221,13 @@ export const projects: Project[] = [
   }
 ];
 
+// Temporarily unpublished; remove the slug here to make the project public again.
+const hiddenProjectSlugs = new Set(["frangarter-moeser"]);
+
+export const projects: Project[] = projectCatalog.filter(
+  (project) => !hiddenProjectSlugs.has(project.slug)
+);
+
 const projectTranslations: Record<Exclude<Locale, "de">, Record<string, Partial<Project>>> = {
   it: {
     "frangarter-moeser": {
@@ -247,11 +237,6 @@ const projectTranslations: Record<Exclude<Locale, "de">, Record<string, Partial<
       municipality: "Frangarto, Appiano",
       organizationAddress: "Casa Walther, Via Sciliar 1, 39100 Bolzano, Alto Adige",
       imageCaption: "Visione progettuale · La pianificazione definitiva è ancora aperta.",
-      gallery: [
-        { src: "/projects/frangarter-moeser-gehoelz.webp", alt: "Visione progettuale di una zona umida di un ettaro con specchi d’acqua, canneti, arbusti e alberi tra i frutteti, in vista aerea e in sezione", caption: "Variante con alberi e arbusti: specchi d’acqua con canneto, circondati da arbusti e alberi. Visualizzazione, non un progetto definitivo." },
-        { src: "/projects/frangarter-moeser-feuchtwiese.webp", alt: "Visione progettuale con prato umido falciato a sinistra e specchio d’acqua con canneto a destra, in vista aerea e in sezione", caption: "Variante prato umido: superfici prative aperte affiancano uno specchio d’acqua con canneto. Visualizzazione, non un progetto definitivo; gli uccelli raffigurati sono esempi e non presenze documentate sul terreno." },
-        { src: "/projects/frangarter-moeser-wasser.webp", alt: "Visione progettuale con più specchi d’acqua, canneti e prati umidi tra i frutteti, in vista aerea e in sezione", caption: "Variante specchi d’acqua: un mosaico di acque aperte, canneti e prati umidi. Visualizzazione; il progetto definitivo sarà elaborato con l’autorità competente per la tutela della natura e con esperti." }
-      ],
       whyItMatters: "Nel fondovalle intensamente coltivato gli habitat umidi seminaturali sono diventati rari. Proprio qui un ettaro può offrire un prezioso rifugio e collegare gli habitat rimasti. Secondo le informazioni del progetto, sul terreno la falda è alta; la frutticoltura richiede talvolta onerosi riporti di terreno. La rinaturalizzazione valorizza invece le condizioni umide del sito, restituendo spazio a una parte dell’antico paesaggio. A seconda degli interventi potranno beneficiarne anfibi, libellule, altri insetti e piante legate agli ambienti umidi. Si vuole creare anche un ulteriore luogo di sosta e alimentazione per gli uccelli migratori lungo la rotta del Giovo. La vicinanza al terreno già acquisito dalla fondazione offre l’opportunità di sviluppare uno spazio naturale connesso. L’acquisto ne crea le basi a lungo termine; una gestione concordata con esperti dovrà conservarne la diversità.",
       impact: [
         { value: "1 ha", label: "superficie per una futura zona umida" },
@@ -410,11 +395,6 @@ const projectTranslations: Record<Exclude<Locale, "de">, Record<string, Partial<
       municipality: "Frangart, Eppan",
       organizationAddress: "Waltherhaus, Schlernstraße 1, 39100 Bolzano, South Tyrol",
       imageCaption: "Design vision · The final plan is still open.",
-      gallery: [
-        { src: "/projects/frangarter-moeser-gehoelz.webp", alt: "Design vision of a one-hectare wetland with pools, reed beds, shrubs and trees between orchards, in aerial view and cross-section", caption: "Variant with trees and shrubs: reed-fringed pools surrounded by shrubs and trees. Visualisation, not a final plan." },
-        { src: "/projects/frangarter-moeser-feuchtwiese.webp", alt: "Design vision showing a mown wet meadow on the left and reed-fringed water on the right, in aerial view and cross-section", caption: "Wet meadow variant: open meadows alongside reed-fringed water. Visualisation, not a final plan; the birds shown are examples rather than species recorded on the site." },
-        { src: "/projects/frangarter-moeser-wasser.webp", alt: "Design vision showing several pools, reed beds and wet meadows between orchards, in aerial view and cross-section", caption: "Open water variant: a mosaic of pools, reed beds and wet meadows. Visualisation; the final design will be developed with the nature conservation authority and specialists." }
-      ],
       whyItMatters: "Semi-natural wetland habitats have become scarce on the intensively farmed valley floor. Here, even one hectare can offer valuable refuge and connections between remaining habitats. According to the project information, groundwater levels on the site are high; fruit growing sometimes requires substantial raising of the ground with imported soil. Restoration instead works with the wet conditions and returns space to part of the former wetland landscape. Depending on the design, amphibians, dragonflies, other insects and wetland plants could benefit. The site is also intended to offer migrating birds an additional resting and feeding place along the Jaufen migration route. Adjoining land already owned by the foundation creates an opportunity to develop connected natural habitat. Purchasing the site provides a long-term basis for this; management agreed with specialists should maintain its diversity.",
       impact: [
         { value: "1 ha", label: "of land for a planned wetland" },
